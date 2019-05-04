@@ -1,37 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tournament index{% endblock %}
+{% block title %}La Calice Cup: STG Tournament{% endblock %}
 
 {% block body %}
-    <h1>Tournament index</h1>
+    <h1>Upcoming Tournament</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for tournament in tournaments %}
-            <tr>
-                <td>{{ tournament.id }}</td>
-                <td>{{ tournament.title }}</td>
-                <td>{{ tournament.description }}</td>
-                <td>
-                    <a href="{{ path('tournament_show', {'id': tournament.id}) }}">show</a>
-                    <a href="{{ path('tournament_edit', {'id': tournament.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <article>
+        <h2>La Calice Cup</h2>
+        <p>In the month of Junes, STG players of all skill levels will join together to compete in the innaugural <em>La Calice Cup</em>; a team-based shoot 'em up tourney where each player's individual high scores contributes to their team's greatness</p>
+    </article>
 
-    <a href="{{ path('tournament_new') }}">Create new</a>
+    <p><a class="button" href="{{ path('user_new') }}">Sign Up!</a></p>
 {% endblock %}

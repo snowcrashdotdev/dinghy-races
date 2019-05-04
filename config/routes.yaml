@@ -5,7 +5,3 @@
 index:
   path: /
   controller: App\Controller\TournamentController::index
-
-signup:
-  path: /sign-up
-  controller: App\Controller\UserController::new

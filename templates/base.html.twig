@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}<link rel="stylesheet" media="screen" href="{{ asset('/css/calice.css') }}">{% endblock %}
     </head>
     <body>
         {% block body %}{% endblock %}
