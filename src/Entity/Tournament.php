@@ -29,7 +29,7 @@ class Tournament
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Game", mappedBy="tournament")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Game", inversedBy="tournaments")
      */
     private $games;
 

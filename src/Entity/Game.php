@@ -33,9 +33,15 @@ class Game
      */
     private $scores;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tournament", mappedBy="games")
+     */
+    private $tournaments;
+
     public function __construct()
     {
         $this->scores = new ArrayCollection();
+        $this->tournaments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -93,6 +99,32 @@ class Game
             if ($score->getGame() === $this) {
                 $score->setGame(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tournament[]
+     */
+    public function getTournaments(): Collection
+    {
+        return $this->tournaments;
+    }
+
+    public function addTournament(Tournament $tournament): self
+    {
+        if (!$this->tournaments->contains($tournament)) {
+            $this->tournaments[] = $tournament;
+        }
+
+        return $this;
+    }
+
+    public function removeTournament(Tournament $tournament): self
+    {
+        if ($this->tournaments->contains($tournament)) {
+            $this->tournaments->removeElement($tournament);
         }
 
         return $this;
