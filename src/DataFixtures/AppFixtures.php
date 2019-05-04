@@ -33,6 +33,14 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->persist($past_tournament);
 
+        $in_progress_tournament = new Tournament();
+        $in_progress_tournament->setTitle('Kappa Open 2019');
+        $in_progress_tournament->setDescription('Put your database to the test.');
+        $in_progress_tournament->setStartDate(new \DateTime('-15 DAY'));
+        $in_progress_tournament->setEndDate(new \DateTime('+15 DAY'));
+
+        $manager->persist($in_progress_tournament);
+
         $manager->flush();
     }
 
