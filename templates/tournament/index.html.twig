@@ -3,12 +3,32 @@
 {% block title %}La Calice Cup: STG Tournament{% endblock %}
 
 {% block body %}
-    <h1>Upcoming Tournament</h1>
+    <h2>Upcoming Tournaments</h2>
+    {% for tournament in upcoming_tournaments %}
+        <h3>{{ tournament.title }}</h3>
+        <p>{{ tournament.description }}</p>
+    {% else %}
+        <h3>No Upcoming Tournaments</h3>
+        <p>That's sad. I'm sad..</p>
+    {% endfor %}
 
-    <article>
-        <h2>La Calice Cup</h2>
-        <p>In the month of Junes, STG players of all skill levels will join together to compete in the innaugural <em>La Calice Cup</em>; a team-based shoot 'em up tourney where each player's individual high scores contributes to their team's greatness</p>
-    </article>
+    <h2>Tournaments In Progress</h2>
+    {% for tournament in in_progress_tournaments %}
+        <h3>{{ tournament.title }}</h3>
+        <p>{{ tournament.description }}</p>
+    {% else %}
+        <h3>No Tournaments In Progress</h3>
+        <p>Remember to sign up for the next one!</p>
+    {% endfor %}
+
+    <h2>Past Tournaments</h2>
+    {% for tournament in past_tournaments %}
+        <h3>{{ tournament.title }}</h3>
+        <p>{{ tournament.description }}</p>
+    {% else %}
+        <h3>No Past Tournaments</h3>
+        <p>Create a new one!</p>
+    {% endfor %}
 
     <p><a class="button" href="{{ path('user_new') }}">Sign Up!</a></p>
 {% endblock %}

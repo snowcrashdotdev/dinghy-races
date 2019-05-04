@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/tournament")
+ * @Route("/tournaments")
  */
 class TournamentController extends AbstractController
 {
@@ -20,8 +20,22 @@ class TournamentController extends AbstractController
      */
     public function index(TournamentRepository $tournamentRepository): Response
     {
+        $today = new \DateTime('NOW');
+        $tournaments = $tournamentRepository->findAll();
+        $upcoming = array_filter($tournaments, function($t) use ($today) {
+            return ( $t->getStartDate() > $today );
+        });
+        $in_progress = array_filter($tournaments, function($t) use ($today) {
+            return ( $t->getStartDate() < $today && $today < $t->getEndDate() );
+        });
+        $past = array_filter($tournaments, function($t) use ($today) {
+            return ( $t->getEndDate() < $today );
+        });
+
         return $this->render('tournament/index.html.twig', [
-            'tournaments' => $tournamentRepository->findAll(),
+            'upcoming_tournaments' => $upcoming,
+            'in_progress_tournaments' => $in_progress,
+            'past_tournaments' => $past
         ]);
     }
 
