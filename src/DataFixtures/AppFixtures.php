@@ -41,6 +41,14 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->persist($in_progress_tournament);
 
+        for ($i=0; $i<14; $i++) {
+            $game = new Game();
+            $game->setTitle(uniqid('STG '));
+            $game->setDescription('A very fun video game.');
+            if ($i>1) { $in_progress_tournament->addGame($game); }
+            $manager->persist($game);
+        }
+
         $manager->flush();
     }
 
