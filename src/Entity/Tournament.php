@@ -95,7 +95,6 @@ class Tournament
     {
         if (!$this->games->contains($game)) {
             $this->games[] = $game;
-            $game->setTournament($this);
         }
 
         return $this;
@@ -105,10 +104,6 @@ class Tournament
     {
         if ($this->games->contains($game)) {
             $this->games->removeElement($game);
-            // set the owning side to null (unless already changed)
-            if ($game->getTournament() === $this) {
-                $game->setTournament(null);
-            }
         }
 
         return $this;
