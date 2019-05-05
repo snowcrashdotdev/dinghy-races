@@ -6,6 +6,7 @@
         {% block stylesheets %}<link rel="stylesheet" media="screen" href="{{ asset('/css/calice.css') }}">{% endblock %}
     </head>
     <body>
+        {{ include('partials/navigation.html.twig') }}
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
