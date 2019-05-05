@@ -5,3 +5,7 @@
 index:
   path: /
   controller: App\Controller\TournamentController::index
+
+app_logout:
+  path: /logout
+  methods: GET
