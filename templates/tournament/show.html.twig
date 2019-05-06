@@ -3,6 +3,7 @@
 {% block title %}Tournament{% endblock %}
 
 {% block body %}
+    <main>
     <h1>Tournament</h1>
 
     <table class="table">
@@ -27,4 +28,5 @@
     <a href="{{ path('tournament_edit', {'id': tournament.id}) }}">edit</a>
 
     {{ include('tournament/_delete_form.html.twig') }}
+    </main>
 {% endblock %}

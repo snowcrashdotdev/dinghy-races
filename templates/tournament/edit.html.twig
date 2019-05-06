@@ -3,9 +3,11 @@
 {% block title %}Edit Tournament{% endblock %}
 
 {% block body %}
-    <h1>Edit Tournament</h1>
+    <main>
+        <h1>Edit Tournament</h1>
 
-    {{ include('tournament/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('tournament/_form.html.twig', {'button_label': 'Update'}) }}
 
-    {{ include('tournament/_delete_form.html.twig') }}
+        {{ include('tournament/_delete_form.html.twig') }}
+    </main>
 {% endblock %}
