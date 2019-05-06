@@ -16,8 +16,8 @@ class TournamentType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, ['attr'=>array('placeholder'=>'Title')])
-            ->add('start_date', DateType::class)
-            ->add('end_date', DateType::class)
+            ->add('start_date', DateType::class, ['widget' => 'single_text', 'help'=>'Start Date'])
+            ->add('end_date', DateType::class, ['widget' => 'single_text', 'help'=>'End Date'])
             ->add('description', CKEditorType::class, ['attr'=>array('placeholder'=>'Description')])
         ;
     }
