@@ -1,11 +1,14 @@
-<nav class="bg-primary navbar navbar-top">
+<nav class="bg-primary navbar">
+    <a class="nav-item" href="{{ path('index') }}">Home</a>
     {% if is_granted('ROLE_ADMIN') %}
-        <a class="nav-item" href="{{ path('app_admin') }}">Admin</a>
+        <a class="nav-item" href="{{ path('tournament_new') }}">New Tournament</a>
+        <a class="nav-item" href="{{ path('user_index') }}">Manage Users</a>
+        <a class="nav-item" href="">Manage Games</a>
     {% endif %}
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <a class="nav-item" href="{{ path('app_logout') }}">Log Out</a>
+        <a class="nav-item justify-right" href="{{ path('app_logout') }}">Log Out</a>
     {% else %}
-        <a class="nav-item" href="{{ path('user_new') }}">Sign Up</a>
+        <a class="nav-item justify-right" href="{{ path('user_new') }}">Sign Up</a>
         <a class="nav-item" href="{{ path('app_login') }}">Log In</a>
     {% endif %}
 </nav>

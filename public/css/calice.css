@@ -1,3 +1,11 @@
+html {
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
 :root {
     font-size: 18px;
     --color-primary: hsla(270, 60%, 50%, 1);
@@ -73,28 +81,18 @@ input {
     background-color: var(--color-primary);
 }
 
-.navbar-top {
-    text-align: right;
+.navbar {
+    width: 100vw;
     padding: var(--space);
-}
-
-.navbar-side {
-    width: 20em;
+    display: flex;
 }
 
 .nav-item {
     color: var(--color-white);
     text-decoration: none;
+    margin-right: var(--space);
 }
 
-.navbar-top .nav-item::after {
-    content: ' - '
-}
-
-.navbar-top .nav-item:last-child::after {
-    display: none;
-}
-
-.navbar-side .nav-item {
-    display: block;
+.justify-right {
+    margin-left: auto;
 }
