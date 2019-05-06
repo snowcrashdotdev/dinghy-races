@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/tournaments")
@@ -41,6 +42,7 @@ class TournamentController extends AbstractController
 
     /**
      * @Route("/new", name="tournament_new", methods={"GET","POST"})
+     * @isGranted("ROLE_ADMIN")
      */
     public function new(Request $request): Response
     {
@@ -53,7 +55,7 @@ class TournamentController extends AbstractController
             $entityManager->persist($tournament);
             $entityManager->flush();
 
-            return $this->redirectToRoute('tournament_index');
+            return $this->redirectToRoute('tournament_edit', ['id'=>$tournament->getId()]);
         }
 
         return $this->render('tournament/new.html.twig', [
@@ -74,6 +76,7 @@ class TournamentController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="tournament_edit", methods={"GET","POST"})
+     * @isGranted("ROLE_ADMIN")
      */
     public function edit(Request $request, Tournament $tournament): Response
     {
@@ -96,6 +99,7 @@ class TournamentController extends AbstractController
 
     /**
      * @Route("/{id}", name="tournament_delete", methods={"DELETE"})
+     * @isGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, Tournament $tournament): Response
     {
