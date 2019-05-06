@@ -1,4 +1,7 @@
 <nav class="bg-primary">
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="nav-item" href="{{ path('app_admin') }}">Admin</a>
+    {% endif %}
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <a class="nav-item" href="{{ path('app_logout') }}">Log Out</a>
     {% else %}
