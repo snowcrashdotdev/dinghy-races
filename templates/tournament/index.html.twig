@@ -6,8 +6,7 @@
     <main>
         <h2>Upcoming Tournaments</h2>
         {% for tournament in upcoming_tournaments %}
-            <h3>{{ tournament.title }}</h3>
-            <p>{{ tournament.description }}</p>
+            {{ include('tournament/summary.html.twig', { 'tournament': tournament }) }}
         {% else %}
             <h3>No Upcoming Tournaments</h3>
             <p>That's sad. I'm sad..</p>
@@ -15,8 +14,7 @@
 
         <h2>Tournaments In Progress</h2>
         {% for tournament in in_progress_tournaments %}
-            <h3>{{ tournament.title }}</h3>
-            <p>{{ tournament.description }}</p>
+            {{ include('tournament/summary.html.twig', { 'tournament': tournament }) }}
         {% else %}
             <h3>No Tournaments In Progress</h3>
             <p>Remember to sign up for the next one!</p>
@@ -24,8 +22,7 @@
 
         <h2>Past Tournaments</h2>
         {% for tournament in past_tournaments %}
-            <h3>{{ tournament.title }}</h3>
-            <p>{{ tournament.description }}</p>
+            {{ include('tournament/summary.html.twig', { 'tournament': tournament }) }}
         {% else %}
             <h3>No Past Tournaments</h3>
             <p>Create a new one!</p>
