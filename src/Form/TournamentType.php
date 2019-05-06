@@ -7,7 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class TournamentType extends AbstractType
@@ -18,7 +18,7 @@ class TournamentType extends AbstractType
             ->add('title', TextType::class, ['attr'=>array('placeholder'=>'Title')])
             ->add('start_date', DateType::class)
             ->add('end_date', DateType::class)
-            ->add('description', TextareaType::class, ['attr'=>array('placeholder'=>'Description')])
+            ->add('description', CKEditorType::class, ['attr'=>array('placeholder'=>'Description')])
         ;
     }
 
