@@ -19,7 +19,7 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
     {
         $upcoming_tournament = new Tournament();
         $upcoming_tournament->setTitle('La Calice Cup');
-        $upcoming_tournament->setDescription('32-person open entry STG tournament, where teams compete for score over a one-month period.');
+        $upcoming_tournament->setDescription('<p>32-person open entry STG tournament, where teams compete for score over a one-month period.</p>');
         $upcoming_tournament->setStartDate(new \DateTime('2019-06-01'));
         $upcoming_tournament->setEndDate(new \DateTime('2019-06-30'));
 
@@ -35,20 +35,19 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
 
         $in_progress_tournament = new Tournament();
         $in_progress_tournament->setTitle('Kappa Open 2019');
-        $in_progress_tournament->setDescription('Put your database to the test.');
+        $in_progress_tournament->setDescription('<p>Put your database to the test.</p>');
         $in_progress_tournament->setStartDate(new \DateTime('-15 DAY'));
         $in_progress_tournament->setEndDate(new \DateTime('+15 DAY'));
-
-        $manager->persist($in_progress_tournament);
 
         for ($i=0; $i<14; $i++) {
             $game = new Game();
             $game->setTitle(uniqid('STG '));
             $game->setDescription('A very fun video game.');
-            if ($i>1) { $in_progress_tournament->addGame($game); }
+            if ($i>6) { $in_progress_tournament->addGame($game); }
             $manager->persist($game);
         }
 
+        $manager->persist($in_progress_tournament);
         $manager->flush();
     }
 
