@@ -1,32 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tournament{% endblock %}
+{% block title %}{{ tournament.title }}{% endblock %}
 
 {% block body %}
     <main>
-    <h1>Tournament</h1>
+    <h1>{{tournament.title}}</h1>
+    {{ tournament.description|raw }}
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ tournament.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ tournament.title }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ tournament.description }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <section>
+        <h2>Teams</h2>
+        {% for team in tournament.teams %}
+        {% else %}
+            <p>No teams registered</p>
+        {% endfor %}
+    </section>
 
-    <a href="{{ path('tournament_index') }}">back to list</a>
+    <section>
+        <h2>Games</h2>
+        {% for game in tournament.games %}
+            {{ include('game/summary.html.twig', {'game': game}) }}
+        {% else %}
+            <p>No games selected</p>
+        {% endfor %}
+    </section>
 
-    <a href="{{ path('tournament_edit', {'id': tournament.id}) }}">edit</a>
+    {% if is_granted('ROLE_ADMIN') %}
+    <aside>
+        <p><a href="{{ path('tournament_edit', {'id': tournament.id}) }}">edit</a></p>
 
-    {{ include('tournament/_delete_form.html.twig') }}
+        {{ include('tournament/_delete_form.html.twig') }}
+    </aside>
+    {% endif %}
     </main>
 {% endblock %}

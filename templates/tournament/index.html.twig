@@ -8,24 +8,21 @@
         {% for tournament in upcoming_tournaments %}
             {{ include('tournament/summary.html.twig', { 'tournament': tournament }) }}
         {% else %}
-            <h3>No Upcoming Tournaments</h3>
-            <p>That's sad. I'm sad..</p>
+            <p>No upcoming tournaments</p>
         {% endfor %}
 
         <h2>Tournaments In Progress</h2>
         {% for tournament in in_progress_tournaments %}
             {{ include('tournament/summary.html.twig', { 'tournament': tournament }) }}
         {% else %}
-            <h3>No Tournaments In Progress</h3>
-            <p>Remember to sign up for the next one!</p>
+            <p>No ongoing tournaments</p>
         {% endfor %}
 
         <h2>Past Tournaments</h2>
         {% for tournament in past_tournaments %}
             {{ include('tournament/summary.html.twig', { 'tournament': tournament }) }}
         {% else %}
-            <h3>No Past Tournaments</h3>
-            <p>Create a new one!</p>
+            <p>No past tournaments</p>
         {% endfor %}
     </main>
 {% endblock %}
