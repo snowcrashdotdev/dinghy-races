@@ -48,10 +48,16 @@ class Tournament
      */
     private $end_date;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Team", mappedBy="tournament", orphanRemoval=true)
+     */
+    private $teams;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
         $this->scores = new ArrayCollection();
+        $this->teams = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +166,37 @@ class Tournament
     public function setEndDate(\DateTimeInterface $end_date): self
     {
         $this->end_date = $end_date;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Team[]
+     */
+    public function getTeams(): Collection
+    {
+        return $this->teams;
+    }
+
+    public function addTeam(Team $team): self
+    {
+        if (!$this->teams->contains($team)) {
+            $this->teams[] = $team;
+            $team->setTournament($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(Team $team): self
+    {
+        if ($this->teams->contains($team)) {
+            $this->teams->removeElement($team);
+            // set the owning side to null (unless already changed)
+            if ($team->getTournament() === $this) {
+                $team->setTournament(null);
+            }
+        }
 
         return $this;
     }

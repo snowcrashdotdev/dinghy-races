@@ -28,6 +28,12 @@ class Team
      */
     private $name;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Tournament", inversedBy="teams")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $tournament;
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
@@ -77,6 +83,18 @@ class Team
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getTournament(): ?Tournament
+    {
+        return $this->tournament;
+    }
+
+    public function setTournament(?Tournament $tournament): self
+    {
+        $this->tournament = $tournament;
 
         return $this;
     }
