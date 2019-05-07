@@ -7,16 +7,16 @@
     <h1>{{tournament.title}}</h1>
     {{ tournament.description|raw }}
 
+    <h2>Teams</h2>
     <section>
-        <h2>Teams</h2>
         {% for team in tournament.teams %}
         {% else %}
             <p>No teams registered</p>
         {% endfor %}
     </section>
 
+    <h2>Games</h2>
     <section>
-        <h2>Games</h2>
         {% for game in tournament.games %}
             {{ include('game/summary.html.twig', {'game': game}) }}
         {% else %}

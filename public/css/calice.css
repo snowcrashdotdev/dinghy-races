@@ -42,6 +42,24 @@ main {
     padding: var(--space);
 }
 
+@media screen and (min-width: 36em) {
+    section {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+article {
+    margin-right: var(--space);
+    margin-bottom: var(--space);
+    flex-basis: 25vw;
+    align-self: stretch;
+    padding: var(--space);
+    border: 1px solid black;
+    border-radius: 0.2em;
+    box-shadow: 0.1em 0.1em 0.4em black;
+}
+
 form {
     max-width: 28em;
 }
