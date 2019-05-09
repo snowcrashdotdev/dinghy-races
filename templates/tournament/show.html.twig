@@ -4,32 +4,32 @@
 
 {% block body %}
     <main>
-    <h1>{{tournament.title}}</h1>
-    {{ tournament.description|raw }}
+        <h1>{{tournament.title}}</h1>
+        {{ tournament.description|raw }}
 
-    <h2>Teams</h2>
-    <section>
-        {% for team in tournament.teams %}
-        {% else %}
-            <p>No teams registered</p>
-        {% endfor %}
-    </section>
+        <h2>Teams</h2>
+        <section>
+            {% for team in tournament.teams %}
+            {% else %}
+                <p>No teams registered</p>
+            {% endfor %}
+        </section>
 
-    <h2>Games</h2>
-    <section>
-        {% for game in tournament.games %}
-            {{ include('game/summary.html.twig', {'game': game}) }}
-        {% else %}
-            <p>No games selected</p>
-        {% endfor %}
-    </section>
+        <h2>Games</h2>
+        <section>
+            {% for game in tournament.games %}
+                {{ include('game/summary.html.twig', {'game': game}) }}
+            {% else %}
+                <p>No games selected</p>
+            {% endfor %}
+        </section>
+    </main>
 
     {% if is_granted('ROLE_ADMIN') %}
-    <aside>
-        <p><a href="{{ path('tournament_edit', {'id': tournament.id}) }}">edit</a></p>
-
-        {{ include('tournament/_delete_form.html.twig') }}
-    </aside>
+        <nav class="bg-primary tools justify-right">
+            <a class="nav-item" href="{{ path('tournament_edit', {'id': tournament.id}) }}">Edit</a>
+            <a class="nav-item" href="">Add Game(s)</a>
+            <a class="nav-item" href="">Add Team(s)</a>
+        </nav>
     {% endif %}
-    </main>
 {% endblock %}
