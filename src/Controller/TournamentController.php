@@ -58,8 +58,9 @@ class TournamentController extends AbstractController
             return $this->redirectToRoute('tournament_edit', ['id'=>$tournament->getId()]);
         }
 
-        return $this->render('tournament/show.html.twig', [
-            'tournament' => $tournament
+        return $this->render('tournament/new.html.twig', [
+            'tournament' => $tournament,
+            'form' => $form->createView()
         ]);
     }
 
