@@ -25,13 +25,15 @@ class TournamentType extends AbstractType
             ->add('games', EntityType::class, [
                 'class' => 'App\Entity\Game',
                 'choice_label' => 'title',
-                'multiple' => true
+                'multiple' => true,
+                'required' => false
                 ])
             ->add('teams', CollectionType::class, [
                 'entry_type' => TeamType::class,
                 'allow_add' => true,
                 'prototype' => true,
-                'by_reference' => false
+                'by_reference' => false,
+                'required' => false
             ])
         ;
     }
