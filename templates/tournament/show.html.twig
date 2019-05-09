@@ -10,6 +10,7 @@
         <h2>Teams</h2>
         <section>
             {% for team in tournament.teams %}
+                {{ include('team/summary.html.twig', {'team': team}) }}
             {% else %}
                 <p>No teams registered</p>
             {% endfor %}
