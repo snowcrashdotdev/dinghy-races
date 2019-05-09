@@ -49,7 +49,7 @@ class Tournament
     private $end_date;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Team", mappedBy="tournament", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Team", mappedBy="tournament", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $teams;
 

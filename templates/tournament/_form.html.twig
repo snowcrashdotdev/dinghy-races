@@ -1,4 +1,35 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{form_errors(form)}}
+
+    {{form_widget(form.title)}}
+    <section>
+        {{form_widget(form.start_date)}}
+        {{form_widget(form.end_date)}}
+    </section>
+
+    {{form_widget(form.description)}}
+
+    {{form_widget(form.games)}}
+
+    <section>
+        <ul id="tournament-teams-list"
+            data-prototype="{{form_widget(form.teams.vars.prototype)|e}}"
+            data-widget-tag="{{'<li>'|e}}"
+            data-widget-counter="{{form.teams|length}}">
+            {% for team in form.teams %}
+                <li>
+                    {{ form_errors(team) }}
+                    {{ form_widget(team) }}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <button type="button"
+                class="add-team-to-tournament"
+                data-list-selector="#tournament-teams-list">Add a team</button>
+    </section>
+
     <button>{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
+
+<script src="{{ asset('/js/tournament-admin.js') }}"></script>

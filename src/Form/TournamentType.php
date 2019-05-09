@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Tournament;
+use App\Form\TeamType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -10,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class TournamentType extends AbstractType
 {
@@ -25,6 +27,12 @@ class TournamentType extends AbstractType
                 'choice_label' => 'title',
                 'multiple' => true
                 ])
+            ->add('teams', CollectionType::class, [
+                'entry_type' => TeamType::class,
+                'allow_add' => true,
+                'prototype' => true,
+                'by_reference' => false
+            ])
         ;
     }
 
