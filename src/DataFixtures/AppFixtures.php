@@ -39,14 +39,6 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
         $in_progress_tournament->setStartDate(new \DateTime('-15 DAY'));
         $in_progress_tournament->setEndDate(new \DateTime('+15 DAY'));
 
-        for ($i=0; $i<14; $i++) {
-            $game = new Game();
-            $game->setTitle(uniqid('STG '));
-            $game->setDescription('A very fun video game.');
-            if ($i>6) { $in_progress_tournament->addGame($game); }
-            $manager->persist($game);
-        }
-
         $manager->persist($in_progress_tournament);
         $manager->flush();
     }
