@@ -7,11 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use App\DataFixtures\UserFixtures;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-use App\Entity\User;
 use App\Entity\Tournament;
-use App\Entity\Game;
-use App\Entity\Score;
-use App\Entity\Team;
 
 class AppFixtures extends Fixture implements DependentFixtureInterface
 {
