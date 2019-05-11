@@ -19,12 +19,12 @@ class Game
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=128)
+     * @ORM\Column(type="string", unique=true)
      */
-    private $title;
+    private $name;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $description;
 
@@ -38,6 +38,16 @@ class Game
      */
     private $tournaments;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $year;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $manufacturer;
+
     public function __construct()
     {
         $this->scores = new ArrayCollection();
@@ -49,14 +59,14 @@ class Game
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getName(): ?string
     {
-        return $this->title;
+        return $this->name;
     }
 
-    public function setTitle(string $title): self
+    public function setName(string $name): self
     {
-        $this->title = $title;
+        $this->name = $name;
 
         return $this;
     }
@@ -126,6 +136,30 @@ class Game
         if ($this->tournaments->contains($tournament)) {
             $this->tournaments->removeElement($tournament);
         }
+
+        return $this;
+    }
+
+    public function getYear(): ?string
+    {
+        return $this->year;
+    }
+
+    public function setYear(?string $year): self
+    {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    public function getManufacturer(): ?string
+    {
+        return $this->manufacturer;
+    }
+
+    public function setManufacturer(?string $manufacturer): self
+    {
+        $this->manufacturer = $manufacturer;
 
         return $this;
     }
