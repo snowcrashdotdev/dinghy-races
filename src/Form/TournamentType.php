@@ -24,7 +24,7 @@ class TournamentType extends AbstractType
             ->add('description', CKEditorType::class, ['attr'=>array('placeholder'=>'Description')])
             ->add('games', EntityType::class, [
                 'class' => 'App\Entity\Game',
-                'choice_label' => 'title',
+                'choice_label' => 'description',
                 'multiple' => true,
                 'required' => false
                 ])
