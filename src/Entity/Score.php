@@ -17,9 +17,9 @@ class Score
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=64, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $video;
+    private $proof;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="scores")
@@ -49,19 +49,27 @@ class Score
      */
     private $points;
 
+    public function __construct($game, $tournament, $user)
+    {
+        $this->setGame($game);
+        $this->setTournament($tournament);
+        $this->setUser($user);
+        $this->setDateSubmitted(new \DateTime('now'));
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getVideo(): ?string
+    public function getProof(): ?string
     {
-        return $this->video;
+        return $this->proof;
     }
 
-    public function setVideo(?string $video): self
+    public function setProof(?string $proof): self
     {
-        $this->video = $video;
+        $this->proof = $proof;
 
         return $this;
     }
