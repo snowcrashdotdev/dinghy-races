@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Tournament;
-use App\Entity\Game;
 use App\Form\TournamentType;
+use App\Entity\Game;
 use App\Repository\TournamentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -99,7 +99,7 @@ class TournamentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/scores/{game}", name="tournament_game", methods={"GET","POST"})
+     * @Route("/{id}/scores/{game}", name="tournament_scores", methods={"GET","POST"})
      */
     public function game(Request $request, Tournament $tournament, Game $game)
     {
@@ -107,7 +107,7 @@ class TournamentController extends AbstractController
             ->getRepository('App\Entity\Score')
             ->findByGameAndTournament($tournament->getId(), $game);
 
-        return $this->render('score/index.html.twig', [
+        return $this->render('score/summary.html.twig', [
             'scores' => $scores,
             'game' => $game,
             'tournament' => $tournament
