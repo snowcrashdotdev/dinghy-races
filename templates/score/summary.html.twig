@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ tournament.title }} scores for {{ game.description }}{% endblock %}
+
+{% block body %}
+    <main>
+        {% if scores %}
+            <table>
+            {% for score in scores %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ score.user.username }}</td>
+                    <td>{{ score.points }}</td>
+                    <td><a href="{{ score.proof }}">Link</a></td>
+                </tr>
+            {% endfor %}
+            </table>
+        {% else %}
+            <p>No scores posted.</p>
+        {% endif %}
+    </main>
+    {% if is_granted('ROLE_USER') %}
+        <a href="{{ url('score_new', {game: game.id, tournament: tournament.id}) }}">Add/update your score</a>
+    {% endif %}
+
+{% endblock %}
