@@ -48,7 +48,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->scores = new ArrayCollection();
-        $this->roles = ['ROLE_USER'];
+        $this->roles = ["ROLE_USER"];
     }
 
     public function getId(): ?int
@@ -77,6 +77,13 @@ class User implements UserInterface
     {
         $this->roles = $roles;
 
+        return $this;
+    }
+
+    public function addRoles(array $roles): self
+    {
+        $this->roles = array_unique(array_merge($roles, $this->roles));
+        
         return $this;
     }
 
