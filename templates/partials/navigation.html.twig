@@ -3,7 +3,7 @@
     {% if is_granted('ROLE_ADMIN') %}
         <a class="nav-item" href="{{ path('tournament_new') }}">New Tournament</a>
         <a class="nav-item" href="{{ path('user_index') }}">Manage Users</a>
-        <a class="nav-item" href="">Manage Games</a>
+        <a class="nav-item" href="{{ path('game_index') }}">Manage Games</a>
     {% endif %}
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <a class="nav-item justify-right" href="{{ path('app_logout') }}">Log Out</a>
