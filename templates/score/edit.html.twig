@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Update score{% endblock %}
+
+{% block body %}
+    <h1>Update score</h1>
+
+    {{ include('score/_form.html.twig', {'button_label': 'Update'}) }}
+
+{% endblock %}
