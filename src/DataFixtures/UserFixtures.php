@@ -26,7 +26,7 @@ class UserFixtures extends Fixture
         $password = $this->encoder->encodePassword($admin, 'admin');
         $admin->setPassword($password);
 
-        $admin->setRoles(array('ROLE_ADMIN', 'ROLE_CAPTAIN'));
+        $admin->addRoles(array('ROLE_ADMIN', 'ROLE_CAPTAIN'));
 
         $manager->persist($admin);
 
@@ -39,7 +39,7 @@ class UserFixtures extends Fixture
             $password = $this->encoder->encodePassword($player, 'luser');
             $player->setPassword($password);
 
-            if ($i < 7) { $player->setRoles(array('ROLE_CAPTAIN')); }
+            if ($i < 7) { $player->addRoles(array('ROLE_CAPTAIN')); }
             $manager->persist($player);
         }
   
