@@ -19,6 +19,18 @@ class ScoreRepository extends ServiceEntityRepository
         parent::__construct($registry, Score::class);
     }
 
+    public function findByGameAndTournament($tournament, $game) {
+        $q = $this->createQueryBuilder('s')
+            ->andWhere('s.tournament = :tournament')
+            ->setParameter('tournament', $tournament)
+            ->andWhere('s.game = :game')
+            ->setParameter('game', $game)
+            ->orderBy('s.points', 'DESC')
+            ->getQuery();
+        
+        return $q->execute();
+    }
+
     // /**
     //  * @return Score[] Returns an array of Score objects
     //  */

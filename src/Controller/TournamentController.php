@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Tournament;
+use App\Entity\Game;
 use App\Form\TournamentType;
 use App\Repository\TournamentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -95,6 +96,22 @@ class TournamentController extends AbstractController
             'tournament' => $tournament,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/{id}/scores/{game}", name="tournament_game", methods={"GET","POST"})
+     */
+    public function game(Request $request, Tournament $tournament, Game $game)
+    {
+        $scores = $this->getDoctrine()
+            ->getRepository('App\Entity\Score')
+            ->findByGameAndTournament($tournament->getId(), $game);
+
+        return $this->render('score/index.html.twig', [
+            'scores' => $scores,
+            'game' => $game,
+            'tournament' => $tournament
+            ]);
     }
 
     /**
