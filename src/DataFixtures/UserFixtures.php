@@ -6,8 +6,9 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements FixtureGroupInterface
 {
     private $encoder;
 
@@ -18,31 +19,20 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        // $product = new Product();
-        // $manager->persist($product);
         $admin = new User();
         $admin->setUsername('admin');
 
         $password = $this->encoder->encodePassword($admin, 'admin');
         $admin->setPassword($password);
 
-        $admin->addRoles(array('ROLE_ADMIN', 'ROLE_CAPTAIN'));
+        $admin->addRoles(array('ROLE_ADMIN'));
 
         $manager->persist($admin);
-
-        for ($i=0; $i < 31; $i++) {
-            $player = new User();
-
-            $username = 'luser_' . sprintf("%03d", $i);
-            $player->setUsername($username);
-
-            $password = $this->encoder->encodePassword($player, 'luser');
-            $player->setPassword($password);
-
-            if ($i < 7) { $player->addRoles(array('ROLE_CAPTAIN')); }
-            $manager->persist($player);
-        }
-  
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['dev'];
     }
 }
