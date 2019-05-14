@@ -19,7 +19,7 @@ class Tournament
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=128)
+     * @ORM\Column(type="string")
      */
     private $title;
 
