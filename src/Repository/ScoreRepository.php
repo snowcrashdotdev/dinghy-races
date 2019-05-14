@@ -31,6 +31,23 @@ class ScoreRepository extends ServiceEntityRepository
         return $q->execute();
     }
 
+    public function findCountGreaterThanPoints(Score $score)
+    {
+        $q = $this->createQueryBuilder('s')
+            ->select('s.id')
+            ->andWhere('s.id != :id')
+            ->setParameter('id', $score->getId())
+            ->andWhere('s.tournament = :tournament')
+            ->setParameter('tournament', $score->getTournament())
+            ->andWhere('s.game = :game')
+            ->setParameter('game', $score->getGame())
+            ->andWhere('s.points >= :points')
+            ->setParameter('points', $score->getPoints())
+            ->getQuery();
+
+        return count($q->execute());
+    }
+
     // /**
     //  * @return Score[] Returns an array of Score objects
     //  */
