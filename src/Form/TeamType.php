@@ -5,7 +5,8 @@ namespace App\Form;
 use App\Entity\Team;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Form\Type\MemberSelectorType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,12 +15,16 @@ class TeamType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['attr'=>['placeholder'=>'Team Name']])
-            ->add('members', EntityType::class, [
-                'class' => 'App\Entity\User',
-                'choice_label' => 'username',
-                'multiple' => true,
-                'by_reference' => false
+            ->add('name', TextType::class, [
+                'attr'=>[
+                    'placeholder'=>'Team Name'
+                ]
+            ])
+            ->add('members', CollectionType::class, [
+                'entry_type' => MemberSelectorType::class,
+                'allow_add' => true,
+                'prototype' => true,
+                'prototype_name' => '__member__'
             ])
         ;
     }

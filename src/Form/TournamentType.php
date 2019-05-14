@@ -32,6 +32,7 @@ class TournamentType extends AbstractType
                 'entry_type' => TeamType::class,
                 'allow_add' => true,
                 'prototype' => true,
+                'prototype_name' => '__team__',
                 'by_reference' => false,
                 'required' => false
             ])
