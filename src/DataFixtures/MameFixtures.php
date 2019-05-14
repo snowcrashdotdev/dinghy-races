@@ -3,10 +3,11 @@
 namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Game;
 
-class MameFixtures extends Fixture
+class MameFixtures extends Fixture implements FixtureGroupInterface
 {
     public function load(ObjectManager $manager)
     {
@@ -21,5 +22,10 @@ class MameFixtures extends Fixture
             }
         }
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['MAME'];
     }
 }
