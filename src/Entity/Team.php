@@ -19,12 +19,12 @@ class Team
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="team")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="teams")
      */
     private $members;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string")
      */
     private $name;
 

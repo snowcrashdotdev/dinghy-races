@@ -20,7 +20,7 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", unique=true)
      */
     private $username;
 
@@ -36,9 +36,9 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Team", inversedBy="members")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Team", mappedBy="members")
      */
-    private $team;
+    private $teams;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Score", mappedBy="user", orphanRemoval=true)
@@ -49,6 +49,8 @@ class User implements UserInterface
     {
         $this->scores = new ArrayCollection();
         $this->roles = ["ROLE_USER"];
+        $this->team = new ArrayCollection();
+        $this->teams = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -157,5 +159,33 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    public function addTeam(Team $team): self
+    {
+        if (!$this->team->contains($team)) {
+            $this->team[] = $team;
+            $team->addMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(Team $team): self
+    {
+        if ($this->team->contains($team)) {
+            $this->team->removeElement($team);
+            $team->removeMember($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Team[]
+     */
+    public function getTeams(): Collection
+    {
+        return $this->teams;
     }
 }
