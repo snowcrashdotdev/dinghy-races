@@ -11,24 +11,17 @@
 
     {{form_widget(form.games)}}
 
-    <section>
-        <ul id="tournament-teams-list"
-            data-prototype="{{form_widget(form.teams.vars.prototype)|e}}"
-            data-widget-tag="{{'<li>'|e}}"
-            data-widget-counter="{{form.teams|length}}">
+    <section
+        id="teams"
+        data-ajax-url="{{path('user_search')}}">
+        <ul id="teams-collection"
+            data-prototype="{{form_widget(form.teams.vars.prototype)|e}}">
             {% for team in form.teams %}
-                <li>
-                    {{ form_errors(team) }}
-                    {{ form_widget(team) }}
-                </li>
+                {{ form_widget(team) }}
+                <button class="add-team-member-button" type="button" data-collection="{{team.vars.id ~ '_members'}}">Add Member</button>
             {% endfor %}
         </ul>
-
-        <button type="button"
-                class="add-team-to-tournament"
-                data-list-selector="#tournament-teams-list">Add a team</button>
     </section>
-
     <button>{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
 
