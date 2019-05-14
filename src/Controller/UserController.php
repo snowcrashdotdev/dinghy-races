@@ -98,4 +98,16 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('user_index');
     }
+
+    /**
+     * @Route("/search/{name}", name="user_search", defaults={"name"=""}, methods={"POST"})
+     */
+    public function search(Request $request, string $name, UserRepository $userRepository): Response
+    {
+        if (null !== $result = $userRepository->searchBySubstring($name)) {
+            $result = $result->getUsername();
+        } 
+    
+        return $this->json(['username'=> $result]);
+    }
 }
