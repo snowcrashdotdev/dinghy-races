@@ -45,9 +45,19 @@ class Score
     private $date_submitted;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date_updated;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $points;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $rank;
 
     public function __construct($game, $tournament, $user)
     {
@@ -130,6 +140,30 @@ class Score
     public function setPoints(int $points): self
     {
         $this->points = $points;
+
+        return $this;
+    }
+
+    public function getDateUpdated(): ?\DateTimeInterface
+    {
+        return $this->date_updated;
+    }
+
+    public function setDateUpdated(\DateTimeInterface $date_updated): self
+    {
+        $this->date_updated = $date_updated;
+
+        return $this;
+    }
+
+    public function getRank(): ?int
+    {
+        return $this->rank;
+    }
+
+    public function setRank(int $rank): self
+    {
+        $this->rank = $rank;
 
         return $this;
     }
