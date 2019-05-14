@@ -65,6 +65,7 @@ class Score
         $this->setTournament($tournament);
         $this->setUser($user);
         $this->setDateSubmitted(new \DateTime('now'));
+        $this->setRank(32);
     }
 
     public function getId(): ?int
