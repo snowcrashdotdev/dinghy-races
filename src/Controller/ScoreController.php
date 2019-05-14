@@ -27,7 +27,8 @@ class ScoreController extends AbstractController
                 ->getRepository('App\Entity\Score')
                 ->findOneBy([
                     'tournament' => $tournament,
-                    'game' => $game
+                    'game' => $game,
+                    'user' => $this->getUser()->getId()
                 ])
         ) {
             return $this->redirectToRoute('score_edit', [
@@ -48,7 +49,24 @@ class ScoreController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $entityManager = $this->getDoctrine()->getManager();
+                $score->setDateUpdated(new \DateTime('now'));
                 $entityManager->persist($score);
+
+                $tournament_scores = $this->getDoctrine()
+                    ->getRepository('App\Entity\Score')
+                    ->findBy([
+                        'game' => $score->getGame(),
+                        'tournament' => $score->getTournament()
+                    ]);
+
+                foreach($tournament_scores as $score) {
+                    $rank = $this->getDoctrine()
+                        ->getRepository('App\Entity\Score')
+                        ->findCountGreaterThanPoints($score);
+                    $score->setRank($rank);
+                    $entityManager->persist($score);
+                }
+
                 $entityManager->flush();
 
                 return $this->redirectToRoute('tournament_scores',
@@ -73,9 +91,27 @@ class ScoreController extends AbstractController
     {
         $form = $this->createForm(ScoreType::class, $score);
         $form->handleRequest($request);
+        $score->setDateUpdated(new \DateTime('now'));
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            $tournament_scores = $this->getDoctrine()
+                    ->getRepository('App\Entity\Score')
+                    ->findBy([
+                        'game' => $score->getGame(),
+                        'tournament' => $score->getTournament()
+                    ]);
+
+            foreach($tournament_scores as $score) {
+                $rank = $this->getDoctrine()
+                    ->getRepository('App\Entity\Score')
+                    ->findCountGreaterThanPoints($score) + 1;
+                $score->setRank($rank);
+                $entityManager->persist($score);
+            }
+            $entityManager->flush();
 
             return $this->redirectToRoute('tournament_show', ['id'=>$score->getTournament()->getId()]);
         }
