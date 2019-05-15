@@ -54,9 +54,9 @@ class ScoreSubscriber implements EventSubscriberInterface
             foreach($scores as $score) {
                 $rank = $score->getRank();
                 if ($rank >= 17) {
-                    $total += (40 - (17 - $rank) * 2);
+                    $total += (40 - ($rank - 17) * 2);
                 } elseif ($rank >= 7) {
-                    $total += (70 - (7 - $rank) * 3);
+                    $total += (70 - ($rank - 7) * 3);
                 } else {
                     $total += (100 - $rank * 5);
                 }
