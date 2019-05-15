@@ -95,4 +95,17 @@ class GameController extends AbstractController
 
         return $this->redirectToRoute('game_index');
     }
+
+    /**
+     * @Route("/search/{name}",
+     * name="game_search",
+     * defaults={"name"=""},
+     * methods={"POST"})
+     */
+    public function search(Request $request, string $name, GameRepository $gameRepository): Response
+    {
+        return $this->json([
+            'data'=> $gameRepository->searchBySubstring($name)
+         ]);
+    }
 }

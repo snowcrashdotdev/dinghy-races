@@ -10,8 +10,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use App\Form\Type\GameSelectorType;
 
 class TournamentType extends AbstractType
 {
@@ -22,10 +22,11 @@ class TournamentType extends AbstractType
             ->add('start_date', DateType::class, ['widget' => 'single_text', 'help'=>'Start Date'])
             ->add('end_date', DateType::class, ['widget' => 'single_text', 'help'=>'End Date'])
             ->add('description', CKEditorType::class, ['attr'=>array('placeholder'=>'Description')])
-            ->add('games', EntityType::class, [
-                'class' => 'App\Entity\Game',
-                'choice_label' => 'description',
-                'multiple' => true,
+            ->add('games', CollectionType::class, [
+                'entry_type' => GameSelectorType::class,
+                'allow_add' => true,
+                'prototype' => true,
+                'prototype_name' => '__game__',
                 'required' => false
                 ])
             ->add('teams', CollectionType::class, [

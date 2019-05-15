@@ -1,10 +1,12 @@
 var teamCollection
+var gameCollection
 var teamSection
 var addTeamButton = document.createElement('button')
 addTeamButton.type = 'button'
 addTeamButton.innerText = 'Add team'
 addTeamButton.classList.add('add-team-member-button')
-var userSearchUrl;
+var userSearchUrl
+var gameSearchUrl
 
 window.addEventListener('DOMContentLoaded', function(){
     teamCollection = document.querySelector('#teams-collection')
@@ -13,6 +15,15 @@ window.addEventListener('DOMContentLoaded', function(){
     teamCollection.dataset.index = teamCollection.childElementCount
     userSearchUrl = teamSection.dataset.ajaxUrl
 
+    gameCollection = document.getElementById('games-collection')
+    gameCollection.dataset.index = gameCollection.childElementCount
+    gameSearchUrl = gameCollection.dataset.ajaxUrl
+
+    addGameButton = document.getElementById('add-game-to-tournament')
+    addGameButton.addEventListener('click', function(e) {
+        addGameForm(gameCollection)
+    })
+
     addTeamButton.addEventListener('click', function(e) {
         addTeamForm(teamCollection)
     })
@@ -20,6 +31,17 @@ window.addEventListener('DOMContentLoaded', function(){
     addHandlerToButtons()
     addSearchToElements()
 })
+
+function addGameForm(collection) {
+    var prototype = collection.dataset.prototype
+    var index = collection.dataset.index
+    var form = prototype.replace(/__game__/g, index)
+    collection.dataset.index++
+    var newGame = document.createElement('li')
+    newGame.innerHTML = form
+    collection.appendChild(newGame)
+    addSearchToElements()
+}
 
 function addTeamForm(collection) {
     var prototype = collection.dataset.prototype
@@ -67,7 +89,24 @@ function searchForUser() {
                 console.info(json)
             })
     } else {
-        return false;
+        return true;
+    }
+}
+
+/** NOT VERY DRY */
+function searchForGame() {
+    var q = this.value
+    if (q.length > 3) {
+        var url = gameSearchUrl + '/' + q
+        window.fetch(url, {method:'POST'})
+        .then(function(res){
+            return res.json()
+        })
+        .then(function(json){
+            console.info(json)
+        })
+    } else {
+        return true
     }
 }
 
@@ -76,6 +115,13 @@ function addSearchToElements() {
     if (searchElements) {
         for (var i = 0; i < searchElements.length; i++) {
             searchElements[i].addEventListener('keyup', searchForUser, false)
+        }
+    }
+
+    var gameSearchElements = document.getElementsByClassName('game-search')
+    if (gameSearchElements) {
+        for (var i = 0; i < gameSearchElements.length; i++) {
+            gameSearchElements[i].addEventListener('keyup', searchForGame, false)
         }
     }
 }

@@ -9,7 +9,17 @@
 
     {{form_widget(form.description)}}
 
-    {{form_widget(form.games)}}
+    <section
+        id="games">
+        <ul id="games-collection"
+            data-prototype="{{form_widget(form.games.vars.prototype)|e}}"
+            data-ajax-url="{{path('game_search')}}">
+            {% for game in form.games %}
+                {{ form_widget(game) }}
+            {% endfor %}
+            <button id="add-game-to-tournament" type="button" data-collection="games-collection">Add Game</button>
+        </ul>
+    </section>
 
     <section
         id="teams"
