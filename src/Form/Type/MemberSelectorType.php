@@ -26,7 +26,12 @@ class MemberSelectorType extends AbstractType
     {
         $resolver->setDefaults([
             'invalid_message' => 'The selected user does not exist',
-            'attr'=> ['placeholder' => 'Username', 'class' => 'user-search']
+            'attr'=> [
+                'placeholder' => 'Username',
+                'class' => 'ajax-search',
+                'data-entity' => 'user'
+            ],
+            'label' => false
         ]);
     }
 

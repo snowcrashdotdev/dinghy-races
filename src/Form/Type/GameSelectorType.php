@@ -26,7 +26,11 @@ class GameSelectorType extends AbstractType
     {
         $resolver->setDefaults([
             'invalid_message' => 'The selected game does not exist',
-            'attr'=> ['placeholder' => 'Game', 'class' => 'game-search']
+            'attr'=> [
+                'placeholder' => 'Game',
+                'class' => 'ajax-search',
+                'data-entity' => 'game' 
+            ]
         ]);
     }
 
