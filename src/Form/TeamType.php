@@ -22,9 +22,12 @@ class TeamType extends AbstractType
             ])
             ->add('members', CollectionType::class, [
                 'entry_type' => MemberSelectorType::class,
+                'entry_options' => [
+                    'label' => false
+                ],
                 'allow_add' => true,
                 'prototype' => true,
-                'prototype_name' => '__member__'
+                'prototype_name' => '__member__',
             ])
         ;
     }

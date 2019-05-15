@@ -24,18 +24,22 @@ class TournamentType extends AbstractType
             ->add('description', CKEditorType::class, ['attr'=>array('placeholder'=>'Description')])
             ->add('games', CollectionType::class, [
                 'entry_type' => GameSelectorType::class,
+                'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'prototype' => true,
                 'prototype_name' => '__game__',
-                'required' => false
+                'required' => false,
+                'label' => 'Games',
                 ])
             ->add('teams', CollectionType::class, [
                 'entry_type' => TeamType::class,
+                'entry_options' => [ 'label' => false ],
                 'allow_add' => true,
                 'prototype' => true,
                 'prototype_name' => '__team__',
                 'by_reference' => false,
-                'required' => false
+                'required' => false,
+                'label' => 'Teams'
             ])
         ;
     }
