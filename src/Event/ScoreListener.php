@@ -1,40 +1,25 @@
 <?php
 namespace App\Event;
 
-use App\Event\NewScoreEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Doctrine\Common\Persistence\ObjectManager;
+use App\Entity\Score;
+use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 
-class ScoreSubscriber implements EventSubscriberInterface
+class ScoreListener
 {
-    private $em;
-
-    public function __construct(ObjectManager $entityManager)
+    public function postPersist(LifecycleEventArgs $args)
     {
-        $this->em = $entityManager;
-    }
+        $entity = $args->getObject();
 
-    public function getManager()
-    {
-        return $this->em;
-    }
+        if (!$entity instanceof Score) {
+            return;
+        }
 
-    public static function getSubscribedEvents()
-    {
-        return [
-            NewScoreEvent::NAME => 'onNewScore'
-        ];
-    }
-
-    public function onNewScore(NewScoreEvent $event) {
-        $em = $this->getManager();
+        $em = $args->getObjectManager();
 
         $scores = $em->getRepository('App\Entity\Score')
             ->findBy([
-                'game' => $event->getScore()->getGame(),
-                'tournament' => $event->getScore()->getTournament()
+                'game' => $entity->getGame(),
+                'tournament' => $entity->getTournament()
             ])
         ;
         

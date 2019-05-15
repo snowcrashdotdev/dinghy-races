@@ -10,9 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\Score;
 use App\Form\ScoreType;
-use App\Event\NewScoreEvent;
-
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @Route("/score")
@@ -22,7 +19,7 @@ class ScoreController extends AbstractController
     /**
      * @Route("/new/{game}/{tournament}", name="score_new", methods={"GET","POST"})
      */
-    public function new(Request $request, $game, $tournament, EventDispatcherInterface $dispatcher): Response
+    public function new(Request $request, $game, $tournament): Response
     {
         if (
             $score = $this->getDoctrine()
@@ -58,9 +55,6 @@ class ScoreController extends AbstractController
                 $entityManager->persist($score);
                 $entityManager->flush();
 
-                $event = new NewScoreEvent($score);
-                $dispatcher->dispatch(NewScoreEvent::NAME, $event);
-
                 return $this->redirectToRoute('tournament_scores',
                     [
                         'id'=>$score->getTournament()->getId(),
@@ -79,7 +73,7 @@ class ScoreController extends AbstractController
     /**
      * @Route("/{id}/edit", name="score_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Score $score, EventDispatcherInterface $dispatcher): Response
+    public function edit(Request $request, Score $score): Response
     {
         $form = $this->createForm(ScoreType::class, $score);
         $form->handleRequest($request);
@@ -88,9 +82,6 @@ class ScoreController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
-
-            $event = new NewScoreEvent($score);
-            $dispatcher->dispatch(NewScoreEvent::NAME, $event);
 
             return $this->redirectToRoute('tournament_scores',
                 [
