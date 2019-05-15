@@ -21,13 +21,53 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
     {
         $admin = new User();
         $admin->setUsername('admin');
-
         $password = $this->encoder->encodePassword($admin, 'admin');
         $admin->setPassword($password);
-
         $admin->addRoles(array('ROLE_ADMIN'));
-
         $manager->persist($admin);
+
+        $usernames = [
+            'Despatche',
+            'ei',
+            'p',
+            'viewtyjoe',
+            'Aquas',
+            'Dumplechan',
+            'MightySquirrel',
+            'owlnonymous',
+            'SpryteMix',
+            'blossom',
+            'Erppo',
+            'Fiztastic',
+            'Jakazam',
+            'KaizaCorp',
+            'D_nir',
+            'DenT4F',
+            'deuce985',
+            'Jaimers',
+            'Cowslanlr',
+            'djtatsujin',
+            'goingfullschmitt',
+            'Mark_MSX',
+            'moglar5K',
+            'Neo_Antwon',
+            'ScopedPixels',
+            'Sensato',
+            'skipnatty',
+            'V0lrat',
+            'wgogh',
+            'y&cow',
+            'Zotmeister'
+        ];
+
+        foreach($usernames as $name) {
+            $user = new User();
+            $user->setUsername($name);
+            $password = $this->encoder->encodePassword($user, $name);
+            $user->setPassword($password);
+            $manager->persist($user);
+        }
+
         $manager->flush();
     }
 
