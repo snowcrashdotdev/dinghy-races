@@ -10,7 +10,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\Score;
 use App\Form\ScoreType;
+use App\Event\NewScoreEvent;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @Route("/score")
@@ -20,7 +22,7 @@ class ScoreController extends AbstractController
     /**
      * @Route("/new/{game}/{tournament}", name="score_new", methods={"GET","POST"})
      */
-    public function new(Request $request, $game, $tournament): Response
+    public function new(Request $request, $game, $tournament, EventDispatcherInterface $dispatcher): Response
     {
         if (
             $score = $this->getDoctrine()
@@ -35,6 +37,8 @@ class ScoreController extends AbstractController
                 'id' => $score->getId()
             ]);
         } else {
+            $user = $this->getUser();
+
             $game = $this->getDoctrine()
                 ->getRepository('App\Entity\Game')
                 ->find($game);
@@ -42,8 +46,9 @@ class ScoreController extends AbstractController
             $tournament = $this->getDoctrine()
                 ->getRepository('App\Entity\Tournament')
                 ->find($tournament);
-
-            $score = new Score($game, $tournament, $this->getUser());
+            
+            $team = $tournament->getTeamByUser($user);
+            $score = new Score($game, $tournament, $user, $team);
             $form = $this->createForm(ScoreType::class, $score);
             $form->handleRequest($request);
 
@@ -51,28 +56,15 @@ class ScoreController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $score->setDateUpdated(new \DateTime('now'));
                 $entityManager->persist($score);
-
-                $tournament_scores = $this->getDoctrine()
-                    ->getRepository('App\Entity\Score')
-                    ->findBy([
-                        'game' => $score->getGame(),
-                        'tournament' => $score->getTournament()
-                    ]);
-
-                foreach($tournament_scores as $score) {
-                    $rank = $this->getDoctrine()
-                        ->getRepository('App\Entity\Score')
-                        ->findCountGreaterThanPoints($score);
-                    $score->setRank($rank);
-                    $entityManager->persist($score);
-                }
-
                 $entityManager->flush();
+
+                $event = new NewScoreEvent($score);
+                $dispatcher->dispatch(NewScoreEvent::NAME, $event);
 
                 return $this->redirectToRoute('tournament_scores',
                     [
-                        'id'=>$tournament->getId(),
-                        'game'=>$game->getId()
+                        'id'=>$score->getTournament()->getId(),
+                        'game'=>$score->getGame()->getId()
                     ]
                 );
             }
@@ -87,7 +79,7 @@ class ScoreController extends AbstractController
     /**
      * @Route("/{id}/edit", name="score_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Score $score): Response
+    public function edit(Request $request, Score $score, EventDispatcherInterface $dispatcher): Response
     {
         $form = $this->createForm(ScoreType::class, $score);
         $form->handleRequest($request);
@@ -97,23 +89,15 @@ class ScoreController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
-            $tournament_scores = $this->getDoctrine()
-                    ->getRepository('App\Entity\Score')
-                    ->findBy([
-                        'game' => $score->getGame(),
-                        'tournament' => $score->getTournament()
-                    ]);
+            $event = new NewScoreEvent($score);
+            $dispatcher->dispatch(NewScoreEvent::NAME, $event);
 
-            foreach($tournament_scores as $score) {
-                $rank = $this->getDoctrine()
-                    ->getRepository('App\Entity\Score')
-                    ->findCountGreaterThanPoints($score) + 1;
-                $score->setRank($rank);
-                $entityManager->persist($score);
-            }
-            $entityManager->flush();
-
-            return $this->redirectToRoute('tournament_show', ['id'=>$score->getTournament()->getId()]);
+            return $this->redirectToRoute('tournament_scores',
+                [
+                    'id'=>$score->getTournament()->getId(),
+                    'game'=>$score->getGame()->getId()
+                ]
+            );
         }
 
         return $this->render('score/edit.html.twig', [
