@@ -34,9 +34,21 @@ class Team
      */
     private $tournament;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $score;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Score", mappedBy="team", orphanRemoval=true)
+     */
+    private $scores;
+
     public function __construct()
     {
+        $this->setScore(0);
         $this->members = new ArrayCollection();
+        $this->scores = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -95,6 +107,49 @@ class Team
     public function setTournament(?Tournament $tournament): self
     {
         $this->tournament = $tournament;
+
+        return $this;
+    }
+
+    public function getScore(): ?int
+    {
+        return $this->score;
+    }
+
+    public function setScore(int $score): self
+    {
+        $this->score = $score;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Score[]
+     */
+    public function getScores(): Collection
+    {
+        return $this->scores;
+    }
+
+    public function addScore(Score $score): self
+    {
+        if (!$this->scores->contains($score)) {
+            $this->scores[] = $score;
+            $score->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScore(Score $score): self
+    {
+        if ($this->scores->contains($score)) {
+            $this->scores->removeElement($score);
+            // set the owning side to null (unless already changed)
+            if ($score->getTeam() === $this) {
+                $score->setTeam(null);
+            }
+        }
 
         return $this;
     }
