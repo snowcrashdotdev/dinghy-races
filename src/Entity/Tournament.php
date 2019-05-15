@@ -5,7 +5,6 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TournamentRepository")
  */
@@ -199,5 +198,12 @@ class Tournament
         }
 
         return $this;
+    }
+
+    public function getTeamByUser(User $user)
+    {
+        return $this->getTeams()->filter(function($team) use ($user) {
+            return $team->getMembers()->contains($user);
+        })->first();
     }
 }
