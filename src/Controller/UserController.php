@@ -104,10 +104,8 @@ class UserController extends AbstractController
      */
     public function search(Request $request, string $name, UserRepository $userRepository): Response
     {
-        if (null !== $result = $userRepository->searchBySubstring($name)) {
-            $result = $result->getUsername();
-        } 
-    
-        return $this->json(['username'=> $result]);
+        return $this->json([
+            'data'=> $userRepository->searchBySubstring($name)
+         ]);
     }
 }

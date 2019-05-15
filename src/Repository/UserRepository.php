@@ -21,8 +21,9 @@ class UserRepository extends ServiceEntityRepository
 
     public function searchBySubstring($string) {
         return $this->createQueryBuilder('u')
+            ->select('u.username')
             ->andWhere('u.username LIKE :string')
-            ->setParameter('string', $string)
+            ->setParameter('string', '%'.addcslashes($string, '%_').'%')
             ->getQuery()
             ->getOneOrNullResult()
         ;
