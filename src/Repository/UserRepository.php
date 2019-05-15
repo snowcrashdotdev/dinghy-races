@@ -24,6 +24,7 @@ class UserRepository extends ServiceEntityRepository
             ->select('u.username')
             ->andWhere('u.username LIKE :string')
             ->setParameter('string', '%'.addcslashes($string, '%_').'%')
+            ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()
         ;
