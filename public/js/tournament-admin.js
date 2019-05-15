@@ -25,7 +25,7 @@ function addFormToCollection() {
 
     if (childCollection) {
         childCollection.dataset.index = 0
-        childCollection.dataset.prototypeName = 'member'
+        childCollection.dataset.prototypeName = '__member__'
         var btn = document.createElement('button')
         btn.classList.add('add-to-collection')
         btn.dataset.collection = childCollection.id
