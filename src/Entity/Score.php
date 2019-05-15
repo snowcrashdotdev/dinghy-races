@@ -61,11 +61,18 @@ class Score
      */
     private $rank;
 
-    public function __construct($game, $tournament, $user)
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Team", inversedBy="scores")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $team;
+
+    public function __construct($game, $tournament, $user, $team)
     {
         $this->setGame($game);
         $this->setTournament($tournament);
         $this->setUser($user);
+        $this->setTeam($team);
         $this->setDateSubmitted(new \DateTime('now'));
         $this->setDateUpdated(new \DateTime('now'));
         $this->setRank(0);
@@ -191,5 +198,17 @@ class Score
                 ->addViolation()
             ;
         }
+    }
+
+    public function getTeam(): ?Team
+    {
+        return $this->team;
+    }
+
+    public function setTeam(?Team $team): self
+    {
+        $this->team = $team;
+
+        return $this;
     }
 }
