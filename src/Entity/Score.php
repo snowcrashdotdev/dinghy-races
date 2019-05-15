@@ -52,7 +52,7 @@ class Score
     private $date_updated;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint")
      */
     private $points;
 
@@ -65,14 +65,14 @@ class Score
      * @ORM\ManyToOne(targetEntity="App\Entity\Team", inversedBy="scores")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $team;
+    private $tourney_team;
 
     public function __construct($game, $tournament, $user, $team)
     {
         $this->setGame($game);
         $this->setTournament($tournament);
         $this->setUser($user);
-        $this->setTeam($team);
+        $this->setTourneyTeam($team);
         $this->setDateSubmitted(new \DateTime('now'));
         $this->setDateUpdated(new \DateTime('now'));
         $this->setRank(0);
@@ -127,6 +127,18 @@ class Score
     public function setTournament(?Tournament $tournament): self
     {
         $this->tournament = $tournament;
+
+        return $this;
+    }
+
+    public function getTourneyTeam(): ?Team
+    {
+        return $this->tourney_team;
+    }
+
+    public function setTourneyTeam(?Team $tourney_team): self
+    {
+        $this->tourney_team = $tourney_team;
 
         return $this;
     }
@@ -198,17 +210,5 @@ class Score
                 ->addViolation()
             ;
         }
-    }
-
-    public function getTeam(): ?Team
-    {
-        return $this->team;
-    }
-
-    public function setTeam(?Team $team): self
-    {
-        $this->team = $team;
-
-        return $this;
     }
 }

@@ -40,7 +40,7 @@ class Team
     private $score;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Score", mappedBy="team", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Score", mappedBy="tourney_team", orphanRemoval=true)
      */
     private $scores;
 
