@@ -1,7 +1,9 @@
 {{ form_start(form) }}
-    {{form_errors(form)}}
+    {{ form_widget(form._token) }}
 
+    {{form_errors(form)}}
     {{form_widget(form.title)}}
+
     <section>
         {{form_widget(form.start_date)}}
         {{form_widget(form.end_date)}}
@@ -9,30 +11,45 @@
 
     {{form_widget(form.description)}}
 
-    <section
-        id="games">
-        <ul id="games-collection"
-            data-prototype="{{form_widget(form.games.vars.prototype)|e}}"
-            data-ajax-url="{{path('game_search')}}">
-            {% for game in form.games %}
-                {{ form_widget(game) }}
-            {% endfor %}
-            <button id="add-game-to-tournament" type="button" data-collection="games-collection">Add Game</button>
-        </ul>
+    <section>
+        {{form_label(form.games)}}
+        {{form_widget(
+            form.games, {
+                'attr': {
+                    'data-prototype-name': form.games.vars.prototype.vars.name,
+                    'data-index': form.games|length
+                    }
+                }
+            )
+        }}
+        
+        <button class="add-to-collection" type="button" data-collection="{{form.games.vars.id}}">Add Game</button>
     </section>
 
-    <section
-        id="teams"
-        data-ajax-url="{{path('user_search')}}">
-        <ul id="teams-collection"
-            data-prototype="{{form_widget(form.teams.vars.prototype)|e}}">
-            {% for team in form.teams %}
-                {{ form_widget(team) }}
-                <button class="add-team-member-button" type="button" data-collection="{{team.vars.id ~ '_members'}}">Add Member</button>
+    <section>
+        {{form_label(form.teams)}}
+        <div
+            id="{{form.teams.vars.id}}"
+            data-prototype="{{form_widget(form.teams.vars.prototype)|e}}"
+            data-index="{{form.teams|length}}"
+            data-prototype-name="{{form.teams.vars.prototype.vars.name}}">
+        {% for team in form.teams %}
+            {{form_row(team.name)}}
+            <div
+                id="{{team.members.vars.id}}"
+                data-prototype="{{form_widget(team.members.vars.prototype)|e}}"
+                data-prototype-name="{{team.members.vars.prototype.vars.name}}"
+                data-index="{{team.members|length}}">
+            {% for member in team.members %}
+                {{form_row(member)}}
             {% endfor %}
-        </ul>
+            </div>
+            <button class="add-to-collection" type="button" data-collection="{{team.members.vars.id}}">Add Member</button>
+        {% endfor %}
+        </div>
+        <button class="add-to-collection" type="button" data-collection="{{form.teams.vars.id}}">Add Team</button>
     </section>
     <button>{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
-
+{{ form_end(form, {'render_rest': false}) }}
+<input type="hidden" id="ajax-search-path" data-user="{{ path('user_search') }}" data-game="{{ path('game_search') }}">
 <script src="{{ asset('/js/tournament-admin.js') }}"></script>
