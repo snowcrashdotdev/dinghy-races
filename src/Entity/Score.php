@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ScoreRepository")
@@ -65,7 +67,8 @@ class Score
         $this->setTournament($tournament);
         $this->setUser($user);
         $this->setDateSubmitted(new \DateTime('now'));
-        $this->setRank(32);
+        $this->setDateUpdated(new \DateTime('now'));
+        $this->setRank(0);
     }
 
     public function getId(): ?int
@@ -167,5 +170,26 @@ class Score
         $this->rank = $rank;
 
         return $this;
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+
+        if ($this->getTournament()->getStartDate() > $this->getDateUpdated()) {
+            $context->buildViolation('The tournament has not started yet.')
+                ->atPath('date_updated')
+                ->addViolation()
+            ;
+        }
+
+        if($this->getTournament()->getEndDate() < $this->getDateUpdated()) {
+            $context->buildViolation('The tournament has already concluded.')
+                ->atPath('date_updated')
+                ->addViolation()
+            ;
+        }
     }
 }
