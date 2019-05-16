@@ -35,18 +35,17 @@ class Team
     private $tournament;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $score;
+    private $points;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Score", mappedBy="tourney_team", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Score", mappedBy="team", orphanRemoval=true)
      */
     private $scores;
 
     public function __construct()
     {
-        $this->setScore(0);
         $this->members = new ArrayCollection();
         $this->scores = new ArrayCollection();
     }
@@ -111,14 +110,14 @@ class Team
         return $this;
     }
 
-    public function getScore(): ?int
+    public function getPoints(): ?int
     {
-        return $this->score;
+        return $this->points;
     }
 
-    public function setScore(int $score): self
+    public function setPoints(int $points): self
     {
-        $this->score = $score;
+        $this->points = $points;
 
         return $this;
     }
