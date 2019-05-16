@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TournamentRepository")
@@ -48,7 +50,7 @@ class Tournament
     private $end_date;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Team", mappedBy="tournament", orphanRemoval=true, cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Team", mappedBy="tournament", orphanRemoval=true, cascade={"persist","remove"})
      */
     private $teams;
 
@@ -200,10 +202,37 @@ class Tournament
         return $this;
     }
 
-    public function getTeamByUser(User $user)
+    public function getTeamByUser(User $user): Team
     {
-        return $this->getTeams()->filter(function($team) use ($user) {
-            return $team->getMembers()->contains($user);
-        })->first();
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->contains("members", $user))
+            ->setFirstResult(0)
+            ->setMaxResults(1);
+
+        return $this->getTeams()->matching($criteria)->first();
+    }
+
+    public function getHighscore(Game $game)
+    {
+        $exp = new Comparison('game', '=', $game);
+        $criteria = new Criteria();
+        $criteria->andWhere($exp)->orderBy(['points' => Criteria::DESC])->setMaxResults(1);
+        
+        return $this->getScores()->matching($criteria)->first();
+    }
+
+    public function getWinner()
+    {
+        $criteria = new Criteria();
+        $criteria->orderBy(['points'=> Criteria::DESC])->setMaxResults(1);
+        return $this->getTeams()->matching($criteria)->first();
+    }
+
+    public function getScoreRank(Score $score) {
+        $criteria = Criteria::create()
+            ->andWhere(Criteria::expr()->eq('game', $score->getGame()))
+            ->orderBy(['points' => Criteria::DESC]);
+
+        return $this->getScores()->matching($criteria)->indexOf($score);
     }
 }
