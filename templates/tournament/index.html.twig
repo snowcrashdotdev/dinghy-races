@@ -1,28 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}La Calice Cup: STG Tournament{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block body %}
-    <main>
+    <main class="index">
+    {% if upcoming_tournaments %}
         <h2>Upcoming Tournaments</h2>
         {% for tournament in upcoming_tournaments %}
             {{ include('tournament/summary.html.twig', { 'tournament': tournament }) }}
-        {% else %}
-            <p>No upcoming tournaments</p>
         {% endfor %}
+    {% endif %}
 
+    {% if in_progress_tournaments %}
         <h2>Tournaments In Progress</h2>
         {% for tournament in in_progress_tournaments %}
             {{ include('tournament/summary.html.twig', { 'tournament': tournament }) }}
-        {% else %}
-            <p>No ongoing tournaments</p>
         {% endfor %}
+    {% endif %}
 
+    {% if past_tournaments %}
         <h2>Past Tournaments</h2>
         {% for tournament in past_tournaments %}
             {{ include('tournament/summary.html.twig', { 'tournament': tournament }) }}
-        {% else %}
-            <p>No past tournaments</p>
         {% endfor %}
+    {% endif %}
     </main>
 {% endblock %}

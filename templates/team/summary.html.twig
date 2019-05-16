@@ -1,8 +1,3 @@
-<article>
+<article class="summary summar-team">
     <h3><a href="{{ path( 'team_show', {'id': team.id} ) }}">{{ team.name }}</a></h3>
-    {% for player in team.members %}
-        <p>{{ player.username }}</p>
-    {% else %}
-        <p>No members assigned to this team.</p>
-    {% endfor %}
 </article>

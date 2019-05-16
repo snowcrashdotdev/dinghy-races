@@ -4,33 +4,44 @@
 
 {% block body %}
     <main>
-        <h1>{{tournament.title}}</h1>
-        {{ tournament.description|raw }}
+        <header class="bg-white tournament-header">
+            <h1 class="bg-accent padding-y">{{tournament.title}}</h1>
+            <section class="flex-row space-between">
+                <div>
+                {{ tournament.description|raw }}
+                </div>
+                <div class="tournament-details font-size-small">
+                    <p>Start: {{tournament.startDate|date('F j, Y')}}</p>
+                    <p>End: {{tournament.endDate|date('F j, Y')}}</p>
+                </div>
+            </section>
+            <section>
+                <p>
+                    <span>Winning Team: {{ tournament.winner.name }} ({{ tournament.winner.points|number_format }} points)</span>
+                    <a class="float-right" href="">Team Leaderboard</a></p>
+            </section>
+                <p>
+                    <span>Top Scorer: {{ topscorer.name }} ({{ topscorer.points|number_format }} points)</span>
+                    <a class="float-right" href="">Individual Leaderboard</a></p>
+                </p>
+            </section>
+        </header>
 
-        <h2>Teams</h2>
-        <section>
-            {% for team in tournament.teams %}
-                {{ include('team/summary.html.twig', {'team': team}) }}
-            {% else %}
-                <p>No teams registered</p>
-            {% endfor %}
-        </section>
-
-        <h2>Games</h2>
-        <section>
+        <section class="flex-row flex-wrap justify-center">
             {% for game in tournament.games %}
                 {{ include('game/summary.html.twig', {'game': game}) }}
             {% else %}
                 <p>No games selected</p>
             {% endfor %}
         </section>
-    </main>
 
-    {% if is_granted('ROLE_ADMIN') %}
-        <nav class="bg-primary tools justify-right">
-            <a class="nav-item" href="{{ path('tournament_edit', {'id': tournament.id}) }}">Edit</a>
-            <a class="nav-item" href="">Add Game(s)</a>
-            <a class="nav-item" href="">Add Team(s)</a>
-        </nav>
-    {% endif %}
+        <section>
+            <h2>Teams</h2>
+            {% for team in tournament.teams %}
+                {{ include('team/summary.html.twig', {'team': team}) }}
+            {% else %}
+                <p>No teams registered</p>
+            {% endfor %}
+        </section>
+    </main>
 {% endblock %}

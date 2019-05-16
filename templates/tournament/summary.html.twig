@@ -1,4 +1,9 @@
-<article>
-    <h3><a href="{{ path( 'tournament_show', {'id': tournament.id} ) }}">{{ tournament.title }}</a></h3>
+<article class="summary summary-tournament">
+    <time>{{ tournament.startDate|date('M jS') }}</time>
+
+    <h3 class="summary-title"><a href="{{ path( 'tournament_show', {'id': tournament.id} ) }}">{{ tournament.title|title }}</a></h3>
+
     {{ tournament.description|raw }}
+
+    <p>{{ [tournament.teams|length, tournament.teams|length > 1 ? 'teams' : 'team']|join(' ') }}</p>
 </article>

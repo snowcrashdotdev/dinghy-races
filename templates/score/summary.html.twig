@@ -4,14 +4,23 @@
 
 {% block body %}
     <main>
+        <h1>{{ tournament.title }} scores for {{ game.description }}</h1>
         {% if scores %}
-            <table>
+            <table class="leaderboard leaderboard-game">
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th class="align-right">Score</th>
+                    <th class="align-right">Test</th>
+                    <th>Record</th>
+                </tr>
             {% for score in scores %}
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>{{ score.user.username }}</td>
-                    <td>{{ score.points }}</td>
-                    <td><a href="{{ score.proof }}">Link</a></td>
+                    <td class="align-right">{{ score.points|number_format }}</td>
+                    <td class="align-right">{{tournament.scorerank(score)|number_format}}</td>
+                    <td><a href="{{ score.proof }}">🗎</a></td>
                 </tr>
             {% endfor %}
             </table>
