@@ -60,14 +60,14 @@ class Score
      * @ORM\ManyToOne(targetEntity="App\Entity\Team", inversedBy="scores")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $tourney_team;
+    private $team;
 
     public function __construct(Game $game, Tournament $tournament, User $user, Team $team)
     {
         $this->setGame($game);
         $this->setTournament($tournament);
         $this->setUser($user);
-        $this->setTourneyTeam($team);
+        $this->setTeam($team);
         $this->setDateSubmitted(new \DateTime('now'));
         $this->setDateUpdated(new \DateTime('now'));
     }
@@ -125,14 +125,14 @@ class Score
         return $this;
     }
 
-    public function getTourneyTeam(): ?Team
+    public function getTeam(): ?Team
     {
-        return $this->tourney_team;
+        return $this->team;
     }
 
-    public function setTourneyTeam(?Team $tourney_team): self
+    public function setTeam(?Team $team): self
     {
-        $this->tourney_team = $tourney_team;
+        $this->team = $team;
 
         return $this;
     }
