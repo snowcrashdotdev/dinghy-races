@@ -19,16 +19,18 @@ class ScoreRepository extends ServiceEntityRepository
         parent::__construct($registry, Score::class);
     }
 
-    public function findByGameAndTournament($tournament, $game) {
+    public function findByGameAndTournament($tournament, $game, $limit=null) {
         $q = $this->createQueryBuilder('s')
             ->andWhere('s.tournament = :tournament')
             ->setParameter('tournament', $tournament)
             ->andWhere('s.game = :game')
             ->setParameter('game', $game)
-            ->orderBy('s.points', 'DESC')
-            ->getQuery();
+            ->orderBy('s.points', 'DESC');
+        if ($limit !== null) {
+            $q->setMaxResults($limit);
+        }
         
-        return $q->execute();
+        return $q->getQuery()->getResult();
     }
 
     public function findCountGreaterThanPoints(Score $score)
