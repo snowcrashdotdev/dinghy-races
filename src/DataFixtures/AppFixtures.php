@@ -29,37 +29,36 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
             $tournament->addGame($game);
         }
         $manager->persist($tournament);
+        $manager->flush();
 
         $users = $manager->getRepository('App\Entity\User')->findAll();
-        shuffle($users);
-        $team_size = 6;
+        $team_size = 8;
 
-        $teams = ['The Iron Androids', 'The Powerful Turkeys', 'The Giant Phantoms', 'The Handsome Hyenas'];
+        $names = ['The Iron Androids', 'The Powerful Turkeys', 'The Giant Phantoms', 'The Handsome Hyenas'];
 
-        $participants = [];
-
-        foreach($teams as $i=>$name){
+        foreach($names as $i => $name) {
             $team = new Team();
             $team->setName($name);
-            $team->setTournament($tournament);
             $members = array_slice($users, $i * $team_size, $team_size);
             foreach($members as $member) {
                 $team->addMember($member);
-                $participants[] = $member;
             }
-            $manager->persist($team);
+            $tournament->addTeam($team);
+            $manager->persist($tournament);
         }
+        $manager->flush();
 
-        foreach($participants as $user) {
-            foreach($games as $game) {
-                $points = random_int(10000, 300000000000);
-                $score = new Score($game, $tournament, $user, $team);
-                $score->setPoints($points);
-                $score->setProof('https://twitch.tv');
-                $manager->persist($score);
+        foreach($tournament->getTeams() as $team) {
+            foreach($team->getMembers() as $user) {
+                foreach($tournament->getGames() as $game) {
+                    $points = random_int(100, 300);
+                    $score = new Score($game, $tournament, $user, $team);
+                    $score->setPoints($points);
+                    $score->setProof('https://twitch.tv');
+                    $manager->persist($score);
+                }
             }
         }
-
         $manager->flush();
     }
 
