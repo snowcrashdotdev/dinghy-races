@@ -34,26 +34,26 @@ class ScoreSubscriber implements EventSubscriber
         }
 
         $em = $args->getObjectManager();
-        $game = $entity->getGame();
+
         $tournament = $entity->getTournament();
-        $teams = $tournament->getTeams();
+        $teams = $tournament->getTeams()->toArray();
 
         foreach($teams as $team) {
-            $scores = $team->getScores();
-            $total = 0;
+            $scores = $team->getScores()->toArray();
+            $points = 0;
             foreach($scores as $score) {
                 $rank = $tournament->getScoreRank($score);
                 if ($rank >= 17) {
-                    $total += (40 - ($rank - 17) * 2);
+                    $points += (40 - ($rank - 17) * 2);
                 } elseif ($rank >= 7) {
-                    $total += (70 - ($rank - 7) * 3);
-                } else {
-                    $total += (100 - $rank * 5);
+                    $points += (70 - ($rank - 7) * 3);
+                } elseif ($rank >= 0) {
+                    $points += (100 - $rank * 5);
                 }
             }
-            $team->setScore($total);
+            $team->setPoints($points);
             $em->persist($team);
-            $em->flush();
         }
+        $em->flush();
     }
 }
