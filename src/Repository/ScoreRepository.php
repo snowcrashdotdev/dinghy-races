@@ -41,6 +41,7 @@ class ScoreRepository extends ServiceEntityRepository
             ->groupBy('s.user')
             ->andWhere('s.tournament = :tournament')
             ->setParameter('tournament', $tournament)
+            ->orderBy('points', 'DESC')
         ;
 
         return $q->getQuery()->getArrayResult();
