@@ -34,14 +34,5 @@
                 <p>No games selected</p>
             {% endfor %}
         </section>
-
-        <section>
-            <h2>Teams</h2>
-            {% for team in tournament.teams %}
-                {{ include('team/summary.html.twig', {'team': team}) }}
-            {% else %}
-                <p>No teams registered</p>
-            {% endfor %}
-        </section>
     </main>
 {% endblock %}
