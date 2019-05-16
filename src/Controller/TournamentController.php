@@ -70,8 +70,16 @@ class TournamentController extends AbstractController
      */
     public function show(Tournament $tournament): Response
     {
+        $leaderIndividualScore = $this->getDoctrine()
+            ->getRepository('App\Entity\Score')
+            ->findIndividualScores($tournament)[0]
+        ;
         return $this->render('tournament/show.html.twig', [
             'tournament' => $tournament,
+            'topscorer' => [
+                'name' => $this->getDoctrine()->getRepository('App\Entity\User')->find($leaderIndividualScore['user'])->getUsername(),
+                'points' => $leaderIndividualScore['points'],
+            ]
         ]);
     }
 
