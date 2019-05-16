@@ -57,17 +57,12 @@ class Score
     private $points;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $rank;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Team", inversedBy="scores")
      * @ORM\JoinColumn(nullable=false)
      */
     private $tourney_team;
 
-    public function __construct($game, $tournament, $user, $team)
+    public function __construct(Game $game, Tournament $tournament, User $user, Team $team)
     {
         $this->setGame($game);
         $this->setTournament($tournament);
@@ -75,7 +70,6 @@ class Score
         $this->setTourneyTeam($team);
         $this->setDateSubmitted(new \DateTime('now'));
         $this->setDateUpdated(new \DateTime('now'));
-        $this->setRank(0);
     }
 
     public function getId(): ?int
@@ -175,18 +169,6 @@ class Score
     public function setDateUpdated(\DateTimeInterface $date_updated): self
     {
         $this->date_updated = $date_updated;
-
-        return $this;
-    }
-
-    public function getRank(): ?int
-    {
-        return $this->rank;
-    }
-
-    public function setRank(int $rank): self
-    {
-        $this->rank = $rank;
 
         return $this;
     }
