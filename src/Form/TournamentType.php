@@ -19,21 +19,32 @@ class TournamentType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, ['attr'=>array('placeholder'=>'Title')])
-            ->add('start_date', DateType::class, ['widget' => 'single_text', 'help'=>'Start Date'])
-            ->add('end_date', DateType::class, ['widget' => 'single_text', 'help'=>'End Date'])
-            ->add('description', CKEditorType::class, ['attr'=>array('placeholder'=>'Description')])
+            ->add('start_date', DateType::class, [
+                'widget' => 'single_text',
+            ])
+            ->add('end_date', DateType::class, [
+                'widget' => 'single_text'
+            ])
+            ->add('description', CKEditorType::class, [
+                'attr'=> ['placeholder'=>'Describe this tournament.']
+            ])
             ->add('games', CollectionType::class, [
                 'entry_type' => GameSelectorType::class,
-                'entry_options' => ['label' => false],
+                'entry_options' => [
+                    'label' => false,
+                    'attr' => ['class' => 'full-width margin-y']
+                ],
                 'allow_add' => true,
                 'prototype' => true,
                 'prototype_name' => '__game__',
                 'required' => false,
                 'label' => 'Games',
-                ])
+            ])
             ->add('teams', CollectionType::class, [
                 'entry_type' => TeamType::class,
-                'entry_options' => [ 'label' => false ],
+                'entry_options' => [
+                    'label' => false,
+                ],
                 'allow_add' => true,
                 'prototype' => true,
                 'prototype_name' => '__team__',

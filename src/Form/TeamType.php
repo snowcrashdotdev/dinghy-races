@@ -16,8 +16,10 @@ class TeamType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
+                'label' => false,
                 'attr'=>[
-                    'placeholder'=>'Team Name'
+                    'placeholder'=>'Team Name',
+                    'class' => 'full-width'
                 ]
             ])
             ->add('members', CollectionType::class, [

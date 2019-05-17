@@ -26,14 +26,15 @@ function addFormToCollection() {
     if (childCollection) {
         childCollection.dataset.index = 0
         childCollection.dataset.prototypeName = '__member__'
+        childCollection.classList.add('tournament-collection')
         var btn = document.createElement('button')
-        btn.classList.add('add-to-collection')
+        btn.classList.add('add-to-collection', 'push-center')
         btn.dataset.collection = childCollection.id
         btn.type = 'button'
         btn.innerText = 'Add member'
         btn.addEventListener('click', addFormToCollection)
 
-        childCollection.before(btn)
+        childCollection.appendChild(btn)
     }
 
     var newSearchInputs = collection.getElementsByClassName('ajax-search')
@@ -44,6 +45,7 @@ function addFormToCollection() {
     }
 
     collection.dataset.index++
+    collection.appendChild(this)
 }
 
 function performAjaxSearch() {
