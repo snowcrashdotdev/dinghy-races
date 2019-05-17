@@ -29,7 +29,7 @@ class ScoreSubscriber implements EventSubscriber
 
     public function calculateTeamScore(LifecycleEventArgs $args)
     {
-        if (!method_exists($entity = $args->getObject(), 'getGame')) {
+        if (!($entity = $args->getObject()) instanceof Score) {
             return;
         }
 
