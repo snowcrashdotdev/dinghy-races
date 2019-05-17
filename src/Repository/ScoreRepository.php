@@ -34,15 +34,20 @@ class ScoreRepository extends ServiceEntityRepository
         return $q->getQuery()->getResult();
     }
 
-    public function findIndividualScores($tournament)
+    public function findIndividualScores($tournament, $limit=null)
     {
         $q = $this->createQueryBuilder('s')
-            ->select('IDENTITY(s.user) as user', 'SUM(s.points) as points')
+            ->join('s.user', 'user')
+            ->select('user.username as username', 'SUM(s.points) as points')
             ->groupBy('s.user')
             ->andWhere('s.tournament = :tournament')
             ->setParameter('tournament', $tournament)
             ->orderBy('points', 'DESC')
         ;
+
+        if ( $limit ) {
+            $q->setMaxResults($limit);
+        }
 
         return $q->getQuery()->getArrayResult();
     }
