@@ -22,12 +22,12 @@
                     <a class="float-right" href="">Team Leaderboard</a></p>
             </section>
             {% endif %}
-            {% if topscorer %}
+            {% for topscorer in topscorer %}
                 <p>
-                    <span>Top Scorer: {{ topscorer.name }} ({{ topscorer.points|number_format }} points)</span>
+                    <span>Top Scorer: {{ topscorer.username }} ({{ topscorer.points|number_format }} points)</span>
                     <a class="float-right" href="">Individual Leaderboard</a></p>
                 </p>
-            {% endif %}
+            {% endfor %}
             </section>
         </header>
 
