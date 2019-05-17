@@ -82,7 +82,9 @@
 }
 @media screen and (min-width: 55em) {
     .half-width {
-        width: 49.5%;
+        width: 49.4%;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
