@@ -29,3 +29,6 @@ services:
     App\Event\ScoreSubscriber:
         tags:
             - { name: doctrine.event_subscriber }
+    App\Event\TournamentSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }
