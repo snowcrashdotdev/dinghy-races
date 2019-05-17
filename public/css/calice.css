@@ -70,6 +70,11 @@
     margin: var(--space-small);
 }
 
+.margin-y {
+    margin-top: var(--space-small);
+    margin-bottom: var(--space-small);
+}
+
 @media screen and (min-width: 55em) {
     .flex-row {
         display: flex;
@@ -84,12 +89,20 @@
     justify-content: center;
 }
 
+.space-between {
+    justify-content: space-between;
+}
+
 .text-align-right {
     text-align: right;
 }
 
 .font-size-small {
     font-size: var(--font-size-small);
+}
+
+.rounded {
+    border-radius: 0.1em;
 }
 
 /* Global Styles */
