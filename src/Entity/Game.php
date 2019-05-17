@@ -76,7 +76,7 @@ class Game
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -126,6 +126,7 @@ class Game
     {
         if (!$this->tournaments->contains($tournament)) {
             $this->tournaments[] = $tournament;
+            $tournament->addGame($this);
         }
 
         return $this;
@@ -135,6 +136,7 @@ class Game
     {
         if ($this->tournaments->contains($tournament)) {
             $this->tournaments->removeElement($tournament);
+            $tournament->removeGame($this);
         }
 
         return $this;

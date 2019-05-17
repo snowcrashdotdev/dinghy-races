@@ -42,6 +42,7 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
             $members = array_slice($users, $i * $team_size, $team_size);
             foreach($members as $member) {
                 $team->addMember($member);
+                $member->addTournament($tournament);
             }
             $tournament->addTeam($team);
             $manager->persist($tournament);

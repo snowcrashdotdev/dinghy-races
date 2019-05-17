@@ -54,11 +54,17 @@ class Tournament
      */
     private $teams;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="tournaments")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
         $this->scores = new ArrayCollection();
         $this->teams = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -234,5 +240,33 @@ class Tournament
             ->orderBy(['points' => Criteria::DESC]);
 
         return $this->getScores()->matching($criteria)->indexOf($score);
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addTournament($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            $user->removeTournament($this);
+        }
+
+        return $this;
     }
 }

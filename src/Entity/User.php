@@ -45,12 +45,18 @@ class User implements UserInterface
      */
     private $scores;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tournament", inversedBy="users")
+     */
+    private $tournaments;
+
     public function __construct()
     {
         $this->scores = new ArrayCollection();
         $this->roles = ["ROLE_USER"];
         $this->team = new ArrayCollection();
         $this->teams = new ArrayCollection();
+        $this->tournaments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -65,7 +71,7 @@ class User implements UserInterface
 
     public function setUsername(string $username): self
     {
-        $this->username = strtolower($username);
+        $this->username = $username;
 
         return $this;
     }
@@ -163,8 +169,8 @@ class User implements UserInterface
 
     public function addTeam(Team $team): self
     {
-        if (!$this->team->contains($team)) {
-            $this->team[] = $team;
+        if (!$this->teams->contains($team)) {
+            $this->teams[] = $team;
             $team->addMember($this);
         }
 
@@ -173,8 +179,8 @@ class User implements UserInterface
 
     public function removeTeam(Team $team): self
     {
-        if ($this->team->contains($team)) {
-            $this->team->removeElement($team);
+        if ($this->teams->contains($team)) {
+            $this->teams->removeElement($team);
             $team->removeMember($this);
         }
 
@@ -187,5 +193,31 @@ class User implements UserInterface
     public function getTeams(): Collection
     {
         return $this->teams;
+    }
+
+    /**
+     * @return Collection|Tournament[]
+     */
+    public function getTournaments(): Collection
+    {
+        return $this->tournaments;
+    }
+
+    public function addTournament(Tournament $tournament): self
+    {
+        if (!$this->tournaments->contains($tournament)) {
+            $this->tournaments[] = $tournament;
+        }
+
+        return $this;
+    }
+
+    public function removeTournament(Tournament $tournament): self
+    {
+        if ($this->tournaments->contains($tournament)) {
+            $this->tournaments->removeElement($tournament);
+        }
+
+        return $this;
     }
 }
