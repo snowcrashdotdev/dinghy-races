@@ -210,12 +210,10 @@ class Tournament
 
     public function getTeamByUser(User $user): Team
     {
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->contains("members", $user))
-            ->setFirstResult(0)
-            ->setMaxResults(1);
-
-        return $this->getTeams()->matching($criteria)->first();
+        return $this->getTeams()
+            ->filter(function($team) use ($user){
+                return $team->getMembers()->contains($user);
+            })->first();
     }
 
     public function getHighscore(Game $game)
