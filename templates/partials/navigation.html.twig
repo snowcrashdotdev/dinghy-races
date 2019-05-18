@@ -1,9 +1,5 @@
-<nav class="navbar bg-primary padding flex-row">
-    <a class="navbar-item" href="{{ path('index') }}">Home</a>
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <a class="navbar-item push-right" href="{{ path('app_logout') }}">Log Out</a>
-    {% else %}
-        <a class="navbar-item push-right" href="{{ path('app_login') }}">Log In</a>
-        <a class="navbar-item" href="{{ path('user_new') }}">Sign Up</a>
-    {% endif %}
-</nav>
+<a class="navbar-item" href="{{ path('index') }}">Home</a>
+{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+    <a class="navbar-item push-right" href="{{ path('app_login') }}">Log In</a>
+    <a class="navbar-item" href="{{ path('user_new') }}">Sign Up</a>
+{% endif %}

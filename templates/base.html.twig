@@ -6,7 +6,13 @@
         {% block stylesheets %}<link rel="stylesheet" media="screen" href="{{ asset('/css/calice.css') }}">{% endblock %}
     </head>
     <body>
-        {{ include('partials/navigation.html.twig') }}
+        <nav class="navbar bg-primary padding flex-row">
+            {{ include('partials/navigation.html.twig') }}
+            {% block navigation %}{% endblock %}
+            {% if is_granted( 'IS_AUTHENTICATED_FULLY' )%}
+                <a class="navbar-item push-right" href="{{ path('app_logout') }}">Log Out</a>
+            {% endif %}
+        </nav>
         {% block body %}{% endblock %}
         {% block footer %}{% endblock %}
         {% block javascripts %}{% endblock %}
