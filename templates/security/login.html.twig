@@ -3,25 +3,32 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<main>
-    <form method="post" class="bg-white padding rounded flex-column true-center">
+<main class="flex-column align-items-center">
+    <h1 class="text-align-center">Please sign in</h1>
+    <form method="post" class="margin-y bg-white padding rounded text-align-center">
         {% if error %}
             <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
-        <h1 class="margin-y">Please sign in</h1>
-        <input type="text" value="{{ last_username }}" name="username" id="inputUsername" placeholder="Username" required autofocus>
-        <input type="password" name="password" id="inputPassword" placeholder="Password" required>
+
+        <div>
+            <input type="text" value="{{ last_username }}" name="username" id="inputUsername" placeholder="Username" required autofocus>
+        </div>
+
+        <div>
+            <input type="password" name="password" id="inputPassword" placeholder="Password" required>
+        </div>
 
         <input type="hidden" name="_csrf_token"
             value="{{ csrf_token('authenticate') }}">
 
-            <div>
-                <label>
-                    <input type="checkbox" name="_remember_me"> Remember me
-                </label>
-            </div>
+        <div class="full-width margin-y">
+            <label>
+                <input type="checkbox" name="_remember_me"> Remember me
+            </label>
+        </div>
 
-        <button class="full-width" type="submit">Sign in</button>
+        <button type="submit">Sign in</button>
     </form>
+    <p>Not registered?<a href="{{path('user_new')}}" class="margin-left">Sign up</a></p>
 </main>
 {% endblock %}
