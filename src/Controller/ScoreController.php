@@ -9,6 +9,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\Score;
+use App\Entity\Game;
+use App\Entity\Tournament;
 use App\Form\ScoreType;
 
 /**
@@ -19,8 +21,18 @@ class ScoreController extends AbstractController
     /**
      * @Route("/new/{game}/{tournament}", name="score_new", methods={"GET","POST"})
      */
-    public function new(Request $request, $game, $tournament): Response
+    public function new(Request $request, Game $game, Tournament $tournament): Response
     {
+        if (
+            ! $tournament->getUsers()->contains($this->getUser())
+        ) {
+            return $this->redirectToRoute('tournament_scores',
+                [
+                    'id'=> $tournament->getId(),
+                    'game'=>$game->getId()
+                ]
+            );
+        }
         if (
             $score = $this->getDoctrine()
                 ->getRepository('App\Entity\Score')
@@ -75,6 +87,17 @@ class ScoreController extends AbstractController
      */
     public function edit(Request $request, Score $score): Response
     {
+        if (
+            $this->getUser() !== $score->getUser()
+        ) {
+            return $this->redirectToRoute('tournament_scores',
+                [
+                    'id'=>$score->getTournament()->getId(),
+                    'game'=>$score->getGame()->getId()
+                ]
+            );
+        }
+
         $form = $this->createForm(ScoreType::class, $score);
         $form->handleRequest($request);
         $score->setDateUpdated(new \DateTime('now'));
