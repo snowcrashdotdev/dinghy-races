@@ -15,14 +15,24 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class, ['attr'=>array('placeholder'=>'Username')])
+            ->add('username', TextType::class, [
+                'label' => false,
+                'attr'=> [
+                    'placeholder'=>'Username'
+                ]
+            ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Passwords must match',
-                'first_options' => ['attr'=>array('placeholder'=>'Password')],
-                'second_options' => ['attr'=>array('placeholder'=>'Repeat password')]
+                'first_options' => [
+                    'attr'=> ['placeholder'=>'Password'],
+                    'label' => false,
+                ],
+                'second_options' => [
+                    'attr'=>['placeholder'=>'Repeat password'],
+                    'label' => false,
                 ]
-            );
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -3,9 +3,10 @@
 {% block title %}New User{% endblock %}
 
 {% block body %}
-    <main>
-        <h1>Registration</h1>
+    <main class="flex-column align-items-center">
+        <h1 class="text-align-center">Sign Up</h1>
 
         {{ include('user/_form.html.twig') }}
-    <main>
+        <p>Already registered?<a href="{{path('app_login')}}" class="margin-left">Sign in</a></p>
+    </main>
 {% endblock %}

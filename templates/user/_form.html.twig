@@ -1,4 +1,10 @@
-{{ form_start(form) }}
+{{
+    form_start(form,{
+        'attr': {
+            'class': 'margin-y bg-white padding rounded text-align-center'
+        }
+    })
+}}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <button class="margin-y">{{ button_label|default('Sign up') }}</button>
 {{ form_end(form) }}
