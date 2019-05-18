@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
+    screenshot_dir: '%kernel.project_dir%/public/uploads/screenshots'
 
 services:
     # default configuration for services in *this* file
@@ -32,3 +33,12 @@ services:
     App\Event\TournamentSubscriber:
         tags:
             - { name: doctrine.event_subscriber }
+    
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%screenshot_dir%'
+    App\Event\FileUploadListener:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postLoad }
