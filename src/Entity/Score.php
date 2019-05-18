@@ -189,15 +189,6 @@ class Score
                 ->addViolation()
             ;
         }
-
-        if (
-            empty($this->getVideoUrl()) and
-            empty($this->getScreenshot())
-        ) {
-            $context->buildViolation('You must include a video URL or screenshot.')
-            ->addViolation()
-        ;
-        }
     }
 
     public function getVideoUrl(): ?string
