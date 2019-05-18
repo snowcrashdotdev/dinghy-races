@@ -58,12 +58,12 @@
     background-color: var(--color-primary);
 }
 
-.bg-primary a {
-    color: var(--color-white);
-}
-
 .bg-accent {
     background-color: var(--color-accent);
+}
+
+.color-black {
+    color: var(--color-black);
 }
 
 .danger {
@@ -175,6 +175,10 @@
     border-top: 0.1em solid var(--color-gray);
 }
 
+.shading {
+    background-image: var(--shading);
+}
+
 /* Global Styles */
 body {
     padding: 0;
@@ -246,6 +250,26 @@ label {
     text-align: center;
 }
 
+table {
+    width: 100%;
+}
+
+th {
+    background-color: var(--color-primary);
+    background-image: var(--shading);
+    color: var(--color-white);
+}
+
+td, th {
+    text-align: center;
+    padding-left: var(--space-smaller);
+    padding-right: var(--space-smaller);
+}
+
+tr:nth-child(even) {
+    background-color: hsla(180, 50%, 100%, 0.5);
+}
+
 /* Component Styles */
 .tournament-header,
 .game-summary {
@@ -273,13 +297,6 @@ label {
     justify-content: space-between;
 }
 
-.leaderboard {
-    width: var(--content-width);
-    max-width: 100%;
-    font-size: var(--font-size-small);
-    text-align: center;
-}
-
 @media screen and (min-width: 30em) {
     .leaderboard {
         font-size: inherit;
@@ -294,6 +311,7 @@ label {
 .navbar-item {
     margin-right: var(--space-small);
     text-decoration: none;
+    color: var(--color-white);
 }
 
 .navbar-item:last-child {
@@ -305,5 +323,41 @@ label {
 }
 
 .add-to-collection {
+    background-color: var(--color-accent);
+}
+
+.leaderboard-link {
+    text-decoration: none;
+}
+
+.leaderboard-game {
+    table-layout: fixed;
+    font-size: 0.8em;
+}
+
+@media screen and (min-width: 55em) {
+    .leaderboard-game {
+        font-size: inherit;
+    }
+}
+
+.row-rank,
+.row-record {
+    width: 8%;
+}
+
+.row-score {
+    width: 16%;
+}
+
+.new-score {
+    text-decoration: none;
+    box-shadow: 0.06em 0.06em 0.2em var(--color-black);
+    font-weight: bold;
+    transition: all ease-in-out 0.2s;
+}
+
+.new-score:hover {
+    color: var(--color-black);
     background-color: var(--color-accent);
 }
