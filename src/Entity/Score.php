@@ -176,7 +176,6 @@ class Score
      */
     public function validate(ExecutionContextInterface $context, $payload)
     {
-
         if ($this->getTournament()->getStartDate() > $this->getDateUpdated()) {
             $context->buildViolation('The tournament has not started yet.')
                 ->atPath('date_updated')
@@ -184,11 +183,20 @@ class Score
             ;
         }
 
-        if($this->getTournament()->getEndDate() < $this->getDateUpdated()) {
+        if ($this->getTournament()->getEndDate() < $this->getDateUpdated()) {
             $context->buildViolation('The tournament has already concluded.')
                 ->atPath('date_updated')
                 ->addViolation()
             ;
+        }
+
+        if (
+            empty($this->getVideoUrl()) and
+            empty($this->getScreenshot())
+        ) {
+            $context->buildViolation('You must include a video URL or screenshot.')
+            ->addViolation()
+        ;
         }
     }
 
