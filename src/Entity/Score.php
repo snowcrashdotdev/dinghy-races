@@ -19,11 +19,6 @@ class Score
     private $id;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $proof;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="scores")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -62,6 +57,21 @@ class Score
      */
     private $team;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $videoUrl;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $screenshot;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $comment;
+
     public function __construct(Game $game, Tournament $tournament, User $user, Team $team)
     {
         $this->setGame($game);
@@ -75,18 +85,6 @@ class Score
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getProof(): ?string
-    {
-        return $this->proof;
-    }
-
-    public function setProof(?string $proof): self
-    {
-        $this->proof = $proof;
-
-        return $this;
     }
 
     public function getUser(): ?User
@@ -192,5 +190,41 @@ class Score
                 ->addViolation()
             ;
         }
+    }
+
+    public function getVideoUrl(): ?string
+    {
+        return $this->videoUrl;
+    }
+
+    public function setVideoUrl(?string $videoUrl): self
+    {
+        $this->videoUrl = $videoUrl;
+
+        return $this;
+    }
+
+    public function getScreenshot(): ?string
+    {
+        return $this->screenshot;
+    }
+
+    public function setScreenshot(?string $screenshot): self
+    {
+        $this->screenshot = $screenshot;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
     }
 }
