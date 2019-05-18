@@ -1,4 +1,30 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form,{
+    'attr':{
+        'class': 'bg-white padding flex-column'
+    }
+}) }}
+    <div>
+        {{ form_errors(form) }}
+    </div>
+
+    <div class="flex-row align-center">
+        {{ form_label(form.points) }}
+        {{ form_widget(form.points) }}
+    </div>
+
+    <div class="flex-row align-center">
+        {{ form_label(form.videoUrl) }}
+        {{ form_widget(form.videoUrl) }}
+    </div>
+
+    <div class="flex-row align-center">
+        {{ form_label(form.screenshot) }}
+        {{ form_widget(form.screenshot) }}
+    </div>
+
+    <div class="flex-row align-center">
+        {{ form_label(form.comment) }}
+        {{ form_widget(form.comment) }}
+    </div>
+    <button class="margin-y">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

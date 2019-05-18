@@ -55,7 +55,6 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
                     $points = random_int(100, 300);
                     $score = new Score($game, $tournament, $user, $team);
                     $score->setPoints($points);
-                    $score->setProof('https://twitch.tv');
                     $manager->persist($score);
                 }
             }

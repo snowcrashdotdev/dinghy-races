@@ -142,7 +142,7 @@
     justify-content: center;
 }
 
-.align-items-center {
+.align-center {
     align-items: center;
 }
 
@@ -360,4 +360,18 @@ tr:nth-child(even) {
 .new-score:hover {
     color: var(--color-black);
     background-color: var(--color-accent);
+}
+  
+.score-input {
+    box-sizing: border-box;
+    width: 100%;
+}
+.score-label {
+    text-align: right;
+    flex-basis: 6rem;
+    margin-right: var(--space);
+}
+    
+.score-label::after {
+    content: ':';
 }

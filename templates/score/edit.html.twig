@@ -1,10 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Update score{% endblock %}
+{% block title %}New Score for {{score.game.description}} in {{score.tournament.title}}{% endblock %}
 
 {% block body %}
-    <h1>Update score</h1>
+    <main>
+        <header class="bg-accent padding">
+            <h1>{{score.tournament.title}}</h1>
+            <p>Update your score for {{score.game.description}}</p>
+        </header>
 
-    {{ include('score/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('score/_form.html.twig', {'button_label': 'Update'}) }}
+    </main>
 
 {% endblock %}
