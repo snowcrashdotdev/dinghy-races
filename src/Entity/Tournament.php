@@ -217,6 +217,27 @@ class Tournament
             })->first();
     }
 
+    public function getScoresByUser(User $user)
+    {
+        $criteria = Criteria::create()
+            ->andWhere(Criteria::expr()->eq('user', $user));
+        return $this->getScores()->matching($criteria);
+    }
+
+    public function getPoints(int $rank)
+    {
+        switch(true) {
+            case ($rank >= 30):
+                return 24 - ($rank - 30);
+            case ($rank >= 13):
+                return 58 - ($rank - 13) * 2;
+            case ($rank >= 4):
+                return 85 - ($rank - 4) * 3;
+            case ($rank >= 0):
+                return 100 - $rank * 5;
+        }
+    }
+
     public function getHighscore(Game $game)
     {
         $exp = new Comparison('game', '=', $game);
@@ -275,5 +296,25 @@ class Tournament
             $this->getStartDate() < $now and
             $this->getEndDate() > $now
         );
+    }
+
+    public function getIndividualScores() {
+        $result = array();
+
+        foreach ($this->getUsers() as $user) {
+            $total = 0;
+            $scores = $this->getScoresByUser($user);
+            foreach($scores as $score) {
+                $points = $this->getPoints($this->getScoreRank($score));
+                $total += $points;
+            }
+            $result[] = ['user' => $user, 'points' => $total];
+        }
+
+        $users = array_column($result, 'user');
+        $points = array_column($result, 'points');
+        array_multisort($points, SORT_DESC, $users, SORT_ASC, $result);
+
+        return $result;
     }
 }

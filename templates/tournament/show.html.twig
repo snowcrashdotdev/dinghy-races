@@ -26,7 +26,7 @@
             {% for topscorer in topscorer %}
                 <p>
                     <span>Top Scorer: {{ topscorer.username }} ({{ topscorer.points|number_format }} points)</span>
-                    <a class="float-right" href="">Individual Leaderboard</a></p>
+                    <a class="float-right" href="{{path('leaderboard_individual',{'tournament':tournament.id})}}">Individual Leaderboard</a></p>
                 </p>
             {% endfor %}
             </section>

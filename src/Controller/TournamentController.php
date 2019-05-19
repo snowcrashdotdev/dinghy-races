@@ -131,6 +131,17 @@ class TournamentController extends AbstractController
     }
 
     /**
+     * @Route("/{tournament}/leaderboards/individual", name="leaderboard_individual", methods={"GET"})
+     */
+    public function individual_leaderboard(Request $request, Tournament $tournament)
+    {
+        return $this->render('tournament/leaderboard.individual.html.twig', [
+            'tournament' => $tournament,
+            'scores' => $tournament->getIndividualScores(),
+        ]);
+    }
+
+    /**
      * @Route("/{id}", name="tournament_delete", methods={"DELETE"})
      * @isGranted("ROLE_ADMIN")
      */
