@@ -1,4 +1,5 @@
 swiftmailer:
+    transport: '%env(MAILER_TRANSPORT)%'
+    username: '%env(MAILER_USERNAME)%'
+    password: '%env(MAILER_PASSWORD)%'
     url: '%env(MAILER_URL)%'
-    transport: smtp
-    spool: { type: file, path: '%kernel.project_dir%/var/spool' }
