@@ -267,4 +267,12 @@ class Tournament
 
         return $this;
     }
+
+    public function isInProgress() {
+        $now = new \DateTime('now');
+        return (
+            $this->getStartDate() < $now and
+            $this->getEndDate() > $now
+        );
+    }
 }

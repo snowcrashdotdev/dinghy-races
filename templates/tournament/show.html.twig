@@ -16,9 +16,10 @@
                 </div>
             </section>
             {% if tournament.winner %}
+                {% set label = tournament.inProgress ? 'Leading' : 'Winning' %}
             <section>
                 <p>
-                    <span>Winning Team: {{ tournament.winner.name }} ({{ tournament.winner.points|number_format }} points)</span>
+                    <span>{{ label }} Team: {{ tournament.winner.name }} ({{ tournament.winner.points|number_format }} points)</span>
                     <a class="float-right" href="">Team Leaderboard</a></p>
             </section>
             {% endif %}
