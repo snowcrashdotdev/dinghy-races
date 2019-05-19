@@ -20,10 +20,12 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
     public function load(ObjectManager $manager)
     {
         $admin = new User();
-        $admin->setUsername('admin');
-        $password = $this->encoder->encodePassword($admin, 'admin');
-        $admin->setPassword($password);
-        $admin->addRoles(array('ROLE_ADMIN'));
+        $admin->setUsername('snowcrash');
+        $password = $this->encoder->encodePassword($admin, 'snowcrash');
+        $admin->setPassword($password)
+            ->addRoles(["ROLE_ADMIN"])
+            ->setVerified(true);
+
         $manager->persist($admin);
 
         $usernames = [
@@ -62,9 +64,10 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
 
         foreach($usernames as $name) {
             $user = new User();
-            $user->setUsername($name);
             $password = $this->encoder->encodePassword($user, $name);
-            $user->setPassword($password);
+            $user->setPassword($password)
+                ->setUsername($name)
+                ->setVerified(true);
             $manager->persist($user);
         }
 
