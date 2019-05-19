@@ -39,7 +39,7 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="team_show", methods={"GET"})
+     * @Route("/{team}", name="team_show", methods={"GET"})
      */
     public function show(Team $team): Response
     {

@@ -353,7 +353,8 @@ img {
 }
 
 .row-rank,
-.row-record {
+.row-record,
+.row-captain {
     width: 8%;
 }
 

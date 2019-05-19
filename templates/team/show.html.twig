@@ -1,11 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Team{% endblock %}
+{% block title %}{{team.tournament.title}} - Team Roster: {{team.name}}{% endblock %}
 
 {% block body %}
-    {% for player in team.members %}
-        <p>{{ player.username }}</p>
-    {% else %}
-        <p>No members assigned to this team.</p>
-    {% endfor %}
+    <main>
+        <header class="bg-accent padding">
+            <h1>
+                <span class="block">{{team.name}}</span>
+                <small class="block">{{team.tournament.title}}</small>
+            </h1>
+        </header>
+
+        <section class="margin-y padding">
+            <h2>Roster</h2>
+            <table>
+                <tr>
+                    <th class="row-captain">Captain</th>
+                    <th>Player</th>
+                    <th>Profile</th>
+                </tr>
+            {% for player in team.members %}
+                <tr>
+                    <td></td>
+                    <td>{{ player.username }}</td>
+                    <td></td>
+                <tr>
+            {% else %}
+                <p>No members assigned to this team.</p>
+            {% endfor %}
+            </table>
+        </section>
+    </main>
 {% endblock %}

@@ -19,7 +19,7 @@
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td class="align-right">{{ team.points|number_format }}</td>
-                    <td>{{ team.name }}</td>
+                    <td><a href="{{path('team_show',{'team':team.id})}}">{{ team.name }}</a></td>
                 </tr>
             {% endfor %}
             </table>
