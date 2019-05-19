@@ -1,6 +1,5 @@
 <article class="summary summary-tournament bg-white margin-y padding">
-    <time class="bg-accent margin padding float-right">{{ tournament.startDate|date('M jS') }}</time>
-
+    <time class="bg-accent margin padding float-right text-align-center">{{ tournament.startDate|date('M jS') }}<span class="break-wide">thru</span>{{tournament.endDate|date('M jS')}}</time>
     <h3 class="summary-title"><a href="{{ path( 'tournament_show', {'id': tournament.id} ) }}">{{ tournament.title|title }}</a></h3>
 
     {{ tournament.description|raw }}

@@ -37,6 +37,17 @@
     display: block;
 }
 
+.break-wide {
+    margin-left: var(--space-smaller);
+    margin-right: var(--space-smaller);
+}
+
+@media screen and (min-width:55em) {
+    .break-wide {
+        display: block;
+    }
+}
+
 .push-center {
     display: block;
     margin-left: auto;
@@ -300,6 +311,7 @@ img {
     align-self: stretch;
     text-decoration: none;
     color: var(--color-black);
+    overflow: auto;
 }
 
 .summary-game {
