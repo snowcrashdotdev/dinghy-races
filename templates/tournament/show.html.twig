@@ -11,8 +11,8 @@
                 {{ tournament.description|raw }}
                 </div>
                 <div class="tournament-details font-size-small">
-                    <p>Start: {{tournament.startDate|date('F j, Y')}}</p>
-                    <p>End: {{tournament.endDate|date('F j, Y')}}</p>
+                    <p>Start: {{tournament.startDate|date('F jS, Y @ g:Ha')}}</p>
+                    <p>End: {{tournament.endDate|date('F jS, Y @ g:Ha')}}</p>
                 </div>
             </section>
             {% if tournament.winner %}
