@@ -22,6 +22,7 @@
     --space-largest: calc(var(--space-larger)*var(--ratio));
 
     --font-size-small: calc(1rem/var(--ratio));
+    --font-size-large: calc(1rem*var(--ratio));
 }
 /* Functional Classes */
 .align-right {
@@ -402,4 +403,44 @@ img {
 
 .thumbnail {
     width: 12rem;
+}
+
+.flash {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: var(--space);
+    padding: var(--space);
+    width: 20vw;
+    min-width: 12em;
+    font-size: 1.2em;
+    border-radius: 0.2em;
+    box-shadow: 0.1em 0.1em 0.1em var(--color-black);
+    background-image: var(--shading);
+    animation: fade-out 0.8s linear forwards 10s;
+}
+
+@keyframes fade-out {
+    100% { opacity: 0; }
+}
+
+@media screen and (min-width:55em) {
+    .flash {
+        left: var(--space-larger);
+        top: var(--space-larger);
+    }
+}
+
+.flash-warning {
+    background-color: var(--color-accent);
+}
+
+.flash-notice {
+    color: var(--color-white);
+    background-color: var(--color-primary);
+}
+
+.flash-error {
+    color: var(--color-white);
+    background-color: var(--color-danger);
 }

@@ -1,0 +1,7 @@
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <aside class="flash flash-{{ label }}">
+            {{ message }}
+        </aside>
+    {% endfor %}
+{% endfor %}
