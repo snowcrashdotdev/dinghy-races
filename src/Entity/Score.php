@@ -203,12 +203,12 @@ class Score
         return $this;
     }
 
-    public function getScreenshot(): ?string
+    public function getScreenshot()
     {
         return $this->screenshot;
     }
 
-    public function setScreenshot(?string $screenshot): self
+    public function setScreenshot($screenshot): self
     {
         $this->screenshot = $screenshot;
 
