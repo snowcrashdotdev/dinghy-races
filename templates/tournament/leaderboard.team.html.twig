@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ tournament.title }} Team Leaderboard{% endblock %}
+
+{% block body %}
+    <main>
+        <h1>
+            <span class="block padding bg-accent">{{ tournament.title }}</span>
+            <span class="block padding bg-accent">Team Leaderboard</span>
+        </h1>
+        {% if tournament.teams %}
+            <table class="leaderboard leaderboard-game margin-y">
+                <tr>
+                    <th class="row-rank">Rank</th>
+                    <th class="align-right row-score">Score</th>
+                    <th class="row-team">Team</th>
+                </tr>
+            {% for team in tournament.teams %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="align-right">{{ team.points|number_format }}</td>
+                    <td>{{ team.name }}</td>
+                </tr>
+            {% endfor %}
+            </table>
+        {% endif %}
+    </main>
+{% endblock %}

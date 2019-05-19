@@ -51,6 +51,7 @@ class Tournament
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Team", mappedBy="tournament", orphanRemoval=true, cascade={"persist","remove"})
+     * @ORM\OrderBy({"points" = "DESC"})
      */
     private $teams;
 

@@ -20,7 +20,7 @@
             <section>
                 <p>
                     <span>{{ label }} Team: {{ tournament.winner.name }} ({{ tournament.winner.points|number_format }} points)</span>
-                    <a class="float-right" href="">Team Leaderboard</a></p>
+                    <a class="float-right" href="{{ path('leaderboard_team', {'tournament': tournament.id}) }}">Team Leaderboard</a></p>
             </section>
             {% endif %}
             {% for topscorer in topscorer %}
