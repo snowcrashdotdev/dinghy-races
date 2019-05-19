@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block body %}
+    <main class="flex-column align-items-center">
+        <h1 class="text-align-center">Thank you!</h1>
+        <p>Please verify your email address before <a href="{{path('app_login')}}">signing in.</a></p>
+    </main>
+{% endblock %}
