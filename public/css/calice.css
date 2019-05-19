@@ -123,6 +123,10 @@
     margin-left: var(--space);
 }
 
+.margin-bottom {
+    margin-bottom: var(--space-small);
+}
+
 @media screen and (min-width: 55em) {
     .flex-row {
         display: flex;
@@ -270,6 +274,13 @@ tr:nth-child(even) {
     background-color: hsla(180, 50%, 100%, 0.5);
 }
 
+img {
+    display: block;
+    max-width: 100%;
+    object-fit: scale-down;
+    object-position: center;
+}
+
 /* Component Styles */
 .tournament-header,
 .game-summary {
@@ -374,4 +385,8 @@ tr:nth-child(even) {
     
 .score-label::after {
     content: ':';
+}
+
+.thumbnail {
+    width: 12rem;
 }
