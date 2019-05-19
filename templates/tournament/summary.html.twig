@@ -5,8 +5,8 @@
 
     {{ tournament.description|raw }}
 
+    {% if tournament.users|length > 1 %}
     <p class="block bg-primary padding-y">
-        {% if tournament.users|length > 1 %}
             {% set details = [
                 [tournament.teams|length, tournament.teams|length > 1 ? 'teams' : 'team']|join(' '),
 
@@ -16,7 +16,6 @@
                 ]
             %}
             {{ details|join(' - ') }}
-        {% endif %}
     <p>
-
+    {% endif %}
 </article>
