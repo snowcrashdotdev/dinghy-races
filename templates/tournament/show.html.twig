@@ -23,12 +23,12 @@
                     <a class="float-right" href="{{ path('leaderboard_team', {'tournament': tournament.id}) }}">Team Leaderboard</a></p>
             </section>
             {% endif %}
-            {% for topscorer in topscorer %}
+            {% if tournament.topscorer %}
                 <p>
-                    <span>Top Scorer: {{ topscorer.username }} ({{ topscorer.points|number_format }} points)</span>
+                    <span>Top Scorer: {{ tournament.topscorer.user.username }} ({{ tournament.topscorer.points|number_format }} points)</span>
                     <a class="float-right" href="{{path('leaderboard_individual',{'tournament':tournament.id})}}">Individual Leaderboard</a></p>
                 </p>
-            {% endfor %}
+            {% endif %}
             </section>
         </header>
 

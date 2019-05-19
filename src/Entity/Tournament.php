@@ -317,4 +317,11 @@ class Tournament
 
         return $result;
     }
+
+    public function getTopScorer() {
+        if (!empty($scores = $this->getIndividualScores())) {
+            return $scores[0];
+        }
+        return false;
+    }
 }

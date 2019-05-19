@@ -76,8 +76,7 @@ class TournamentController extends AbstractController
         ;
 
         return $this->render('tournament/show.html.twig', [
-            'tournament' => $tournament,
-            'topscorer' => $topScorer,
+            'tournament' => $tournament
         ]);
     }
 
