@@ -171,26 +171,6 @@ class Score
         return $this;
     }
 
-    /**
-     * @Assert\Callback
-     */
-    public function validate(ExecutionContextInterface $context, $payload)
-    {
-        if ($this->getTournament()->getStartDate() > $this->getDateUpdated()) {
-            $context->buildViolation('The tournament has not started yet.')
-                ->atPath('date_updated')
-                ->addViolation()
-            ;
-        }
-
-        if ($this->getTournament()->getEndDate() < $this->getDateUpdated()) {
-            $context->buildViolation('The tournament has already concluded.')
-                ->atPath('date_updated')
-                ->addViolation()
-            ;
-        }
-    }
-
     public function getVideoUrl(): ?string
     {
         return $this->videoUrl;
@@ -225,5 +205,33 @@ class Score
         $this->comment = $comment;
 
         return $this;
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        if ($this->getTournament()->getStartDate() > $this->getDateUpdated()) {
+            $context->buildViolation('The tournament has not started yet.')
+                ->atPath('date_updated')
+                ->addViolation()
+            ;
+        }
+
+        if ($this->getTournament()->getEndDate() < $this->getDateUpdated()) {
+            $context->buildViolation('The tournament has already concluded.')
+                ->atPath('date_updated')
+                ->addViolation()
+            ;
+        }
+
+        if (
+            $this->getVideoUrl() === null and
+            $this->getScreenshot() === null
+        ) {
+            $context->buildViolation('Either a Video URL or screenshot is required.')
+                ->addViolation();
+        }
     }
 }
