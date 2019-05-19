@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @Route("/user")
@@ -29,7 +30,7 @@ class UserController extends AbstractController
     /**
      * @Route("/sign-up", name="user_new", methods={"GET","POST"})
      */
-    public function new(Request $request, UserPasswordEncoderInterface $encoder): Response
+    public function new(Request $request, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -39,10 +40,27 @@ class UserController extends AbstractController
             $password = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
             $entityManager = $this->getDoctrine()->getManager();
+            $user->setResetToken(bin2hex(random_bytes(32)));
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_login');
+            $verify_url = $this->generateUrl('app_verify', [
+                'user'=> $user->getId(),
+                'token'=>$user->getResetToken(),
+                ], UrlGeneratorInterface::ABSOLUTE_URL
+            );
+
+            $message = (new \Swift_Message('Please verify your email address'))
+                ->setFrom($this->getParameter('default_sender'))
+                ->setTo($user->getEmail())
+                ->setBody($this->renderView('emails/registration.html.twig', [
+                    'verify_url' => $verify_url
+                ]), 'text/html'
+            );
+            
+            $mailer->send($message);
+
+            return $this->redirectToRoute('app_welcome');
         }
 
         return $this->render('user/new.html.twig', [

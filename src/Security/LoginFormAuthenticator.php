@@ -68,7 +68,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
         if (!$user) {
             // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Username could not be found.');
+            throw new CustomUserMessageAuthenticationException('Username or password were not valid.');
         }
 
         return $user;
@@ -76,6 +76,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
+        if (!$user->isVerified()) {
+            throw new CustomUserMessageAuthenticationException('Please verify your email address before logging in.');
+        }
+
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
