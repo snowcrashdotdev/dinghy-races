@@ -23,7 +23,7 @@
                 <tr>
                     <td></td>
                     <td>{{ player.username }}</td>
-                    <td></td>
+                    <td><a href="{{path('user_show', {'id':player.id})}}">👤</a></td>
                 <tr>
             {% else %}
                 <p>No members assigned to this team.</p>

@@ -195,6 +195,10 @@
     background-image: var(--shading);
 }
 
+.list-style-none {
+    list-style-type: none;
+}
+
 /* Global Styles */
 body {
     padding: 0;
@@ -291,6 +295,11 @@ img {
     max-width: 100%;
     object-fit: scale-down;
     object-position: center;
+}
+
+ul {
+    padding-left: var(--space-large);
+    margin: var(--space) 0;
 }
 
 /* Component Styles */

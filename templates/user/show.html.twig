@@ -1,36 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User{% endblock %}
+{% block title %}{{user.username}} player profile{% endblock %}
 
 {% block body %}
     <main>
-    <h1>User</h1>
+        <header class="bg-accent padding flex-row">
+            <h1 class="padding-y">{{user.username}}</h1>
+        </header>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Username</th>
-                <td>{{ user.username }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <section class="margin-y bg-white padding">
+        {% if user.tournaments %}
+            <h2>Has appeared in:</h2>
+            <ul class="list-style-none">
+            {% for tournament in user.tournaments %}
+                <li>{{tournament.title}}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>Has not yet participated in a tournament</p>
+        {% endif %}
+        </section>
 
-    <a href="{{ path('user_index') }}">back to list</a>
-
-    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
-
-    {{ include('user/_delete_form.html.twig') }}
+        <section class="margin-y padding">
+        {% if user.scores %}
+            <h2 class="margin-bottom">Recent high scores:</h2>
+            <table class="leaderboard">
+                <tr>
+                    <th>Score</th>
+                    <th>Game</th>
+                    <th>Date</th>
+                    <th>Record</th>
+                </tr>
+            {% for score in user.scores %}
+                <tr>
+                    <td>{{score.points}}</td>
+                    <td>{{score.game.description}}</td>
+                    <td>{{score.dateUpdated|date('M j, Y')}}</td>
+                    <td><a href="{{score.videoUrl}}">📄</a></td>
+                </tr>
+            {% endfor %}
+            </table>
+        {% endif %}
+        </section>
     </main>
 {% endblock %}
