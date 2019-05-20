@@ -251,7 +251,13 @@ class Tournament
     {
         $criteria = new Criteria();
         $criteria->orderBy(['points'=> Criteria::DESC])->setMaxResults(1);
-        return $this->getTeams()->matching($criteria)->first();
+
+        $leading_team = $this->getTeams()->matching($criteria)->first();
+
+        if ($leading_team->getPoints() > 0) {
+            return $leading_team;
+        }
+        return false;
     }
 
     public function getScoreRank(Score $score) {
@@ -320,7 +326,9 @@ class Tournament
 
     public function getTopScorer() {
         if (!empty($scores = $this->getIndividualScores())) {
-            return $scores[0];
+            if ($scores[0]['points'] > 0 ){
+                return $scores[0];
+            }
         }
         return false;
     }
