@@ -67,6 +67,11 @@ class User implements UserInterface
      */
     private $reset_token;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_at;
+
     public function __construct()
     {
         $this->verified = false;
@@ -75,6 +80,7 @@ class User implements UserInterface
         $this->team = new ArrayCollection();
         $this->teams = new ArrayCollection();
         $this->tournaments = new ArrayCollection();
+        $this->created_at = new \DateTime('now');
     }
 
     public function getId(): ?int
@@ -259,6 +265,18 @@ class User implements UserInterface
     public function setResetToken(?string $reset_token): self
     {
         $this->reset_token = $reset_token;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }
