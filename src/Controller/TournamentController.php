@@ -90,7 +90,14 @@ class TournamentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $em = $this->getDoctrine()->getManager();
+            foreach($tournament->getTeams() as $team) {
+                foreach($team->getMembers() as $user) {
+                    $tournament->addUser($user);
+                }
+            }
+            $em->persist($tournament);
+            $em->flush();
 
             return $this->redirectToRoute('tournament_index', [
                 'id' => $tournament->getId(),

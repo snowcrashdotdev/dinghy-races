@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TournamentRepository")
- * @ORM\HasLifecycleCallbacks()
+ *
  */
 class Tournament
 {
@@ -68,15 +68,6 @@ class Tournament
         $this->scores = new ArrayCollection();
         $this->teams = new ArrayCollection();
         $this->users = new ArrayCollection();
-    }
-
-    public function preUpdate()
-    {
-        foreach($this->getTeams() as $team) {
-            foreach($team->getMembers() as $user) {
-                $user->addTournament($this);
-            }
-        }
     }
 
     public function getId(): ?int
