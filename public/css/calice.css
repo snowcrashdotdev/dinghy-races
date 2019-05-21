@@ -430,7 +430,7 @@ ul {
     border-radius: 0.2em;
     box-shadow: 0.1em 0.1em 0.1em var(--color-black);
     background-image: var(--shading);
-    animation: fade-out 0.8s linear forwards 10s;
+    animation: fade-out 0.8s linear forwards 5s;
 }
 
 @keyframes fade-out {
