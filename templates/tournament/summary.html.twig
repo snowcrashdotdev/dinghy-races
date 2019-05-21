@@ -3,9 +3,8 @@
     <h3 class="summary-title"><a href="{{ path( 'tournament_show', {'id': tournament.id} ) }}">{{ tournament.title|title }}</a></h3>
 
     {{ tournament.description|raw }}
-
     {% if tournament.users|length > 1 %}
-    <p class="block bg-primary padding-y">
+    <p class="block bg-primary padding-y clear-floats">
             {% set details = [
                 [tournament.teams|length, tournament.teams|length > 1 ? 'teams' : 'team']|join(' '),
 
