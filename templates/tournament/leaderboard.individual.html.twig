@@ -8,7 +8,9 @@
             <span class="block padding bg-accent">{{ tournament.title }}</span>
             <span class="block padding bg-accent">Individual Leaderboard</span>
         </h1>
-        {% if scores %}
+        {% if not scores %}
+            <p class="bg-white margin padding">No scores posted.</p>
+        {% else %}
             <table class="leaderboard leaderboard-game margin-y">
                 <tr>
                     <th class="row-rank">Rank</th>

@@ -15,22 +15,25 @@
                     <p>End: {{tournament.endDate|date('F jS, Y @ g:Ha')}}</p>
                 </div>
             </section>
-            <section>
-            {% for name,points in tournament.winningTeam %}
-                {% set label = tournament.inProgress ? 'Leading' : 'Winning' %}
-                <p>
-                <span>{{ label }} Team: {{ name }} ({{ points|number_format }} points)</span>
-                <a class="float-right" href="{{ path('leaderboard_team', {'tournament': tournament.id}) }}">Team Leaderboard</a>
-                </p>
-            {% endfor %}
-            </section>
-            {% if tournament.topscorer %}
-                <p>
-                    <span>Top Scorer: {{ tournament.topscorer.user.username }} ({{ tournament.topscorer.points|number_format }} points)</span>
-                    <a class="float-right" href="{{path('leaderboard_individual',{'tournament':tournament.id})}}">Individual Leaderboard</a></p>
-                </p>
+
+            {% if tournament.hasScores %}
+                <section>
+                    {% set label = (tournament.inProgress) ? 'Leading' : 'Winning' %}
+                    {% set leading = tournament.scoreTournament('team', true) %}
+                    <p>
+                    <span>{{ label }} Team: {{ leading.team.name }} ({{ leading.points|number_format }} points)</span>
+                    <a class="float-right" href="{{ path('leaderboard_team', {'tournament': tournament.id}) }}">Team Leaderboard</a>
+                    </p>
+                </section>
+
+                <section>
+                    {% set leading = tournament.scoreTournament('ind', true) %}
+                    <p>
+                        <span>Top Scorer: {{ leading.user.username }} ({{ leading.points|number_format }} points)</span>
+                        <a class="float-right" href="{{path('leaderboard_individual',{'tournament':tournament.id})}}">Individual Leaderboard</a></p>
+                    </p>
+                </section>
             {% endif %}
-            </section>
         </header>
 
         <section class="flex-row flex-wrap justify-center">

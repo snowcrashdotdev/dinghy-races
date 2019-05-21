@@ -136,7 +136,7 @@ class TournamentController extends AbstractController
     {
         return $this->render('tournament/leaderboard.individual.html.twig', [
             'tournament' => $tournament,
-            'scores' => $tournament->getIndividualScores(),
+            'scores' => $tournament->scoreTournament('ind'),
         ]);
     }
 

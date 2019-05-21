@@ -36,6 +36,7 @@ class Tournament
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Score", mappedBy="tournament", orphanRemoval=true)
+     * @ORM\OrderBy({"points" = "DESC"})
      */
     private $scores;
 
@@ -300,6 +301,10 @@ class Tournament
         return $this;
     }
 
+    public function hasScores() {
+        return ! $this->getScores()->isEmpty();
+    }
+
     public function isInProgress() {
         $now = new \DateTime('now');
         return (
@@ -351,5 +356,76 @@ class Tournament
             }
         }
         return false;
+    }
+
+    public function scoreTournament(string $type='team', bool $topOnly=false)
+    {
+        $scores = $this->getScores();
+
+        // Group By Game
+        $groupedByGame = [];
+
+        foreach($scores as $score) {
+            $key = $score->getGame()->getName();
+            $groupedByGame[$key][] = $score;
+        }
+
+        $individualScores = [];
+
+        foreach($groupedByGame as $set) {
+            foreach($set as $index => $score) {
+                $user = $score->getUser();
+                $team = $score->getTeam();
+                $key = $user->getUsername();
+                if (!isset($individualScores[$key])) {
+                    $individualScores[$key] = [
+                        'user' => $user,
+                        'team' => $team,
+                        'points' => 0
+                    ];
+                }
+                $individualScores[$key]['points'] += $this->getPoints($index);
+            }
+        }
+
+        if(
+            !usort($individualScores, function($a,$b) {
+                return $b['points'] <=> $a['points'];
+            }) 
+        ) { return null; }
+
+        if ($type === 'ind') {
+            if ($topOnly) {
+                return $individualScores[0];
+            } else {
+                return $individualScores;
+            }
+        }
+
+        $teamScores = [];
+
+        foreach($individualScores as $score) {
+            $team = $score['team'];
+            $key = $team->getName();
+            if (!isset($teamScores[$key])) {
+                $teamScores[$key] = [
+                    'team' => $team,
+                    'points' => 0
+                ];
+            }
+            $teamScores[$key]['points'] += $score['points'];
+        }
+
+        usort($teamScores, function($a,$b){
+            return $b['points'] <=> $a['points'];
+        });
+
+        if ($type === 'team') {
+            if ($topOnly) {
+                return $teamScores[0];
+            } else {
+                return $teamScores;
+            }
+        }
     }
 }

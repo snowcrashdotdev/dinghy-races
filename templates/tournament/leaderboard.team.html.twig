@@ -8,14 +8,16 @@
             <span class="block padding bg-accent">{{ tournament.title }}</span>
             <span class="block padding bg-accent">Team Leaderboard</span>
         </h1>
-        {% if tournament.teams %}
+        {% if not tournament.hasScores %}
+            <p class="bg-white margin padding">No scores posted.</p>
+        {% else %}
             <table class="leaderboard leaderboard-game margin-y">
                 <tr>
                     <th class="row-rank">Rank</th>
                     <th class="align-right row-score">Score</th>
                     <th class="row-team">Team</th>
                 </tr>
-            {% for score in tournament.teamScores %}
+            {% for score in tournament.scoreTournament('team') %}
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td class="align-right">{{ score.points|number_format }}</td>
