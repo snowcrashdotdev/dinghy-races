@@ -41,8 +41,10 @@ class TournamentSubscriber implements EventSubscriber
             foreach($team->getMembers() as $member) {
                 $member->addTournament($entity);
                 $em->persist($member);
+                $tournament->addUser($member);
             }
         }
+        $em->persist($tournament);
         $em->flush();
     }
 }
