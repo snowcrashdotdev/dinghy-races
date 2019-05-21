@@ -222,6 +222,8 @@ class Score
                 ->atPath('date_updated')
                 ->addViolation()
             ;
+            $this->setScreenshot(null);
+            return;
         }
 
         if ($this->getTournament()->getEndDate() < $this->getDateUpdated()) {
@@ -229,6 +231,8 @@ class Score
                 ->atPath('date_updated')
                 ->addViolation()
             ;
+            $this->setScreenshot(null);
+            return;
         }
 
         if (
