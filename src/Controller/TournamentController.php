@@ -53,6 +53,11 @@ class TournamentController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            foreach($tournament->getTeams() as $team) {
+                foreach($team->getMembers() as $user) {
+                    $tournament->addUser($user);
+                }
+            }
             $entityManager->persist($tournament);
             $entityManager->flush();
 
