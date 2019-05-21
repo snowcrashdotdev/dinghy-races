@@ -21,12 +21,12 @@ class GameRepository extends ServiceEntityRepository
 
     public function searchBySubstring($string) {
         return $this->createQueryBuilder('g')
-            ->select('g.description')
+            ->select('g.description as value')
             ->andWhere('g.description LIKE :string')
             ->setParameter('string', '%'.addcslashes($string, '%_').'%')
-            ->setMaxResults(1)
+            ->setMaxResults(5)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
 

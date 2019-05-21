@@ -28,7 +28,7 @@ class GameSelectorType extends AbstractType
             'invalid_message' => 'The selected game does not exist',
             'attr'=> [
                 'placeholder' => 'Game',
-                'class' => 'ajax-search',
+                'class' => 'ajax-search full-width margin-y',
                 'data-entity' => 'game' 
             ]
         ]);

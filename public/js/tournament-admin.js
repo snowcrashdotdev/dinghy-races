@@ -40,7 +40,7 @@ function addFormToCollection() {
     var newSearchInputs = collection.getElementsByClassName('ajax-search')
     if (newSearchInputs) {
         for (let search of newSearchInputs) {
-            search.addEventListener('keydown', performAjaxSearch, false)
+            search.addEventListener('input', performAjaxSearch, false)
         }
     }
 
@@ -48,19 +48,45 @@ function addFormToCollection() {
     collection.appendChild(this)
 }
 
-function performAjaxSearch() {
-    var q = this.value
-    if (this.value < 3) {
+var ajaxResults = document.createElement('ul')
+ajaxResults.classList.add('ajax-results-collection')
+function performAjaxSearch(e) {
+    var q = e.target.value
+    if (this.value.length < 3) {
+        while(ajaxResults.hasChildNodes()) {
+            ajaxResults.removeChild(ajaxResults.lastChild)
+        }
         return true;
     } else {
         var url = [document.getElementById('ajax-search-path').dataset[this.dataset.entity], this.value].join('/')
+        var autocomplete = e.target
+        e.target.parentNode.classList.add('position')
 
         window.fetch(url, {method:'POST'})
             .then(function(res) {
                 return res.json()
             })
             .then(function(json) {
-                console.log(json)
+                if (json.data.length) {
+                    while(ajaxResults.hasChildNodes()) {
+                        ajaxResults.removeChild(ajaxResults.lastChild)
+                    }
+                    ajaxResults.remove()
+                    for (let result of json.data) {
+                        var li = document.createElement('li');
+                        li.innerText = result.value
+                        li.classList.add('ajax-search-result')
+                        li.addEventListener('click', function(e){
+                            autocomplete.value = e.target.innerText
+                            while(ajaxResults.hasChildNodes()) {
+                                ajaxResults.removeChild(ajaxResults.lastChild)
+                            }
+                            return false
+                        })
+                        ajaxResults.appendChild(li)
+                        autocomplete.parentNode.insertBefore(ajaxResults, autocomplete)
+                    }
+                }
             })
     }
 }

@@ -32,7 +32,6 @@ class TournamentType extends AbstractType
                 'entry_type' => GameSelectorType::class,
                 'entry_options' => [
                     'label' => false,
-                    'attr' => ['class' => 'full-width margin-y']
                 ],
                 'allow_add' => true,
                 'prototype' => true,
