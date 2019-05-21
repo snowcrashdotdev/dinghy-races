@@ -6,6 +6,7 @@
     <main>
         <header class="bg-accent padding flex-row">
             <h1 class="padding-y">{{user.username}}</h1>
+            <p class="push-right">Member since {{user.createdAt|date('M j, Y')}}</p>
         </header>
 
         <section class="margin-y bg-white padding">
