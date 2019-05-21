@@ -15,14 +15,15 @@
                     <p>End: {{tournament.endDate|date('F jS, Y @ g:Ha')}}</p>
                 </div>
             </section>
-            {% if tournament.winner %}
-                {% set label = tournament.inProgress ? 'Leading' : 'Winning' %}
             <section>
+            {% for name,points in tournament.winningTeam %}
+                {% set label = tournament.inProgress ? 'Leading' : 'Winning' %}
                 <p>
-                    <span>{{ label }} Team: {{ tournament.winner.name }} ({{ tournament.winner.points|number_format }} points)</span>
-                    <a class="float-right" href="{{ path('leaderboard_team', {'tournament': tournament.id}) }}">Team Leaderboard</a></p>
+                <span>{{ label }} Team: {{ name }} ({{ points|number_format }} points)</span>
+                <a class="float-right" href="{{ path('leaderboard_team', {'tournament': tournament.id}) }}">Team Leaderboard</a>
+                </p>
+            {% endfor %}
             </section>
-            {% endif %}
             {% if tournament.topscorer %}
                 <p>
                     <span>Top Scorer: {{ tournament.topscorer.user.username }} ({{ tournament.topscorer.points|number_format }} points)</span>

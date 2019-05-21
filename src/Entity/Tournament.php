@@ -247,17 +247,21 @@ class Tournament
         return $this->getScores()->matching($criteria)->first();
     }
 
-    public function getWinner()
+    public function getWinningTeam()
     {
-        $criteria = new Criteria();
-        $criteria->orderBy(['points'=> Criteria::DESC])->setMaxResults(1);
-
-        $leading_team = $this->getTeams()->matching($criteria)->first();
-
-        if ($leading_team->getPoints() > 0) {
-            return $leading_team;
+        $totals = [];
+        foreach($this->getScores() as $score) {
+            $points = $this->getPoints($this->getScoreRank($score));
+            $name = $score->getTeam()->getName();
+            if (isset($totals[$name])) {
+                $totals[$name] += $points;
+            } else {
+                $totals[$name] = $points;
+            }
         }
-        return false;
+        if (arsort($totals)) {
+            return [key($totals) => reset($totals)];
+        }
     }
 
     public function getScoreRank(Score $score) {
@@ -321,6 +325,22 @@ class Tournament
         $points = array_column($result, 'points');
         array_multisort($points, SORT_DESC, $users, SORT_ASC, $result);
 
+        return $result;
+    }
+
+    public function getTeamScores() {
+        $result = array();
+
+        foreach($this->getTeams() as $team) {
+            $total = 0;
+            foreach($team->getScores() as $score) {
+                $total += $this->getPoints($this->getScoreRank($score));
+            }
+            $result[] = ['team' => $team, 'points' => $total];
+        }
+        $team = array_column($result, 'team');
+        $points = array_column($result, 'points');
+        array_multisort($points, SORT_DESC, $team, SORT_ASC, $result);
         return $result;
     }
 
