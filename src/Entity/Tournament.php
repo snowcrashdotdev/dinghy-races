@@ -361,6 +361,7 @@ class Tournament
 
     public function scoreTournament(string $type='team', bool $topOnly=false)
     {
+        if (!$this->hasScores()) { return null; }
         $scores = $this->getScores();
 
         // Group By Game
