@@ -16,26 +16,46 @@
                 </div>
             </section>
 
-            {% if tournament.hasScores %}
-                <section>
-                    {% set label = (tournament.inProgress) ? 'Leading' : 'Winning' %}
-                    {% set leading = tournament.scoreTournament('team', true) %}
-                    <p>
-                    <span>{{ label }} Team: {{ leading.team.name }} ({{ leading.points|number_format }} points)</span>
-                    <a class="float-right" href="{{ path('leaderboard_team', {'tournament': tournament.id}) }}">Team Leaderboard</a>
-                    </p>
-                </section>
+            <section>
+                {% set label = (tournament.inProgress) ? 'Leading' : 'Winning' %}
+                {% set leading = tournament.scoreTournament('team', true) %}
+                <p>
+                <span>
+                {% if tournament.hasScores %}
+                {{ label }} Team: {{ leading.team.name }} ({{ leading.points|number_format }} points)
+                {% else %}
+                    * No leading team.
+                {% endif %}
+                </span>
+                <a class="float-right" href="{{ path('leaderboard_team', {'tournament': tournament.id}) }}">Team Leaderboard</a>
+                </p>
+            </section>
 
-                <section>
-                    {% set leading = tournament.scoreTournament('ind', true) %}
-                    <p>
-                        <span>Top Scorer: {{ leading.user.username }} ({{ leading.points|number_format }} points)</span>
-                        <a class="float-right" href="{{path('leaderboard_individual',{'tournament':tournament.id})}}">Individual Leaderboard</a></p>
-                    </p>
-                </section>
-            {% endif %}
+            <section>
+                {% set leading = tournament.scoreTournament('ind', true) %}
+                <p>
+                    <span>
+                    {% if tournament.hasScores %}
+                    Top Scorer: {{ leading.user.username }} ({{ leading.points|number_format }} points)
+                    {% else %}
+                        * No leading individual.
+                    {% endif %}
+                    </span>
+                    <a class="float-right" href="{{path('leaderboard_individual',{'tournament':tournament.id})}}">Individual Leaderboard</a></p>
+                </p>
+            </section>
         </header>
 
+        <h2 class="margin-y">Teams</h2>
+        <section class="flex-row flex-wrap justify-center">
+            {% for team in tournament.teams %}
+                {{ include('team/summary.html.twig', {'team': team}) }}
+            {% else %}
+                <p>No teams registered.</p>
+            {% endfor %}
+        </section>
+
+        <h2 class="margin-y">Events</h2>
         <section class="flex-row flex-wrap justify-center">
             {% for game in tournament.games %}
                 {{ include('game/summary.html.twig', {'game': game}) }}

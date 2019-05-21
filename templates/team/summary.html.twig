@@ -1,3 +1,10 @@
-<article class="summary summar-team">
-    <h3><a href="{{ path( 'team_show', {'id': team.id} ) }}">{{ team.name }}</a></h3>
+<article class="summary summary-team bg-white flex-column margin">
+    <h3 class="bg-primary padding"><a href="{{ path( 'team_show', {'team': team.id} ) }}">{{ team.name }}</a></h3>
+    <ul class="list-style-none">
+        {% for member in team.members %}
+            <li>{{member.username}}</li>
+        {% else %}
+            <li>No team members registered</li>
+        {% endfor %}
+    </ul>
 </article>
