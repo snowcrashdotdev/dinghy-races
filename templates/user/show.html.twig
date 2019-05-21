@@ -27,17 +27,17 @@
             <h2 class="margin-bottom">Recent high scores:</h2>
             <table class="leaderboard">
                 <tr>
-                    <th>Score</th>
                     <th>Game</th>
+                    <th>Score</th>
+                    <th>Rank</th>
                     <th>Date</th>
-                    <th>Record</th>
                 </tr>
             {% for score in user.scores %}
                 <tr>
-                    <td>{{score.points}}</td>
                     <td>{{score.game.description}}</td>
+                    <td>{{score.points}}</td>
+                    <td>{{score.rank}}</td>
                     <td>{{score.dateUpdated|date('M j, Y')}}</td>
-                    <td><a href="{{score.videoUrl}}">📄</a></td>
                 </tr>
             {% endfor %}
             </table>

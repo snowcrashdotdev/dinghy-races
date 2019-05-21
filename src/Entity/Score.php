@@ -207,6 +207,11 @@ class Score
         return $this;
     }
 
+    public function getRank()
+    {
+        return $this->getTournament()->getScoreRank($this) + 1;
+    }
+
     /**
      * @Assert\Callback
      */
