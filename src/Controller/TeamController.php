@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/teams")
@@ -17,6 +18,7 @@ class TeamController extends AbstractController
 {
     /**
      * @Route("/new", name="team_new", methods={"GET","POST"})
+     * @isGranted("ROLE_ADMIN")
      */
     public function new(Request $request): Response
     {
@@ -50,6 +52,7 @@ class TeamController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="team_edit", methods={"GET","POST"})
+     * @isGranted("ROLE_ADMIN")
      */
     public function edit(Request $request, Team $team): Response
     {
@@ -70,6 +73,7 @@ class TeamController extends AbstractController
 
     /**
      * @Route("/{id}", name="team_delete", methods={"DELETE"})
+     * @isGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, Team $team): Response
     {
