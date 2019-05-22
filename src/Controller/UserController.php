@@ -82,31 +82,6 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
-     * @isGranted("ROLE_ADMIN")
-     */
-    public function edit(Request $request, User $user, UserPasswordEncoderInterface $encoder): Response
-    {
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $password = $encoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('user_index', [
-                'id' => $user->getId(),
-            ]);
-        }
-
-        return $this->render('user/edit.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * @Route("/{id}", name="user_delete", methods={"DELETE"})
      * @isGranted("ROLE_ADMIN")
      */
