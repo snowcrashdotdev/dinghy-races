@@ -192,6 +192,10 @@
     text-align: center;
 }
 
+.text-align-left {
+    text-align: left;
+}
+
 .font-size-small {
     font-size: var(--font-size-small);
 }
@@ -396,7 +400,9 @@ ul {
 }
 
 .row-rank,
-.row-record {
+.row-record,
+.row-profile,
+.row-social {
     width: 8%;
 }
 
