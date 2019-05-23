@@ -38,12 +38,14 @@ class ScoreSubscriber implements EventSubscriber
         $tournament = $entity->getTournament();
         $scores = $tournament->scoreTournament();
 
-        foreach($scores as $score) {
-            $team = $score['team'];
-            $points = $score['points'];
-            $team->setPoints($points);
-            $em->persist($team);
+        if ($scores) {
+            foreach($scores as $score) {
+                $team = $score['team'];
+                $points = $score['points'];
+                $team->setPoints($points);
+                $em->persist($team);
+            }
+            $em->flush();
         }
-        $em->flush();
     }
 }
