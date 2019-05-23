@@ -85,4 +85,35 @@ class TeamController extends AbstractController
 
         return $this->redirectToRoute('team_index');
     }
+
+    /**
+     * @Route("/promote/{team}/{username}", name="team_promotion", defaults={"username"=""},methods={"POST"})
+     */
+    public function promote(Request $request, Team $team, string $username)
+    {
+        $user = $this->getDoctrine()->getRepository('App\Entity\User')
+            ->findOneBy(['username' => $username]);
+        
+        if (!$user) {
+            return $this->json([
+                'success' => false
+            ]);
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $demote = $request->query->get('demote');
+
+        if ($demote) {
+            $team->removeCaptain($user->getId());
+        } elseif (!$demote) {
+            $team->addCaptain($user->getId());
+        }
+
+        $em->persist($team);
+        $em->flush();
+        return $this->json([
+            'success' => true,
+            'data' => ['captains' => $team->getCaptains()]
+        ]);
+    }
 }

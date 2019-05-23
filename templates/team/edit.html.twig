@@ -3,9 +3,12 @@
 {% block title %}Edit Team{% endblock %}
 
 {% block body %}
+<main>
     <h1>Edit Team</h1>
 
     {{ include('team/_form.html.twig', {'button_label': 'Update'}) }}
 
     {{ include('team/_delete_form.html.twig') }}
+</main>
+<script src="{{asset('/js/tournament-admin.js')}}"></script>
 {% endblock %}

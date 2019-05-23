@@ -29,7 +29,7 @@ class MemberSelectorType extends AbstractType
             'attr'=> [
                 'autocomplete' => 'off',
                 'placeholder' => 'Username',
-                'class' => 'ajax-search',
+                'class' => 'ajax-search team-member-input',
                 'data-entity' => 'user'
             ],
             'label' => false

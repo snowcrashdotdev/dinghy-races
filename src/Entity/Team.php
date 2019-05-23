@@ -44,6 +44,11 @@ class Team
      */
     private $scores;
 
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $captains = [];
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
@@ -150,6 +155,34 @@ class Team
             }
         }
 
+        return $this;
+    }
+
+    public function getCaptains(): ?array
+    {
+        return $this->captains;
+    }
+
+    public function setCaptains(?array $captains): self
+    {
+        $this->captains = $captains;
+
+        return $this;
+    }
+
+    public function addCaptain(int $id)
+    {
+        if (empty($this->captains) or false === array_search($id, $this->captains)) {
+            $this->captains[] = $id;
+        }
+        return $this;
+    }
+
+    public function removeCaptain(int $id)
+    {
+        if ($index = array_search($id, $this->captains)) {
+            unset($this->captains[$index]);
+        }
         return $this;
     }
 }

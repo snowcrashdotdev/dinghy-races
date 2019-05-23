@@ -21,7 +21,7 @@
                 </tr>
             {% for player in team.members %}
                 <tr>
-                    <td></td>
+                    <td>{% if player.id in team.captains %}👑{% endif %}</td>
                     <td>{{ player.username }}</td>
                     <td><a href="{{path('user_show', {'id':player.id})}}">👤</a></td>
                 <tr>
@@ -31,4 +31,10 @@
             </table>
         </section>
     </main>
+{% endblock %}
+
+{% block navigation %}
+    {% if is_granted("ROLE_ADMIN") %}
+        <a href="{{path('team_edit', {'id':team.id})}}">Edit</a>
+    {% endif %}
 {% endblock %}

@@ -1,4 +1,38 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{form_widget(form.name)}}
+    <div
+        class="tournament-collection"
+        id="{{form.members.vars.id}}"
+        data-prototype="<div>{{form_widget(form.members.vars.prototype)|e}}</div>"
+        data-prototype-name="{{form.members.vars.prototype.vars.name}}"
+        data-index="{{form.members|length}}">
+            {% for member in form.members %}
+                {{form_row(member)}}
+            {% endfor %}
+            </div>
+            <button class="add-to-collection push-center" type="button" data-collection="{{form.members.vars.id}}">Add Member</button>
+        </div>
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    var promotionUrl = "{{path('team_promotion', {'team':team.id})}}"
+    var members = document.getElementsByClassName('team-member-input');
+
+    for (let input of members) {
+        var promotion = document.createElement('input')
+        promotion.type = 'checkbox'
+        promotion.value = input.value
+        input.parentNode.insertBefore(promotion, input)
+
+        promotion.addEventListener('click', function(e){
+            var requestUri = promotionUrl + '/' + this.value
+            if (!this.checked) {
+                requestUri += '?demote=1'
+            }
+            window.fetch(requestUri, {method: 'POST'})
+        })
+    }
+})
+</script>
