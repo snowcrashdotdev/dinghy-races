@@ -418,9 +418,11 @@ class Tournament
             $teamScores[$key]['points'] += $score['points'];
         }
 
-        usort($teamScores, function($a,$b){
-            return $b['points'] <=> $a['points'];
-        });
+        if (
+            !usort($teamScores, function($a,$b){
+                return $b['points'] <=> $a['points'];
+            })
+        ) { return null; }
 
         if ($type === 'team') {
             if ($topOnly) {
