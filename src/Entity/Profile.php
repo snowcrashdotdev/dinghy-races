@@ -17,14 +17,14 @@ class Profile
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="profile", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\User", mappedBy="profile")
      */
     private $user;
 
     /**
      * @ORM\Column(type="json", nullable=true)
      */
-    private $profile = [];
+    private $social = [];
 
     public function getId(): ?int
     {
@@ -39,7 +39,13 @@ class Profile
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
+    
+        // set (or unset) the owning side of the relation if necessary
+        $newProfile = $user === null ? null : $this;
+        if ($newProfile !== $user->getProfile()) {
+            $user->setProfile($newProfile);
+        }
+    
         return $this;
     }
 
