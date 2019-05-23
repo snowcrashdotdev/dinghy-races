@@ -212,6 +212,10 @@
     list-style-type: none;
 }
 
+.icon {
+    text-decoration: none;
+}
+
 /* Global Styles */
 body {
     padding: 0;
@@ -392,8 +396,7 @@ ul {
 }
 
 .row-rank,
-.row-record,
-.row-captain {
+.row-record {
     width: 8%;
 }
 
