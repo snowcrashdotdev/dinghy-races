@@ -22,9 +22,9 @@ class Profile
     private $user;
 
     /**
-     * @ORM\Column(type="json", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $social = [];
+    private $social;
 
     public function getId(): ?int
     {
@@ -49,12 +49,12 @@ class Profile
         return $this;
     }
 
-    public function getSocial(): ?array
+    public function getSocial()
     {
         return $this->social;
     }
 
-    public function setSocial(?array $social): self
+    public function setSocial(string $social): self
     {
         $this->social = $social;
 

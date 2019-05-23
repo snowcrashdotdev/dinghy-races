@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Profile;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -96,6 +97,8 @@ class User implements UserInterface
         $this->teams = new ArrayCollection();
         $this->tournaments = new ArrayCollection();
         $this->created_at = new \DateTime('now');
+        $this->profile = new Profile();
+        $this->profile->setUser($this);
     }
 
     public function getId(): ?int

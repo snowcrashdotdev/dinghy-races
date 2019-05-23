@@ -31,6 +31,8 @@ final class Version20190523095027 extends AbstractMigration implements Container
         {
             $profile = new Profile();
             $profile->setUser($user);
+            $profile->setSocial(null);
+            $em->persist($profile);
         }
         $em->flush();
 
