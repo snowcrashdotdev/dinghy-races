@@ -54,7 +54,7 @@ class Profile
         return $this->social;
     }
 
-    public function setSocial(string $social): self
+    public function setSocial($social): self
     {
         $this->social = $social;
 
