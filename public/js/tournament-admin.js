@@ -10,7 +10,20 @@ window.addEventListener('DOMContentLoaded', function(e) {
     for (let search of ajaxSearchInputs) {
         search.addEventListener('keydown', performAjaxSearch, false)
     }
+
+    var teamMembers = document.getElementsByClassName('team-member-input')
+
+    for (let member of teamMembers) {
+        var removeMemberButton = document.createElement('button')
+        removeMemberButton.innerText = 'X'
+        removeMemberButton.addEventListener('click', removeMember)
+        member.parentElement.appendChild(removeMemberButton)
+    }
 });
+
+function removeMember(e) {
+    e.target.parentNode.remove()
+}
 
 function addFormToCollection() {
     var collection = document.getElementById(this.dataset.collection)

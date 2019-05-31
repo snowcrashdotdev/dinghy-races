@@ -211,6 +211,7 @@ class User implements UserInterface
     {
         if ($this->teams->contains($team)) {
             $this->teams->removeElement($team);
+            $this->removeTournament($team->getTournament());
             $team->removeMember($this);
         }
 

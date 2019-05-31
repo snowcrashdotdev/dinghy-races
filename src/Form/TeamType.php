@@ -28,6 +28,7 @@ class TeamType extends AbstractType
                     'label' => false
                 ],
                 'allow_add' => true,
+                'allow_delete' => true,
                 'prototype' => true,
                 'prototype_name' => '__member__',
             ])
