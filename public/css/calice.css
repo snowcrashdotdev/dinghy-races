@@ -148,6 +148,10 @@
     margin-left: var(--space);
 }
 
+.margin-top {
+    margin-top: var(--space-small); 
+}
+
 .margin-bottom {
     margin-bottom: var(--space-small);
 }
@@ -423,6 +427,12 @@ ul {
     box-shadow: 0.06em 0.06em 0.2em var(--color-black);
     font-weight: bold;
     transition: all ease-in-out 0.2s;
+}
+
+@media screen and (min-width:55em) {
+    .new-score {
+        width: 16%;
+    }
 }
 
 .new-score:hover {

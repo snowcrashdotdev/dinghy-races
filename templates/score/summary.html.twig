@@ -2,11 +2,7 @@
 
 {% block title %}{{ tournament.title }} scores for {{ game.description }}{% endblock %}
 
-{% block navigation %}
-    {% if is_granted('ROLE_USER') %}
-            <a class="new-score navbar-item margin-left padding-x rounded shading" href="{{ url('score_new', {game: game.id, tournament: tournament.id}) }}">Add Score</a>
-    {% endif %}
-{% endblock %}
+{% block navigation %}{% endblock %}
 
 {% block body %}
     <main>
@@ -14,6 +10,9 @@
             <span class="block padding bg-accent"><a class="tournament-title" href="{{path('tournament_show', {'id': tournament.id})}}">{{ tournament.title }}</a></span>
             <span class="block padding bg-accent">scores for {{ game.description }}</span>
         </h1>
+        {% if is_granted('ROLE_USER') %}
+            <a class="push-right margin-top block bg-primary new-score padding-x rounded shading text-align-center" href="{{ url('score_new', {game: game.id, tournament: tournament.id}) }}">Add/Edit Score</a>
+        {% endif %}
         {% if scores %}
             <table class="leaderboard leaderboard-game margin-y">
                 <tr>
