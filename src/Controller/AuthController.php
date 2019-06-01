@@ -123,6 +123,7 @@ class AuthController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $password = $encoder->encodePassword($user, $user->getPassword());
                 $user->setPassword($password);
+                $user->setResetToken(null);
                 $em->persist($user);
                 $em->flush();
 
