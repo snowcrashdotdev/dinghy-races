@@ -13,7 +13,7 @@
         <nav class="navbar bg-primary padding flex-row">
             {{ include('partials/navigation.html.twig') }}
             {% block navigation %}{% endblock %}
-            {% if is_granted( 'IS_AUTHENTICATED_FULLY' )%}
+            {% if is_granted( 'ROLE_USER' )%}
                 <a class="navbar-item push-right" href="{{ path('app_logout') }}">Log Out</a>
             {% endif %}
         </nav>
