@@ -22,13 +22,6 @@
         {{ form_widget(form.screenshot) }}
     </div>
 
-    {% if form.vars.data.screenshot %}
-    <div class="push-center">
-        <span>Current screenshot:</span>
-        <img class="thumbnail margin-bottom" src="{{ asset('uploads/screenshots/') ~ form.vars.data.screenshot.filename }}">
-    </div>
-    {% endif %}
-
     <div class="flex-row align-items-center">
         {{ form_label(form.comment) }}
         {{ form_widget(form.comment) }}

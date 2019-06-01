@@ -29,7 +29,14 @@
                     <td class="align-right">{{ score.points|number_format }}</td>
                     <td>{{ score.user.username }}</td>
                     <td>{{  score.team.name }}</td>
-                    <td><a class="leaderboard-link" href="">📄</a></td>
+                    <td>
+                        {% if score.screenshot %}
+                            <a class="icon" target="_blank" href="{{asset('uploads/screenshots/') ~ score.screenshot.filename}}">📷</a>
+                        {% endif %}
+                        {% if score.videoUrl %}
+                            <a class="icon" target="_blank" href="{{score.videoUrl|e}}">📼</a>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
             </table>
