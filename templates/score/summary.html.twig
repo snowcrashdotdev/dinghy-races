@@ -24,7 +24,7 @@
                     <th class="row-record">Record</th>
                 </tr>
             {% for score in scores %}
-                <tr>
+                <tr title="{{score.comment|e}}">
                     <td>{{ loop.index }}</td>
                     <td class="align-right">{{ score.points|number_format }}</td>
                     <td><a href="{{path('user_show', {'id': score.user.id})}}">{{ score.user.username }}</a></td>
