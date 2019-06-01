@@ -22,9 +22,8 @@
             value="{{ csrf_token('authenticate') }}">
 
         <div class="full-width margin-y">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
+            <input type="checkbox" id="remember_me" name="_remember_me" checked/>
+            <label for="remember_me">Keep me logged in</label>
         </div>
 
         <button type="submit">Sign in</button>

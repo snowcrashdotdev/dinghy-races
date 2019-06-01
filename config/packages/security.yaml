@@ -25,15 +25,14 @@ security:
 
             # activate different ways to authenticate
 
-            # http_basic: true
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-
             form_login:
                 login_path: app_login
-            # https://symfony.com/doc/current/security/form_login_setup.html
+
             remember_me:
                 secret: '%env(APP_SECRET)%'
-                lifetime: 2592000
+                lifetime: 3024000
+                path: /
+                secure: true     
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
