@@ -35,7 +35,7 @@
             {% for score in user.scores %}
                 <tr>
                     <td>{{score.game.description}}</td>
-                    <td>{{score.points}}</td>
+                    <td>{{score.points|number_format}}</td>
                     <td>{{score.rank}}</td>
                     <td>{{score.dateUpdated|date('M j, Y')}}</td>
                 </tr>
