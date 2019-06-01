@@ -27,7 +27,7 @@
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td class="align-right">{{ score.points|number_format }}</td>
-                    <td>{{ score.user.username }}</td>
+                    <td><a href="{{path('user_show', {'id': score.user.id})}}">{{ score.user.username }}</a></td>
                     <td>{{  score.team.name }}</td>
                     <td>
                         {% if score.screenshot %}
