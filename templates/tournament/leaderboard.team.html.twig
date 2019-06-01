@@ -5,7 +5,7 @@
 {% block body %}
     <main>
         <h1>
-            <span class="block padding bg-accent">{{ tournament.title }}</span>
+            <span class="block padding bg-accent"><a class="tournament-title" href="{{path('tournament_show', {'id': tournament.id})}}">{{ tournament.title }}</a></span>
             <span class="block padding bg-accent">Team Leaderboard</span>
         </h1>
         {% if not tournament.hasScores %}

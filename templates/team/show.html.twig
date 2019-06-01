@@ -7,7 +7,7 @@
         <header class="bg-accent padding">
             <h1>
                 <span class="block">{{team.name}}</span>
-                <small class="block">{{team.tournament.title}}</small>
+                <small class="block"><a class="tournament-title" href="{{path('tournament_show', {'id': team.tournament.id})}}">{{ team.tournament.title }}</a></small>
             </h1>
         </header>
 

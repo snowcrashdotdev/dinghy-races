@@ -14,7 +14,7 @@
             <h2>Has appeared in:</h2>
             <ul class="list-style-none">
             {% for tournament in user.tournaments %}
-                <li>{{tournament.title}}</li>
+                <li><a href="{{path('tournament_show', {'id': tournament.id})}}">{{ tournament.title }}</a></li>
             {% endfor %}
             </ul>
         {% else %}

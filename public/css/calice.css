@@ -399,6 +399,14 @@ ul {
     }
 }
 
+.tournament-title {
+    color: var(--color-black);
+}
+
+.tournament-title:visited {
+    color: var(--color-black);
+}
+
 .row-rank,
 .row-record,
 .row-profile,
