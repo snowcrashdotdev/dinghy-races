@@ -523,3 +523,8 @@ ul {
 .ajax-search-result:hover {
     background-image: var(--shading);
 }
+
+.tw-animated-glitch-logo__svg {
+    height: 1rem;
+    width: 1rem;
+}

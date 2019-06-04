@@ -2,7 +2,12 @@
     <h3 class="bg-primary padding"><a href="{{ path( 'team_show', {'team': team.id} ) }}">{{ team.name }}</a></h3>
     <ul class="list-style-none">
         {% for member in team.members %}
-            <li>{{member.username}}</li>
+            <li>
+                <a href="{{path('user_show', {'id':member.id})}}">{{member.username}}</a>
+                {% if member.profile.social %}
+                    <a class="icon" target="_blank" href="{{member.profile.social}}" class="icon">{{ source('svg/twitch.svg')|raw }}</a>
+                {% endif %}
+            </li>
         {% else %}
             <li>No team members registered</li>
         {% endfor %}
