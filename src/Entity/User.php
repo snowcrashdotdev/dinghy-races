@@ -8,6 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Profile;
+use App\Entity\Tournament;
+use App\Entity\Game;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Expr\Comparison;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -172,6 +176,15 @@ class User implements UserInterface
     public function getScores(): Collection
     {
         return $this->scores;
+    }
+
+    public function getScore(Tournament $tournament, Game $game)
+    {
+        $criteria = new Criteria();
+        $expr = new Comparison('tournament', '=', $tournament);
+        $expr2 = new Comparison('game', '=', $game);
+        $criteria->where($expr)->andWhere($expr2);
+        return $this->getScores()->matching($criteria)->first();
     }
 
     public function addScore(Score $score): self
