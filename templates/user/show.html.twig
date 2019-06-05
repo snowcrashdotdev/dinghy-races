@@ -33,7 +33,7 @@
                 </tr>
             {% for score in user.scores %}
                 <tr>
-                    <td>{{score.game.description}}</td>
+                    <td><a href="{{path('tournament_scores', {'id':score.tournament.id,'game':score.game.id})}}">{{score.game.description}}</a></td>
                     <td>{{score.points|number_format}}</td>
                     <td>{{score.rank}}</td>
                     <td>{{score.dateUpdated|date('M j, Y')}}</td>
