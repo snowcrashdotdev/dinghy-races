@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Service\FileUploader;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -85,7 +87,7 @@ class ScoreController extends AbstractController
     /**
      * @Route("/{id}/edit", name="score_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Score $score): Response
+    public function edit(Request $request, Score $score, FileUploader $uploader): Response
     {
         if (
             $this->getUser() !== $score->getUser()
@@ -96,6 +98,11 @@ class ScoreController extends AbstractController
                     'game'=>$score->getGame()->getId()
                 ]
             );
+        }
+
+        if ($screenshot = $score->getScreenshot() ) {
+            $path = $uploader->getTargetDirectory() . '/' . $screenshot;
+            $score->setScreenshot(new File($path));
         }
 
         $form = $this->createForm(ScoreType::class, $score);
