@@ -48,17 +48,4 @@ class FileUploadListener
             $score->setScreenshot($file->getFilename());
         }
     }
-
-    public function postLoad(LifecycleEventArgs $args)
-    {
-        $entity = $args->getEntity();
-
-        if (!$entity instanceof Score) {
-            return;
-        }
-
-        if ($fileName = $entity->getScreenshot()) {
-            $entity->setScreenshot(new File($this->uploader->getTargetDirectory().'/'.$fileName));
-        }
-    }
 }

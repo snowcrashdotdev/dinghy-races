@@ -30,7 +30,7 @@
                     <td>{{  score.team.name }}</td>
                     <td>
                         {% if score.screenshot %}
-                            <a class="icon" target="_blank" href="{{asset('uploads/screenshots/') ~ score.screenshot.filename}}">📷</a>
+                            <a class="icon" target="_blank" href="{{asset('uploads/screenshots/') ~ score.screenshot}}">📷</a>
                         {% endif %}
                         {% if score.videoUrl %}
                             <a class="icon" target="_blank" href="{{score.videoUrl|e}}">📼</a>
