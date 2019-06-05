@@ -190,4 +190,28 @@ class Team
         }
         return $this;
     }
+
+    public function getLeaderboard()
+    {
+        $result = array();
+        $scores = $this->getScores();
+        foreach ($scores as $score) {
+            $rank = $this->getTournament()->getScoreRank($score);
+            $points = $this->getTournament()->getPoints($rank);
+            $id = $score->getUser()->getId();
+            if (!isset($result[$id])) {
+                $result[$id] = [
+                    'user' => $score->getUser(),
+                    'points' => 0,
+                    'completed' => 0
+                ];
+            }
+            $result[$id]['points'] += $points;
+            $result[$id]['completed']++;
+        }
+        $completed = array_column($result, 'completed');
+        $points = array_column($result, 'points');
+        array_multisort($points, SORT_DESC, $completed, SORT_DESC, $result);
+        return $result;
+    }
 }

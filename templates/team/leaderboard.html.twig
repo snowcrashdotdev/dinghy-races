@@ -1,0 +1,16 @@
+<table class="leaderboard leaderboard-game margin-y">
+    <tr>
+        <th class="row-rank">Rank</th>
+        <th class="align-right row-score">Score</th>
+        <th>Player</th>
+        <th>Completed</th>
+    </tr>
+    {% for score in scores %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td class="align-right">{{ score.points|number_format }}</td>
+            <td><a href="{{path('user_show',{'id':score.user.id})}}">{{ score.user.username }}</a></td>
+            <td>{{score.completed}} out of {{gameCount}}</td>
+        </tr>
+    {% endfor %}
+</table>

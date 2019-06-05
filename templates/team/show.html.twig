@@ -12,27 +12,9 @@
         </header>
 
         <section class="margin-y padding">
-            <h2>Roster</h2>
-            <table class="padding">
-                <tr>
-                    <th class="text-align-left">Player</th>
-                    <th class="row-profile">Profile</th>
-                    <th class="row-social">Twitch</th>
-                </tr>
-            {% for player in team.members %}
-                <tr>
-                    <td class="text-align-left">{{ player.username }}</td>
-                    <td><a class="icon" href="{{path('user_show', {'id':player.id})}}">👤</a></td>
-                    <td>
-                    {% if player.profile.social %}
-                        <a class="icon" target="_blank" href="{{player.profile.social}}" class="icon">{{ source('svg/twitch.svg')|raw }}</a>
-                    {% endif %}
-                    </td>
-                <tr>
-            {% else %}
-                <p>No members assigned to this team.</p>
-            {% endfor %}
-            </table>
+            {% if (team.leaderboard) %}
+                {{ include('team/leaderboard.html.twig', {'scores':team.leaderboard,'gameCount':team.tournament.games|length}) }}
+            {% endif %}
         </section>
     </main>
 {% endblock %}
