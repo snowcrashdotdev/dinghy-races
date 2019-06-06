@@ -18,6 +18,7 @@
                 <tr>
                     <th class="row-rank">Rank</th>
                     <th class="align-right row-score">Score</th>
+                    <th class="align-right row-score">Points</th>
                     <th class="row-player">Player</th>
                     <th class="row-team">Team</th>
                     <th class="row-record">Record</th>
@@ -26,6 +27,7 @@
                 <tr title="{{score.comment|e}}">
                     <td>{{ loop.index }}</td>
                     <td class="align-right">{{ score.points|number_format }}</td>
+                    <td class="align-right">{{tournament.points(loop.index - 1)|number_format}}</td>
                     <td><a href="{{path('user_show', {'id': score.user.id})}}">{{ score.user.username }}</a></td>
                     <td>{{  score.team.name }}</td>
                     <td>
