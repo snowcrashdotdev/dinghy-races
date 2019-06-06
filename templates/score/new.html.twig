@@ -4,7 +4,10 @@
 
 {% block body %}
     <main>
-        <h1>New High Score</h1>
+        <header class="bg-accent padding">
+            <h1>{{score.tournament.title}}</h1>
+            <p>Add your score for {{score.game.description}}</p>
+        </header>
         {{ include('score/_form.html.twig') }}
     </main>
 {% endblock %}

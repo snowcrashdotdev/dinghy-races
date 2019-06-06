@@ -52,7 +52,7 @@
         </div>
         <button class="add-to-collection full-width margin-y" type="button" data-collection="{{form.teams.vars.id}}">Add Team</button>
     </section>
-    <button class="full-width margin-y">{{ button_label|default('Save') }}</button>
+    <button class="full-width margin-y">{{ button_label|default('Add') }}</button>
 {{ form_end(form, {'render_rest': false}) }}
 <input type="hidden" id="ajax-search-path" data-user="{{ path('user_search') }}" data-game="{{ path('game_search') }}">
 <script src="{{ asset('/js/tournament-admin.js') }}"></script>
