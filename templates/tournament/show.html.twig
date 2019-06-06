@@ -46,6 +46,28 @@
             </section>
         </header>
 
+        {% if tournament.inProgress %}
+        <h2 class="bg-white padding margin-top">Latest</h2>
+        <section>
+            <table class="leaderboard">
+                <tr>
+                    <th>Date</th>
+                    <th>Game</th>
+                    <th>Score</th>
+                    <th>Player</th>
+                </tr>
+            {% for score in latestScores %}
+                <tr>
+                    <td>{{score.dateUpdated|date('M j, g:Ha')}}</td>
+                    <td><a href="{{path('tournament_scores',{'id':tournament.id,'game':score.game.id})}}">{{score.game.description}}</a></td>
+                    <td>{{score.points|number_format}}</td>
+                    <td><a href="{{path('user_show',{'id':score.user.id})}}">{{score.user.username}}</td>
+                <tr>
+            {% endfor %}
+            </table>
+        </section>
+        {% endif %}
+
         <h2 class="margin-y">Teams</h2>
         <section class="flex-row flex-wrap justify-center">
             {% for team in tournament.teams %}

@@ -80,8 +80,13 @@ class TournamentController extends AbstractController
             ->findIndividualScores($tournament, 1)
         ;
 
+        $latestScores = $this->getDoctrine()
+            ->getRepository('App\Entity\Score')
+            ->findBy(['tournament' => $tournament],['date_updated'=>'DESC'],5,0);
+
         return $this->render('tournament/show.html.twig', [
-            'tournament' => $tournament
+            'tournament' => $tournament,
+            'latestScores' => $latestScores
         ]);
     }
 
