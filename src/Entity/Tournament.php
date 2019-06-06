@@ -230,12 +230,12 @@ class Tournament
     {
         switch(true) {
             case ($rank >= 30):
-                return 24 - ($rank - 30);
+                return 23 - ($rank - 30);
             case ($rank >= 13):
-                return 58 - ($rank - 13) * 2;
+                return 56 - ($rank - 13) * 2;
             case ($rank >= 4):
-                return 85 - ($rank - 4) * 3;
-            case ($rank >= 0):
+                return 82 - ($rank - 4) * 3;
+            case ($rank < 4):
                 return 100 - $rank * 5;
         }
     }
