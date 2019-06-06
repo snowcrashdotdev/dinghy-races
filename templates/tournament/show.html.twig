@@ -12,7 +12,7 @@
                 </div>
                 <div class="tournament-details font-size-small">
                     <p>Start: {{tournament.startDate|date('F jS, Y @ g:ia')}}</p>
-                    <p>End: {{tournament.endDate|date('F jS, Y @ g:ia')}}</p>
+                    <p>End: {{tournament.endDate|date_modify('-1 minute')|date('F jS, Y @ g:ia')}}</p>
                 </div>
             </section>
 
