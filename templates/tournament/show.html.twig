@@ -11,8 +11,8 @@
                 {{ tournament.description|raw }}
                 </div>
                 <div class="tournament-details font-size-small">
-                    <p>Start: {{tournament.startDate|date('F jS, Y @ g:Ha')}}</p>
-                    <p>End: {{tournament.endDate|date('F jS, Y @ g:Ha')}}</p>
+                    <p>Start: {{tournament.startDate|date('F jS, Y @ g:ia')}}</p>
+                    <p>End: {{tournament.endDate|date('F jS, Y @ g:ia')}}</p>
                 </div>
             </section>
 
@@ -58,7 +58,7 @@
                 </tr>
             {% for score in latestScores %}
                 <tr>
-                    <td>{{score.dateUpdated|date('M j, g:Ha')}}</td>
+                    <td>{{score.dateUpdated|date('M j, g:ia')}}</td>
                     <td><a href="{{path('tournament_scores',{'id':tournament.id,'game':score.game.id})}}">{{score.game.description}}</a></td>
                     <td>{{score.points|number_format}}</td>
                     <td><a href="{{path('user_show',{'id':score.user.id})}}">{{score.user.username}}</td>
