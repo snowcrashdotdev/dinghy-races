@@ -62,6 +62,11 @@ class Tournament
      */
     private $users;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Draft", mappedBy="tournament", cascade={"persist", "remove"})
+     */
+    private $draft;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
@@ -431,5 +436,23 @@ class Tournament
                 return $teamScores;
             }
         }
+    }
+
+    public function getDraft(): ?Draft
+    {
+        return $this->draft;
+    }
+
+    public function setDraft(?Draft $draft): self
+    {
+        $this->draft = $draft;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newTournament = $draft === null ? null : $this;
+        if ($newTournament !== $draft->getTournament()) {
+            $draft->setTournament($newTournament);
+        }
+
+        return $this;
     }
 }

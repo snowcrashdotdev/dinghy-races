@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Tournament;
 use App\Form\TournamentType;
 use App\Entity\Game;
+use App\Entity\Draft;
 use App\Repository\TournamentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,6 +54,9 @@ class TournamentController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $draft = new Draft();
+            $draft->setTournament($tournament);
+            $entityManager->persist($draft);
             foreach($tournament->getTeams() as $team) {
                 foreach($team->getMembers() as $user) {
                     $tournament->addUser($user);
