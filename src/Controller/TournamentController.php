@@ -56,6 +56,7 @@ class TournamentController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $draft = new Draft();
             $draft->setTournament($tournament);
+            $draft->setInviteToken(bin2hex(random_bytes(8)));
             $entityManager->persist($draft);
             foreach($tournament->getTeams() as $team) {
                 foreach($team->getMembers() as $user) {

@@ -28,6 +28,11 @@ class Draft
      */
     private $entries;
 
+    /**
+     * @ORM\Column(type="guid", nullable=true)
+     */
+    private $invite_token;
+
     public function __construct()
     {
         $this->entries = new ArrayCollection();
@@ -72,6 +77,18 @@ class Draft
         if ($this->entries->contains($entry)) {
             $this->entries->removeElement($entry);
         }
+
+        return $this;
+    }
+
+    public function getInviteToken(): ?string
+    {
+        return $this->invite_token;
+    }
+
+    public function setInviteToken(?string $invite_token): self
+    {
+        $this->invite_token = $invite_token;
 
         return $this;
     }
