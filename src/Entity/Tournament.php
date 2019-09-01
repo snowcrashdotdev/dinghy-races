@@ -455,4 +455,13 @@ class Tournament
 
         return $this;
     }
+
+    public function hasEntered(User $user)
+    {
+        if (null === $draft = $this->getDraft()) {
+            return false;
+        } else {
+            return $draft->alreadyEntered($user);
+        }
+    }
 }

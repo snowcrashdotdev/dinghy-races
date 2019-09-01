@@ -3,6 +3,11 @@
     <h3 class="summary-title"><a href="{{ path( 'tournament_show', {'id': tournament.id} ) }}">{{ tournament.title|title }}</a></h3>
 
     {{ tournament.description|raw }}
+
+    {% if is_granted("ROLE_USER") and tournament.hasEntered(app.user) %}
+        <p>You are signed up for this tournament ✔️</p>
+    {% endif %}
+
     {% if tournament.users|length > 1 %}
     <p class="block bg-primary padding-y clear-floats">
             {% set details = [

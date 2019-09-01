@@ -6,6 +6,9 @@
     <main>
         <header class="bg-white tournament-header">
             <h1 class="bg-accent padding-y">{{tournament.title}}</h1>
+            {% if is_granted("ROLE_USER") and tournament.hasEntered(app.user) %}
+                <p>You are signed up for this tournament ✔️</p>
+            {% endif %}
             <section class="flex-row space-between">
                 <div>
                 {{ tournament.description|raw }}
