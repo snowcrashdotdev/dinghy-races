@@ -27,7 +27,6 @@ final class Version20190901122859 extends AbstractMigration
         $this->addSql('ALTER TABLE draft ADD CONSTRAINT FK_467C969433D1A3E7 FOREIGN KEY (tournament_id) REFERENCES tournament (id)');
         $this->addSql('ALTER TABLE draft_user ADD CONSTRAINT FK_97D3E04DE2F3C5D1 FOREIGN KEY (draft_id) REFERENCES draft (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE draft_user ADD CONSTRAINT FK_97D3E04DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE tournament DROP invite_token');
     }
 
     public function down(Schema $schema) : void
@@ -38,6 +37,5 @@ final class Version20190901122859 extends AbstractMigration
         $this->addSql('ALTER TABLE draft_user DROP FOREIGN KEY FK_97D3E04DE2F3C5D1');
         $this->addSql('DROP TABLE draft');
         $this->addSql('DROP TABLE draft_user');
-        $this->addSql('ALTER TABLE tournament ADD invite_token CHAR(36) DEFAULT NULL COLLATE utf8mb4_unicode_ci COMMENT \'(DC2Type:guid)\'');
     }
 }
