@@ -108,7 +108,7 @@ class AuthController extends AbstractController
                 'warning',
                 'Invalid security token.'
             );
-            return redirectToRoute('index');
+            return $this->redirectToRoute('tournament_index');
         }
 
         $em = $this->getDoctrine()->getManager();
