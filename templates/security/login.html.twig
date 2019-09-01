@@ -20,6 +20,8 @@
 
         <input type="hidden" name="_csrf_token"
             value="{{ csrf_token('authenticate') }}">
+        
+        <input type="hidden" name="_target_path" value="{{ app.request.headers.get('referer') }}">
 
         <div class="full-width margin-y">
             <input type="checkbox" id="remember_me" name="_remember_me" checked/>

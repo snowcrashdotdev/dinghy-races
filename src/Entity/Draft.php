@@ -92,4 +92,9 @@ class Draft
 
         return $this;
     }
+
+    public function alreadyEntered(User $entry)
+    {
+        return ($this->entries->contains($entry));
+    }
 }

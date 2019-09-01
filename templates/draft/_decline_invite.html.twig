@@ -1,0 +1,6 @@
+<form method="POST" action="{{path('invite_decline', {'id': draft.id})}}">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('invite' ~ draft.id) }}">
+
+    <button class="button danger">Decline</button>
+</form>
