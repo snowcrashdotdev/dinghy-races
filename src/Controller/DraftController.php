@@ -7,6 +7,7 @@ use App\Repository\DraftRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class DraftController extends AbstractController
 {
@@ -48,5 +49,27 @@ class DraftController extends AbstractController
         }
 
         return $this->redirectToRoute('tournament_show', ['id' => $draft->getTournament()->getId()]);
+    }
+
+    /**
+     * @Route("/drafts", name="draft_index", methods={"GET"})
+     * @isGranted("ROLE_TO")
+     */
+    public function index(DraftRepository $draftRepository)
+    {
+        return $this->render('draft/index.html.twig', [
+            'drafts' => $draftRepository->findAll(),
+        ]);
+    }
+
+    /**
+     * @Route("/drafts/{id}", name="draft_show", methods={"GET"})
+     * @isGranted("ROLE_TO")
+     */
+    public function show(Draft $draft)
+    {
+        return $this->render('draft/show.html.twig', [
+            'draft' => $draft
+        ]);
     }
 }

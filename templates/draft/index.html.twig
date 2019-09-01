@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Active Drafts{% endblock %}
+
+{% block body %}
+    <h1>Active Drafts</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tournament Title</th>
+                <th>Entries</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for draft in drafts %}
+            <tr>
+                <td>{{ draft.tournament.title }}</td>
+                <td>
+                    <a href="{{ path('draft_show', {'id': draft.id}) }}">show</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

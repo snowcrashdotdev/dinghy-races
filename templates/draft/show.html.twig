@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Draft Entries for {{ draft.tournament.title }}{% endblock %}
+
+{% block body %}
+    <h1>Draft Entries for {{ draft.tournament.title }}</h1>
+    <article class="summary bg-white flex-column margin">
+        <h2 class="bg-primary padding">({{ draft.entries|length }}) Entries:</h2>
+        <ul class="list-style-none">
+            {% for entry in draft.entries %}
+                <li>
+                    <a href="{{path('user_show', {'id':entry.id})}}">{{entry.username}}</a>
+                    {% if entry.profile.social %}
+                        <a class="icon" target="_blank" href="{{entry.profile.social}}" class="icon">{{ source('svg/twitch.svg')|raw }}</a>
+                    {% endif %}
+                </li>
+            {% else %}
+                <li>No entries.</li>
+            {% endfor %}
+        </ul>
+    </article>
+{% endblock %}
