@@ -53,7 +53,7 @@ class DraftController extends AbstractController
 
     /**
      * @Route("/drafts", name="draft_index", methods={"GET"})
-     * @isGranted("ROLE_TO")
+     * @isGranted({"ROLE_ADMIN", "ROLE_TO"})
      */
     public function index(DraftRepository $draftRepository)
     {
@@ -64,7 +64,7 @@ class DraftController extends AbstractController
 
     /**
      * @Route("/drafts/{id}", name="draft_show", methods={"GET"})
-     * @isGranted("ROLE_TO")
+     * @isGranted({"ROLE_ADMIN", "ROLE_TO"})
      */
     public function show(Draft $draft)
     {
