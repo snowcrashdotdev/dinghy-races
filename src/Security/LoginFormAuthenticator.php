@@ -86,7 +86,12 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         if ($targetPath = $request->request->get('_target_path')) {
-            return new RedirectResponse($targetPath);
+            if (
+                false === strpos($targetPath, '/verify') &&
+                false === strpos($targetPath, '/login')
+            ) {
+                return new RedirectResponse($targetPath);
+            }
         }
 
         return new RedirectResponse($this->urlGenerator->generate('tournament_index'));
