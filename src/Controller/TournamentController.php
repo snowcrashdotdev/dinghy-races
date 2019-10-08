@@ -44,7 +44,7 @@ class TournamentController extends AbstractController
 
     /**
      * @Route("/new", name="tournament_new", methods={"GET","POST"})
-     * @isGranted("ROLE_ADMIN")
+     * @isGranted({"ROLE_ADMIN", "ROLE_TO"})
      */
     public function new(Request $request): Response
     {
@@ -97,7 +97,7 @@ class TournamentController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="tournament_edit", methods={"GET","POST"})
-     * @isGranted("ROLE_ADMIN")
+     * @isGranted({"ROLE_ADMIN", "ROLE_TO"})
      */
     public function edit(Request $request, Tournament $tournament): Response
     {
