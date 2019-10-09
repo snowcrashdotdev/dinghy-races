@@ -13,7 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/games")
- * @isGranted("ROLE_ADMIN")
+ * @isGranted({"ROLE_ADMIN", "ROLE_TO"})
  */
 class GameController extends AbstractController
 {

@@ -98,7 +98,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/search/{name}", name="user_search", defaults={"name"=""}, methods={"POST"})
-     * @isGranted("ROLE_ADMIN")
+     * @isGranted({"ROLE_ADMIN", "ROLE_TO"})
      */
     public function search(Request $request, string $name, UserRepository $userRepository): Response
     {
