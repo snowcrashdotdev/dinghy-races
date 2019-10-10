@@ -71,21 +71,21 @@
         </section>
         {% endif %}
 
-        <h2 class="margin-y">Teams</h2>
-        <section class="flex-row flex-wrap justify-center">
-            {% for team in tournament.teams %}
-                {{ include('team/summary.html.twig', {'team': team}) }}
-            {% else %}
-                <p>No teams registered.</p>
-            {% endfor %}
-        </section>
-
         <h2 class="margin-y">Events</h2>
         <section class="flex-row flex-wrap justify-center">
             {% for game in tournament.games %}
                 {{ include('game/summary.html.twig', {'game': game}) }}
             {% else %}
                 <p>No games selected</p>
+            {% endfor %}
+        </section>
+
+        <h2 class="margin-y">Teams</h2>
+        <section class="flex-row flex-wrap justify-center">
+            {% for team in tournament.teams %}
+                {{ include('team/summary.html.twig', {'team': team}) }}
+            {% else %}
+                <p>No teams registered.</p>
             {% endfor %}
         </section>
     </main>
