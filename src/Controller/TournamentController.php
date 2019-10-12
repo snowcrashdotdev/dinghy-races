@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Tournament;
 use App\Form\TournamentType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Game;
 use App\Entity\Draft;
 use App\Repository\TournamentRepository;
@@ -122,6 +124,40 @@ class TournamentController extends AbstractController
         return $this->render('tournament/edit.html.twig', [
             'tournament' => $tournament,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/scoring", name="tournament_scoring", methods={"GET", "POST"})
+     */
+    public function scoring(Request $request, Tournament $tournament): Response
+    {
+        $count = $tournament->getUsers()->count();
+        $form = $this->createFormBuilder();
+        $place = 1;
+        while ($place <= $count) {
+            $form = $form->add($place, IntegerType::class);
+            $place++;
+        }
+        $form = $form->add('Submit', SubmitType::class)->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $scoringTable = $form->getData();
+            $tournament->setScoringTable($scoringTable);
+            $em->persist($tournament);
+            $em->flush();
+
+            return $this->redirectToRoute('tournament_scoring', [
+                'id' => $tournament->getId(),
+            ]);
+        }
+
+        return $this->render('tournament/scoring.html.twig', [
+            'tournament' => $tournament,
+            'form' => $form->createView()
         ]);
     }
 
