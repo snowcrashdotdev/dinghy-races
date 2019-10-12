@@ -67,6 +67,11 @@ class Tournament
      */
     private $draft;
 
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $scoring_table = [];
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
@@ -463,5 +468,17 @@ class Tournament
         } else {
             return $draft->alreadyEntered($user);
         }
+    }
+
+    public function getScoringTable(): ?array
+    {
+        return $this->scoring_table;
+    }
+
+    public function setScoringTable(?array $scoring_table): self
+    {
+        $this->scoring_table = $scoring_table;
+
+        return $this;
     }
 }
