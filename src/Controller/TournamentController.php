@@ -135,8 +135,14 @@ class TournamentController extends AbstractController
         $count = $tournament->getUsers()->count();
         $form = $this->createFormBuilder();
         $place = 1;
+        $scoringTable = $tournament->getScoringTable();
         while ($place <= $count) {
-            $form = $form->add($place, IntegerType::class);
+            if ( isset( $scoringTable[$place] ) ) {
+                $options = ['data' => $scoringTable[$place]];
+            } else {
+                $options = false;
+            }
+            $form = $form->add($place, IntegerType::class, $options);
             $place++;
         }
         $form = $form->add('Submit', SubmitType::class)->getForm();
