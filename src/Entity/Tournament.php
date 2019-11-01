@@ -238,15 +238,11 @@ class Tournament
 
     public function getPoints(int $rank)
     {
-        switch(true) {
-            case ($rank >= 30):
-                return 23 - ($rank - 30);
-            case ($rank >= 13):
-                return 56 - ($rank - 13) * 2;
-            case ($rank >= 4):
-                return 82 - ($rank - 4) * 3;
-            case ($rank < 4):
-                return 100 - $rank * 5;
+        if (null === $scoringTable = $this->getScoringTable()) {
+            return 0;
+        } else {
+            $place = $rank + 1;
+            return $scoringTable[$place];
         }
     }
 
