@@ -2,7 +2,9 @@
     <h3>{{ game.description }}<small>{{ game.manufacturer }} {{ game.year }}</small></h3>
     {% if tournament.scores|length > 0 %}
     {% set hiscore = tournament.highscore(game) %}
-    <p class="font-size-small"><span>Hi-Score: {{hiscore.points|number_format}}</span><span class="float-right">{{hiscore.user.username}}</span></p>
+        {% if hiscore %}
+            <p class="font-size-small"><span>Hi-Score: {{hiscore.points|number_format}}</span><span class="float-right">{{hiscore.user.username}}</span></p>
+        {% endif %}
     {% endif %}
 
     {% if is_granted('ROLE_USER') %}
