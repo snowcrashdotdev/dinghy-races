@@ -140,7 +140,7 @@ class TournamentController extends AbstractController
             if ( isset( $scoringTable[$place] ) ) {
                 $options = ['data' => $scoringTable[$place]];
             } else {
-                $options = false;
+                $options = [];
             }
             $form = $form->add($place, IntegerType::class, $options);
             $place++;
