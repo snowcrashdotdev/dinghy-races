@@ -3,9 +3,15 @@
         'class': 'bg-white padding flex-column'
     }
 }) }}
-    <div>
-        {{ form_errors(form) }}
-    </div>
+    {% if not form.vars.valid %}
+        <ul>
+        {% for child in form.children %}
+            {% for error in child.vars.errors%}
+                <li>{{error.message}}</li>
+            {% endfor %}
+        {% endfor %}
+        </ul>
+    {% endif %}
 
     <div class="flex-row align-items-center">
         {{ form_label(form.points) }}

@@ -64,11 +64,16 @@ class Score
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Image
      */
     private $screenshot;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *      max = 140,
+     *      maxMessage = "Your comment should fit in a tweet."
+     * )
      */
     private $comment;
 
