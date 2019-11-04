@@ -129,6 +129,7 @@ class TournamentController extends AbstractController
 
     /**
      * @Route("/{id}/scoring", name="tournament_scoring", methods={"GET", "POST"})
+     * @isGranted({"ROLE_ADMIN", "ROLE_TO"})
      */
     public function scoring(Request $request, Tournament $tournament): Response
     {
@@ -176,7 +177,10 @@ class TournamentController extends AbstractController
             ->getRepository('App\Entity\Score')
             ->findByGameAndTournament($tournament->getId(), $game);
 
+        $user = $this->getUser();
+
         return $this->render('score/summary.html.twig', [
+            'user' => $user,
             'scores' => $scores,
             'game' => $game,
             'tournament' => $tournament

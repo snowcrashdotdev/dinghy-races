@@ -104,12 +104,18 @@ class ScoreController extends AbstractController
             $path = $uploader->getTargetDirectory() . '/' . $screenshot;
             $score->setScreenshot(new File($path));
         }
+        $oldScore = clone $score;
 
         $form = $this->createForm(ScoreType::class, $score);
         $form->handleRequest($request);
-        $score->setDateUpdated(new \DateTime('now'));
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $newScore = $form->getData();
+
+            if ($oldScore->getPoints() !== $newScore->getPoints()) {
+                $score->setDateUpdated(new \DateTime('now'));
+            }
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
