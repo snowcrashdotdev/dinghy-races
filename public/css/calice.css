@@ -323,7 +323,7 @@ td, th {
     text-overflow: ellipsis;
 }
 
-tr:nth-child(even) {
+tr:nth-child(even):not(.highlighted) {
     background-color: hsla(180, 50%, 100%, 0.5);
 }
 
