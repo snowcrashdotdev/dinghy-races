@@ -8,7 +8,7 @@
     <main>
         <h1>
             <span class="block padding bg-accent"><a class="tournament-title" href="{{path('tournament_show', {'id': tournament.id})}}">{{ tournament.title }}</a></span>
-            <span class="block padding bg-accent">scores for {{ game.description }}</span>
+            <span class="block padding bg-accent">scores for {{ game.description }} <small>{{ game.name ~ '.zip' }}</small></span>
         </h1>
         {% if is_granted('ROLE_USER') %}
             <a class="push-right margin-top block bg-primary new-score padding-x rounded shading text-align-center" href="{{ url('score_new', {game: game.id, tournament: tournament.id}) }}">Add/Edit Score</a>

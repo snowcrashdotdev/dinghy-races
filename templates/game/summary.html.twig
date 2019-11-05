@@ -1,5 +1,5 @@
 <a href="{{ path('tournament_scores', {'id': tournament.id, 'game': game.id}) }}" class="summary summary-game bg-white padding margin">
-    <h3>{{ game.description }}<small>{{ game.manufacturer }} {{ game.year }}</small></h3>
+    <h3>{{ game.description }}<small>{{ game.manufacturer }} {{ game.year }}</small><small>{{ game.name ~ '.zip' }}</small></h3>
     {% if tournament.scores|length > 0 %}
     {% set hiscore = tournament.highscore(game) %}
         {% if hiscore %}
