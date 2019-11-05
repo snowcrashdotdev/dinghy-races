@@ -24,8 +24,19 @@
     </div>
 
     <div class="flex-row align-items-center">
+    {% if score.screenshot %}
+        {{ form_label(form.screenshot)}}
+        <img title="Click to remove." class="screenshot-preview" id="current-screenshot" src="{{'/uploads/screenshots/' ~ score.screenshot.filename}}">
+        {{ form_widget(form.screenshot,{
+            'attr':{
+                'disabled': true,
+                'hidden': true
+            }
+        }) }}
+    {% else %}
         {{ form_label(form.screenshot) }}
         {{ form_widget(form.screenshot) }}
+    {% endif %}
     </div>
 
     <div class="flex-row align-items-center">
@@ -34,3 +45,16 @@
     </div>
     <button class="margin-y">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        var screenshot = document.getElementById('current-screenshot');
+        var uploadInput = document.getElementById('score_screenshot');
+        screenshot.addEventListener('click', function(e){
+            e.preventDefault();
+            e.target.remove();
+            uploadInput.removeAttribute('disabled');
+            uploadInput.removeAttribute('hidden');
+        });
+    });
+</script>

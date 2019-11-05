@@ -85,7 +85,7 @@ class ScoreController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="score_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="score_edit", methods={"GET","PATCH"})
      */
     public function edit(Request $request, Score $score, FileUploader $uploader): Response
     {
@@ -106,7 +106,12 @@ class ScoreController extends AbstractController
         }
         $oldScore = clone $score;
 
-        $form = $this->createForm(ScoreType::class, $score);
+        $form = $this->createForm(ScoreType::class, $score, [
+            'method' => 'PATCH',
+            'empty_data' => [
+                'screenshot' => $screenshot
+            ]
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

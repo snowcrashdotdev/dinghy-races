@@ -40,7 +40,7 @@ class ScoreType extends AbstractType
                     'class' => 'score-input'
                 ],
                 'label' => 'Screenshot',
-                'label_attr' => ['class'=>'score-label']
+                'label_attr' => ['class'=>'score-label'],
             ])
             ->add('comment', TextType::class, [
                 'required' => false,
