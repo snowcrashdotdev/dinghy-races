@@ -538,3 +538,21 @@ ul {
     height: 1rem;
     width: 1rem;
 }
+
+.screenshot-preview {
+    transition: opacity 0.1s ease-in;
+    position: relative;
+}
+
+.screenshot-preview:hover {
+    opacity: 0.85;
+}
+
+.screenshot-preview:hover::after {
+    content: '\00d7';
+    position: absolute;
+    top: -0.8em;
+    right: -0.4em;
+    font-size: 1em;
+    color: var(--color-danger);
+}

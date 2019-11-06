@@ -26,7 +26,9 @@
     <div class="flex-row align-items-center">
     {% if score.screenshot %}
         {{ form_label(form.screenshot)}}
-        <img title="Click to remove." class="screenshot-preview" id="current-screenshot" src="{{'/uploads/screenshots/' ~ score.screenshot.filename}}">
+        <div class="screenshot-preview" id="current-screenshot">
+        <img title="Click to remove." src="{{'/uploads/screenshots/' ~ score.screenshot.filename}}">
+        </div>
         {{ form_widget(form.screenshot,{
             'attr':{
                 'disabled': true,
