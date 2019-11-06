@@ -1,0 +1,6 @@
+<h2 class="margin-y">🎥 Live Streams</h2>
+<section class="bg-white padding margin-x">
+    {% for stream in streams %}
+        <a class="block margin stream-link" target="_blank" href="{{'https://www.twitch.tv/' ~ stream.user_name}}">{{stream.user_name}} is live &mdash; {{stream.title}}</a>
+    {% endfor %}
+</section>

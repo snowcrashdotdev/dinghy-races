@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Service\TwitchChecker;
 
 /**
  * @Route("/tournaments")
@@ -80,7 +81,7 @@ class TournamentController extends AbstractController
     /**
      * @Route("/{id}", name="tournament_show", methods={"GET"})
      */
-    public function show(Tournament $tournament): Response
+    public function show(Tournament $tournament, TwitchChecker $twitchChecker): Response
     {
         $topScorer = $this->getDoctrine()
             ->getRepository('App\Entity\Score')
@@ -90,8 +91,11 @@ class TournamentController extends AbstractController
         $latestScores = $this->getDoctrine()
             ->getRepository('App\Entity\Score')
             ->findBy(['tournament' => $tournament],['date_updated'=>'DESC'],5,0);
+        
+        $streams = $twitchChecker->getLiveTwitchStreams($tournament);
 
         return $this->render('tournament/show.html.twig', [
+            'streams' => $streams,
             'tournament' => $tournament,
             'latestScores' => $latestScores
         ]);

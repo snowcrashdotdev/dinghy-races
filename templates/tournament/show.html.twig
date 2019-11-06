@@ -80,6 +80,10 @@
             {% endfor %}
         </section>
 
+        {% if tournament.inProgress and streams %}
+            {{ include('partials/twitch.html.twig', {'streams': streams}) }}
+        {% endif %}
+
         <h2 class="margin-y">Teams</h2>
         <section class="flex-row flex-wrap justify-center">
             {% for team in tournament.teams %}
