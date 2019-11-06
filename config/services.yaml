@@ -31,6 +31,10 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%screenshot_dir%'
+    App\Service\TwitchChecker:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+            $clientId: '%env(TWITCH_CLIENT_ID)%'
     App\Event\FileUploadListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
