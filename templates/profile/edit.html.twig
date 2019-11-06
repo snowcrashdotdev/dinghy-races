@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calice Cup Settings{% endblock %}
+
+{% block body %}
+    <h2 class="text-small padding-y">Customize your profile:</h1>
+
+    {{form(form,{
+    'attr':{
+        'class': 'bg-white padding flex-column'
+    }})}}
+{% endblock %}

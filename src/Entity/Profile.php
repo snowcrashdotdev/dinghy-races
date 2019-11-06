@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProfileRepository")
@@ -23,6 +24,7 @@ class Profile
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\Url
      */
     private $social;
 
@@ -59,5 +61,10 @@ class Profile
         $this->social = $social;
 
         return $this;
+    }
+
+    public function hasTwitch(): bool
+    {
+        return 1 === preg_match('~^https?://(www\.)?twitch\.tv/[a-zA-Z0-9_]{3,}/?$~', $this->getSocial());
     }
 }

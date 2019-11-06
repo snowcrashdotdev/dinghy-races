@@ -10,7 +10,7 @@
             {% for entry in draft.entries %}
                 <li>
                     <a href="{{path('user_show', {'id':entry.id})}}">{{entry.username}}</a>
-                    {% if entry.profile.social %}
+                    {% if entry.profile.hasTwitch %}
                         <a class="icon" target="_blank" href="{{entry.profile.social}}" class="icon">{{ source('svg/twitch.svg')|raw }}</a>
                     {% endif %}
                 </li>
