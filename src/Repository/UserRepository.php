@@ -30,6 +30,15 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findOneByUsername($username)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('UPPER(u.username) = UPPER(:username)')
+            ->setParameter('username', $username)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */
