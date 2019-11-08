@@ -4,8 +4,6 @@ namespace App\Controller;
 
 use App\Repository\UserRepository;
 use App\Entity\Tournament;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Expr\Comparison;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,21 +15,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class StreamKitController extends AbstractController
 {
     /**
-     * @Route("/{username}/{tournament}/scores", name="stream_kit")
+     * @Route("/{username}/{tournament}/scores", name="stream_kit", methods={"GET"})
      */
     public function scores(String $username, Tournament $tournament, UserRepository $users) : Response
     {
-        $scores = null;
+        $params = null;
         $user = $users->findOneByUsername($username);
-
-        if ($user) {
-            $expr = new Comparison('user', '=', $user);
-            $criteria = new Criteria();
-            $criteria->where($expr);
-            $scores = $tournament->getScores()->matching($criteria);
+        if ($user && $tournament) {
+            $params = [
+                'user' => $user->getId(),
+                'tournament' => $tournament->getId()
+            ];
         }
         return $this->render('stream_kit/scores.html.twig', [
-            'scores' => $scores,
+            'params' => $params
         ]);
     }
 }
