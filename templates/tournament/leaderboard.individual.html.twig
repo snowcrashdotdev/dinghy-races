@@ -19,7 +19,12 @@
                     <th>Team</th>
                 </tr>
             {% for score in scores %}
-                <tr>
+                {% if user is same as(score.user) %}
+                    {% set className = 'highlighted' %}
+                {% else %}
+                    {% set className = '' %}
+                {% endif %}
+                <tr class="{{className}}">
                     <td>{{ loop.index }}</td>
                     <td class="align-right">{{ score.points|number_format }}</td>
                     <td><a href="{{path('user_show', {'id': score.user.id})}}">{{ score.user.username }}</a></td>
