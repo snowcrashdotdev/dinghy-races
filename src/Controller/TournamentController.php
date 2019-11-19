@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Tournament;
 use App\Form\TournamentType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Game;
 use App\Entity\Draft;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Service\TwitchChecker;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @Route("/tournaments")
@@ -137,8 +139,9 @@ class TournamentController extends AbstractController
      */
     public function scoring(Request $request, Tournament $tournament): Response
     {
+        $forms = $this->get('form.factory');
         $count = $tournament->getUsers()->count();
-        $form = $this->createFormBuilder();
+        $form = $forms->createNamedBuilder('scoring_table');
         $place = 1;
         $scoringTable = $tournament->getScoringTable();
         while ($place <= $count) {
@@ -150,9 +153,20 @@ class TournamentController extends AbstractController
             $form = $form->add($place, IntegerType::class, $options);
             $place++;
         }
-        $form = $form->add('Submit', SubmitType::class)->getForm();
+        $form = $form->add('save', SubmitType::class)->getForm();
+
+        $options = [
+            'data' => $tournament->getCutoffDate(),
+            'label' => 'Cutoff Date',
+            'widget' => 'single_text'
+        ];
+        $cutoffForm = $forms->createNamedBuilder('cutoff_date')
+            ->add('cutoff', DateType::class, $options)
+            ->add('save', SubmitType::class)
+            ->getForm();
 
         $form->handleRequest($request);
+        $cutoffForm->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -160,15 +174,18 @@ class TournamentController extends AbstractController
             $tournament->setScoringTable($scoringTable);
             $em->persist($tournament);
             $em->flush();
-
-            return $this->redirectToRoute('tournament_scoring', [
-                'id' => $tournament->getId(),
-            ]);
+        } else if ($cutoffForm->isSubmitted() && $cutoffForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $cutoff = $cutoffForm->getData()['cutoff'];
+            $tournament->setCutoffDate($cutoff);
+            $em->persist($tournament);
+            $em->flush();
         }
 
         return $this->render('tournament/scoring.html.twig', [
             'tournament' => $tournament,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'cutoffForm' => $cutoffForm->createView()
         ]);
     }
 

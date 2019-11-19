@@ -72,6 +72,11 @@ class Tournament
      */
     private $scoring_table = [];
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $cutoff_date;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
@@ -476,5 +481,23 @@ class Tournament
         $this->scoring_table = $scoring_table;
 
         return $this;
+    }
+
+    public function getCutoffDate(): ?\DateTimeInterface
+    {
+        return $this->cutoff_date;
+    }
+
+    public function setCutoffDate(?\DateTimeInterface $cutoff_date): self
+    {
+        $this->cutoff_date = $cutoff_date;
+
+        return $this;
+    }
+
+    public function isAfterCutoff()
+    {
+        $now = new \DateTime('now');
+        return ($now > $this->cutoff_date);
     }
 }

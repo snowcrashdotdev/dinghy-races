@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\Score;
 use App\Entity\Game;
@@ -47,41 +46,51 @@ class ScoreController extends AbstractController
             return $this->redirectToRoute('score_edit', [
                 'id' => $score->getId()
             ]);
-        } else {
-            $user = $this->getUser();
-
-            $game = $this->getDoctrine()
-                ->getRepository('App\Entity\Game')
-                ->find($game);
-
-            $tournament = $this->getDoctrine()
-                ->getRepository('App\Entity\Tournament')
-                ->find($tournament);
-            
-            $team = $tournament->getTeamByUser($user);
-            $score = new Score($game, $tournament, $user, $team);
-            $form = $this->createForm(ScoreType::class, $score);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $score->setDateUpdated(new \DateTime('now'));
-                $entityManager->persist($score);
-                $entityManager->flush();
-
-                return $this->redirectToRoute('tournament_scores',
-                    [
-                        'id'=>$score->getTournament()->getId(),
-                        'game'=>$score->getGame()->getId()
-                    ]
-                );
-            }
-
-            return $this->render('score/new.html.twig', [
-                'score' => $score,
-                'form' => $form->createView()
-            ]);
         }
+
+        if ($tournament->isAfterCutoff()) {
+            $this->addFlash('notice', 'It is too late to add a score for this game.');
+            return $this->redirectToRoute('tournament_scores',
+                [
+                    'id'=> $tournament->getId(),
+                    'game'=>$game->getId()
+                ]
+            );
+        }
+
+        $user = $this->getUser();
+
+        $game = $this->getDoctrine()
+            ->getRepository('App\Entity\Game')
+            ->find($game);
+
+        $tournament = $this->getDoctrine()
+            ->getRepository('App\Entity\Tournament')
+            ->find($tournament);
+        
+        $team = $tournament->getTeamByUser($user);
+        $score = new Score($game, $tournament, $user, $team);
+        $form = $this->createForm(ScoreType::class, $score);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $score->setDateUpdated(new \DateTime('now'));
+            $entityManager->persist($score);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('tournament_scores',
+                [
+                    'id'=>$score->getTournament()->getId(),
+                    'game'=>$score->getGame()->getId()
+                ]
+            );
+        }
+
+        return $this->render('score/new.html.twig', [
+            'score' => $score,
+            'form' => $form->createView()
+        ]);
     }
 
     /**
@@ -102,7 +111,11 @@ class ScoreController extends AbstractController
 
         if ($screenshot = $score->getScreenshot() ) {
             $path = $uploader->getTargetDirectory() . '/' . $screenshot;
-            $score->setScreenshot(new File($path));
+            if (file_exists($path)) {
+                $score->setScreenshot(new File($path));
+            } else {
+                $score->setScreenshot(null);
+            }
         }
         $oldScore = clone $score;
 
