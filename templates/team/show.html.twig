@@ -12,8 +12,8 @@
         </header>
 
         <section class="margin-y padding">
-            {% if (team.leaderboard) %}
-                {{ include('team/leaderboard.html.twig', {'scores':team.leaderboard,'gameCount':team.tournament.games|length}) }}
+            {% if (leaderboard) %}
+                {{ include('team/leaderboard.html.twig', {'scores':leaderboard,'gameCount':team.tournament.games|length}) }}
             {% endif %}
         </section>
     </main>

@@ -19,7 +19,7 @@ class Team
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="teams")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="teams", fetch="EAGER")
      */
     private $members;
 

@@ -13,6 +13,7 @@ use App\Entity\Score;
 use App\Entity\Game;
 use App\Entity\Tournament;
 use App\Form\ScoreType;
+use App\Service\ScoreKeeper;
 
 /**
  * @Route("/score")
@@ -78,6 +79,9 @@ class ScoreController extends AbstractController
             $score->setDateUpdated(new \DateTime('now'));
             $entityManager->persist($score);
             $entityManager->flush();
+            
+            $scorekeeper = new ScoreKeeper($tournament, $entityManager);
+            $scorekeeper->scoreGame($game);
 
             return $this->redirectToRoute('tournament_scores',
                 [
@@ -136,6 +140,9 @@ class ScoreController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
+
+            $scorekeeper = new ScoreKeeper($score->getTournament(), $entityManager);
+            $scorekeeper->scoreGame($score->getGame());
 
             return $this->redirectToRoute('tournament_scores',
                 [

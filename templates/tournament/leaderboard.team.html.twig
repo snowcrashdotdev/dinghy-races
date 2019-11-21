@@ -17,11 +17,11 @@
                     <th class="align-right row-score">Score</th>
                     <th class="row-team">Team</th>
                 </tr>
-            {% for score in tournament.scoreTournament('team') %}
+            {% for team in teamScores %}
                 <tr>
                     <td>{{ loop.index }}</td>
-                    <td class="align-right">{{ score.points|number_format }}</td>
-                    <td><a href="{{path('team_show',{'team':score.team.id})}}">{{ score.team.name }}</a></td>
+                    <td class="align-right">{{ team.points|number_format }}</td>
+                    <td><a href="{{path('team_show',{'team': team.id})}}">{{ team.name }}</a></td>
                 </tr>
             {% endfor %}
             </table>

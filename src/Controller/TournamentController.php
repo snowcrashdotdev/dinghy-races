@@ -85,21 +85,20 @@ class TournamentController extends AbstractController
      */
     public function show(Tournament $tournament, TwitchChecker $twitchChecker): Response
     {
-        $topScorer = $this->getDoctrine()
-            ->getRepository('App\Entity\Score')
-            ->findIndividualScores($tournament, 1)
-        ;
+        $scoreRepo = $this->getDoctrine()->getRepository('App\Entity\Score');
 
-        $latestScores = $this->getDoctrine()
-            ->getRepository('App\Entity\Score')
-            ->findBy(['tournament' => $tournament],['date_updated'=>'DESC'],5,0);
+        $leadingTeam = $scoreRepo->findTeamScores($tournament, 1);
+        $leadingPlayer = $scoreRepo->findIndividualScores($tournament, 1);
+        $latestScores = $scoreRepo->latestScores($tournament);
         
         $streams = $twitchChecker->getLiveTwitchStreams($tournament);
 
         return $this->render('tournament/show.html.twig', [
             'streams' => $streams,
             'tournament' => $tournament,
-            'latestScores' => $latestScores
+            'latestScores' => $latestScores,
+            'leadingPlayer' => $leadingPlayer,
+            'leadingTeam' => $leadingTeam
         ]);
     }
 
@@ -213,8 +212,13 @@ class TournamentController extends AbstractController
      */
     public function team_leaderboard(Request $request, Tournament $tournament)
     {
+        $teamScores = $this->getDoctrine()
+            ->getRepository('App\Entity\Score')
+            ->findTeamScores($tournament);
+
         return $this->render('tournament/leaderboard.team.html.twig', [
-            'tournament' => $tournament
+            'tournament' => $tournament,
+            'teamScores' => $teamScores 
         ]);
     }
 
@@ -223,10 +227,15 @@ class TournamentController extends AbstractController
      */
     public function individual_leaderboard(Request $request, Tournament $tournament)
     {
+
+        $scores = $this->getDoctrine()
+            ->getRepository('App\Entity\Score')
+            ->findIndividualScores($tournament);
+
         return $this->render('tournament/leaderboard.individual.html.twig', [
-            'user' => $this->getUser(),
+            'user' => $this->getUser()->getId(),
             'tournament' => $tournament,
-            'scores' => $tournament->scoreTournament('ind'),
+            'scores' => $scores,
         ]);
     }
 

@@ -21,11 +21,12 @@
 
             <section>
                 {% set label = (tournament.inProgress) ? 'Leading' : 'Winning' %}
-                {% set leading = tournament.scoreTournament('team', true) %}
                 <p>
                 <span>
                 {% if tournament.hasScores %}
-                {{ label }} Team: {{ leading.team.name }} ({{ leading.points|number_format }} points)
+                    {% for team in leadingTeam %}
+                        {{ label }} Team: {{ team.name }} ({{ team.points|number_format }} points)
+                    {% endfor %}
                 {% else %}
                     * No leading team.
                 {% endif %}
@@ -35,11 +36,12 @@
             </section>
 
             <section>
-                {% set leading = tournament.scoreTournament('ind', true) %}
                 <p>
                     <span>
                     {% if tournament.hasScores %}
-                    Top Scorer: {{ leading.user.username }} ({{ leading.points|number_format }} points)
+                        {% for player in leadingPlayer %}
+                    Top Scorer: {{ player.username }} ({{ player.points|number_format }} points)
+                        {% endfor %}
                     {% else %}
                         * No leading individual.
                     {% endif %}

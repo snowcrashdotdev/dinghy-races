@@ -77,6 +77,16 @@ class Score
      */
     private $comment;
 
+    /**
+     * @ORM\Column(type="bigint", nullable=true)
+     */
+    private $ranked_points;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $auto_assigned;
+
     public function __construct(Game $game, Tournament $tournament, User $user, Team $team)
     {
         $this->setGame($game);
@@ -247,5 +257,29 @@ class Score
             $context->buildViolation('Either a Video URL or screenshot is required.')
                 ->addViolation();
         }
+    }
+
+    public function getRankedPoints(): ?string
+    {
+        return $this->ranked_points;
+    }
+
+    public function setRankedPoints(?string $ranked_points): self
+    {
+        $this->ranked_points = $ranked_points;
+
+        return $this;
+    }
+
+    public function getAutoAssigned(): ?bool
+    {
+        return $this->auto_assigned;
+    }
+
+    public function setAutoAssigned(?bool $auto_assigned): self
+    {
+        $this->auto_assigned = $auto_assigned;
+
+        return $this;
     }
 }

@@ -9,7 +9,7 @@
         <tr>
             <td>{{ loop.index }}</td>
             <td class="align-right">{{ score.points|number_format }}</td>
-            <td><a href="{{path('user_show',{'id':score.user.id})}}">{{ score.user.username }}</a></td>
+            <td><a href="{{path('user_show',{'id':score.user})}}">{{ score.username }}</a></td>
             <td>{{score.completed}} out of {{gameCount}}</td>
         </tr>
     {% endfor %}

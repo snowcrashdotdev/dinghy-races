@@ -45,8 +45,13 @@ class TeamController extends AbstractController
      */
     public function show(Team $team): Response
     {
+        $leaderboard = $this->getDoctrine()
+            ->getRepository('App\Entity\Score')
+            ->findTeamLeaderboard($team);
+
         return $this->render('team/show.html.twig', [
             'team' => $team,
+            'leaderboard' => $leaderboard
         ]);
     }
 

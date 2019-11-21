@@ -22,7 +22,7 @@
         {% endif %}
         </section>
         <section class="margin-y padding">
-        {% if user.scores %}
+        {% if scores %}
             <h2 class="margin-bottom">Recent high scores:</h2>
             <table class="leaderboard">
                 <tr>
@@ -31,7 +31,7 @@
                     <th>Rank</th>
                     <th>Date</th>
                 </tr>
-            {% for score in user.scores %}
+            {% for score in scores %}
                 <tr>
                     <td><a href="{{path('tournament_scores', {'id':score.tournament.id,'game':score.game.id})}}">{{score.game.description}}</a></td>
                     <td>{{score.points|number_format}}</td>

@@ -27,8 +27,8 @@
                 <tr class="{{className}}">
                     <td>{{ loop.index }}</td>
                     <td class="align-right">{{ score.points|number_format }}</td>
-                    <td><a href="{{path('user_show', {'id': score.user.id})}}">{{ score.user.username }}</a></td>
-                    <td>{{tournament.teamByUser(score.user)}}</td>
+                    <td><a href="{{path('user_show', {'id': score.user})}}">{{ score.username }}</a></td>
+                    <td><a href="{{path('team_show', {'team': score.team})}}">{{score.teamName}}</a></td>
                 </tr>
             {% endfor %}
             </table>

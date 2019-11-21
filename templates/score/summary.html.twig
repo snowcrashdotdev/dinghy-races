@@ -34,7 +34,7 @@
                     <td>{{ loop.index }}</td>
                     <td class="align-right">{{ score.points|number_format }}</td>
                     <td>{{score.comment|e}}</td>
-                    <td class="align-right">{{tournament.points(loop.index - 1)|number_format}}</td>
+                    <td class="align-right">{{score.rankedPoints}}</td>
                     <td><a href="{{path('user_show', {'id': score.user.id})}}">{{ score.user.username }}</a></td>
                     <td><a href="{{path('team_show', {'team': score.team.id})}}">{{score.team.name}}</a></td>
                     <td>

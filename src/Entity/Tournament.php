@@ -31,7 +31,7 @@ class Tournament
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Game", inversedBy="tournaments")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Game", inversedBy="tournaments", fetch="EAGER")
      */
     private $games;
 
@@ -52,13 +52,13 @@ class Tournament
     private $end_date;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Team", mappedBy="tournament", orphanRemoval=true, cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Team", mappedBy="tournament", orphanRemoval=true, cascade={"persist","remove"}, fetch="EAGER")
      * @ORM\OrderBy({"points" = "DESC"})
      */
     private $teams;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="tournaments")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="tournaments", fetch="EAGER")
      */
     private $users;
 
@@ -226,12 +226,15 @@ class Tournament
         return $this;
     }
 
-    public function getTeamByUser(User $user): Team
+    public function getTeamByUser(User $user)
     {
-        return $this->getTeams()
-            ->filter(function($team) use ($user){
-                return $team->getMembers()->contains($user);
-            })->first();
+        $teams = $this->getTeams()->toArray();
+
+        foreach($teams as $team) {
+            if ($team->getMembers()->contains($user)) {
+                return $team;
+            }
+        }
     }
 
     public function getScoresByUser(User $user)
@@ -499,5 +502,24 @@ class Tournament
     {
         $now = new \DateTime('now');
         return ($now > $this->cutoff_date);
+    }
+
+    public function needsFullScoring()
+    {
+        return $this->getScores()->exists(function($i, $score) {
+            return $score->getRankedPoints() === null;
+        });
+    }
+
+    public function hasNoShows()
+    {
+        if ($this->isAfterCutoff()) {
+            $expectedScoreCount = $this->getUsers()->count() * $this->getGames()->count();
+            $actualScoreCount = $this->getScores()->count();
+
+            return $actualScoreCount < $expectedScoreCount;
+        } else {
+            return false;
+        }
     }
 }
