@@ -108,6 +108,7 @@ class ScoreKeeper
         $noShowScore->setAutoAssigned(true);
         $noShowScore->setPoints(0);
         $noShowScore->setRankedPoints($points);
+        $noShowScore->setComment('(no show)');
         $this->em->persist($noShowScore);
         $this->em->flush();
     }
