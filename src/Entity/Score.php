@@ -95,6 +95,7 @@ class Score
         $this->setTeam($team);
         $this->setDateSubmitted(new \DateTime('now'));
         $this->setDateUpdated(new \DateTime('now'));
+        $this->setAutoAssigned(false);
     }
 
     public function getId(): ?int
