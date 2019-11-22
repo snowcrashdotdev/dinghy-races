@@ -58,7 +58,7 @@ class ScoreKeeper
         return $this->tournament->getScoringTable()[$rank];
     }
 
-    public function getScores(Game $game = null, User $user = null)
+    public function getScores(Game $game = null, User $user = null, bool $ranked=null)
     {
         $criteria = new Criteria();
         if ($game) {
@@ -74,7 +74,11 @@ class ScoreKeeper
         $nExpr = new Comparison('auto_assigned', Comparison::NEQ, true);
         $criteria->andWhere($nExpr);
 
-        $criteria->orderBy(['ranked_points' => 'DESC', 'date_updated' => 'ASC']);
+        if (true === $ranked) {
+            $criteria->orderBy(['ranked_points' => 'DESC', 'date_updated' => 'ASC']);
+        } else {
+            $criteria->orderBy(['points' => 'DESC', 'date_updated' => 'ASC']);
+        }
 
         $scores = $this->tournament->getScores()->matching($criteria);
 
@@ -84,7 +88,7 @@ class ScoreKeeper
     public function assignNoShowScores()
     {
         foreach($this->tournament->getGames() as $game) {
-            $noShowPoints = $this->getScores($game)
+            $noShowPoints = $this->getScores($game, null, true)
                 ->last()
                 ->getRankedPoints() - 5;
             settype($noShowPoints, 'string');
