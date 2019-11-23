@@ -227,13 +227,18 @@ class TournamentController extends AbstractController
      */
     public function individual_leaderboard(Request $request, Tournament $tournament)
     {
+        if ($currentUser = $this->getUser()) {
+            $user = $currentUser->getId();
+        } else {
+            $user = null;
+        }
 
         $scores = $this->getDoctrine()
             ->getRepository('App\Entity\Score')
             ->findIndividualScores($tournament);
 
         return $this->render('tournament/leaderboard.individual.html.twig', [
-            'user' => $this->getUser()->getId(),
+            'user' => $user,
             'tournament' => $tournament,
             'scores' => $scores,
         ]);
