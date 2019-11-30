@@ -37,7 +37,7 @@ class Tournament
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Score", mappedBy="tournament", orphanRemoval=true)
-     * @ORM\OrderBy({"points" = "DESC"})
+     * @ORM\OrderBy({"ranked_points" = "DESC", "date_updated" = "ASC"})
      */
     private $scores;
 
