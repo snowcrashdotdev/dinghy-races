@@ -233,7 +233,7 @@ class Score
      */
     public function validate(ExecutionContextInterface $context, $payload)
     {
-        if ($this->getTournament()->getStartDate() > $this->getDateUpdated()) {
+        if ($this->getTournament()->getStartDate() > new \DateTime('NOW')) {
             $context->buildViolation('The tournament has not started yet.')
                 ->atPath('date_updated')
                 ->addViolation()
@@ -242,7 +242,7 @@ class Score
             return;
         }
 
-        if ($this->getTournament()->getEndDate() < $this->getDateUpdated()) {
+        if ($this->getTournament()->getEndDate() < new \DateTime('NOW')) {
             $context->buildViolation('The tournament has already concluded.')
                 ->atPath('date_updated')
                 ->addViolation()
