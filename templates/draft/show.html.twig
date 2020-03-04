@@ -9,6 +9,7 @@
         <ul class="list-style-none">
             {% for entry in draft.draftEntries %}
                 <li>
+                    <small>({{ entry.createdAt|date('Y-m-d @ G:i') }})</small>
                     <a href="{{path('user_show', {'id':entry.user.id})}}">{{entry.user.username}}</a>
                 </li>
             {% else %}
