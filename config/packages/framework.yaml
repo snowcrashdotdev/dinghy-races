@@ -12,7 +12,7 @@ framework:
         handler_id: ~
         cookie_secure: auto
         cookie_samesite: lax
-        save_path: '%kernel.root_dir%/../var/sessions/%kernel.environment%'
+        save_path: '%kernel.project_dir%/../var/sessions/%kernel.environment%'
 
     #esi: true
     #fragments: true
