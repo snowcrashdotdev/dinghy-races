@@ -16,3 +16,4 @@
 .DS_Store
 .htaccess
 uploads
+node_modules
