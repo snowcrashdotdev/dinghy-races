@@ -36,6 +36,8 @@ class TwitchChecker
                     return trim($url['path'], '/');
                 }, $users
             );
+
+            if (empty($twitchUsers)) { return false; }
     
             $query = '?user_login=' . join('&user_login=', $twitchUsers);
     
@@ -53,7 +55,6 @@ class TwitchChecker
             $json = json_decode(curl_exec($curl));
             curl_close($curl);
             
-    
             $live = array_filter($json->data, function($stream){
                 return $stream->type === 'live';
             });
