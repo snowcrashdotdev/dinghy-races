@@ -8,7 +8,7 @@ use App\Repository\DraftRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class DraftController extends AbstractController
 {
@@ -62,7 +62,7 @@ class DraftController extends AbstractController
 
     /**
      * @Route("/drafts", name="draft_index", methods={"GET"})
-     * @isGranted({"ROLE_ADMIN", "ROLE_TO"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
      */
     public function index(DraftRepository $draftRepository)
     {
@@ -73,7 +73,7 @@ class DraftController extends AbstractController
 
     /**
      * @Route("/drafts/{id}", name="draft_show", methods={"GET"})
-     * @isGranted({"ROLE_ADMIN", "ROLE_TO"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
      */
     public function show(Draft $draft)
     {

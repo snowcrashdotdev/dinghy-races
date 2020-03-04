@@ -18,7 +18,7 @@ class TeamController extends AbstractController
 {
     /**
      * @Route("/new", name="team_new", methods={"GET","POST"})
-     * @isGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function new(Request $request): Response
     {
@@ -57,7 +57,7 @@ class TeamController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="team_edit", methods={"GET","POST"})
-     * @isGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function edit(Request $request, Team $team): Response
     {
@@ -78,7 +78,7 @@ class TeamController extends AbstractController
 
     /**
      * @Route("/{id}", name="team_delete", methods={"DELETE"})
-     * @isGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, Team $team): Response
     {

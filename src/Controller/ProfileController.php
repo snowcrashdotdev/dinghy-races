@@ -15,7 +15,7 @@ class ProfileController extends AbstractController
 {
     /**
      * @Route("/settings/profile", name="settings_profile", methods={"GET", "POST"})
-     * @isGranted("ROLE_USER")
+     * @IsGranted("ROLE_USER")
      */
     public function edit(Request $request): Response
     {

@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Service\TwitchChecker;
 use Symfony\Component\Validator\Constraints\Date;
@@ -49,7 +50,7 @@ class TournamentController extends AbstractController
 
     /**
      * @Route("/new", name="tournament_new", methods={"GET","POST"})
-     * @isGranted({"ROLE_ADMIN", "ROLE_TO"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
      */
     public function new(Request $request): Response
     {
@@ -104,7 +105,7 @@ class TournamentController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="tournament_edit", methods={"GET","POST"})
-     * @isGranted({"ROLE_ADMIN", "ROLE_TO"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
      */
     public function edit(Request $request, Tournament $tournament): Response
     {
@@ -134,7 +135,7 @@ class TournamentController extends AbstractController
 
     /**
      * @Route("/{id}/scoring", name="tournament_scoring", methods={"GET", "POST"})
-     * @isGranted({"ROLE_ADMIN", "ROLE_TO"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
      */
     public function scoring(Request $request, Tournament $tournament): Response
     {
@@ -246,7 +247,7 @@ class TournamentController extends AbstractController
 
     /**
      * @Route("/{id}", name="tournament_delete", methods={"DELETE"})
-     * @isGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, Tournament $tournament): Response
     {
