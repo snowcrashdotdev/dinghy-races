@@ -93,6 +93,11 @@ class User implements UserInterface
      */
     private $profile;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DraftEntry", mappedBy="user", orphanRemoval=true)
+     */
+    private $draftEntries;
+
     public function __construct()
     {
         $this->verified = false;
@@ -104,6 +109,7 @@ class User implements UserInterface
         $this->created_at = new \DateTime('now');
         $this->profile = new Profile();
         $this->profile->setUser($this);
+        $this->draftEntries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -322,6 +328,37 @@ class User implements UserInterface
     public function setProfile(?Profile $profile): self
     {
         $this->profile = $profile;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DraftEntry[]
+     */
+    public function getDraftEntries(): Collection
+    {
+        return $this->draftEntries;
+    }
+
+    public function addDraftEntry(DraftEntry $draftEntry): self
+    {
+        if (!$this->draftEntries->contains($draftEntry)) {
+            $this->draftEntries[] = $draftEntry;
+            $draftEntry->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDraftEntry(DraftEntry $draftEntry): self
+    {
+        if ($this->draftEntries->contains($draftEntry)) {
+            $this->draftEntries->removeElement($draftEntry);
+            // set the owning side to null (unless already changed)
+            if ($draftEntry->getUser() === $this) {
+                $draftEntry->setUser(null);
+            }
+        }
 
         return $this;
     }

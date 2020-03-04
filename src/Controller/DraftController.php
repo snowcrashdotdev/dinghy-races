@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Draft;
+use App\Entity\DraftEntry;
 use App\Repository\DraftRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,10 +27,15 @@ class DraftController extends AbstractController
      */
     public function invite_accept(Request $request, Draft $draft)
     {
-        if ($this->isCsrfTokenValid('invite'.$draft->getId(), $request->request->get('_token'))) {
-            $draft->addEntry($this->getUser());
+        if (
+            $this->isCsrfTokenValid('invite'.$draft->getId(), $request->request->get('_token')) &&
+
+            ! $draft->hasEntered($this->getUser())
+        
+        ) {
+            $entry = new DraftEntry($draft, $this->getUser());
+            $draft->addDraftEntry($entry);
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($draft);
             $entityManager->flush();
         }
 
@@ -42,7 +48,10 @@ class DraftController extends AbstractController
     public function invite_decline(Request $request, Draft $draft)
     {
         if ($this->isCsrfTokenValid('invite'.$draft->getId(), $request->request->get('_token'))) {
-            $draft->removeEntry($this->getUser());
+            $entry = $this->getDoctrine()
+                ->getRepository('App\Entity\DraftEntry')
+                ->findOneBy(['user' => $this->getUser()]);
+            $draft->removeDraftEntry($entry);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($draft);
             $entityManager->flush();

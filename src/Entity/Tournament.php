@@ -470,7 +470,7 @@ class Tournament
         if (null === $draft = $this->getDraft()) {
             return false;
         } else {
-            return $draft->alreadyEntered($user);
+            return $draft->hasEntered($user);
         }
     }
 

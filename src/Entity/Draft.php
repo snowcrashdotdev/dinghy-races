@@ -33,9 +33,16 @@ class Draft
      */
     private $invite_token;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DraftEntry", mappedBy="draft", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OrderBy({"created_at" = "DESC"})
+     */
+    private $draftEntries;
+
     public function __construct()
     {
         $this->entries = new ArrayCollection();
+        $this->draftEntries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -93,8 +100,43 @@ class Draft
         return $this;
     }
 
-    public function alreadyEntered(User $entry)
+    public function hasEntered(User $user)
     {
-        return ($this->entries->contains($entry));
+        return(
+            $this->draftEntries->exists(function($key, $entry) use ($user) {
+                return $entry->getUser() === $user;
+            })
+        );
+    }
+
+    /**
+     * @return Collection|DraftEntry[]
+     */
+    public function getDraftEntries(): Collection
+    {
+        return $this->draftEntries;
+    }
+
+    public function addDraftEntry(DraftEntry $draftEntry): self
+    {
+        if (!$this->draftEntries->contains($draftEntry)) {
+            $this->draftEntries[] = $draftEntry;
+            $draftEntry->setDraft($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDraftEntry(DraftEntry $draftEntry): self
+    {
+        if ($this->draftEntries->contains($draftEntry)) {
+            $this->draftEntries->removeElement($draftEntry);
+            // set the owning side to null (unless already changed)
+            if ($draftEntry->getDraft() === $this) {
+                $draftEntry->setDraft(null);
+            }
+        }
+
+        return $this;
     }
 }
