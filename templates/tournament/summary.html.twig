@@ -4,7 +4,7 @@
 
     {{ tournament.description|raw }}
 
-    {% if is_granted("ROLE_USER") and tournament.hasEntered(app.user) %}
+    {% if is_granted("ROLE_USER") and tournament.hasEntered(app.user) and tournament.isUpcoming %}
         <p>You are signed up for this tournament ✔️</p>
     {% endif %}
 

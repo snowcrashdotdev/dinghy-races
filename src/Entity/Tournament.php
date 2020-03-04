@@ -522,4 +522,9 @@ class Tournament
             return false;
         }
     }
+
+    public function isUpcoming()
+    {
+        return ($this->getStartDate() > date_create('now'));
+    }
 }
