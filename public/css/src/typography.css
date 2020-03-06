@@ -1,0 +1,22 @@
+:root {
+    font-family: var(--sans);
+    line-height: var(--ratio);
+}
+
+body {
+    padding: 0.1rem;
+    color: var(--color-black);
+}
+
+:--heading {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    margin: 0;
+    margin-bottom: calc(var(--margin) / 2);
+}
+
+:--anchor {
+    text-decoration: none;
+    color: var(--color-prime);
+}
