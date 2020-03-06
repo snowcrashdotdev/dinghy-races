@@ -18,6 +18,10 @@ section {
             top: calc(var(--padding) * -1);
         }
     }
+
+    :--gadget {
+        max-width: calc(100vw / 3);
+    }
 }
 
 :--gadget {
