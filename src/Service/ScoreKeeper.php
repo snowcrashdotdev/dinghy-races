@@ -27,6 +27,7 @@ class ScoreKeeper
 
         if ($tournament->hasNoShows()) {
             $this->assignNoShowScores();
+            $this->scoreTeams();
         }
     }
 
@@ -37,6 +38,8 @@ class ScoreKeeper
         foreach($games as $game) {
             $this->scoreGame($game);
         }
+
+        $this->scoreTeams();
     }
 
     public function scoreGame(Game $game)
@@ -45,10 +48,24 @@ class ScoreKeeper
 
         $rank = 1;
         foreach ($scores as $score) {
+            $score->setRank($rank);
             $rankedPoints = $this->getRankedPoints($rank);
             $score->setRankedPoints($rankedPoints);
             $this->em->persist($score);
             $rank++;
+        }
+        $this->em->flush();
+    }
+
+    public function scoreTeams()
+    {
+        $teams = $this->tournament->getTeams()->toArray();
+        foreach($teams as $team) {
+            $scores = $team->getScores()->toArray();
+            $points = 0;
+            foreach ($scores as $score) { $points += $score->getRankedPoints(); }
+            $team->setPoints($points);
+            $this->em->persist($team);
         }
         $this->em->flush();
     }

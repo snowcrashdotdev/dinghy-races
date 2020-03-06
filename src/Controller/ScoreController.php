@@ -82,6 +82,7 @@ class ScoreController extends AbstractController
             
             $scorekeeper = new ScoreKeeper($tournament, $entityManager);
             $scorekeeper->scoreGame($game);
+            $scorekeeper->scoreTeams();
 
             return $this->redirectToRoute('tournament_scores',
                 [
@@ -143,6 +144,7 @@ class ScoreController extends AbstractController
 
             $scorekeeper = new ScoreKeeper($score->getTournament(), $entityManager);
             $scorekeeper->scoreGame($score->getGame());
+            $scorekeeper->scoreTeams();
 
             return $this->redirectToRoute('tournament_scores',
                 [
