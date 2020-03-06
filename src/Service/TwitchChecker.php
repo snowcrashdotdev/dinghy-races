@@ -10,8 +10,9 @@ class TwitchChecker
 {
     private $cache;
     private $clientId;
+    private $streamTag;
 
-    public function __construct(Connection $connection, String $clientId)
+    public function __construct(Connection $connection, String $clientId, String $streamTag)
     {
         $this->cache = new PdoAdapter(
             $connection,
@@ -19,6 +20,7 @@ class TwitchChecker
             60
         );
         $this->clientId = $clientId;
+        $this->streamTag = $streamTag;
     }
 
     public function getLiveTwitchStreams(Tournament $tournament)
@@ -56,7 +58,10 @@ class TwitchChecker
             curl_close($curl);
             
             $live = array_filter($json->data, function($stream){
-                return $stream->type === 'live';
+                return (
+                    $stream->type === 'live' &&
+                    preg_match("\{$this->streamTag}\i", $stream->title)
+                );
             });
 
             return $live;

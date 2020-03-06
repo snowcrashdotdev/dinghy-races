@@ -35,6 +35,7 @@ services:
         arguments:
             $connection: '@doctrine.dbal.default_connection'
             $clientId: '%env(TWITCH_CLIENT_ID)%'
+            $streamTag: '[calice]'
     App\Event\FileUploadListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
