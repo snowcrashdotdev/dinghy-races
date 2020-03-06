@@ -87,6 +87,11 @@ class Score
      */
     private $auto_assigned;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $rank;
+
     public function __construct(Game $game, Tournament $tournament, User $user, Team $team)
     {
         $this->setGame($game);
@@ -223,11 +228,6 @@ class Score
         return $this;
     }
 
-    public function getRank()
-    {
-        return $this->getTournament()->getScoreRank($this) + 1;
-    }
-
     /**
      * @Assert\Callback
      */
@@ -280,6 +280,18 @@ class Score
     public function setAutoAssigned(?bool $auto_assigned): self
     {
         $this->auto_assigned = $auto_assigned;
+
+        return $this;
+    }
+
+    public function getRank(): ?int
+    {
+        return $this->rank;
+    }
+
+    public function setRank(?int $rank): self
+    {
+        $this->rank = $rank;
 
         return $this;
     }
