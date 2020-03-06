@@ -1,0 +1,6 @@
+{% if tournament.scores %}
+<aside>
+    <h3>Participation</h3>
+    <p>{{tournament.participationRate|number_format(4) * 100 ~ "%"}}</p>
+</aside>
+{% endif %}

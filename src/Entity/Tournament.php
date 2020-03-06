@@ -513,18 +513,21 @@ class Tournament
 
     public function hasNoShows()
     {
-        if ($this->isAfterCutoff()) {
-            $expectedScoreCount = $this->getUsers()->count() * $this->getGames()->count();
-            $actualScoreCount = $this->getScores()->count();
-
-            return $actualScoreCount < $expectedScoreCount;
-        } else {
-            return false;
-        }
+        return ($this->getParticipationRate() < 1);
     }
 
     public function isUpcoming()
     {
         return ($this->getStartDate() > date_create('now'));
+    }
+
+    public function getParticipationRate()
+    {
+        $criteria = Criteria::create()
+            ->andWhere(Criteria::expr()->neq('auto_assigned', true));
+
+        $expectedScoreCount = $this->getUsers()->count() * $this->getGames()->count();
+        $actualScoreCount = $this->getScores()->matching($criteria)->count();
+        return $actualScoreCount / $expectedScoreCount;
     }
 }
