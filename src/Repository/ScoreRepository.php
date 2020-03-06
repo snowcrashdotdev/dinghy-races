@@ -22,13 +22,13 @@ class ScoreRepository extends ServiceEntityRepository
         parent::__construct($registry, Score::class);
     }
 
-    public function latestScores(Tournament $tournament)
+    public function findRecentScores(Tournament $tournament)
     {
         $q = $this->createQueryBuilder('s')
             ->andWhere('s.tournament = :tournament')
             ->andWhere('s.points != 0')
             ->orderBy('s.date_updated', 'DESC')
-            ->setMaxResults(5)
+            ->setMaxResults(3)
             ->setParameter('tournament', $tournament);
 
         return $q->getQuery()->getResult();
@@ -53,9 +53,9 @@ class ScoreRepository extends ServiceEntityRepository
     {
         $q = $this->createQueryBuilder('s')
             ->join('s.user', 'u')
-            ->join('s.team', 't')
-            ->select('u.username as username', 'SUM(s.ranked_points) as points', 'u.id as user', 't.id as team', 't.name as teamName')
-            ->groupBy('s.user')
+            ->leftJoin('s.team', 't')
+            ->select('u.id as id', 'u.username as name', 't.name as team', 'SUM(s.ranked_points) as points')
+            ->groupBy('s.user', 's.team')
             ->andWhere('s.tournament = :tournament')
             ->setParameter('tournament', $tournament)
             ->orderBy('points', 'DESC')

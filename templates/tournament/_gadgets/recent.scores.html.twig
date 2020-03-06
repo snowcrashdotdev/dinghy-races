@@ -1,0 +1,11 @@
+<aside>
+    <h3>Recent Scores</h3>
+    {% for score in recent_scores %}
+        <div>
+            <time>{{score.dateUpdated|date('m/d G:i')}}</time>
+            <span>{{score.user}}<span>
+            <span>{{score.points|number_format}}</span>
+            <a href="{{ path('tournament_scores', {'id': tournament.id, 'game': score.game.id}) }}">{{score.game}}</a>
+        </div>
+    {% endfor %}
+</aside>

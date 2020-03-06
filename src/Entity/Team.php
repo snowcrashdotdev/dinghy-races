@@ -191,6 +191,20 @@ class Team
         return $this;
     }
 
+    public function getAverageRank()
+    {
+        $scores = $this->getScores();
+        $count = count($scores);
+        $average = array_sum(
+            $scores->map(function($score) use ($count) {
+                return $score->getRank() / $count; })
+            ->toArray()
+        );
+
+        return $average;
+
+    }
+
     public function getLeaderboard()
     {
         $result = array();

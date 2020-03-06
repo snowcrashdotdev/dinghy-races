@@ -1,0 +1,8 @@
+{% if live_streams %}
+<aside>
+    <h3>Live Streams</h3>
+    {% for stream in live_streams %}
+        <a target="_blank" href="{{'https://www.twitch.tv/' ~ stream.user_name}}">{{stream.user_name}} &mdash; {{stream.title}}</a>
+    {% endfor %}
+</aside>
+{% endif %}

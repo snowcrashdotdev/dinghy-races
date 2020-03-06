@@ -4,34 +4,72 @@
 
 {% block body %}
     <main>
-        <header class="margin-y">
+        <header>
             <details>
-                <summary><h1 class="bg-accent padding-y">{{tournament.title}}</h1></summary>
+                <summary><h1>{{tournament.title}}</h1></summary>
                 <div>{{ tournament.description|raw }}</div>
-                <time>Start: {{tournament.startDate|date('F jS, Y @ g:ia')}} End: {{tournament.endDate|date_modify('-1 minute')|date('F jS, Y @ g:ia')}}</time>
             </details>
         </header>
 
-        <section class="flex">
-            <h2>Games</h2>
-            {% for game in tournament.games %}
-                {{ include('game/_summary.html.twig', {'game': game}) }}
-            {% else %}
-                <p>No games selected</p>
-            {% endfor %}
-        </section>
-
-        {% if tournament.inProgress and streams %}
-            {{ include('partials/twitch.html.twig', {'streams': streams}) }}
+        {% if tournament.inProgress %}
+            <section>
+                {% include 'tournament/_gadgets/recent.scores.html.twig' %}
+                {% include 'tournament/_gadgets/top.team.html.twig' %}
+                {% include 'tournament/_gadgets/top.player.html.twig' %}
+                {% include 'tournament/_gadgets/live.streams.html.twig' %}
+            </section>
         {% endif %}
 
-        <h2 class="margin-y">Teams</h2>
-        <section class="flex-row flex-wrap justify-center">
-            {% for team in tournament.teams %}
-                {{ include('team/summary.html.twig', {'team': team}) }}
+        <table>
+            <h2>Games</h2>
+            <tr>
+                <th>ROM</th>
+                <th>Game</th>
+                <th>Developer</th>
+                <th>Year</th>
+                {% if not tournament.isUpcoming %}
+                    <th>High Score</th>
+                    {% if is_granted('ROLE_USER') %}
+                        <th>Your Score</th>
+                    {% endif %}
+                {% endif %}
+            </tr>
+            {% for game in tournament.games %}
+                {% set highscore = tournament.highscore(game) %}
+                <tr>
+                    <td>
+                        <a href="{{ path('tournament_scores', {'id': tournament.id, 'game': game.id}) }}">
+                            {{ game.name ~ '.zip' }}
+                        </a>
+                    </td>
+                    <td>{{ game.description }}</td>
+                    <td>{{ game.manufacturer }}</td>
+                    <td>{{ game.year }}</td>
+                    {% if not tournament.isUpcoming %}
+                        <td>{{highscore.user.username}} {{highscore.points|number_format}}</td>
+                        {% if is_granted('ROLE_USER') %}
+                            {% set yourscore = app.user.getscore(tournament, game) %}
+                                <td>{{ yourscore.points|number_format }}</td>
+                        {% endif %}
+                    {% endif %}
+                </tr>
             {% else %}
-                <p>No teams registered.</p>
+                <tr><td>No games selected.</td></tr>
             {% endfor %}
+        </table>
+
+        <table>
+            <h2>Teams</h2>
+            {% for team in tournament.teams %}
+                <tr>
+                    <td><a href="{{path('team_show', {'team': team.id})}}">{{team}}</a></td>
+                    <td>{{ team.points|number_format }}</td>
+                    <td>{{ team.averageRank|number_format(2) }}</td>
+                </tr>
+            {% else %}
+                <td>No teams registered.</td>
+            {% endfor %}
+        </table>
         </section>
     </main>
 {% endblock %}

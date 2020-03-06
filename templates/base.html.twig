@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en">
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,7 +9,7 @@
         {% block stylesheets %}<link rel="stylesheet" media="screen" href="{{ asset('/css/dist/style.min.css') }}">{% endblock %}
     </head>
     <body>
-        {{ include('_partials/flash.html.twig') }}
+        {% include '_partials/flash.html.twig'  %}
         {% block body %}{% endblock %}
         {% block footer %}{% endblock %}
         {% block javascripts %}

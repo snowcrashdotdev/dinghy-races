@@ -52,8 +52,8 @@ class Tournament
     private $end_date;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Team", mappedBy="tournament", orphanRemoval=true, cascade={"persist","remove"}, fetch="EAGER")
-     * @ORM\OrderBy({"points" = "DESC"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Team", mappedBy="tournament", orphanRemoval=true, cascade={"persist","remove"})
+     * @ORM\OrderBy({"points" = "DESC", "name" = "ASC"})
      */
     private $teams;
 
