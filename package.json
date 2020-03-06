@@ -1,0 +1,36 @@
+{
+  "name": "dinghy-races",
+  "version": "1.0.0",
+  "description": "The software behind the inaugural (and future?) [Calice Cup](https://calice.snowcrash.fun).",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build:css": "postcss public/css/style.css -o public/css/dist/style.min.css",
+    "build:js": "webpack public/js/src/admin-*.js -o public/js/dist/admin.min.js --mode=production",
+    "build": "npm run build:css && npm run build:js",
+    "build:watch": "nodemon -e css --ignore *.min.* --exec \"npm run build:css\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snowcrashdotdev/dinghy-races.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/snowcrashdotdev/dinghy-races/issues"
+  },
+  "homepage": "https://github.com/snowcrashdotdev/dinghy-races#readme",
+  "devDependencies": {
+    "cssnano": "^4.1.10",
+    "cssnano-preset-advanced": "^4.0.7",
+    "nodemon": "^2.0.2",
+    "postcss-cli": "^7.1.0",
+    "postcss-import": "^12.0.1",
+    "postcss-preset-env": "^6.7.0",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
+  }
+}
