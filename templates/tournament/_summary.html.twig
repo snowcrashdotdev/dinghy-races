@@ -1,0 +1,7 @@
+<article>
+    <h3><a href="{{ path( 'tournament_show', {'id': tournament.id} ) }}">{{ tournament.title|title }}</a></h3>
+
+    <time>{{ tournament.startDate|date('F jS, Y @ g:ia') }} &mdash; {{tournament.endDate|date_modify('-1 minute')|date('F jS, Y @ g:ia')}}</time>
+    
+    <div>{{ tournament.description|raw }}</div>
+</article>

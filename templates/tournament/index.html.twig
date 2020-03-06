@@ -1,28 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Home{% endblock %}
-
 {% block body %}
-    <main class="index">
-    {% if upcoming_tournaments %}
-        <h2>Upcoming Tournaments</h2>
-        {% for tournament in upcoming_tournaments %}
-            {{ include('tournament/summary.html.twig', { 'tournament': tournament }) }}
-        {% endfor %}
-    {% endif %}
+    <main>
+        <h1>{{ appname }}</h1>
+        <p>{{ appdescription }}</p>
+        {% if upcoming_tournaments %}
+            <section>
+                <h2>Upcoming Tournaments</h2>
+                {% for tournament in upcoming_tournaments %}
+                    {{ include('tournament/_summary.html.twig', { 'tournament': tournament }) }}
+                {% endfor %}
+            </section>
+        {% endif %}
 
-    {% if in_progress_tournaments %}
-        <h2>Tournaments In Progress</h2>
-        {% for tournament in in_progress_tournaments %}
-            {{ include('tournament/summary.html.twig', { 'tournament': tournament }) }}
-        {% endfor %}
-    {% endif %}
+        {% if in_progress_tournaments %}
+            <section>
+                <h2>Tournaments In Progress</h2>
+                {% for tournament in in_progress_tournaments %}
+                    {{ include('tournament/_summary.html.twig', { 'tournament': tournament }) }}
+                {% endfor %}
+            </section>
+        {% endif %}
 
-    {% if past_tournaments %}
-        <h2>Past Tournaments</h2>
-        {% for tournament in past_tournaments %}
-            {{ include('tournament/summary.html.twig', { 'tournament': tournament }) }}
-        {% endfor %}
-    {% endif %}
+        {% if past_tournaments %}
+            <section>
+                <h2>Past Tournaments</h2>
+                {% for tournament in past_tournaments %}
+                    {{ include('tournament/_summary.html.twig', { 'tournament': tournament }) }}
+                {% endfor %}
+            </section>
+        {% endif %}
     </main>
 {% endblock %}

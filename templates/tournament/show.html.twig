@@ -4,79 +4,18 @@
 
 {% block body %}
     <main>
-        <header class="bg-white tournament-header">
-            <h1 class="bg-accent padding-y">{{tournament.title}}</h1>
-            {% if is_granted("ROLE_USER") and tournament.hasEntered(app.user) %}
-                <p>You are signed up for this tournament ✔️</p>
-            {% endif %}
-            <section class="flex-row space-between">
-                <div>
-                {{ tournament.description|raw }}
-                </div>
-                <div class="tournament-details font-size-small">
-                    <p>Start: {{tournament.startDate|date('F jS, Y @ g:ia')}}</p>
-                    <p>End: {{tournament.endDate|date_modify('-1 minute')|date('F jS, Y @ g:ia')}}</p>
-                </div>
-            </section>
-
-            <section>
-                {% set label = (tournament.inProgress) ? 'Leading' : 'Winning' %}
-                <p>
-                <span>
-                {% if tournament.hasScores %}
-                    {% for team in leadingTeam %}
-                        {{ label }} Team: {{ team.name }} ({{ team.points|number_format }} points)
-                    {% endfor %}
-                {% else %}
-                    * No leading team.
-                {% endif %}
-                </span>
-                <a class="float-right" href="{{ path('leaderboard_team', {'tournament': tournament.id}) }}">Team Leaderboard</a>
-                </p>
-            </section>
-
-            <section>
-                <p>
-                    <span>
-                    {% if tournament.hasScores %}
-                        {% for player in leadingPlayer %}
-                    Top Scorer: {{ player.username }} ({{ player.points|number_format }} points)
-                        {% endfor %}
-                    {% else %}
-                        * No leading individual.
-                    {% endif %}
-                    </span>
-                    <a class="float-right" href="{{path('leaderboard_individual',{'tournament':tournament.id})}}">Individual Leaderboard</a></p>
-                </p>
-            </section>
+        <header class="margin-y">
+            <details>
+                <summary><h1 class="bg-accent padding-y">{{tournament.title}}</h1></summary>
+                <div>{{ tournament.description|raw }}</div>
+                <time>Start: {{tournament.startDate|date('F jS, Y @ g:ia')}} End: {{tournament.endDate|date_modify('-1 minute')|date('F jS, Y @ g:ia')}}</time>
+            </details>
         </header>
 
-        {% if tournament.inProgress %}
-        <h2 class="bg-white padding margin-top">Latest</h2>
-        <section>
-            <table class="leaderboard">
-                <tr>
-                    <th>Date</th>
-                    <th>Game</th>
-                    <th>Score</th>
-                    <th>Player</th>
-                </tr>
-            {% for score in latestScores %}
-                <tr>
-                    <td>{{score.dateUpdated|date('M j, g:ia')}}</td>
-                    <td><a href="{{path('tournament_scores',{'id':tournament.id,'game':score.game.id})}}">{{score.game.description}}</a></td>
-                    <td>{{score.points|number_format}}</td>
-                    <td><a href="{{path('user_show',{'id':score.user.id})}}">{{score.user.username}}</td>
-                <tr>
-            {% endfor %}
-            </table>
-        </section>
-        {% endif %}
-
-        <h2 class="margin-y">Events</h2>
-        <section class="flex-row flex-wrap justify-center">
+        <section class="flex">
+            <h2>Games</h2>
             {% for game in tournament.games %}
-                {{ include('game/summary.html.twig', {'game': game}) }}
+                {{ include('game/_summary.html.twig', {'game': game}) }}
             {% else %}
                 <p>No games selected</p>
             {% endfor %}

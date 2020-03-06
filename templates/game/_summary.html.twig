@@ -1,0 +1,19 @@
+<article>
+    <a class="block" href="{{ path('tournament_scores', {'id': tournament.id, 'game': game.id}) }}">{{ game.description }}</a>
+
+    <small class="block">{{ game.name ~ '.zip' }} ({{ game.manufacturer }}, {{ game.year }})</small>
+
+    {% if tournament.scores|length > 0 %}
+        {% set highscore = tournament.highscore(game) %}
+        {% if highscore %}
+            <p>High Score: {{highscore.points|number_format}} <span class="color-primary">{{highscore.user.username}}</span></p>
+        {% endif %}
+
+        {% if is_granted('ROLE_USER') %}
+            {% set yourScore = app.user.getscore(tournament, game) %}
+            {% if yourScore %}
+                <p>Your Score: {{yourScore.points|number_format}}</p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</article>
