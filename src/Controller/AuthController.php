@@ -60,7 +60,7 @@ class AuthController extends AbstractController
                 ->findOneBy(['email' => $email]);
 
             if ($user) {
-                $entityManager = $this->getDoctrine()->getEntityManager();
+                $entityManager = $this->getDoctrine()->getManager();
                 $user->setResetToken(bin2hex(random_bytes(32)));
                 $entityManager->persist($user);
                 $entityManager->flush();

@@ -105,7 +105,7 @@ class TeamController extends AbstractController
             ]);
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $demote = $request->query->get('demote');
 
         if ($demote) {
