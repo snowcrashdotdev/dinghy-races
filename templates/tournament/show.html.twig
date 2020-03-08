@@ -9,6 +9,9 @@
                 <summary><h1>{{tournament.title}}</h1></summary>
                 <div>{{ tournament.description|raw }}</div>
             </details>
+            {% if tournament.inProgress %}
+                <p>Ends <time>{{tournament.endDate|date_modify('-1 minute')|date('F jS, g:ia')}}</time></p>
+            {% endif %}
         </header>
 
         {% if tournament.inProgress %}
@@ -66,6 +69,7 @@
                     <td><a href="{{path('team_show', {'team': team.id})}}">{{team}}</a></td>
                     <td>{{ team.points|number_format }}</td>
                     <td>{{ team.averageRank|number_format(2) }}</td>
+                    <td>{{ team.participationRate|number_format(4) * 100 ~ "%" }}
                 </tr>
             {% else %}
                 <td>No teams registered.</td>
