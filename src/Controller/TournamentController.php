@@ -93,7 +93,7 @@ class TournamentController extends AbstractController
 
         if ($tournament->isInProgress()) {
             $scoreRepo = $this->getDoctrine()->getRepository('App\Entity\Score');
-            $leadingTeams = $scoreRepo->findTeamScores($tournament, 1);
+            $leadingTeams = $scoreRepo->findTeamScores($tournament, null, 1);
             $leadingPlayers = $scoreRepo->findIndividualScores($tournament, 1);
             $recentScores = $scoreRepo->findRecentScores($tournament);
             $liveStreams = $twitchChecker->getLiveTwitchStreams($tournament);
@@ -199,18 +199,19 @@ class TournamentController extends AbstractController
      */
     public function game(Request $request, Tournament $tournament, Game $game)
     {
-        $scores = $this->getDoctrine()
-            ->getRepository('App\Entity\Score')
-            ->findByGameAndTournament($tournament->getId(), $game);
+        $scoreRepo = $this->getDoctrine()
+            ->getRepository('App\Entity\Score');
+        
+        $scores = $scoreRepo->findByGameAndTournament($tournament->getId(), $game);
 
-        $user = $this->getUser();
+        $teams = $scoreRepo->findTeamScores($tournament, $game);
 
-        return $this->render('score/summary.html.twig', [
-            'user' => $user,
+        return $this->render('tournament/show_scores.html.twig', [
             'scores' => $scores,
             'game' => $game,
-            'tournament' => $tournament
-            ]);
+            'tournament' => $tournament,
+            'teams' => $teams
+        ]);
     }
 
     /**
