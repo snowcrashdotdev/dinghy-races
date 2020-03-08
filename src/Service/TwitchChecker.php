@@ -57,10 +57,11 @@ class TwitchChecker
             $json = json_decode(curl_exec($curl));
             curl_close($curl);
             
-            $live = array_filter($json->data, function($stream){
+            $tag = $this->streamTag;
+            $live = array_filter($json->data, function($stream) use ($tag) {
                 return (
                     $stream->type === 'live' &&
-                    preg_match("\{$this->streamTag}\i", $stream->title)
+                    false !== strpos($stream->title, $tag)
                 );
             });
 
