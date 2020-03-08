@@ -1,0 +1,34 @@
+<table class="leaderboard leaderboard-game margin-y">
+    <tr>
+        <th class="row-rank">Rank</th>
+        <th class="align-right row-score">Score</th>
+        <th class="row-comment">Comment</th>
+        <th class="align-right row-score">Points</th>
+        <th class="row-player">Player</th>
+        <th class="row-team">Team</th>
+        <th class="row-record">Record</th>
+    </tr>
+    {% for score in scores %}
+        {% if app.user and app.user is same as(score.user) %}
+            {% set className = 'highlighted' %}
+        {% else %}
+            {% set className = '' %}
+        {% endif %}
+        <tr class="{{className}}" title="{{score.comment|e}}">
+            <td>{{ loop.index }}</td>
+            <td class="align-right">{{ score.points|number_format }}</td>
+            <td>{{score.comment|e}}</td>
+            <td class="align-right">{{score.rankedPoints}}</td>
+            <td><a href="{{path('user_show', {'id': score.user.id})}}">{{ score.user.username }}</a></td>
+            <td><a href="{{path('team_show', {'team': score.team.id})}}">{{score.team.name}}</a></td>
+            <td>
+                {% if score.screenshot %}
+                    <a class="icon" target="_blank" href="{{'/uploads/screenshots/' ~ score.screenshot}}">📷</a>
+                {% endif %}
+                {% if score.videoUrl %}
+                    <a class="icon" target="_blank" href="{{score.videoUrl|e}}">📼</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>

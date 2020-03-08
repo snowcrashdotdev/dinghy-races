@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ tournament.title }} scores for {{ game.description }}{% endblock %}
+
+{% block body %}
+    <main>
+        <h1>{{ tournament.title }} scores for {{ game.description }} (<small>{{ game.name ~ '.zip' }}</small>)</h1>
+        {% if scores %}
+            {% include 'game/_leaderboard.team.html.twig' %}
+            {% include 'game/_leaderboard.individual.html.twig' %}
+        {% else %}
+            <p>No scores posted.</p>
+        {% endif %}
+    </main>
+{% endblock %}
