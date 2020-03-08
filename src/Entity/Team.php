@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -203,6 +205,17 @@ class Team
 
         return $average;
 
+    }
+
+    public function getParticipationRate()
+    {
+        $criteria = Criteria::create()
+        ->andWhere(Criteria::expr()->neq('auto_assigned', true));
+
+        $expectedScoreCount = $this->getMembers()->count() * $this->getTournament()->getGames()->count();
+        $actualScoreCount = $this->getScores()->matching($criteria)->count();
+
+        return $actualScoreCount / $expectedScoreCount;
     }
 
     public function getLeaderboard()
