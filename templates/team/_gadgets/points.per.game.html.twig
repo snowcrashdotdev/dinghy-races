@@ -1,0 +1,8 @@
+{% if points_per_game %}
+    <aside>
+        {% for game in points_per_game %}
+            <p>{{game.points|number_format}} {{game.name}}<p>
+        {% endfor %}
+        <p>{{team.points|number_format}} Total</p>
+    </aside>
+{% endif %}

@@ -4,12 +4,17 @@
 
 {% block body %}
     <main>
-        <header class="bg-accent padding">
-            <h1>
-                <span class="block">{{team.name}}</span>
+        <header>
+            <h1>{{team.name}}</h1>
                 <small class="block"><a class="tournament-title" href="{{path('tournament_show', {'id': team.tournament.id})}}">{{ team.tournament.title }}</a></small>
             </h1>
         </header>
+
+        {% if not team.tournament.isUpcoming %}
+            <section>
+                {% include 'team/_gadgets/points.per.game.html.twig' %}
+            </section>
+        {% endif %}
 
         <section class="margin-y padding">
             {% if (leaderboard) %}
