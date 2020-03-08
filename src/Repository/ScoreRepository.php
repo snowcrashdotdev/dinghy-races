@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Score;
 use App\Entity\Tournament;
+use App\Entity\Game;
 use App\Entity\Team;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -68,7 +69,7 @@ class ScoreRepository extends ServiceEntityRepository
         return $q->getQuery()->getArrayResult();
     }
 
-    public function findTeamScores($tournament, $limit=null)
+    public function findTeamScores(Tournament $tournament, Game $game=null, $limit=null)
     {
         $q = $this->createQueryBuilder('s')
             ->join('s.team', 't')
@@ -77,6 +78,11 @@ class ScoreRepository extends ServiceEntityRepository
             ->andWhere('s.tournament = :tournament')
             ->setParameter('tournament', $tournament)
             ->orderBy('points', 'DESC');
+
+        if ($game !== null) {
+            $q->andWhere('s.game = :game')
+                ->setParameter('game', $game);
+        }
 
         if ($limit) {
             $q->setMaxResults($limit);
@@ -96,6 +102,19 @@ class ScoreRepository extends ServiceEntityRepository
             ->orderBy('points', 'DESC');
 
         return $q->getQuery()->getArrayResult();
+    }
+
+    public function findTeamScoresPerGame(Team $team)
+    {
+        $q = $this->createQueryBuilder('s')
+            ->join('s.game', 'g')
+            ->select('g.id as game', 'g.name as name', 'SUM(s.ranked_points) as points')
+            ->groupBy('s.game')
+            ->andWhere('s.team = :team')
+            ->setParameter('team', $team)
+            ->orderBy('points', 'DESC');
+
+        return $q->getQuery()->getResult();
     }
 
     public function findUserScores(User $user, $limit=null)
