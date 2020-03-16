@@ -48,3 +48,25 @@ section {
         margin-right: 0;
     }
 }
+
+table {
+    border: 0.15em solid var(--color-three);
+    border-collapse: collapse;
+    white-space: nowrap;
+    margin-bottom: var(--margin);
+}
+
+th {
+    background-color: var(--color-three);
+    color: var(--color-white);
+    text-align: left;
+}
+
+th, td {
+    border: 0.15em solid var(--color-three);
+    padding: var(--padding);
+}
+
+tbody tr:nth-child(even) {
+    background-color: hsla(var(--hsl-gray), 0.15);
+}

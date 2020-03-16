@@ -63,17 +63,31 @@
         </table>
 
         <table>
-            <h2>Teams</h2>
+            <thead>
+                <h2>Teams</h2>
+                <tr>
+                    <th>Team Name</th>
+                    {% if not tournament.isUpcoming %}
+                        <th>Points</th>
+                        <th>Average Rank</th>
+                        <th>Participation Rate</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
             {% for team in tournament.teams %}
                 <tr>
                     <td><a href="{{path('team_show', {'team': team.id})}}">{{team}}</a></td>
-                    <td>{{ team.points|number_format }}</td>
-                    <td>{{ team.averageRank|number_format(2) }}</td>
-                    <td>{{ team.participationRate|number_format(4) * 100 ~ "%" }}
+                    {% if not tournament.isUpcoming %}
+                        <td>{{ team.points|number_format }}</td>
+                        <td>{{ team.averageRank|number_format(2) }}</td>
+                        <td>{{ team.participationRate|number_format(4) * 100 ~ "%" }}
+                    {% endif %}
                 </tr>
             {% else %}
                 <td>No teams registered.</td>
             {% endfor %}
+            </tbody>
         </table>
         </section>
     </main>
