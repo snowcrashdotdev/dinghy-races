@@ -1,16 +1,25 @@
 .gadget-group {
     display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
 }
 
 .gadget {
     position: relative;
+    flex: 1;
     box-sizing: border-box;
     padding: var(--padding);
     padding-top: calc(var(--margin) * 2);
+    margin-right: var(--margin);
     border: 0.15em solid var(--color-gray);
     border-radius: 0.3em 0.6em 0.2em 0.2em;
     color: var(--color-gray);
-    background-image: linear-gradient(80deg, var(--color-black), var(--color-prime));
+    background-image: linear-gradient(105deg, var(--color-black), var(--color-prime));
+}
+
+.gadget:last-child {
+    margin-right: 0;
 }
 
 .gadget :--heading {
@@ -41,8 +50,13 @@
     height: 10rem;
     max-width: 100%;
     max-height: 100%;
+    margin: 0 auto;
 }
 
 .radial-gauge-path {
     stroke: var(--color-two);
+}
+
+.gadget-top-score {
+    text-align: center;
 }

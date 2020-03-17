@@ -8,6 +8,10 @@ body {
     color: var(--color-black);
 }
 
+p {
+    margin: 0;
+}
+
 :--heading {
     font-family: 'Roboto', sans-serif;
     font-size: 1rem;

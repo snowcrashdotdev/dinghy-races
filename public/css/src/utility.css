@@ -3,7 +3,11 @@
 }
 
 .text-large {
-    font-size: calc(var(--ratio) * 1em);
+    font-size: var(--size-large);
+}
+
+.text-larger {
+    font-size: var(--size-larger);
 }
 
 .margin-right {
