@@ -3,8 +3,8 @@
     {% for score in recent_scores %}
         <div class="flex" title="{{score.dateUpdated|date('m/d G:i')}}">
             <a class="flex-1" href="{{ path('tournament_scores', {'id': tournament.id, 'game': score.game.id}) }}">{{score.game}}</a>
-            <span class="roboto text-large align-right margin-right">{{score.user|slice(0,3)|upper}}</span>
-            <span class="roboto text-large">{{score.points|number_format}}</span>
+            <span class="roboto text-large outlined align-right margin-right">{{score.user|slice(0,3)|upper}}</span>
+            <span class="roboto text-large outlined">{{score.points|number_format}}</span>
         </div>
     {% endfor %}
 </aside>
