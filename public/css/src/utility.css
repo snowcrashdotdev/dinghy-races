@@ -10,12 +10,24 @@
     margin-right: var(--margin);
 }
 
+.outlined {
+    text-shadow: var(--outlined);
+}
+
 .uppercase {
     text-transform: uppercase;
 }
 
 .positioned {
     position: relative;
+}
+
+.absolute-center {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
 }
 
 .highlighted {
@@ -25,8 +37,17 @@
 
 .flex {
     display: flex;
+    align-items: center;
 }
 
 .flex-1 {
     flex: 1;
+}
+
+.color-two {
+    color: var(--color-two);
+}
+
+.color-three {
+    color: var(--color-three);
 }

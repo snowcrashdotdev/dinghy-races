@@ -1,6 +1,18 @@
 {% if tournament.scores %}
-<aside>
+<aside class="gadget">
     <h3>Participation</h3>
-    <p>{{tournament.participationRate|number_format(4) * 100 ~ "%"}}</p>
+    <div class="radial-gauge positioned">
+        <svg viewBox="0 0 36 36">
+            <path class="radial-gauge-path"
+                d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831";
+                fill="none";
+                stroke-width="1";
+                stroke-dasharray="{{tournament.participationRate * 100}}, 100"
+            />
+        </svg>
+        <span class="roboto color-two outlined text-large absolute-center">{{tournament.participationRate|number_format(4) * 100 ~ "%"}}</span>
+    </div>
 </aside>
 {% endif %}
