@@ -24,18 +24,6 @@ section {
     }
 }
 
-:--gadget {
-    border: 0.15em solid var(--color-three);
-    border-radius: 0.12em;
-    margin-bottom: var(--margin);
-    padding: var(--padding);
-    box-sizing: border-box;
-}
-
-:--gadget:last-child {
-    margin-bottom: 0;
-}
-
 @media (--desktop) {
     :--gadget {
         flex-basis: 0;
@@ -68,5 +56,5 @@ th, td {
 }
 
 tbody tr:nth-child(even) {
-    background-color: hsla(var(--hsl-gray), 0.15);
+    background-color: var(--shaded);
 }

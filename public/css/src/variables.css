@@ -6,8 +6,6 @@
 
 :root {
     font-size: 16px;
-    --sans: 'Open Sans', sans-serif;
-    --bitmap: 'Press Start 2P', cursive;
     --ratio: 1.61803;
     --padding: calc(0.5em + 0.1vw);
     --margin: calc(1rem * var(--ratio));
@@ -19,10 +17,14 @@
     --hsl-white: var(--hue), 9%, 98%;
     --hsl-gray: var(--hue), 9%, 53%;
     --hsl-black: var(--hue), 9%, 18%;
+
     --color-prime: hsl(var(--hsl-prime));
     --color-two: hsl(var(--hsl-two));
     --color-three: hsl(var(--hsl-three));
     --color-white: hsl(var(--hsl-white));
     --color-gray: hsl(var(--hsl-gray));
     --color-black: hsl(var(--hsl-black));
+
+    --shaded: hsla(var(--hsl-gray), 0.09);
+    --outlined: 0.1em 0.1em 0.1em var(--color-black);
 }

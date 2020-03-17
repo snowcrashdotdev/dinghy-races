@@ -1,5 +1,5 @@
 :root {
-    font-family: var(--sans);
+    font-family: 'Montserrat', sans-serif;
     line-height: var(--ratio);
 }
 
@@ -9,6 +9,7 @@ body {
 }
 
 :--heading {
+    font-family: 'Roboto', sans-serif;
     font-size: 1rem;
     font-weight: 700;
     line-height: 1;
