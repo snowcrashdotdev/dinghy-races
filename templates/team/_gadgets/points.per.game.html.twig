@@ -2,20 +2,22 @@
     {% set highest = points_per_game|first %}
     {% set view_width = (highest.points / 20) + 175 %}
     {% set view_height = points_per_game|length * 25 %}
-    <aside class="gadget flex-basis-50">
+    <aside class="gadget">
         <h3>Points By Game</h3>
         <svg class="gauge" viewBox="0 0 {{view_width}} {{view_height}}">
             {% for game in points_per_game %}
-            <g class="linear-gauge-bar">
+            <g>
                     {% set height = 20 %}
                     {% set width = game.points / 20 %}
                     {% set y = (loop.index - 1) * (height + 5) %}
                     <rect
+                        class="linear-gauge-rect"
                         width="{{width}}"
                         height="{{height}}"
                         y="{{y}}">
                     </rect>
                     <text
+                        class="linear-gauge-label"
                         x="{{width + 7}}"
                         y="{{y + 9.5}}"
                         dy=".35em">
@@ -24,7 +26,6 @@
             </g>
             {% endfor %}
         </svg>
-
-        <p>{{team.points|number_format}} Total</p>
+        <p class="roboto text-large outlined">Total: {{team.points|number_format}}</p>
     </aside>
 {% endif %}
