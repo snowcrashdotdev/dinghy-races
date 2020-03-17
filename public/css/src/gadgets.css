@@ -1,17 +1,18 @@
 .gadget-group {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: stretch;
     flex-wrap: wrap;
+    margin-bottom: var(--margin);
 }
 
 .gadget {
     position: relative;
-    flex: 1;
     box-sizing: border-box;
     padding: var(--padding);
     padding-top: calc(var(--margin) * 2);
     margin-right: var(--margin);
+    margin-bottom: var(--margin);
     border: 0.15em solid var(--color-gray);
     border-radius: 0.3em 0.6em 0.2em 0.2em;
     color: var(--color-gray);
@@ -45,11 +46,8 @@
     }
 }
 
-.radial-gauge {
-    width: 10rem;
-    height: 10rem;
+.gauge {
     max-width: 100%;
-    max-height: 100%;
     margin: 0 auto;
 }
 

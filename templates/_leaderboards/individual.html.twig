@@ -1,0 +1,39 @@
+<table>
+    <thead>
+        <h3>All Scores</h3>
+        <tr>
+            <th>Rank</th>
+            <th>Team</th>
+            <th>Player</th>
+            <th class="text-right">Score</th>
+            <th class="text-right">Ranked Points</th>
+            <th>Record</th>
+            <th>Comment</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for score in scores %}
+        {% if app.user and app.user is same as(score.user) %}
+            {% set className = 'highlighted' %}
+        {% else %}
+            {% set className = '' %}
+        {% endif %}
+        <tr class="{{className}}" title="{{score.comment|e}}">
+            <td>{{ loop.index }}</td>
+            <td><a href="{{path('team_show', {'team': score.team.id})}}">{{score.team.name}}</a></td>
+            <td><a href="{{path('user_show', {'id': score.user.id})}}">{{ score.user }}</a></td>
+            <td class="text-right">{{ score.points|number_format }}</td>
+            <td class="text-right">{{score.rankedPoints}}</td>
+            <td class="text-center">
+                {% if score.screenshot %}
+                    <a target="_blank" href="{{'/uploads/screenshots/' ~ score.screenshot}}">📷</a>
+                {% endif %}
+                {% if score.videoUrl %}
+                    <a target="_blank" href="{{score.videoUrl|e}}">📼</a>
+                {% endif %}
+            </td>
+            <td>{{score.comment|e}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

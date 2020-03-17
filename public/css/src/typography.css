@@ -28,7 +28,6 @@ p {
 
 table {
     border-collapse: collapse;
-    white-space: nowrap;
     margin-bottom: var(--margin);
 }
 

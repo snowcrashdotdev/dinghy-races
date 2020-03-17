@@ -1,31 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{team.tournament.title}} - Team Roster: {{team.name}}{% endblock %}
+{% block title %}{{team.tournament.title}} - Team Stats: {{team.name}}{% endblock %}
 
 {% block body %}
-    <main>
-        <header>
-            <h1>{{team.name}}</h1>
-                <small class="block"><a class="tournament-title" href="{{path('tournament_show', {'id': team.tournament.id})}}">{{ team.tournament.title }}</a></small>
-            </h1>
-        </header>
+<header>
+    <h1>{{team.name}}</h1>
 
-        {% if not team.tournament.isUpcoming %}
-            <section>
-                {% include 'team/_gadgets/points.per.game.html.twig' %}
-            </section>
+    <h2><a class="tournament-title" href="{{path('tournament_show', {'id': team.tournament.id})}}">{{ team.tournament.title }}</a></h2>
+</header>
+
+<main>
+{% if not team.tournament.isUpcoming %}
+    <section class="gadget-group">
+        {% include 'team/_gadgets/points.per.game.html.twig' %}
+    </section>
+{% endif %}
+
+    <section>
+        {% if (leaderboard) %}
+            {{ include('team/leaderboard.html.twig', {'scores':leaderboard,'gameCount':team.tournament.games|length}) }}
         {% endif %}
-
-        <section class="margin-y padding">
-            {% if (leaderboard) %}
-                {{ include('team/leaderboard.html.twig', {'scores':leaderboard,'gameCount':team.tournament.games|length}) }}
-            {% endif %}
-        </section>
-    </main>
+    </section>
+</main>
 {% endblock %}
 
 {% block navigation %}
-    {% if is_granted("ROLE_ADMIN") %}
+    {{ parent() }}
+    {% if is_granted("ROLE_TO") %}
         <a href="{{path('team_edit', {'id':team.id})}}">Edit</a>
     {% endif %}
 {% endblock %}

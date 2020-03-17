@@ -25,6 +25,7 @@
         {% endif %}
 
         <table>
+            <thead>
             <h2>Games</h2>
             <tr>
                 <th>ROM</th>
@@ -38,6 +39,7 @@
                     {% endif %}
                 {% endif %}
             </tr>
+            </thead>
             {% for game in tournament.games %}
                 {% set highscore = tournament.highscore(game) %}
                 <tr>

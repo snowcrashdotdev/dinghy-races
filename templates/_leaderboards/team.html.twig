@@ -1,0 +1,16 @@
+<table>
+    <thead>
+        <h2>Team Scores</h2>
+        <tr>
+            <th>Team Name</th>
+            <th class="text-right">Ranked Points</th>
+        </tr>
+    <tbody>
+    {% for team in teams %}
+            <tr>
+                <td>{{team.name}}</td>
+                <td class="text-right">{{team.points|number_format}}</td>
+            </tr>
+    {% endfor %}
+    </tbody>
+</table>
