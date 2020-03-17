@@ -1,7 +1,6 @@
 @custom-selector :--heading h1, h2, h3, h4, h5, h6;
 @custom-selector :--anchor a, a:link, a:active, a:visited;
 @custom-selector :--body p, a;
-@custom-selector :--gadget article, aside;
 @custom-media --desktop (min-width: 50em);
 
 :root {
@@ -10,12 +9,12 @@
     --padding: calc(0.5em + 0.1vw);
     --margin: calc(1rem * var(--ratio));
 
-    --hue: 16.9deg;
+    --hue: 256.9deg;
     --hsl-prime: var(--hue), 76.8%, 51%;
     --hsl-two: calc(120deg + var(--hue)), 76.8%, 51%;
     --hsl-three: calc(240deg + var(--hue)), 76.8%, 51%;
     --hsl-white: var(--hue), 9%, 98%;
-    --hsl-gray: var(--hue), 9%, 53%;
+    --hsl-gray: var(--hue), 9%, 70%;
     --hsl-black: var(--hue), 9%, 18%;
 
     --color-prime: hsl(var(--hsl-prime));

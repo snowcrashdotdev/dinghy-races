@@ -19,5 +19,26 @@ body {
 
 :--anchor {
     text-decoration: none;
-    color: var(--color-prime);
+    color: var(--color-three);
+}
+
+table {
+    border-collapse: collapse;
+    white-space: nowrap;
+    margin-bottom: var(--margin);
+}
+
+th {
+    background-color: var(--color-prime);
+    color: var(--color-white);
+    text-align: left;
+}
+
+th, td {
+    border: 0.1em solid var(--color-prime);
+    padding: var(--padding);
+}
+
+tbody tr:nth-child(even) {
+    background-color: var(--shaded);
 }

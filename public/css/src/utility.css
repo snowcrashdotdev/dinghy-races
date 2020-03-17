@@ -1,3 +1,15 @@
+.roboto {
+    font-family: 'Roboto', sans-serif;
+}
+
+.text-large {
+    font-size: calc(var(--ratio) * 1em);
+}
+
+.margin-right {
+    margin-right: var(--margin);
+}
+
 .uppercase {
     text-transform: uppercase;
 }
@@ -9,4 +21,12 @@
 .highlighted {
     background-color: hsla(var(--hsl-two), 0.3) !important;
     border-color: var(--color-two) !important;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-1 {
+    flex: 1;
 }
