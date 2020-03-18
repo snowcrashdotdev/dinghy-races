@@ -1,7 +1,8 @@
 {% for player in leading_players %}
+{% set href = path('user_show', {id: player.id}) %}
 <aside class="gadget gadget-top-score">
     <h3>Top Player</h3>
-    <a class="text-large" href="{{path('user_show', {id: player.id})}}">{{player.name}}</a>
+    <a class="text-large" href="{{href}}">{{player.name}}</a>
     <p class="roboto text-larger outlined">{{player.points}}</p>
 </aside>
 {% endfor %}
