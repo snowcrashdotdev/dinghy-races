@@ -17,11 +17,18 @@
                         y="{{y}}">
                     </rect>
                     <text
+                        class="linear-gauge-value"
+                        x="5"
+                        y="{{y + 9.5}}"
+                        dy=".35em">
+                        {{game.points|number_format}}
+                    </text>
+                    <text
                         class="linear-gauge-label"
                         x="{{width + 7}}"
                         y="{{y + 9.5}}"
                         dy=".35em">
-                        {{game.name}}: {{game.points|number_format}}
+                        {{game.name}}
                     </text>
             </g>
             {% endfor %}

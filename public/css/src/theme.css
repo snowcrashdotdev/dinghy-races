@@ -1,5 +1,4 @@
 body {
     background-color: var(--color-black);
-    color: var(--color-white);
-
+    color: hsla(var(--hsl-white), 0.78);
 }
