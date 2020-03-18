@@ -92,6 +92,11 @@ class Score
      */
     private $rank;
 
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $points_history = [];
+
     public function __construct(Game $game, Tournament $tournament, User $user, Team $team)
     {
         $this->setGame($game);
@@ -292,6 +297,18 @@ class Score
     public function setRank(?int $rank): self
     {
         $this->rank = $rank;
+
+        return $this;
+    }
+
+    public function getPointsHistory(): ?array
+    {
+        return $this->points_history;
+    }
+
+    public function setPointsHistory(array $points_history): self
+    {
+        $this->points_history = $points_history;
 
         return $this;
     }
