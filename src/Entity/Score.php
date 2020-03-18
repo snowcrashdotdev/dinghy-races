@@ -97,6 +97,11 @@ class Score
      */
     private $points_history = [];
 
+    /**
+     * @ORM\Column(type="bigint")
+     */
+    private $team_points;
+
     public function __construct(Game $game, Tournament $tournament, User $user, Team $team)
     {
         $this->setGame($game);
@@ -309,6 +314,18 @@ class Score
     public function setPointsHistory(array $points_history): self
     {
         $this->points_history = $points_history;
+
+        return $this;
+    }
+
+    public function getTeamPoints(): ?string
+    {
+        return $this->team_points;
+    }
+
+    public function setTeamPoints(string $team_points): self
+    {
+        $this->team_points = $team_points;
 
         return $this;
     }
