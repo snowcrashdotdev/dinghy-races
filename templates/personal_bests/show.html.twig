@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Permanent Leaderboard for {{game.description}}{% endblock %}
+
+{% block body %}
+    <h1>Permanent Leaderboard for {{game.description}}</h1>
+    {% if game.personalBests|length > 0 %}
+        {% set scores = game.personalBests %}
+        {% set permanent_board = true %}
+        {% include '_leaderboards/individual.html.twig' %}
+    {% else %}
+        <p>No scores have been posted for this game</p>
+    {% endif %}
+{% endblock %}

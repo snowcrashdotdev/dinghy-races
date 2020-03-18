@@ -30,6 +30,17 @@ class GameRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findAllHavingScores()
+    {
+        return $this->createQueryBuilder('g')
+            ->select('g')
+            ->join('g.scores', 's')
+            ->orderBy('g.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Game[] Returns an array of Game objects
     //  */

@@ -50,6 +50,7 @@ class Game
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\PersonalBest", mappedBy="game")
+     * @ORM\OrderBy({"points" = "DESC"})
      */
     private $personalBests;
 

@@ -47,7 +47,7 @@ class PersonalBest
     private $screenshot;
 
     /**
-     * @ORM\Column(type="string", length=144, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $comment;
 

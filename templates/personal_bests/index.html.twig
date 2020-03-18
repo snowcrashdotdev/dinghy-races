@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Permanent Leaderboards{% endblock %}
+
+{% block body %}
+    {% for game in games %}
+        {% set href = path('pb_show', {game: game}) %}
+        <p><a href="{{href}}">{{game}}</a></p>
+    {% endfor %}
+{% endblock %}
