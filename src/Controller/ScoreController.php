@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Score;
+use App\Entity\PersonalBest;
 use App\Entity\Game;
 use App\Entity\Tournament;
 use App\Form\ScoreType;
@@ -78,6 +79,7 @@ class ScoreController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $score->setDateUpdated(new \DateTime('now'));
             $entityManager->persist($score);
+            $this->updatePersonalBest($score);
             $entityManager->flush();
             
             $scorekeeper = new ScoreKeeper($tournament, $entityManager);
@@ -140,6 +142,7 @@ class ScoreController extends AbstractController
             }
 
             $entityManager = $this->getDoctrine()->getManager();
+            $this->updatePersonalBest($score);
             $entityManager->flush();
 
             $scorekeeper = new ScoreKeeper($score->getTournament(), $entityManager);
@@ -158,5 +161,31 @@ class ScoreController extends AbstractController
             'score' => $score,
             'form' => $form->createView(),
         ]);
+    }
+
+    private function updatePersonalBest(Score $score)
+    {
+        $manager = $this->getDoctrine()->getManager();
+
+        $pb = $this->getDoctrine()
+            ->getRepository('App\Entity\PersonalBest')
+            ->findOneBy([
+                'user' => $score->getUser(),
+                'game' => $score->getGame()
+            ])
+        ;
+
+        if (empty($pb)) {
+            $pb = new PersonalBest();
+            $pb->fromScore($score);
+            $manager->persist($pb);
+        } elseif ($pb->getPoints() < $score->getPoints()) {
+            $pb->setUpdatedAt($score->getDateUpdated());
+            $pb->setPoints($score->getPoints());
+            $pb->setVideoUrl($score->getVideoUrl());
+            $pb->setScreenshot($score->getScreenshot());
+            $pb->setComment($score->getComment());
+            $manager->persist($pb);
+        }
     }
 }

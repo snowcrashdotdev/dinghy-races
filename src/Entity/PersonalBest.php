@@ -173,4 +173,19 @@ class PersonalBest
 
         return $this;
     }
+
+    public function fromScore(Score $score): self
+    {
+        $this->setCreatedAt($score->getDateSubmitted());
+        $this->setUpdatedAt($score->getDateUpdated());
+        $this->setUser($score->getUser());
+        $this->setGame($score->getGame());
+        $this->setPoints($score->getPoints());
+        $this->setPointsHistory($score->getPointsHistory());
+        $this->setVideoUrl($score->getVideoUrl());
+        $this->setScreenshot($score->getScreenshot());
+        $this->setComment($score->getComment());
+
+        return $this;
+    }
 }
