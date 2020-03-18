@@ -48,10 +48,16 @@ class Game
      */
     private $manufacturer;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PersonalBest", mappedBy="game")
+     */
+    private $personalBests;
+
     public function __construct()
     {
         $this->scores = new ArrayCollection();
         $this->tournaments = new ArrayCollection();
+        $this->personalBests = new ArrayCollection();
     }
 
     public function __toString()
@@ -167,6 +173,37 @@ class Game
     public function setManufacturer(?string $manufacturer): self
     {
         $this->manufacturer = $manufacturer;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PersonalBest[]
+     */
+    public function getPersonalBests(): Collection
+    {
+        return $this->personalBests;
+    }
+
+    public function addPersonalBest(PersonalBest $personalBest): self
+    {
+        if (!$this->personalBests->contains($personalBest)) {
+            $this->personalBests[] = $personalBest;
+            $personalBest->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removePersonalBest(PersonalBest $personalBest): self
+    {
+        if ($this->personalBests->contains($personalBest)) {
+            $this->personalBests->removeElement($personalBest);
+            // set the owning side to null (unless already changed)
+            if ($personalBest->getGame() === $this) {
+                $personalBest->setGame(null);
+            }
+        }
 
         return $this;
     }

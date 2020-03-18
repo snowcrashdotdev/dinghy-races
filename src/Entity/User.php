@@ -98,6 +98,11 @@ class User implements UserInterface
      */
     private $draftEntries;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PersonalBest", mappedBy="user")
+     */
+    private $personalBests;
+
     public function __construct()
     {
         $this->verified = false;
@@ -110,6 +115,7 @@ class User implements UserInterface
         $this->profile = new Profile();
         $this->profile->setUser($this);
         $this->draftEntries = new ArrayCollection();
+        $this->personalBests = new ArrayCollection();
     }
 
     public function __toString()
@@ -362,6 +368,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($draftEntry->getUser() === $this) {
                 $draftEntry->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PersonalBest[]
+     */
+    public function getPersonalBests(): Collection
+    {
+        return $this->personalBests;
+    }
+
+    public function addPersonalBest(PersonalBest $personalBest): self
+    {
+        if (!$this->personalBests->contains($personalBest)) {
+            $this->personalBests[] = $personalBest;
+            $personalBest->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePersonalBest(PersonalBest $personalBest): self
+    {
+        if ($this->personalBests->contains($personalBest)) {
+            $this->personalBests->removeElement($personalBest);
+            // set the owning side to null (unless already changed)
+            if ($personalBest->getUser() === $this) {
+                $personalBest->setUser(null);
             }
         }
 
