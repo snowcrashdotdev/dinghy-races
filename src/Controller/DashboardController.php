@@ -6,7 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Repository\PersonalBestRepository;
-use App\Repository\GameRepository;
+use App\Entity\Tournament;
+use App\Service\ScoreKeeper;
 
 /**
  * @Route("/dashboard")
@@ -30,13 +31,21 @@ class DashboardController extends AbstractController
      * @Route("/permanent-boards/refresh", name="pb_refresh")
      * @Security("is_granted('ROLE_TO')")
      */
-    public function refresh(PersonalBestRepository $pbRepo, GameRepository $gamesRepo)
+    public function pb_refresh(PersonalBestRepository $pbRepo)
     {
-        $games = $gamesRepo->findAllHavingScores();
+        $games = $this->getDoctrine()
+            ->getRepository('App\Entity\Game')
+            ->findAllHavingScores();
         $manager = $this->getDoctrine()->getManager();
 
         foreach ($games as $game) {
-            $scores = $game->getScores();
+            $scores = $this->getDoctrine()
+                ->getRepository('App\Entity\Score')
+                ->findBy([
+                    'game' => $game,
+                    'auto_assigned' => false,
+                ])
+            ;   
             foreach($scores as $score) {
                 $pb = $pbRepo->findOneBy([
                     'game' => $game->getId(),
@@ -60,5 +69,18 @@ class DashboardController extends AbstractController
         }
 
         return $this->redirectToRoute('pb_index');
+    }
+
+    /**
+     * @Route("/tournaments/refresh/{tournament}", name="tournament_refresh")
+     * @Security("is_granted('ROLE_TO')")
+     */
+    public function tournament_refresh(Tournament $tournament)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $scorekeeper = new ScoreKeeper($tournament, $manager);
+        $scorekeeper->scoreTournament();
+
+        return $this->redirectToRoute('tournament_show', ['id' => $tournament->getId()]);
     }
 }

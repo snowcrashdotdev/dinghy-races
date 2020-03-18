@@ -1,6 +1,15 @@
-<a class="navbar-item" href="{{ path('index') }}">⌂</a>
+<nav class="main-navigation">
+    <a class="navbar-item" href="{{ path('index') }}">⌂</a>
 
-{% if app.request.attributes.get('_route') == 'tournament_scores' %}
-    {% set href = path('score_new', {'game':game.id,'tournament':tournament.id}) %}
-    <a class="navbar-item" href="{{href}}">✎</a>
-{% endif %}
+    {% if app.request.attributes.get('_route') == 'tournament_show' %}
+        {% if is_granted('ROLE_TO') %}
+            {% set href = path('tournament_refresh', {'tournament':tournament.id}) %}
+            <a class="navbar-item" href="{{href}}">↻</a>
+        {% endif %}
+    {% endif %}
+
+    {% if app.request.attributes.get('_route') == 'tournament_scores' %}
+        {% set href = path('score_new', {'game':game.id,'tournament':tournament.id}) %}
+        <a class="navbar-item" href="{{href}}">✎</a>
+    {% endif %}
+</nav>
