@@ -6,5 +6,8 @@
 <main>
     <h1>{{appname}}</h1>
     <h2>Your active tournaments:</h2>
+    {% for tournament in tournaments %}
+        {{tournament.title}}
+    {% endfor %}
 </main>
 {% endblock %}

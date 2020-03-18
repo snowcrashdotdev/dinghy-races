@@ -1,5 +1,6 @@
-<a class="navbar-item" href="{{ path('index') }}">Home</a>
-{% if not is_granted('ROLE_USER') %}
-    <a class="navbar-item push-right" href="{{ path('app_login') }}">Log In</a>
-    <a class="navbar-item" href="{{ path('user_new') }}">Sign Up</a>
+<a class="navbar-item" href="{{ path('index') }}">⌂</a>
+
+{% if app.request.attributes.get('_route') == 'tournament_scores' %}
+    {% set href = path('score_new', {'game':game.id,'tournament':tournament.id}) %}
+    <a class="navbar-item" href="{{href}}">✎</a>
 {% endif %}
