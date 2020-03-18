@@ -46,11 +46,6 @@ class Team
      */
     private $scores;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $captains = [];
-
     public function __construct()
     {
         $this->members = new ArrayCollection();
