@@ -3,11 +3,6 @@
     line-height: var(--ratio);
 }
 
-body {
-    padding: 0.1rem;
-    color: var(--color-black);
-}
-
 p {
     margin: 0;
 }
