@@ -1,6 +1,7 @@
 {% if points_per_game %}
+    {% set ratio = 1 / 6 %}
     {% set highest = points_per_game|first %}
-    {% set view_width = (highest.points / 20) %}
+    {% set view_width = highest.points * ratio %}
     {% set view_height = points_per_game|length * 25 %}
     <aside class="gadget">
         <h3>Points By Game</h3>
@@ -8,7 +9,7 @@
             {% for game in points_per_game %}
             <g>
                     {% set height = 20 %}
-                    {% set width = game.points / 20 %}
+                    {% set width = game.points * ratio %}
                     {% set y = (loop.index - 1) * (height + 5) %}
                     <rect
                         class="linear-gauge-rect"
@@ -28,7 +29,7 @@
                         x="60"
                         y="{{y + 9.5}}"
                         dy=".35em">
-                        {{game.name}}
+                        {{game.description}}
                     </text>
             </g>
             {% endfor %}

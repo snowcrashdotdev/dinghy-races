@@ -142,10 +142,11 @@ class ScoreRepository extends ServiceEntityRepository
     {
         $q = $this->createQueryBuilder('s')
             ->join('s.game', 'g')
-            ->select('g.id as game', 'g.name as name', 'SUM(s.team_points) as points')
+            ->select('g.id as game', 'g.description as description', 'SUM(s.team_points) as points')
             ->groupBy('s.game')
             ->andWhere('s.team = :team')
             ->setParameter('team', $team)
+            ->andWhere('s.team_points > 0')
             ->orderBy('points', 'DESC');
 
         return $q->getQuery()->getResult();
