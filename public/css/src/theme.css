@@ -2,3 +2,16 @@ body {
     background-color: var(--color-black);
     color: hsla(var(--hsl-white), 0.78);
 }
+
+.main-navigation {
+    font-size: var(--size-larger);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: calc(var(--padding) / 2) 0;
+
+    & .nav-item {
+        color: var(--color-two);
+        margin: 0 0.25em;
+    }
+}
