@@ -77,7 +77,6 @@ class ScoreController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $score->setDateUpdated(new \DateTime('now'));
             $entityManager->persist($score);
             $this->updatePersonalBest($score);
             $entityManager->flush();
@@ -124,7 +123,6 @@ class ScoreController extends AbstractController
                 $score->setScreenshot(null);
             }
         }
-        $oldScore = clone $score;
 
         $form = $this->createForm(ScoreType::class, $score, [
             'method' => 'PATCH',
@@ -135,19 +133,12 @@ class ScoreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $newScore = $form->getData();
-
-            if ($oldScore->getPoints() !== $newScore->getPoints()) {
-                $score->setDateUpdated(new \DateTime('now'));
-            }
 
             $entityManager = $this->getDoctrine()->getManager();
-            $this->updatePersonalBest($score);
             $entityManager->flush();
 
             $scorekeeper = new ScoreKeeper($score->getTournament(), $entityManager);
             $scorekeeper->scoreGame($score->getGame());
-            $scorekeeper->scoreTeams();
 
             return $this->redirectToRoute('tournament_scores',
                 [
@@ -180,7 +171,7 @@ class ScoreController extends AbstractController
             $pb->fromScore($score);
             $manager->persist($pb);
         } elseif ($pb->getPoints() < $score->getPoints()) {
-            $pb->setUpdatedAt($score->getDateUpdated());
+            $pb->setUpdatedAt($score->getUpdatedAt());
             $pb->setPoints($score->getPoints());
             $pb->setVideoUrl($score->getVideoUrl());
             $pb->setScreenshot($score->getScreenshot());

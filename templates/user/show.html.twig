@@ -36,7 +36,7 @@
                     <td><a href="{{path('tournament_scores', {'id':score.tournament.id,'game':score.game.id})}}">{{score.game.description}}</a></td>
                     <td>{{score.points|number_format}}</td>
                     <td>{{score.rank}} of {{score.tournament.users.count}}</td>
-                    <td>{{score.dateUpdated|date('M j, Y')}}</td>
+                    <td>{{score.updatedAt|date('M j, Y')}}</td>
                 </tr>
             {% endfor %}
             </table>

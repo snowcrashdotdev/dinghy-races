@@ -176,8 +176,8 @@ class PersonalBest
 
     public function fromScore(Score $score): self
     {
-        $this->setCreatedAt($score->getDateSubmitted());
-        $this->setUpdatedAt($score->getDateUpdated());
+        $this->setCreatedAt($score->getCreatedAt());
+        $this->setUpdatedAt($score->getUpdatedAt());
         $this->setUser($score->getUser());
         $this->setGame($score->getGame());
         $this->setPoints($score->getPoints());

@@ -39,12 +39,12 @@ class Score
     /**
      * @ORM\Column(type="datetime")
      */
-    private $date_submitted;
+    private $created_at;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $date_updated;
+    private $updated_at;
 
     /**
      * @ORM\Column(type="bigint")
@@ -108,8 +108,6 @@ class Score
         $this->setTournament($tournament);
         $this->setUser($user);
         $this->setTeam($team);
-        $this->setDateSubmitted(new \DateTime('now'));
-        $this->setDateUpdated(new \DateTime('now'));
         $this->setAutoAssigned(false);
     }
 
@@ -166,12 +164,12 @@ class Score
         return $this;
     }
 
-    public function getDateSubmitted(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->date_submitted;
     }
 
-    public function setDateSubmitted(\DateTimeInterface $date_submitted): self
+    public function setCreatedAt(\DateTimeInterface $date_submitted): self
     {
         $this->date_submitted = $date_submitted;
 
@@ -190,14 +188,14 @@ class Score
         return $this;
     }
 
-    public function getDateUpdated(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->date_updated;
+        return $this->updated_at;
     }
 
-    public function setDateUpdated(\DateTimeInterface $date_updated): self
+    public function setUpdatedAt(\DateTimeInterface $updated_at): self
     {
-        $this->date_updated = $date_updated;
+        $this->updated_at = $updated_at;
 
         return $this;
     }
@@ -245,7 +243,7 @@ class Score
     {
         if ($this->getTournament()->getStartDate() > new \DateTime('NOW')) {
             $context->buildViolation('The tournament has not started yet.')
-                ->atPath('date_updated')
+                ->atPath('updated_at')
                 ->addViolation()
             ;
             $this->setScreenshot(null);
@@ -254,7 +252,7 @@ class Score
 
         if ($this->getTournament()->getEndDate() < new \DateTime('NOW')) {
             $context->buildViolation('The tournament has already concluded.')
-                ->atPath('date_updated')
+                ->atPath('updated_at')
                 ->addViolation()
             ;
             $this->setScreenshot(null);
@@ -306,7 +304,7 @@ class Score
         return $this;
     }
 
-    public function getPointsHistory(): ?array
+    public function getPointsHistory()
     {
         return $this->points_history;
     }

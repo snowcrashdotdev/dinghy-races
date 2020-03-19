@@ -54,7 +54,7 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Score", mappedBy="user", orphanRemoval=true)
-     * @ORM\OrderBy({"date_updated" = "DESC"})
+     * @ORM\OrderBy({"updated_at" = "DESC"})
      */
     private $scores;
 
