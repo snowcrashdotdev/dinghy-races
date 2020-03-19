@@ -39,11 +39,15 @@ services:
     App\EventListener\PersonalBestChange:
         tags:
             -
-                name: 'doctrine.event_listener'
+                name: 'doctrine.orm.entity_listener'
                 event: 'preUpdate'
                 entity: 'App\Entity\PersonalBest'
             -
-                name: 'doctrine.event_listener'
+                name: 'doctrine.orm.entity_listener'
+                event: 'preUpdate'
+                entity: 'App\Entity\Score'
+            -
+                name: 'doctrine.orm.entity_listener'
                 event: 'prePersist'
                 entity: 'App\Entity\PersonalBest'
     App\EventListener\FileUploadListener:

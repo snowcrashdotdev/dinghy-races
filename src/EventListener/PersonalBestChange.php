@@ -1,35 +1,34 @@
 <?php
 namespace App\EventListener;
 
-use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 
 class PersonalBestChange
 {
-    public function preUpdate(LifecycleEventArgs $args)
+    public function preUpdate($score, PreUpdateEventArgs $args)
     {
-        $pb = $args->getObject();
         $changes = $args->getObjectManager()
             ->getUnitOfWork()
-            ->getEntityChangeSet($pb)
+            ->getEntityChangeSet($score)
         ;
 
         if (array_key_exists('points', $changes)) {
-            $history = $pb->getPointsHistory();
+            $history = $score->getPointsHistory();
             $change = $changes['points'];
             $new_history = array_merge($change,$history);
             $new_history = array_unique($new_history);
-            asort($new_history);
+            sort($new_history, SORT_NUMERIC);
             
-            $pb->setPointsHistory($new_history);
-            $pb->setUpdatedAt(new \DateTime('NOW'));
+            $score->setPointsHistory($new_history);
+            $score->setUpdatedAt(new \DateTime('NOW'));
         }
     }
 
-    public function prePersist(LifecycleEventArgs $args)
+    public function prePersist($score, LifecycleEventArgs $args)
     {
         $now = new \DateTime('NOW');
-        $pb = $args->getObject();
-        $pb->setCreatedAt($now);
-        $pb->setUpdatedAt($now);
+        $score->setCreatedAt($now);
+        $score->setUpdatedAt($now);
     }
 }
