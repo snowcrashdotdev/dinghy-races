@@ -10,6 +10,7 @@
             <th class="text-right">Score</th>
             {% if not permanent_board is defined %}
                 <th class="text-right">Ranked Points</th>
+                <th class="text-right">Team Points</th>
             {% endif %}
             <th>Record</th>
             <th>Comment</th>
@@ -31,6 +32,7 @@
             <td class="text-right">{{ score.points|number_format }}</td>
             {% if not permanent_board is defined %}
                 <td class="text-right">{{score.rankedPoints}}</td>
+                <td class="text-right">{{score.teamPoints}}</td>
             {% endif %}
             <td class="text-center">
                 {% if score.screenshot %}
