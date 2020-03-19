@@ -187,5 +187,6 @@ class ScoreController extends AbstractController
             $pb->setComment($score->getComment());
             $manager->persist($pb);
         }
+        $manager->flush();
     }
 }

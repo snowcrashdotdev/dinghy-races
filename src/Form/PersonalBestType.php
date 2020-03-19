@@ -12,15 +12,10 @@ class PersonalBestType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('created_at')
-            ->add('updated_at')
+            ->add('points')
             ->add('video_url')
             ->add('screenshot')
             ->add('comment')
-            ->add('points')
-            ->add('points_history')
-            ->add('user')
-            ->add('game')
         ;
     }
 

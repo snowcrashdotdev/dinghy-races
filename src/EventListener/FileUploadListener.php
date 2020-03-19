@@ -1,5 +1,5 @@
 <?php
-namespace App\Event;
+namespace App\EventListener;
 
 use App\Entity\Score;
 use App\Service\FileUploader;

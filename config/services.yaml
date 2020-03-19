@@ -36,7 +36,17 @@ services:
             $connection: '@doctrine.dbal.default_connection'
             $clientId: '%env(TWITCH_CLIENT_ID)%'
             $streamTag: '[calice]'
-    App\Event\FileUploadListener:
+    App\EventListener\PersonalBestChange:
+        tags:
+            -
+                name: 'doctrine.event_listener'
+                event: 'preUpdate'
+                entity: 'App\Entity\PersonalBest'
+            -
+                name: 'doctrine.event_listener'
+                event: 'prePersist'
+                entity: 'App\Entity\PersonalBest'
+    App\EventListener\FileUploadListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }

@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New PersonalBest{% endblock %}
+{% block title %}Edit PersonalBest{% endblock %}
 
 {% block body %}
-    <h1>Create new PersonalBest</h1>
+    <h1>Edit PersonalBest</h1>
 
-    {{ include('personal_best/_form.html.twig') }}
+    {{ include('personal_best/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('personal_best_index') }}">back to list</a>
+    <a href="{{ path('pb_index') }}">back to list</a>
 {% endblock %}
