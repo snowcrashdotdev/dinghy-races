@@ -77,6 +77,21 @@ class Tournament
      */
     private $cutoff_date;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $cutoff_line;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $cutoff_score;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $noshow_score;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
@@ -529,5 +544,41 @@ class Tournament
         $expectedScoreCount = $this->getUsers()->count() * $this->getGames()->count();
         $actualScoreCount = $this->getScores()->matching($criteria)->count();
         return $actualScoreCount / $expectedScoreCount;
+    }
+
+    public function getCutoffLine(): ?int
+    {
+        return $this->cutoff_line;
+    }
+
+    public function setCutoffLine(?int $cutoff_line): self
+    {
+        $this->cutoff_line = $cutoff_line;
+
+        return $this;
+    }
+
+    public function getCutoffScore(): ?int
+    {
+        return $this->cutoff_score;
+    }
+
+    public function setCutoffScore(?int $cutoff_score): self
+    {
+        $this->cutoff_score = $cutoff_score;
+
+        return $this;
+    }
+
+    public function getNoshowScore(): ?int
+    {
+        return $this->noshow_score;
+    }
+
+    public function setNoshowScore(?int $noshow_score): self
+    {
+        $this->noshow_score = $noshow_score;
+
+        return $this;
     }
 }

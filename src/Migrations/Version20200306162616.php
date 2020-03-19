@@ -22,7 +22,6 @@ final class Version20200306162616 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('DROP TABLE cache_items');
         $this->addSql('ALTER TABLE score ADD rank INT DEFAULT NULL');
     }
 

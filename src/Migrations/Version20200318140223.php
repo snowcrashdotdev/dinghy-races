@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200318131752 extends AbstractMigration
+final class Version20200318140223 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,8 +22,7 @@ final class Version20200318131752 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('DROP TABLE cache_items');
-        $this->addSql('ALTER TABLE score ADD team_points BIGINT NOT NULL');
+        $this->addSql('ALTER TABLE tournament ADD cutoff_line INT DEFAULT NULL, ADD cutoff_score INT DEFAULT NULL, ADD noshow_score INT DEFAULT NULL');
     }
 
     public function down(Schema $schema) : void
@@ -31,7 +30,6 @@ final class Version20200318131752 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE cache_items (item_id VARBINARY(255) NOT NULL, item_data MEDIUMBLOB NOT NULL, item_lifetime INT UNSIGNED DEFAULT NULL, item_time INT UNSIGNED NOT NULL, PRIMARY KEY(item_id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB COMMENT = \'\' ');
-        $this->addSql('ALTER TABLE score DROP team_points');
+        $this->addSql('ALTER TABLE tournament DROP cutoff_line, DROP cutoff_score, DROP noshow_score');
     }
 }

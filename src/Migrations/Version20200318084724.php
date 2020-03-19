@@ -25,7 +25,6 @@ final class Version20200318084724 extends AbstractMigration
         $this->addSql('CREATE TABLE personal_best (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, game_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, video_url VARCHAR(255) DEFAULT NULL, screenshot VARCHAR(255) DEFAULT NULL, comment VARCHAR(144) DEFAULT NULL, points BIGINT NOT NULL, points_history LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\', INDEX IDX_9C077172A76ED395 (user_id), INDEX IDX_9C077172E48FD905 (game_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE personal_best ADD CONSTRAINT FK_9C077172A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE personal_best ADD CONSTRAINT FK_9C077172E48FD905 FOREIGN KEY (game_id) REFERENCES game (id)');
-        $this->addSql('DROP TABLE cache_items');
         $this->addSql('ALTER TABLE score ADD points_history LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\'');
         $this->addSql('ALTER TABLE user CHANGE roles roles LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\'');
     }
