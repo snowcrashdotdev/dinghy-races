@@ -24,14 +24,18 @@ class ScoreRepository extends ServiceEntityRepository
         parent::__construct($registry, Score::class);
     }
 
-    public function findSubmittedTournamentScores(Tournament $tournament, Game $game=null, Team $team=null, Integer $limit=null)
+    public function findSubmittedTournamentScores(Tournament $tournament=null, Game $game=null, Team $team=null, Integer $limit=null)
     {
         $q = $this->createQueryBuilder('s')
-            ->andWhere('s.tournament = :tournament')
-            ->setParameter('tournament', $tournament)
             ->andWhere('s.auto_assigned != 1')
             ->orderBy('s.points', 'DESC')
         ;
+
+        if ($tournament !== null) {
+            $q->andWhere('s.tournament = :tournament')
+                ->setParameter('tournament', $tournament)
+            ;
+        }
 
         if ($game !== null) {
             $q->andWhere('s.game = :game')
@@ -62,7 +66,7 @@ class ScoreRepository extends ServiceEntityRepository
         $q = $this->createQueryBuilder('s')
             ->andWhere('s.tournament = :tournament')
             ->andWhere('s.points != 0')
-            ->orderBy('s.date_updated', 'DESC')
+            ->orderBy('s.updated_at', 'DESC')
             ->setMaxResults(3)
             ->setParameter('tournament', $tournament);
 
@@ -159,7 +163,7 @@ class ScoreRepository extends ServiceEntityRepository
             ->andWhere('s.user = :user')
             ->setParameter('user', $user)
             ->andWhere('s.points > 0')
-            ->orderBy('s.date_updated', 'DESC')
+            ->orderBy('s.updated_at', 'DESC')
             ->setMaxResults($limit);
 
         return $q->getQuery()->getResult();
