@@ -167,6 +167,15 @@ class TournamentController extends AbstractController
         ];
         $cutoffForm = $forms->createNamedBuilder('cutoff_date')
             ->add('cutoff', DateType::class, $options)
+            ->add('cutoff_line', IntegerType::class, [
+                'data' => $tournament->getCutoffLine()
+            ])
+            ->add('cutoff_score', IntegerType::class, [
+                'data' => $tournament->getCutoffScore()
+            ])
+            ->add('noshow_score', IntegerType::class, [
+                'data' => $tournament->getNoshowScore()
+            ])
             ->add('save', SubmitType::class)
             ->getForm();
 
@@ -181,8 +190,11 @@ class TournamentController extends AbstractController
             $em->flush();
         } else if ($cutoffForm->isSubmitted() && $cutoffForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $cutoff = $cutoffForm->getData()['cutoff'];
-            $tournament->setCutoffDate($cutoff);
+            $data = $cutoffForm->getData();
+            $tournament->setCutoffDate($data['cutoff']);
+            $tournament->setCutoffLine($data['cutoff_line']);
+            $tournament->setCutoffScore($data['cutoff_score']);
+            $tournament->setNoshowScore($data['noshow_score']);
             $em->persist($tournament);
             $em->flush();
         }
