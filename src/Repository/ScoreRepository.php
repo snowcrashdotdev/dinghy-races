@@ -9,6 +9,7 @@ use App\Entity\Team;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @method Score|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,6 +22,39 @@ class ScoreRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Score::class);
+    }
+
+    public function findSubmittedTournamentScores(Tournament $tournament, Game $game=null, Team $team=null, Integer $limit=null)
+    {
+        $q = $this->createQueryBuilder('s')
+            ->andWhere('s.tournament = :tournament')
+            ->setParameter('tournament', $tournament)
+            ->andWhere('s.auto_assigned != 1')
+            ->orderBy('s.points', 'DESC')
+        ;
+
+        if ($game !== null) {
+            $q->andWhere('s.game = :game')
+                ->setParameter('game', $game)
+            ;
+        }
+
+        if ($team !== null) {
+            $q->andWhere('s.team = :team')
+                ->setParameter('team', $team)
+            ;
+        }
+
+        return $q->getQuery()->getResult();
+    }
+
+    public function findTotalTeamPoints(Team $team)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.team = :team')
+            ->setParameter('team', $team)
+            ->select('SUM(s.team_points) as total')
+            ->getQuery()->getSingleScalarResult();
     }
 
     public function findRecentScores(Tournament $tournament)
@@ -108,7 +142,7 @@ class ScoreRepository extends ServiceEntityRepository
     {
         $q = $this->createQueryBuilder('s')
             ->join('s.game', 'g')
-            ->select('g.id as game', 'g.name as name', 'SUM(s.ranked_points) as points')
+            ->select('g.id as game', 'g.name as name', 'SUM(s.team_points) as points')
             ->groupBy('s.game')
             ->andWhere('s.team = :team')
             ->setParameter('team', $team)
