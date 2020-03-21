@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{user}} Permanent Board{% endblock %}
+
+{% block body %}
+    <header>
+        <h1>{{user}} Permanent Board</h1>
+    </header>
+
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Game</th>
+                    <th>Score</th>
+                    <th>Record</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for score in personal_bests %}
+                <tr>
+                    <td>{{score.updatedAt|date('M j, Y')}}
+                    <td>{{score.game.description}}</a></td>
+                    <td>{{score.points|number_format}}</td>
+                    <td>
+                    {% if score.screenshot %}
+                        <a target="_blank" href="{{'/uploads/screenshots/' ~ score.screenshot}}">📷</a>
+                    {% endif %}
+                    {% if score.videoUrl %}
+                        <a target="_blank" href="{{score.videoUrl|e}}">📼</a>
+                    {% endif %}
+                    </td>
+                    <td>{{score.comment}}</td>
+                </tr>
+            {% else %}
+                <p>No personal bests posted.</p>
+            {% endfor %}
+            </tbody>
+        </table>
+    </main>
+{% endblock %}

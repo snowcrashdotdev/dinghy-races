@@ -112,4 +112,22 @@ class UserController extends AbstractController
             'data'=> $userRepository->searchBySubstring($name)
          ]);
     }
+
+    /**
+     * @Route("/{user}/personal-bests", name="user_pbs")
+     */
+    public function personal_bests(Request $request, User $user)
+    {
+        $pbs = $this->getDoctrine()
+            ->getRepository('App\Entity\PersonalBest')
+            ->findBy([
+                'user' => $user
+            ])
+        ;
+
+        return $this->render('user/personal_bests.html.twig', [
+            'user' => $user,
+            'personal_bests' => $pbs
+        ]);
+    }
 }
