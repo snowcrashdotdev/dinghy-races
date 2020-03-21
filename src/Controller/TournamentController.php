@@ -95,7 +95,7 @@ class TournamentController extends AbstractController
             $scoreRepo = $this->getDoctrine()->getRepository('App\Entity\Score');
             $leadingTeams = $scoreRepo->findTeamScores($tournament, null, 1);
             $leadingPlayers = $scoreRepo->findIndividualScores($tournament, 1);
-            $recentScores = $scoreRepo->findRecentScores($tournament);
+            $recentScores = $scoreRepo->findRecentScores($tournament, 10);
             $liveStreams = $twitchChecker->getLiveTwitchStreams($tournament);
         }
 

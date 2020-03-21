@@ -61,14 +61,17 @@ class ScoreRepository extends ServiceEntityRepository
             ->getQuery()->getSingleScalarResult();
     }
 
-    public function findRecentScores(Tournament $tournament)
+    public function findRecentScores(Tournament $tournament, $limit=null)
     {
         $q = $this->createQueryBuilder('s')
             ->andWhere('s.tournament = :tournament')
             ->andWhere('s.points != 0')
             ->orderBy('s.updated_at', 'DESC')
-            ->setMaxResults(3)
             ->setParameter('tournament', $tournament);
+        
+        if ($limit !== null) {
+            $q->setMaxResults($limit);
+        }
 
         return $q->getQuery()->getResult();
     }

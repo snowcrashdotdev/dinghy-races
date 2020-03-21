@@ -1,10 +1,10 @@
 <aside class="gadget">
     <h3>Recent Scores</h3>
     {% for score in recent_scores %}
-        <div class="flex" title="{{score.updatedAt|date('m/d G:i')}}">
-            <a class="flex-1" href="{{ path('tournament_scores', {'id': tournament.id, 'game': score.game.id}) }}">{{score.game}}</a>
-            <span class="roboto text-large outlined align-right margin-right">{{score.user|slice(0,3)|upper}}</span>
-            <span class="roboto text-large outlined">{{score.points|number_format}}</span>
+        <div class="text-justify" title="{{score.updatedAt|date('m/d G:i')}}">
+            <a href="{{ path('tournament_scores', {'id': tournament.id, 'game': score.game.id}) }}">{{score.game}}</a>
+            <span class="margin-x-auto roboto outlined">{{score.user|slice(0,3)|upper}}</span>
+            <span class="roboto outlined">{{score.points|number_format}}</span>
         </div>
     {% endfor %}
 </aside>

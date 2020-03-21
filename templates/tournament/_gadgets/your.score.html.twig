@@ -5,10 +5,11 @@
     </aside>
 
     {% if user_score.pointsHistory|length >= 3 %}
-        {% set width = user_score.pointsHistory|length * 20 - 20 %}
+        {% set offset = 10 %}
+        {% set width = user_score.pointsHistory|length * offset - offset %}
         {% set height = width * 9 / 32 %}
         {% set ratio = height / user_score.points %}
-        {% set polyline_points = user_score.pointsHistory|map((value, index) => "#{index * 20},#{height - (ratio * value)}")|join(' ') %}
+        {% set polyline_points = user_score.pointsHistory|map((value, index) => "#{index * offset},#{height - (ratio * value)}")|join(' ') %}
         <aside class="gadget">
             <h3>Score Over Time</h3>
             <svg class="linear-gauge" viewBox="0 0 {{width}} {{height}}">

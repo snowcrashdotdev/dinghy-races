@@ -3,7 +3,7 @@
     {% set highest = points_per_game|first %}
     {% set view_width = highest.points * ratio %}
     {% set view_height = points_per_game|length * 25 %}
-    <aside class="gadget">
+    <aside class="gadget gadget-pbg">
         <h3>Points By Game</h3>
         <svg class="gauge" viewBox="0 0 {{view_width}} {{view_height}}">
             {% for game in points_per_game %}

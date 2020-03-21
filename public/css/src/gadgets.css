@@ -7,8 +7,8 @@
 }
 
 .gadget {
-    flex: 0;
-    flex-basis: 30rem;
+    flex: 0 0 18rem;
+    max-width: 100%;
     position: relative;
     box-sizing: border-box;
     padding: var(--padding);
@@ -18,7 +18,7 @@
     border: 0.15em solid var(--color-gray);
     border-radius: 0.3em 0.6em 0.2em 0.2em;
     color: var(--color-gray);
-    background-image: linear-gradient(105deg, var(--color-black), var(--color-prime));
+    background-image: linear-gradient(105deg, var(--color-black) 40%, var(--color-prime));
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -58,15 +58,15 @@
 }
 
 .radial-gauge-path {
-    stroke: var(--color-two);
+    stroke: var(--color-three);
 }
 
 .linear-gauge-rect {
-    fill: var(--color-two);
+    fill: hsla(var(--hsl-three), 0.7);
 }
 
 .linear-gauge-label {
-    fill: var(--color-prime);
+    fill: var(--color-white);
 }
 
 .gadget-top-score {
@@ -77,4 +77,8 @@
     fill: none;
     stroke: var(--color-two);
     stroke-width: 0.01em;
+}
+
+.gadget-pbg {
+    flex-basis: 30rem;
 }

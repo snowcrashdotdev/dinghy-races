@@ -27,6 +27,6 @@
     --color-gray: hsl(var(--hsl-gray));
     --color-black: hsl(var(--hsl-black));
 
-    --shaded: hsla(var(--hsl-gray), 0.28);
+    --shaded: hsla(var(--hsl-gray), 0.1);
     --outlined: 0.1em 0.1em 0.1em var(--color-black);
 }
