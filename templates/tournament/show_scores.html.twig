@@ -6,6 +6,9 @@
     <main>
         <h1>{{ tournament.title }} scores for {{ game.description }} (<small>{{ game.name ~ '.zip' }}</small>)</h1>
         {% if scores %}
+            {% if user_score %}
+                {% include 'tournament/_gadgets/your.score.html.twig' %}
+            {% endif %}
             {% include '_leaderboards/team.html.twig' %}
             {% include '_leaderboards/individual.html.twig' %}
         {% else %}

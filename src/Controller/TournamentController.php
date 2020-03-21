@@ -218,11 +218,25 @@ class TournamentController extends AbstractController
 
         $teams = $scoreRepo->findTeamScores($tournament, $game);
 
+        $user_score = null;
+        $user = $this->getUser();
+        if (!empty($user)) {
+            $user_score = $this->getDoctrine()
+                ->getRepository('App\Entity\Score')
+                ->findOneBy([
+                    'game' => $game,
+                    'tournament' => $tournament,
+                    'user' => $user
+                ])
+            ;
+        }
+
         return $this->render('tournament/show_scores.html.twig', [
             'scores' => $scores,
             'game' => $game,
             'tournament' => $tournament,
-            'teams' => $teams
+            'teams' => $teams,
+            'user_score' => $user_score
         ]);
     }
 

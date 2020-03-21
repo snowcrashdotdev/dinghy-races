@@ -72,3 +72,9 @@
 .gadget-top-score {
     text-align: center;
 }
+
+.linear-gauge-line {
+    fill: none;
+    stroke: var(--color-two);
+    stroke-width: 0.01em;
+}
