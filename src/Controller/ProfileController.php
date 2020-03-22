@@ -44,4 +44,27 @@ class ProfileController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/users/{username}", name="profile_show")
+     */
+    public function show(Request $request, String $username)
+    {
+        $user = $this->getDoctrine()
+            ->getRepository('App\Entity\User')
+            ->findOneBy([
+                'username' => $username
+            ])
+        ;
+
+        if (empty($user)) {
+            return $this->redirectToRoute('dashboard');
+        } else {
+            $profile = $user->getProfile();
+            return $this->render('profile/show.html.twig', [
+                'user' => $user,
+                'profile' => $profile
+            ]);
+        }
+    }
 }

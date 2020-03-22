@@ -92,6 +92,11 @@ class Tournament
      */
     private $noshow_score;
 
+    public function __toString(): ?string
+    {
+        return $this->getTitle();
+    }
+
     public function __construct()
     {
         $this->games = new ArrayCollection();

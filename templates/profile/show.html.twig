@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{user}}{% endblock %}
+
+{% block body %}
+    <h1>{{user}}</h1>
+    {% if profile.social %}
+        <p><small><a href="{{profile.social}}">{{profile.social}}</a></small></p>
+    {% endif %}
+
+    {% if user.teams %}
+        <h2>Has appeared in:</h2>
+        {% for team in user.teams %}
+            <p>{{team.tournament}} on {{team}}</p>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
