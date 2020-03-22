@@ -54,6 +54,11 @@ class Game
      */
     private $personalBests;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $marquee;
+
     public function __construct()
     {
         $this->scores = new ArrayCollection();
@@ -205,6 +210,18 @@ class Game
                 $personalBest->setGame(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMarquee(): ?string
+    {
+        return $this->marquee;
+    }
+
+    public function setMarquee(?string $marquee): self
+    {
+        $this->marquee = $marquee;
 
         return $this;
     }
