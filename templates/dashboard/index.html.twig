@@ -8,6 +8,7 @@
     <h2>Your active tournaments:</h2>
     {% for tournament in tournaments %}
         {{tournament.title}}
+        {% include 'dashboard/_gadgets/active.scores.html.twig' %}
     {% endfor %}
 </main>
 {% endblock %}

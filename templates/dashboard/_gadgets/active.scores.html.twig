@@ -1,0 +1,32 @@
+<table>
+    <thead>
+        <h3>Active Games</h3>
+        <tr>
+            <th>Game</th>
+            <th class="text-right">Your Score</th>
+            <th class="text-center">Add New</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for game in tournament.games %}
+            {% set score = user.getScore(tournament, game) %}
+            {% set href_new = path('score_new', {
+                'game': game.id,
+                'tournament': tournament.id
+            }) %}
+            {% set href_leaderboard = path('tournament_scores', {
+                'game': game.id,
+                'id': tournament.id
+            }) %}
+            <tr>
+                <td><a href="{{href_leaderboard}}">{{game}}</a></td>
+                {% if score %}
+                    <td class="text-right">{{score.points|number_format}}
+                {% else %}
+                    <td class="text-right"><em>None</em></td>
+                {% endif %}
+                <td class="text-center"><a href="{{href_new}}">✎</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

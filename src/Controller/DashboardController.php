@@ -11,7 +11,6 @@ use App\Service\ScoreKeeper;
 
 /**
  * @Route("/dashboard")
- * @Security("is_granted('ROLE_USER')")
  */
 class DashboardController extends AbstractController
 {
@@ -20,11 +19,23 @@ class DashboardController extends AbstractController
      */
     public function index()
     {
-        $tournaments = $this->getUser()->getTournaments()->filter(function($tournament) { return $tournament->isInProgress(); });
+        $user = $this->getUser();
 
-        return $this->render('dashboard/index.html.twig', [
-            'tournaments' => $tournaments
-        ]);
+        if (empty($user)) {
+            return $this->redirectToRoute('tournament_index');
+        } else {
+            $tournaments = $this->getUser()
+                ->getTournaments()
+                ->filter(function($tournament) {
+                    return $tournament->isInProgress();
+                })
+            ;
+
+            return $this->render('dashboard/index.html.twig', [
+                'tournaments' => $tournaments,
+                'user' => $user
+            ]);
+        }
     }
 
     /**
