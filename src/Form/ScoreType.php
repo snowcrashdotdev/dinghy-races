@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\File;
 
 class ScoreType extends AbstractType
 {
@@ -35,12 +36,21 @@ class ScoreType extends AbstractType
             ])
             ->add('screenshot', FileType::class, [
                 'required' => false,
+                'mapped' => false,
                 'attr' => [
                     'placeholder' => 'Any image file will do',
                     'class' => 'score-input'
                 ],
                 'label' => 'Screenshot',
                 'label_attr' => ['class'=>'score-label'],
+                'constraints' => [
+                    new File([
+                        'mimeTypes' => [
+                            'image/*'
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid image file.'
+                    ])
+                ]
             ])
             ->add('comment', TextType::class, [
                 'required' => false,
