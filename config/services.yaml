@@ -41,6 +41,14 @@ services:
                     name: 'doctrine.orm.entity_listener'
                     event: 'preUpdate'
                     entity: 'App\Entity\Profile'
+    App\EventListener\GameChange:
+        arguments:
+            $upload_dir: '%marquee_dir%'
+        tags:
+                -
+                    name: 'doctrine.orm.entity_listener'
+                    event: 'preUpdate'
+                    entity: 'App\Entity\Game'
     App\EventListener\ScoreChange:
         arguments:
             $upload_dir: '%screenshot_dir%'

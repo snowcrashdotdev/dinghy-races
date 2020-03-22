@@ -9,6 +9,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use App\Service\ImageUploader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
@@ -37,6 +40,14 @@ class GameController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $marquee_file = $form['marquee']->getData();
+
+            if ($marquee_file) {
+                $uploader = new ImageUploader($upload_dir);
+                $game->setMarquee(
+                    $uploader->upload($marquee_file)
+                );
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($game);
             $entityManager->flush();
@@ -68,10 +79,28 @@ class GameController extends AbstractController
         $form = $this->createForm(GameType::class, $game);
         $form->handleRequest($request);
 
+        $upload_dir = $this->getParameter('marquee_dir');
+
+        try {
+            $game->setMarquee(
+                new File($upload_dir . '/' . $game->getMarquee())
+            );
+        } catch (FileException $e) {
+            $game->setMarquee(null);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $marquee_file = $form['marquee']->getData();
+
+            if ($marquee_file) {
+                $uploader = new ImageUploader($upload_dir);
+                $game->setMarquee(
+                    $uploader->upload($marquee_file)
+                );
+            }
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('game_index', [
+            return $this->redirectToRoute('game_show', [
                 'id' => $game->getId(),
             ]);
         }
