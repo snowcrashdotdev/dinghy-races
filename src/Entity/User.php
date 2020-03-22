@@ -196,15 +196,6 @@ class User implements UserInterface
         return $this->scores;
     }
 
-    public function getScore(Tournament $tournament, Game $game)
-    {
-        $criteria = new Criteria();
-        $expr = new Comparison('tournament', '=', $tournament);
-        $expr2 = new Comparison('game', '=', $game);
-        $criteria->where($expr)->andWhere($expr2);
-        return $this->getScores()->matching($criteria)->first();
-    }
-
     public function addScore(Score $score): self
     {
         if (!$this->scores->contains($score)) {
@@ -403,5 +394,23 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    public function getScore(Tournament $tournament, Game $game)
+    {
+        $criteria = new Criteria();
+        $expr = new Comparison('tournament', '=', $tournament);
+        $expr2 = new Comparison('game', '=', $game);
+        $criteria->where($expr)->andWhere($expr2);
+        return $this->getScores()->matching($criteria)->first();
+    }
+
+    public function getTeam(Tournament $tournament)
+    {
+        $criteria = new Criteria();
+        $expr = new Comparison('tournament', '=', $tournament);
+        $criteria->where($expr);
+
+        return $this->getTeams()->matching($criteria)->first();
     }
 }

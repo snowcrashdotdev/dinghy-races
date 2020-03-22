@@ -102,15 +102,6 @@ class Score
      */
     private $team_points;
 
-    public function __construct(Game $game, Tournament $tournament, User $user, Team $team)
-    {
-        $this->setGame($game);
-        $this->setTournament($tournament);
-        $this->setUser($user);
-        $this->setTeam($team);
-        $this->setAutoAssigned(false);
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -257,14 +248,6 @@ class Score
             ;
             $this->setScreenshot(null);
             return;
-        }
-
-        if (
-            $this->getVideoUrl() === null and
-            $this->getScreenshot() === null
-        ) {
-            $context->buildViolation('Either a Video URL or screenshot is required.')
-                ->addViolation();
         }
     }
 
