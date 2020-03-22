@@ -9,6 +9,7 @@ class ImageUploader
     private $targetDirectory;
     public const IMAGE_SIZES = [500, 300, 100];
     public const MAX_IMAGE_SIZE = 800;
+    public const SIZE_PREFIX = '_x';
 
     public function __construct($targetDirectory)
     {
@@ -36,7 +37,7 @@ class ImageUploader
 
         foreach($this::IMAGE_SIZES as $size) {
             $new_path = $this->getTargetDirectory()
-                .'/'.$file_name.'x'.$size.$file_ext;
+                .'/'.$file_name.$this::SIZE_PREFIX.$size.$file_ext;
             $img->scaleImage($size, 0);
             $img->writeImage($new_path);
         }
