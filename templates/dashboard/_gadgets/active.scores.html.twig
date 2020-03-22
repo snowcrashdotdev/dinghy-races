@@ -11,8 +11,8 @@
         {% for game in tournament.games %}
             {% set score = user.getScore(tournament, game) %}
             {% set href_new = path('score_new', {
-                'game': game.id,
-                'tournament': tournament.id
+                'game_name': game.name,
+                'tournament_id': tournament.id
             }) %}
             {% set href_leaderboard = path('tournament_scores', {
                 'game': game.id,
