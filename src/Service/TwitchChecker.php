@@ -5,14 +5,17 @@ use Symfony\Component\Cache\Adapter\PdoAdapter;
 use Doctrine\DBAL\Driver\Connection;
 use Symfony\Contracts\Cache\ItemInterface;
 use App\Entity\Tournament;
+use Doctrine\ORM\EntityManagerInterface;
 
 class TwitchChecker
 {
     private $cache;
     private $clientId;
     private $streamTag;
+    private $manager;
+    private $cache_handle = 'live_streams';
 
-    public function __construct(Connection $connection, String $clientId, String $streamTag)
+    public function __construct(Connection $connection, String $clientId, String $streamTag, EntityManagerInterface $manager)
     {
         $this->cache = new PdoAdapter(
             $connection,
@@ -21,27 +24,29 @@ class TwitchChecker
         );
         $this->clientId = $clientId;
         $this->streamTag = $streamTag;
+        $this->manager = $manager;
     }
 
     public function getLiveTwitchStreams(Tournament $tournament)
     {
-        $liveStreams = $this->cache->get('live_streams', function(ItemInterface $item) use ($tournament) {
-            $item->expiresAfter(60);
-            $users = $tournament->getUsers()->filter(function($user) {
-                return $user->getProfile()->hasTwitch();
-            })->toArray();
-    
-            $twitchUsers = array_map(
-                function($user) {
-                    $url = parse_url($user->getProfile()->getSocial());
-    
-                    return trim($url['path'], '/');
-                }, $users
-            );
+        $this->setCacheHandle( 'live_streams_' . $tournament->getId() );
 
-            if (empty($twitchUsers)) { return false; }
+        $liveStreams = $this->cache->get($this->getCacheHandle(), function(ItemInterface $item) use ($tournament) { 
+            $item->expiresAfter(60);
+
+            $twitch_users = $this->manager->getRepository('App\Entity\Profile')
+                ->findTournamentTwitchLinks($tournament)
+            ;
+
+            if (empty($twitch_users)) { return false; }
+
+            $twitch_users = array_map(function($profile) {
+                    $url = parse_url($profile['twitchUrl']);
+                    return trim($url['path'], '/');
+                }, $twitch_users
+            );
     
-            $query = '?user_login=' . join('&user_login=', $twitchUsers);
+            $query = '?user_login=' . join('&user_login=', $twitch_users);
     
             $remote_api = 'https://api.twitch.tv/helix/streams';
     
@@ -56,16 +61,20 @@ class TwitchChecker
             curl_setopt_array($curl, $curl_opt);
             $json = json_decode(curl_exec($curl));
             curl_close($curl);
-            
-            $tag = $this->streamTag;
-            $live = array_filter($json->data, function($stream) use ($tag) {
-                return (
-                    $stream->type === 'live' &&
-                    false !== strpos($stream->title, $tag)
-                );
-            });
 
-            return $live;
+            if (property_exists($json, 'data')) {
+                $tag = $this->streamTag;
+                $live = array_filter($json->data, function($stream) use ($tag) {
+                    return (
+                        $stream->type === 'live' &&
+                        false !== strpos($stream->title, $tag)
+                    );
+                });
+    
+                return $live;
+            } else {
+                return false;
+            }
         });
 
         if (empty($liveStreams)) {
@@ -73,5 +82,17 @@ class TwitchChecker
         } else {
             return $liveStreams;
         }
+    }
+
+    public function getCacheHandle()
+    {
+        return $this->cache_handle;
+    }
+
+    public function setCacheHandle(String $handle)
+    {
+        $this->cache_handle = $handle;
+
+        return $this;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Profile;
+use App\Entity\Tournament;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -17,6 +18,21 @@ class ProfileRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Profile::class);
+    }
+
+    public function findTournamentTwitchLinks(Tournament $tournament)
+    {
+        $q = $this->createQueryBuilder('p')
+            ->select('p.social as twitchUrl')
+            ->innerJoin('App\Entity\User', 'u', 'WITH', 'u.profile = p')
+            ->join('u.tournaments', 't')
+            ->andWhere('t.id = :tournament')
+            ->andWhere('p.social LIKE :twitch')
+            ->setParameter('tournament', $tournament->getId())
+            ->setParameter('twitch', '%twitch.tv%')
+        ;
+
+        return $q->getQuery()->getArrayResult();
     }
 
     // /**
