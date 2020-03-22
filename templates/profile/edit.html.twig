@@ -1,12 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Change Settings{% endblock %}
+{% block title %}Settings{% endblock %}
 
 {% block body %}
-    <h2 class="text-small padding-y">Customize your profile:</h1>
+    <h1>Settings for {{appname}}</h1>
 
-    {{form(form,{
-    'attr':{
-        'class': 'bg-white padding flex-column'
-    }})}}
+    {% include 'profile/_form.html.twig' %}
 {% endblock %}
