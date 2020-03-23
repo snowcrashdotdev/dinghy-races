@@ -24,45 +24,11 @@
             </section>
         {% endif %}
 
-        <table>
-            <thead>
-            <h2>Games</h2>
-            <tr>
-                <th>ROM</th>
-                <th>Game</th>
-                <th>Developer</th>
-                <th>Year</th>
-                {% if not tournament.isUpcoming %}
-                    <th>High Score</th>
-                    {% if is_granted('ROLE_USER') %}
-                        <th>Your Score</th>
-                    {% endif %}
-                {% endif %}
-            </tr>
-            </thead>
-            {% for game in tournament.games %}
-                {% set highscore = tournament.highscore(game) %}
-                <tr>
-                    <td>
-                        <a href="{{ path('tournament_scores', {'id': tournament.id, 'game': game.id}) }}">
-                            {{ game.name ~ '.zip' }}
-                        </a>
-                    </td>
-                    <td>{{ game.description }}</td>
-                    <td>{{ game.manufacturer }}</td>
-                    <td>{{ game.year }}</td>
-                    {% if not tournament.isUpcoming %}
-                        <td>{{highscore.user.username}} {{highscore.points|number_format}}</td>
-                        {% if is_granted('ROLE_USER') %}
-                            {% set yourscore = app.user.getscore(tournament, game) %}
-                                <td>{{ yourscore.points|number_format }}</td>
-                        {% endif %}
-                    {% endif %}
-                </tr>
-            {% else %}
-                <tr><td>No games selected.</td></tr>
-            {% endfor %}
-        </table>
+        <section class="summary-group">
+        {% for game in tournament.games %}
+            {% include 'game/_summary.html.twig' %}
+        {% endfor %}
+        </section>
 
         <table>
             <thead>

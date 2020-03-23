@@ -1,19 +1,37 @@
-<article>
-    <a class="block" href="{{ path('tournament_scores', {'id': tournament.id, 'game': game.id}) }}">{{ game.description }}</a>
+<article class="summary game-summary">
+    {% if game.marquee %}
+        {% import '_macros/img.responsive.html.twig' as m_img %}
+        {% set path = asset('/uploads/marquees/') %}
+        {% set sizes = '(min-width: 600px) 800px' %}
 
-    <small class="block">{{ game.name ~ '.zip' }} ({{ game.manufacturer }}, {{ game.year }})</small>
-
-    {% if tournament.scores|length > 0 %}
-        {% set highscore = tournament.highscore(game) %}
-        {% if highscore %}
-            <p>High Score: {{highscore.points|number_format}} <span class="color-primary">{{highscore.user.username}}</span></p>
-        {% endif %}
-
-        {% if is_granted('ROLE_USER') %}
-            {% set yourScore = app.user.getscore(tournament, game) %}
-            {% if yourScore %}
-                <p>Your Score: {{yourScore.points|number_format}}</p>
-            {% endif %}
-        {% endif %}
+        {{ m_img.responsive( path, game.marquee, sizes, 'marquee' ) }}
     {% endif %}
+
+    {% set href = path('score_show', {
+        'game_name': game.name,
+        'tournament_id': tournament.id
+    }) %}
+    <a class="summary-details" href="{{href}}">
+        <h3 class="roboto outlined">{{game.description}}
+            <small class="float-right">{{game.manufacturer}}, {{game.year}}</small>
+        </h3>
+        {% if not tournament.isUpcoming %}
+        <div class="game-summary-scores">
+            {% set game_scores = tournament.scores|filter(
+                s => s.game is same as(game)
+            ) %}
+            {% set high_score = game_scores|first %}
+
+            <span class="block">High Score</span>
+            <p class="text-large color-white">{{high_score.points|number_format}}<small class="block">{{high_score.user.username}}</small></p>
+            {% if is_granted('ROLE_USER') %}
+                {% set user_score = game_scores|filter(
+                    s => s.user is same as(app.user)
+                )|first %}
+                    <span class="block">Your Score</span>
+                    <p class="color-white">{{ user_score.points|number_format }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </a>
 </article>
