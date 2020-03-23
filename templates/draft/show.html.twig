@@ -8,9 +8,12 @@
         <h2 class="bg-primary padding">({{ draft.draftEntries|length }}) Entries:</h2>
         <ul class="list-style-none">
             {% for entry in draft.draftEntries %}
+                {% set href = path('profile_show', {
+                    'username': entry.user
+                }) %}
                 <li>
                     <small>({{ entry.createdAt|date('Y-m-d @ G:i') }})</small>
-                    <a href="{{path('user_show', {'id':entry.user.id})}}">{{entry.user.username}}</a>
+                    <a href="{{href}}">{{entry.user}}</a>
                 </li>
             {% else %}
                 <li>No entries.</li>

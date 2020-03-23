@@ -28,7 +28,7 @@
             {% if not permanent_board is defined %}
                 <td><a href="{{path('team_show', {'team': score.team.id})}}">{{score.team.name}}</a></td>
             {% endif %}
-            <td><a href="{{path('user_show', {'id': score.user.id})}}">{{ score.user }}</a></td>
+            <td><a href="{{path('profile_show', {'username': score.user})}}">{{ score.user }}</a></td>
             <td class="text-right">{{ score.points|number_format }}</td>
             {% if not permanent_board is defined %}
                 <td class="text-right">{{score.rankedPoints}}</td>

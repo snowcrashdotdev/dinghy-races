@@ -6,10 +6,13 @@
         <th>Completed</th>
     </tr>
     {% for score in scores %}
+        {% set href = path('profile_show', {
+            'username': score.user
+        }) %}
         <tr>
             <td>{{ loop.index }}</td>
             <td class="align-right">{{ score.points|number_format }}</td>
-            <td><a href="{{path('user_show',{'id':score.user})}}">{{ score.username }}</a></td>
+            <td><a href="{{href}}">{{ score.username }}</a></td>
             <td>{{score.completed}} out of {{gameCount}}</td>
         </tr>
     {% endfor %}

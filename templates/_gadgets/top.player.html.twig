@@ -1,5 +1,7 @@
 {% for player in leading_players %}
-{% set href = path('user_show', {id: player.id}) %}
+{% set href = path('profile_show', {
+    'username': player.name|lower
+}) %}
 <aside class="gadget gadget-top-score">
     <h3>Top Player</h3>
     <a class="text-large" href="{{href}}">{{player.name}}</a>
