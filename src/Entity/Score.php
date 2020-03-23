@@ -157,12 +157,12 @@ class Score
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->date_submitted;
+        return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeInterface $date_submitted): self
+    public function setCreatedAt(\DateTimeInterface $created_at): self
     {
-        $this->date_submitted = $date_submitted;
+        $this->created_at = $created_at;
 
         return $this;
     }
