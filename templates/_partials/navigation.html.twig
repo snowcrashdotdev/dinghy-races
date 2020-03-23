@@ -11,7 +11,7 @@
         {% endif %}
     {% endif %}
 
-    {% if app.request.attributes.get('_route') == 'tournament_scores' %}
+    {% if app.request.attributes.get('_route') == 'score_show' %}
         {% set href = path('score_new', {'game_name':game.name,'tournament_id':tournament.id}) %}
         <a class="nav-item" href="{{href}}">✎</a>
     {% endif %}

@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 class ScoreController extends AbstractController
 {
     /**
-     * @Route("/new/{game_name}/{tournament_id}", name="score_new", methods={"GET","POST"})
+     * @Route("/{game_name}/{tournament_id}/new", name="score_new", methods={"GET","POST"})
      * @Entity("tournament", expr="repository.find(tournament_id)")
      * @ParamConverter("game", options={"mapping": {"game_name": "name"}})
      */
@@ -78,10 +78,10 @@ class ScoreController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
-            return $this->redirectToRoute('tournament_scores',
+            return $this->redirectToRoute('score_show',
                 [
-                    'id'=>$score->getTournament()->getId(),
-                    'game'=>$score->getGame()->getId()
+                    'tournament_id'=>$score->getTournament()->getId(),
+                    'game_name'=>$score->getGame()->getName()
                 ]
             );
         }
@@ -89,6 +89,39 @@ class ScoreController extends AbstractController
         return $this->render('score/new.html.twig', [
             'score' => $score,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{game_name}/{tournament_id}", name="score_show")
+     * @Entity("tournament", expr="repository.find(tournament_id)")
+     * @ParamConverter("game", options={"mapping": {"game_name": "name"}})
+     */
+    public function show(Tournament $tournament, Game $game, ScoreRepository $repo)
+    {
+        $scores = $repo->findBy([
+            'game' => $game,
+            'tournament' => $tournament
+        ], ['points' => 'DESC']);
+
+        $teams = $repo->findTeamScores($tournament, $game);
+
+        $user_score = null;
+        $user = $this->getUser();
+        if (!empty($user)) {
+            $user_score = $repo->findOneBy([
+                'game' => $game,
+                'tournament' => $tournament,
+                'user' => $user
+            ]);
+        }
+
+        return $this->render('tournament/show_scores.html.twig', [
+            'scores' => $scores,
+            'game' => $game,
+            'tournament' => $tournament,
+            'teams' => $teams,
+            'user_score' => $user_score
         ]);
     }
 }

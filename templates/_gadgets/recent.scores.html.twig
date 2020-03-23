@@ -1,8 +1,12 @@
 <aside class="gadget">
     <h3>Recent Scores</h3>
     {% for score in recent_scores %}
+        {% set href = path('score_show', {
+            'game_name': score.game.name,
+            'tournament_id': score.tournament.id
+        }) %}
         <div class="text-justify" title="{{score.updatedAt|date('m/d G:i')}}">
-            <a href="{{ path('tournament_scores', {'id': tournament.id, 'game': score.game.id}) }}">{{score.game}}</a>
+            <a href="{{href}}">{{score.game}}</a>
             <span class="margin-x-auto roboto outlined">{{score.user|slice(0,3)|upper}}</span>
             <span class="roboto outlined">{{score.points|number_format}}</span>
         </div>

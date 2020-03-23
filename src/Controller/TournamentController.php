@@ -207,40 +207,6 @@ class TournamentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/scores/{game}", name="tournament_scores", methods={"GET","POST"})
-     */
-    public function game(Request $request, Tournament $tournament, Game $game)
-    {
-        $scoreRepo = $this->getDoctrine()
-            ->getRepository('App\Entity\Score');
-        
-        $scores = $scoreRepo->findByGameAndTournament($tournament->getId(), $game);
-
-        $teams = $scoreRepo->findTeamScores($tournament, $game);
-
-        $user_score = null;
-        $user = $this->getUser();
-        if (!empty($user)) {
-            $user_score = $this->getDoctrine()
-                ->getRepository('App\Entity\Score')
-                ->findOneBy([
-                    'game' => $game,
-                    'tournament' => $tournament,
-                    'user' => $user
-                ])
-            ;
-        }
-
-        return $this->render('tournament/show_scores.html.twig', [
-            'scores' => $scores,
-            'game' => $game,
-            'tournament' => $tournament,
-            'teams' => $teams,
-            'user_score' => $user_score
-        ]);
-    }
-
-    /**
      * @Route("/{tournament}/leaderboards/team", name="leaderboard_team", methods={"GET"})
      */
     public function team_leaderboard(Request $request, Tournament $tournament)

@@ -14,9 +14,9 @@
                 'game_name': game.name,
                 'tournament_id': tournament.id
             }) %}
-            {% set href_leaderboard = path('tournament_scores', {
-                'game': game.id,
-                'id': tournament.id
+            {% set href_leaderboard = path('score_show', {
+                'game_name': game.name,
+                'tournament_id': tournament.id
             }) %}
             <tr>
                 <td><a href="{{href_leaderboard}}">{{game}}</a></td>
