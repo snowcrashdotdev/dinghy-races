@@ -1,9 +1,60 @@
 body {
     margin: 0;
-    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+header, main {
+    margin-top: var(--margin);
+    padding-top: calc(var(--margin)/2);
 }
 
 main {
     padding-left: calc(var(--padding));
     padding-right: calc(var(--padding));
+}
+
+.main-navigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: var(--margin);
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    z-index: 1;
+}
+
+.nav-item {
+    display: block;
+    margin-left: calc(1rem / var(--ratio));
+    margin-right: calc(1rem / var(--ratio));
+}
+
+.has-sub-items {
+    position: relative;
+
+    &:hover .sub-navigation {
+        display: block;
+    }
+}
+
+.sub-navigation {
+    display: none;
+    position: absolute;
+    background-color: #000;
+    min-width: 14rem;
+}
+
+.push-right .sub-navigation {
+    right: 0;
+}
+
+.navbar-pfp {
+    height: 1rem;
+    width: 1rem;
+    vertical-align: middle;
 }

@@ -11,6 +11,7 @@
 
     --size-large: calc(1em * var(--ratio));
     --size-larger: calc(var(--size-large) * var(--ratio));
+    --size-small: calc(1em / var(--ratio));
 
     --hue: 256.9deg;
     --hsl-prime: var(--hue), 76.8%, 51%;

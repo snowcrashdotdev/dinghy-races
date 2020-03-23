@@ -82,6 +82,10 @@
     flex: 1;
 }
 
+.push-right {
+    margin-left: auto;
+}
+
 .basis-50 {
     flex-basis: 50%;
 }

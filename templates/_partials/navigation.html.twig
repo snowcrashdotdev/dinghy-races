@@ -1,18 +1,48 @@
 <nav class="main-navigation">
-    <a class="nav-item" href="{{ path('index') }}">⌂</a>
+    <a class="nav-item" href="{{ path('index') }}">🏆 Home</a>
 
-    {% if app.request.attributes.get('_route') == 'tournament_show' %}
-        {% if is_granted('ROLE_TO') %}
-            {% set href = path('tournament_refresh', {'tournament':tournament.id}) %}
-            <a class="nav-item" href="{{href}}">↻</a>
+    {% if is_granted('ROLE_USER') %}
+        <div class="nav-item has-sub-items">
+            <a href="#">+ New</a>
+            <div class="sub-navigation">
+            {% if app.request.attributes.get('_route') == 'score_show' %}
+                {% set href = path('score_new', {'game_name':game.name,'tournament_id':tournament.id}) %}
+                <a class="nav-item" href="{{href}}">✎ Score</a>
+            {% endif %}
 
-            {% set href = path('tournament_scoring', {'id':tournament.id}) %}
-            <a class="nav-item" href="{{href}}">⍯</a>
-        {% endif %}
+            {% if is_granted('ROLE_TO') %}
+                <a class="nav-item" href="{{path('team_new')}}">Team</a>
+                <a class="nav-item" href="{{path('tournament_new')}}">Tournament</a>
+            {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if app.request.attributes.get('_route') == 'tournament_show' and is_granted('ROLE_TO') %}
+        <div class="nav-item has-sub-items">
+            {% set href = path('tournament_edit', {
+                'id': tournament.id
+            }) %}
+            <a href="{{href}}">Edit</a>
+        </div>
     {% endif %}
 
     {% if app.request.attributes.get('_route') == 'score_show' %}
-        {% set href = path('score_new', {'game_name':game.name,'tournament_id':tournament.id}) %}
-        <a class="nav-item" href="{{href}}">✎</a>
+        {% set href = path('tournament_show', {'id':tournament.id}) %}
+        <a class="nav-item" href="{{href}}">➦ Back</a>
+    {% endif %}
+
+    {% if not is_granted('ROLE_USER') %}
+        <a class="nav-item push-right" href="{{path('app_login')}}">Log In</a>
+    {% else %}
+        <div class="nav-item push-right has-sub-items">
+            <a href="{{path('profile_show', {'username':app.user})}}">
+            <img class="navbar-pfp">
+            Profile</a>
+            <div class="sub-navigation">
+                <a class="nav-item" href="{{path('profile_edit')}}">Edit Settings</a>
+                <a class="nav-item" href="{{path('app_logout')}}">Log Out</a>
+            </div>
+        </div>
     {% endif %}
 </nav>

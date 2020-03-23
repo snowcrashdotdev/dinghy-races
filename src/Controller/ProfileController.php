@@ -15,7 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class ProfileController extends AbstractController
 {
     /**
-     * @Route("/settings", name="profile_settings", methods={"GET", "POST"})
+     * @Route("/settings", name="profile_edit", methods={"GET", "POST"})
      * @IsGranted("ROLE_USER")
      */
     public function edit(Request $request): Response
