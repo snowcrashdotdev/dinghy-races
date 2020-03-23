@@ -1,0 +1,7 @@
+{% macro responsive(path, filename, sizes, classnames) %}
+    {% set img_sizes = constant('App\\Service\\ImageUploader::IMAGE_SIZES') %}
+    {% set prefix = constant('App\\Service\\ImageUploader::SIZE_PREFIX') %}
+    {% set srcset = img_sizes|map(s => "#{path ~ filename|split('.')|first ~ prefix ~ s ~ '.' ~ filename|split('.')|last} #{s}px")|join(', ') %}
+
+    <img class="{{classnames}}" src="{{path ~ filename}}" srcset="{{srcset}}" sizes="{{sizes}}">
+{% endmacro %}
