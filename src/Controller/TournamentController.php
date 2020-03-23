@@ -7,17 +7,16 @@ use App\Form\TournamentType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use App\Entity\Game;
 use App\Entity\Draft;
 use App\Repository\TournamentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Service\TwitchChecker;
-use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @Route("/tournaments")
@@ -82,10 +81,36 @@ class TournamentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="tournament_show", methods={"GET"})
+     * @Route("/{id}/{format?}", name="tournament_show", methods={"GET"})
      */
-    public function show(Tournament $tournament, TwitchChecker $twitchChecker): Response
+    public function show(Tournament $tournament, TwitchChecker $twitchChecker, ?String $format): Response
     {
+        if ($format !== null) {
+            $scores = $this->getDoctrine()
+                ->getRepository('App\Entity\Score')
+                ->findByTournamentPublic($tournament)
+            ;
+
+            if ($format === '.json') {
+                return $this->json([
+                    'data' => $scores
+                ]);
+            } elseif ($format === '.csv') {
+                $csv = $this->get('serializer')->encode($scores, 'csv');
+                $response = new Response($csv);
+                $disposition = HeaderUtils::makeDisposition(
+                    HeaderUtils::DISPOSITION_ATTACHMENT,
+                    'scores.csv'
+                );
+                $response->headers->set('Content-Type', 'text/csv');
+                $response->headers->set('Content-Disposition', $disposition);
+
+                return $response;
+            } else {
+                throw $this->createNotFoundException('Unknown format requested.');
+            }
+        }
+
         $leadingTeams = false;
         $leadingPlayers = false;
         $recentScores = false;

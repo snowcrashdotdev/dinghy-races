@@ -189,6 +189,19 @@ class ScoreRepository extends ServiceEntityRepository
         return count($q->execute());
     }
 
+    public function findByTournamentPublic(Tournament $tournament)
+    {
+        $q = $this->createQueryBuilder('s')
+            ->join('s.user', 'u')
+            ->join('s.team', 't')
+            ->select('s.points', 'u.username', 't.name as team')
+            ->andWhere('s.tournament = :tournament')
+            ->setParameter('tournament', $tournament)
+        ;
+
+        return $q->getQuery()->getArrayResult();
+    }
+
     // /**
     //  * @return Score[] Returns an array of Score objects
     //  */
