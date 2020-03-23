@@ -2,3 +2,8 @@ body {
     margin: 0;
     padding: 0;
 }
+
+main {
+    padding-left: calc(var(--padding));
+    padding-right: calc(var(--padding));
+}

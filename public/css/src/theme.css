@@ -46,3 +46,8 @@ body {
 .game-summary-scores {
     text-align: center;
 }
+
+.profile-picture {
+    width: 8rem;
+    max-width: 100%;
+}

@@ -3,10 +3,21 @@
 {% block title %}{{user}}'s player profile{% endblock %}
 
 {% block body %}
+    <header>
+    {% if profile.picture %}
+        {% import '_macros/img.responsive.html.twig' as m_img %}
+        {% set path = asset('/uploads/pfps/') %}
+        {% set sizes = '(min-width: 600px) 200px' %}
+        {{ m_img.responsive( path, profile.picture, sizes, 'profile-picture' ) }}
+    {% endif %}
+
     <h1>{{user}}</h1>
     {% if profile.social %}
         <p><small><a href="{{profile.social}}">{{profile.social}}</a></small></p>
     {% endif %}
+    </header>
+
+    <main>
 
     {% if user.teams %}
         <h2>Has appeared in:</h2>
@@ -14,5 +25,7 @@
             <p>{{team.tournament}} on {{team}}</p>
         {% endfor %}
     {% endif %}
+
+    </main>
 
 {% endblock %}
