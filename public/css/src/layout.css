@@ -207,3 +207,8 @@ td {
         display: table-cell;
     }
 }
+
+img {
+    max-width: 100%;
+    height: auto;
+}

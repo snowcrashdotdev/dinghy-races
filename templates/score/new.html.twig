@@ -3,11 +3,11 @@
 {% block title %}submit score for {{score.game.description}} in {{score.tournament.title}}{% endblock %}
 
 {% block body %}
-    <main>
-        <header class="bg-accent padding">
-            <h1>{{score.tournament.title}}</h1>
-            <p>Add a score for {{score.game.description}}<small>{{ score.game.name ~ '.zip' }}</small></p>
-        </header>
-        {{ include('score/_form.html.twig') }}
-    </main>
+<header class="bg-accent padding">
+    <h1>{{score.tournament.title}}</h1>
+    <p class="text-small">add your score for {{score.game.description}} <span class="text-small">({{ score.game.name ~ '.zip' }})</span></p>
+</header>
+<main>
+    {{ include('score/_form.html.twig') }}
+</main>
 {% endblock %}

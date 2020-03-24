@@ -1,0 +1,21 @@
+form {
+    background-color: #000;
+    padding-top: var(--padding);
+    padding-bottom: var(--padding);
+}
+
+label {
+    float: left;
+    text-align: right;
+    width: 6rem;
+    margin-right: calc(var(--margin) / 2);
+}
+
+form button {
+    margin-top: var(--margin);
+    float: right;
+}
+
+.upload-preview {
+    cursor: pointer;
+}

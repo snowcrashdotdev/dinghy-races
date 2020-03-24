@@ -23,15 +23,14 @@
         {{ form_widget(form.videoUrl) }}
     </div>
 
-    <div class="flex-row align-items-center">
+    <div class="positioned">
     {% if score.screenshot %}
         {{ form_label(form.screenshot)}}
-        <div class="screenshot-preview" id="current-screenshot">
-        <img title="Click to remove." src="{{'/uploads/screenshots/' ~ score.screenshot.filename}}">
+        <div class="upload-preview" data-file-input="score_screenshot">
+            <img src="{{'/uploads/screenshots/' ~ score.screenshot.filename}}">
         </div>
         {{ form_widget(form.screenshot,{
             'attr':{
-                'disabled': true,
                 'hidden': true
             }
         }) }}
@@ -49,14 +48,13 @@
 {{ form_end(form) }}
 
 <script>
-    document.addEventListener('DOMContentLoaded', function(){
-        var screenshot = document.getElementById('current-screenshot');
-        var uploadInput = document.getElementById('score_screenshot');
-        screenshot.addEventListener('click', function(e){
-            e.preventDefault();
-            e.target.remove();
-            uploadInput.removeAttribute('disabled');
-            uploadInput.removeAttribute('hidden');
-        });
+    document.addEventListener('DOMContentLoaded', function() {
+        var uploadPreviews = document.getElementsByClassName('upload-preview');
+
+        for (let preview of uploadPreviews) {
+            preview.addEventListener('click', function(e) {
+                document.getElementById(preview.getAttribute('data-file-input')).click();
+            });
+        }
     });
 </script>
