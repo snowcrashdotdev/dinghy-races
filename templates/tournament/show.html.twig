@@ -3,17 +3,16 @@
 {% block title %}{{ tournament.title }}{% endblock %}
 
 {% block body %}
-    <main>
-        <header>
-            <details>
-                <summary><h1>{{tournament.title}}</h1></summary>
-                <div>{{ tournament.description|raw }}</div>
-            </details>
-            {% if tournament.inProgress %}
-                <p>Ends <time>{{tournament.endDate|date_modify('-1 minute')|date('F jS, g:ia')}}</time></p>
-            {% endif %}
-        </header>
+    <header>
+        <h1>{{tournament.title}}</h1>
 
+        {% if tournament.inProgress %}
+            <time class="block text-small">
+                ends {{tournament.endDate|date_modify('-1 minute')|date('F jS, g:ia')}}
+            </time>
+        {% endif %}
+    </header>
+    <main>
         {% if tournament.inProgress %}
             <section class="gadget-group">
                 {% include '_gadgets/recent.scores.html.twig' %}
