@@ -4,7 +4,7 @@
 
 {% block body %}
 <main>
-    <h1>{{appname}}</h1>
+    <h1>{{website.name}}</h1>
     <h2>Your active tournaments:</h2>
     {% for tournament in tournaments %}
         {% set href = path('tournament_show', {
