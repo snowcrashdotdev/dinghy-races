@@ -47,7 +47,7 @@ class PersonalBestController extends AbstractController
     }
 
     /**
-     * @Route("/{game}/new", name="pb_new", methods={"GET","POST"})
+     * @Route("/new", name="pb_new", methods={"GET","POST"})
      * @Security("is_granted('ROLE_USER')")
      */
     public function new(Request $request, String $game, PersonalBestRepository $personalBestRepository): Response
