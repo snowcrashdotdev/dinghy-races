@@ -1,19 +1,17 @@
 <nav class="main-navigation">
-    <a class="nav-item" href="{{ path('index') }}">🏆 Home</a>
+    <a class="nav-item" href="{{ path('index') }}">🏆<span class="nav-item-label">Home</a>
 
     {% if is_granted('ROLE_USER') %}
         <div class="nav-item has-sub-items">
-            <a href="#">+ New</a>
+            <a href="#">➕<span class="nav-item-label">New</span></a>
             <div class="sub-navigation">
-            {% if app.request.attributes.get('_route') == 'score_show' %}
-                {% set href = path('score_new', {'game_name':game.name,'tournament_id':tournament.id}) %}
-                <a class="nav-item" href="{{href}}">✎ Score</a>
-            {% endif %}
+                {% set href = path('pb_new') %}
+                <a class="nav-item" href="{{href}}">Personal Best</a>
 
-            {% if is_granted('ROLE_TO') %}
-                <a class="nav-item" href="{{path('team_new')}}">Team</a>
-                <a class="nav-item" href="{{path('tournament_new')}}">Tournament</a>
-            {% endif %}
+                {% if is_granted('ROLE_TO') %}
+                    <a class="nav-item" href="{{path('team_new')}}">Team</a>
+                    <a class="nav-item" href="{{path('tournament_new')}}">Tournament</a>
+                {% endif %}
             </div>
         </div>
     {% endif %}
