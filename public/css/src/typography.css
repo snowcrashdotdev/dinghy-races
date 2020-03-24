@@ -20,3 +20,11 @@ p {
     text-decoration: none;
     color: var(--color-two);
 }
+
+small {
+    font-size: var(--size-small);
+}
+
+header {
+    font-size: var(--size-large);
+}

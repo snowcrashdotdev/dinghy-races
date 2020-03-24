@@ -3,7 +3,7 @@ body {
     color: hsla(var(--hsl-white), 0.99);
 }
 
-.summary {
+.game-summary {
     border: 0.1em solid var(--color-gray);
 }
 
@@ -25,13 +25,25 @@ body {
     text-align: center;
 }
 
+.active-game {
+    position: relative;
+    background-color: var(--shaded);
+}
+
+.active-game-new-score {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #000;
+    padding-left: var(--padding);
+    padding-right: var(--padding);
+}
+
 .profile-picture {
     width: 8rem;
     max-width: 100%;
 }
 
 header {
-    font-size: var(--size-large);
-    padding: var(--padding);
     background: linear-gradient(180deg, #000, transparent);
 }

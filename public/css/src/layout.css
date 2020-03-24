@@ -7,19 +7,19 @@ body {
 header, main {
     margin-top: var(--margin);
     padding-top: calc(var(--margin)/2);
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
 }
 
 main {
-    padding-left: calc(var(--padding));
-    padding-right: calc(var(--padding));
     max-width: var(--max-content-width);
     margin-left: auto;
     margin-right: auto;
 }
 
-table {
-    max-width: 100%;
-}
+/*
+*   Navigation
+*/
 
 .main-navigation {
     position: fixed;
@@ -109,6 +109,9 @@ table {
     }
 }
 
+/*
+*   Tables
+*/
 table {
     display: block;
     border-collapse: collapse;

@@ -3,15 +3,21 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
+<header>
+     <h1>Dashboard</h1>
+     <small>Welcome, {{app.user.username}}</small>
+</header>
+
 <main>
-    <h1>{{website.name}}</h1>
-    <h2>Your active tournaments:</h2>
+    <h2>Active tournaments</h2>
     {% for tournament in tournaments %}
         {% set href = path('tournament_show', {
             'id': tournament.id
         }) %}
-        <h3><a href="{{href}}">{{tournament.title}}</a></h3>
-        {% include '_gadgets/active.scores.html.twig' %}
+        <section>
+            <h3><a href="{{href}}">{{tournament.title}}</a></h3>
+            {% include '_gadgets/active.games.html.twig' %}
+        </section>
     {% endfor %}
 </main>
 {% endblock %}

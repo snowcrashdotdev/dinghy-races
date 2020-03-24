@@ -1,0 +1,28 @@
+<h4>You scores:</h4>
+<section class="summary-group">
+{% for game in tournament.games %}
+    {% set score = user.getScore(tournament, game) %}
+    {% set href_new = path('score_new', {
+        'game_name': game.name,
+        'tournament_id': tournament.id
+    }) %}
+    {% set href_leaderboard = path('score_show', {
+        'game_name': game.name,
+        'tournament_id': tournament.id
+    }) %}
+        <div class="summary active-game">
+            {% if game.marquee %}
+                {% import '_macros/img.responsive.html.twig' as m_img %}
+                {% set path = asset('/uploads/marquees/') %}
+                {% set sizes = '(min-width: 600px) 800px' %}
+
+                {{ m_img.responsive( path, game.marquee, sizes, 'marquee' ) }}
+            {% endif %}
+            <div class="summary-details">
+                <a class="block" href="{{href_leaderboard}}">{{game.description}}</a>
+                <p class="text-large roboto outlined">{{ score ? score.points|number_format : 'None'}}</p>
+                <a class="active-game-new-score" href="{{href_new}}">📝<span class="nav-item-label">New</span></a>
+            </div>
+        </div>
+{% endfor %}
+</section>
