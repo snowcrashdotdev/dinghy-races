@@ -75,7 +75,7 @@
 
 .linear-gauge-line {
     fill: none;
-    stroke: var(--color-two);
+    stroke: var(--color-three);
     stroke-width: 0.01em;
 }
 
