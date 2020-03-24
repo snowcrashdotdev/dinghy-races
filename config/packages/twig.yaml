@@ -1,5 +1,6 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
     globals:
-        appname: 'La Calice Cup'
-        appdescription: 'Online team STG score tournaments'
+        website:
+            name: 'La Calice Cup'
+            description: 'Online team STG score tournaments'
