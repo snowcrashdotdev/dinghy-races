@@ -116,7 +116,7 @@ class ScoreController extends AbstractController
             ]);
         }
 
-        return $this->render('tournament/show_scores.html.twig', [
+        return $this->render('score/show.html.twig', [
             'scores' => $scores,
             'game' => $game,
             'tournament' => $tournament,

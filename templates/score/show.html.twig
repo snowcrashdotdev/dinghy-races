@@ -3,7 +3,13 @@
 {% block title %}{{ tournament.title }} scores for {{ game.description }}{% endblock %}
 
 {% block navigation %}
-<a class="nav-item" href="deez">Nuts</a>
+    {% if is_granted('ROLE_USER') %}
+        {% set href = path('score_new', {
+            'game_name': game.name,
+            'tournament_id': tournament.id
+        }) %}
+        <a href="{{href}}" class="nav-item">✏️<span class="nav-item-label">Your Score</span></a>
+    {% endif %}
 {% endblock %}
 
 {% block body %}
