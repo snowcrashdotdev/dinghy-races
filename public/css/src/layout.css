@@ -71,7 +71,6 @@ table {
     position: relative;
     box-sizing: border-box;
     margin-bottom: 1rem;
-    font-size: 0.8em;
 }
 
 @media (min-width: 37.5rem) {

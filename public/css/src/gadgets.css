@@ -1,31 +1,20 @@
 .gadget-group {
-    display: flex;
-    justify-content: flex-start;
-    align-items: stretch;
-    flex-wrap: wrap;
     margin-bottom: var(--margin);
 }
 
 .gadget {
-    flex: 0 0 18rem;
-    max-width: 100%;
+    display: block;
     position: relative;
     box-sizing: border-box;
-    padding: var(--padding);
     padding-top: calc(var(--margin) * 2);
-    margin-right: var(--margin);
-    margin-bottom: var(--margin);
+    padding-bottom: var(--padding);
+    padding-left: var(--padding);
+    padding-right: var(--padding);
+    margin-bottom: 1rem;
     border: 0.15em solid var(--color-gray);
     border-radius: 0.3em 0.6em 0.2em 0.2em;
-    color: var(--color-gray);
     background-image: linear-gradient(105deg, var(--color-black) 40%, var(--color-prime));
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.gadget:last-child {
-    margin-right: 0;
+    color: var(--color-gray);
 }
 
 .gadget :--heading {
@@ -55,6 +44,13 @@
     width: 100%;
     height: 100%;
     margin: 0 auto;
+}
+
+.radial-gauge {
+    display: block;
+    margin: 0 auto;
+    width: 12rem;
+    height: 12rem;
 }
 
 .radial-gauge-path {
