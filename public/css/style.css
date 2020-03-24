@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:500|Roboto:900&display=swap');
 @import 'src/variables.css';
-@import 'src/layout.css';
-@import 'src/typography.css';
-@import 'src/utility.css';
 @import 'src/theme.css';
 @import 'src/gadgets.css';
+@import 'src/typography.css';
+@import 'src/layout.css';
+@import 'src/utility.css';

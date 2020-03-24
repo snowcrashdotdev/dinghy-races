@@ -12,6 +12,13 @@ header, main {
 main {
     padding-left: calc(var(--padding));
     padding-right: calc(var(--padding));
+    max-width: var(--max-content-width);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table {
+    max-width: 100%;
 }
 
 .main-navigation {
@@ -57,4 +64,33 @@ main {
     height: 1rem;
     width: 1rem;
     vertical-align: middle;
+}
+
+.summary {
+    display: block;
+    position: relative;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+    font-size: 0.8em;
+}
+
+@media (min-width: 37.5rem) {
+    .summary-group {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .summary {
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: calc(50% - 1rem);
+        margin-right: 0.5rem;
+        margin-left: 0.5rem;
+    }
+}
+
+@media (min-width: 73.75rem) {
+    .summary {
+        flex-basis: calc(100% / 3 - 1rem);
+    }
 }

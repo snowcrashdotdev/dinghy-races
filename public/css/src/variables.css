@@ -1,7 +1,9 @@
 @custom-selector :--heading h1, h2, h3, h4, h5, h6;
 @custom-selector :--anchor a, a:link, a:active, a:visited;
 @custom-selector :--body p, a;
-@custom-media --desktop (min-width: 50em);
+@custom-media --content-width (min-width: 100rem);
+@custom-media --medium (min-width: 74rem);
+@custom-media --small (min-width: 37rem);
 
 :root {
     font-size: 16px;
@@ -30,4 +32,6 @@
 
     --shaded: hsla(var(--hsl-gray), 0.1);
     --outlined: 0.1em 0.1em 0.1em var(--color-black);
+
+    --max-content-width: 100rem;
 }

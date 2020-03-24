@@ -3,17 +3,10 @@ body {
     color: hsla(var(--hsl-white), 0.99);
 }
 
-.summary-group {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-}
+
 
 .summary {
-    position: relative;
-    flex: 0 0 30rem;
     border: 0.1em solid var(--color-gray);
-    margin: calc(var(--margin) / 4);
 }
 
 .summary-details {

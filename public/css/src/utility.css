@@ -24,7 +24,13 @@
 }
 
 .float-right {
-    float: right;
+    display: block;
+}
+
+@media (--small) {
+    .float-right {
+        float: right;
+    }
 }
 
 .margin-x-auto {
