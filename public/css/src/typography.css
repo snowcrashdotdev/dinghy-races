@@ -9,7 +9,7 @@ p {
 
 :--heading {
     font-family: 'Roboto', sans-serif;
-    font-size: 1rem;
+    font-size: 1em;
     font-weight: 700;
     line-height: 1;
     margin: 0;
@@ -19,24 +19,4 @@ p {
 :--anchor {
     text-decoration: none;
     color: var(--color-two);
-}
-
-table {
-    border-collapse: collapse;
-    margin-bottom: var(--margin);
-}
-
-th {
-    background-color: var(--color-prime);
-    color: var(--color-white);
-    text-align: left;
-}
-
-th, td {
-    border: 0.1em solid var(--color-prime);
-    padding: var(--padding);
-}
-
-tbody tr:nth-child(even) {
-    background-color: var(--shaded);
 }

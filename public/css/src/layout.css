@@ -39,6 +39,21 @@ table {
     display: block;
     margin-left: calc(1rem / var(--ratio));
     margin-right: calc(1rem / var(--ratio));
+
+    &:hover {
+        color: var(--color-white);
+    }
+}
+
+.nav-item-label {
+    padding-left: var(--padding);
+    display: none;
+}
+
+@media (min-width: 30rem) {
+    .nav-item-label {
+        display: initial;
+    }
 }
 
 .has-sub-items {
@@ -91,5 +106,101 @@ table {
 @media (min-width: 73.75rem) {
     .summary {
         flex-basis: calc(100% / 3 - 1rem);
+    }
+}
+
+table {
+    display: block;
+    border-collapse: collapse;
+    margin-bottom: var(--margin);
+}
+
+thead {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+th {
+    background-color: var(--color-prime);
+    color: var(--color-white);
+    text-align: left;
+}
+
+th, td {
+    border: 0.1em solid var(--color-prime);
+    padding: var(--padding);
+}
+
+tbody tr:nth-child(even) {
+    background-color: transparent;
+}
+
+tr {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: var(--margin);
+}
+
+td {
+    box-sizing: border-box;
+    position: relative;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 100%;
+    overflow: hidden;
+    margin: 0 -0.1em -0.1em 0;
+    text-align: right;
+}
+
+.td-index {
+    text-align: left;
+}
+
+.labeled-data:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding-left: var(--padding);
+    padding-right: var(--padding);
+    white-space: nowrap;
+    font-size: var(--size-small);
+    color: var(--color-gray);
+    background-color: #000;
+}
+
+.ranked-points:before { content: 'Ranked Points'; }
+.team-points:before { content: 'Team Points'; }
+.score-recording:before { content: 'Recording'; }
+
+.comment-empty {
+    display: none;
+}
+
+@media (min-width: 52rem) {
+    table {
+        display: table;
+    }
+
+    thead {
+        position: unset;
+    }
+
+    tr {
+        display: table-row;
+    }
+
+    td {
+        margin: 0;
+    }
+
+    .labeled-data:before {
+        display: none;
+    }
+
+    .comment-empty {
+        display: table-cell;
     }
 }

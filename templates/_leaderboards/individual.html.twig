@@ -2,15 +2,15 @@
     <thead>
         <h3>All Scores</h3>
         <tr>
-            <th>Rank</th>
+            <th class="td-index">Rank</th>
+            <th>Score</th>
+            <th>Player</th>
             {% if not permanent_board is defined %}
                 <th>Team</th>
             {% endif %}
-            <th>Player</th>
-            <th class="text-right">Score</th>
             {% if not permanent_board is defined %}
-                <th class="text-right">Ranked Points</th>
-                <th class="text-right">Team Points</th>
+                <th>Ranked Points</th>
+                <th>Team Points</th>
             {% endif %}
             <th>Record</th>
             <th>Comment</th>
@@ -24,17 +24,17 @@
             {% set className = '' %}
         {% endif %}
         <tr class="{{className}}" title="{{score.comment|e}}">
-            <td>{{ loop.index }}</td>
+            <td class="td-index">{{ loop.index }}</td>
+            <td>{{ score.points|number_format }}</td>
+            <td><a href="{{path('profile_show', {'username': score.user})}}">{{ score.user.username }}</a></td>
             {% if not permanent_board is defined %}
                 <td><a href="{{path('team_show', {'team': score.team.id})}}">{{score.team.name}}</a></td>
             {% endif %}
-            <td><a href="{{path('profile_show', {'username': score.user})}}">{{ score.user }}</a></td>
-            <td class="text-right">{{ score.points|number_format }}</td>
             {% if not permanent_board is defined %}
-                <td class="text-right">{{score.rankedPoints}}</td>
-                <td class="text-right">{{score.teamPoints}}</td>
+                <td class="text-right labeled-data ranked-points">{{score.rankedPoints}}</td>
+                <td class="text-right labeled-data team-points">{{score.teamPoints}}</td>
             {% endif %}
-            <td class="text-center">
+            <td class="labeled-data score-recording">
                 {% if score.screenshot %}
                     <a target="_blank" href="{{'/uploads/screenshots/' ~ score.screenshot}}">📷</a>
                 {% endif %}
@@ -42,7 +42,7 @@
                     <a target="_blank" href="{{score.videoUrl|e}}">📼</a>
                 {% endif %}
             </td>
-            <td>{{score.comment|e}}</td>
+            <td class="{{ not score.comment ? 'comment-empty' }}">{{score.comment|default(' ')|e}}</td>
         </tr>
     {% endfor %}
     </tbody>

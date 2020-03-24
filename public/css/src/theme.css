@@ -3,8 +3,6 @@ body {
     color: hsla(var(--hsl-white), 0.99);
 }
 
-
-
 .summary {
     border: 0.1em solid var(--color-gray);
 }
@@ -30,4 +28,10 @@ body {
 .profile-picture {
     width: 8rem;
     max-width: 100%;
+}
+
+header {
+    font-size: var(--size-large);
+    padding: var(--padding);
+    background: linear-gradient(180deg, #000, transparent);
 }
