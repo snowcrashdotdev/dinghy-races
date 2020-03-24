@@ -1,0 +1,14 @@
+    {% if not is_granted('ROLE_USER') %}
+        <a class="nav-item push-right" href="{{path('app_login')}}">Log In</a>
+    {% else %}
+        <div class="nav-item push-right has-sub-items">
+            <a href="{{path('profile_show', {'username':app.user})}}">
+            <img class="navbar-pfp">
+            Profile</a>
+            <div class="sub-navigation">
+                <a class="nav-item" href="{{path('profile_edit')}}">Edit Settings</a>
+                <a class="nav-item" href="{{path('app_logout')}}">Log Out</a>
+            </div>
+        </div>
+    {% endif %}
+</nav>

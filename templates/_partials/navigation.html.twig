@@ -18,6 +18,8 @@
         </div>
     {% endif %}
 
+    {% block navigation %}{% endblock %}
+
     {% if app.request.attributes.get('_route') == 'tournament_show' and is_granted('ROLE_TO') %}
         <div class="nav-item has-sub-items">
             {% set href = path('tournament_edit', {

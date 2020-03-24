@@ -10,7 +10,9 @@
     </head>
     <body>
         {% include '_partials/flash.html.twig'  %}
-        {% include '_partials/navigation.html.twig' %}
+        {% include '_partials/_nav.begin.html.twig' %}
+        {% block navigation %}{% endblock %}
+        {% include '_partials/_nav.end.html.twig' %}
         {% block body %}{% endblock %}
         {% block sidebar %}{% endblock %}
         {% block footer %}{% endblock %}

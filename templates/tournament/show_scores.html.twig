@@ -2,6 +2,10 @@
 
 {% block title %}{{ tournament.title }} scores for {{ game.description }}{% endblock %}
 
+{% block navigation %}
+<a class="nav-item" href="deez">Nuts</a>
+{% endblock %}
+
 {% block body %}
     <main>
         <h1>{{ tournament.title }} scores for {{ game.description }} (<small>{{ game.name ~ '.zip' }}</small>)</h1>
