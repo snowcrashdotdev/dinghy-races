@@ -66,13 +66,16 @@ class ScoreController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $screenshot_file = $form['screenshot']->getData();
+            $old_screenshot = $score->getScreenshot();
+            $new_screenshot_file = $form['screenshot']->getData();
 
-            if ($screenshot_file) {
+            if ($new_screenshot_file) {
                 $uploader = new ImageUploader($upload_dir);
                 $score->setScreenshot(
-                    $uploader->upload($screenshot_file)
+                    $uploader->upload($new_screenshot_file)
                 );
+            } elseif (method_exists($old_screenshot, 'getFilename')) {
+                $score->setScreenshot($old_screenshot->getFilename());
             }
 
             $entityManager = $this->getDoctrine()->getManager();
