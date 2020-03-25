@@ -12,6 +12,7 @@
 
 .text-small {
     font-size: var(--size-small);
+    line-height: var(--margin);
 }
 
 .text-center {
@@ -29,6 +30,12 @@
 
 .float-right {
     display: block;
+}
+
+.content-true-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @media (--small) {

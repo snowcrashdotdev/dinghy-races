@@ -1,36 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Log in{% endblock %}
 
 {% block body %}
-<main class="flex-column align-items-center">
-    <h1 class="text-align-center">Please sign in</h1>
-    <form method="post" class="margin-y bg-white padding rounded text-align-center">
+<main class="login content-true-center">
+    <form method="post">
         {% if error %}
             <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
 
         <div>
+            <label for="username">Username</label>
             <input type="text" value="{{ last_username }}" name="username" id="inputUsername" placeholder="Username" required autofocus>
         </div>
 
         <div>
+            <label for="password">Password</label>
             <input type="password" name="password" id="inputPassword" placeholder="Password" required>
         </div>
 
-        <input type="hidden" name="_csrf_token"
-            value="{{ csrf_token('authenticate') }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
         
         <input type="hidden" name="_target_path" value="{{ app.request.headers.get('referer') }}">
 
-        <div class="full-width margin-y">
-            <input type="checkbox" id="remember_me" name="_remember_me" checked/>
-            <label for="remember_me">Keep me logged in</label>
+        <div>
+            <label class="text-small text-baseline" for="remember_me">Stay signed in</label>
+            <input type="checkbox" id="remember_me" name="_remember_me">
         </div>
 
         <button type="submit">Sign in</button>
+
+        <p>Not registered? <a href="{{path('user_new')}}">Sign up</a></p>
+        <p>Trouble logging in? <a href="{{path('app_lost_password')}}">Reset</a></p>
     </form>
-    <p>Not registered?<a href="{{path('user_new')}}" class="margin-left">Sign up</a></p>
-    <p><a href="{{path('app_lost_password')}}">Lost Password?</a></p>
 </main>
 {% endblock %}
