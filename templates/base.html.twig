@@ -16,19 +16,7 @@
         {% block body %}{% endblock %}
         {% block sidebar %}{% endblock %}
         {% block footer %}{% endblock %}
-        {% block javascripts %}
-        <script>
-        // Remove flash messages after they serve their purpose
-        document.addEventListener('DOMContentLoaded', function(){
-            var flashMessages = document.getElementsByClassName('flash')
-            setTimeout(function(){
-                for (var i = 0; i < flashMessages.length; i++) {
-                    var flash = flashMessages.item(i)
-                    flash.parentNode.removeChild(flash)
-                }
-            }, 12000)
-        })
-        </script>
-        {% endblock %}
+        <script src="{{asset('/js/dist/app.min.js')}}"></script>
+        {% block javascripts %}{% endblock %}
     </body>
 </html>

@@ -7,10 +7,10 @@
     "test": "tests"
   },
   "scripts": {
-    "build:css": "postcss public/css/style.css -o public/css/dist/style.min.css",
-    "build:js": "webpack public/js/src/admin-*.js -o public/js/dist/admin.min.js --mode=production",
+    "build:css": "postcss ./public/css/style.css -o ./public/css/dist/style.min.css",
+    "build:js": "webpack app=./public/js/src/app.js forms=./public/js/src/forms.js --output-path='./public/js/dist' --output-filename='[name].min.js' --mode=production",
     "build": "npm run build:css && npm run build:js",
-    "build:watch": "nodemon -e css --ignore *.min.* --exec \"npm run build:css\"",
+    "build:watch": "nodemon -e css,js --ignore *.min.* --exec \"npm run build\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
