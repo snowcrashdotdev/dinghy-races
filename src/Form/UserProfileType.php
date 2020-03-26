@@ -5,7 +5,7 @@ namespace App\Form;
 use App\Entity\Profile;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,11 +21,9 @@ class UserProfileType extends AbstractType
                 'mapped' => false,
                 'label' => 'Picture',
                 'constraints' => [
-                    new File([
-                        'mimeTypes' => [
-                            'image/*'
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid image file.'
+                    new Image([
+                        'allowLandscape' => false,
+                        'allowPortrait' => false
                     ])
                 ]
             ])

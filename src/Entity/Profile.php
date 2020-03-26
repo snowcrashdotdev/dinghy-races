@@ -94,12 +94,12 @@ class Profile
         return $this;
     }
 
-    public function setPictureFile(File $file)
+    public function setPictureFile(?File $file)
     {
         $this->picture_file = $file;
     }
 
-    public function getPictureFile()
+    public function getPictureFile() : ?File
     {
         return $this->picture_file;
     }
