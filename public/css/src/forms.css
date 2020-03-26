@@ -42,6 +42,23 @@ form button {
     cursor: pointer;
 }
 
+.remove-file {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    right: 0;
+    width: 1rem;
+    background: none;
+    border: none;
+    color: var(--color-two);
+}
+
+.remove-file:active {
+    color: var(--color-white);
+}
+
 .login {
     min-height: calc(100vh - 15rem);
 }

@@ -21,14 +21,6 @@ class ProfileController extends AbstractController
         $profile = $this->getUser()->getProfile();
         $upload_dir = $this->getParameter('pfp_dir');
 
-        try {
-            $profile->setPictureFile(
-                new File( join('/', [$upload_dir, $profile->getPicture()]) )
-            );
-        } catch (FileException $e) {
-            $profile->setPictureFile(null);
-        }
-
         $form = $this->createForm(UserProfileType::class, $profile);
 
         $form->handleRequest($request);

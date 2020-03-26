@@ -20,20 +20,24 @@
     </div>
 
     <div class="positioned">
-    {% if score.screenshot %}
         {{ form_label(form.screenshot)}}
-        <div class="upload-preview" data-file-input="score_screenshot">
-            <img src="{{'/uploads/screenshots/' ~ score.screenshot.filename}}">
-        </div>
-        {{ form_widget(form.screenshot,{
-            'attr':{
+        {% if form.screenshot %}
+            {% set widget_attr = {
+                'class': 'picture-input',
                 'hidden': true
-            }
-        }) }}
-    {% else %}
-        {{ form_label(form.screenshot) }}
-        {{ form_widget(form.screenshot) }}
-    {% endif %}
+            } %}
+            {% set preview_style = '' %}
+        {% else %}
+            {% set widget_attr = {
+                'class': 'picture-input'
+            } %}
+            {% set preview_style = 'display:none;' %}
+        {% endif %}
+        <div class="upload-preview" data-file-input="score_screenshot">
+            <img style="{{preview_style}}" id="score_screenshot_preview" src="{{'/uploads/screenshots/' ~ score.screenshot.filename}}">
+            <button style="{{preview_style}}" title="Remove screenshot" type="button" class="remove-file" data-file-input="score_screenshot">ⓧ</button>
+        </div>
+        {{ form_widget(form.screenshot, { 'attr': widget_attr }) }}
     </div>
 
     <div class="flex-row align-items-center">

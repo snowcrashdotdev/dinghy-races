@@ -4,20 +4,24 @@
         {{ form_widget(form.social) }}
     </div>
     <div class="positioned">
-    {% if profile.picture %}
         {{ form_label(form.picture_file)}}
-        <div class="upload-preview" data-file-input="user_profile_picture_file">
-            <img src="{{'/uploads/pfps/' ~ profile.picture}}">
-        </div>
-        {{ form_widget(form.picture_file,{
-            'attr':{
+        {% if profile.picture %}
+            {% set widget_attr = {
+                'class': 'picture-input',
                 'hidden': true
-            }
-        }) }}
-    {% else %}
-        {{ form_label(form.picture_file) }}
-        {{ form_widget(form.picture_file) }}
-    {% endif %}
+            } %}
+            {% set preview_style = '' %}
+        {% else %}
+            {% set widget_attr = {
+                'class': 'picture-input'
+            } %}
+            {% set preview_style = 'display:none;' %}
+        {% endif %}
+        <div class="upload-preview" data-file-input="user_profile_picture_file">
+            <img style="{{preview_style}}" id="user_profile_picture_file_preview" src="{{'/uploads/pfps/' ~ profile.picture}}">
+            <button type="button" style="{{preview_style}}" class="remove-file" data-file-input="user_profile_picture_file">ⓧ</button>
+        </div>
+        {{ form_widget(form.picture_file, {'attr': widget_attr} ) }}
     </div>
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

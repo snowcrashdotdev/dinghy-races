@@ -1,4 +1,28 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    <div class="positioned">
+        {{ form_label(form.marquee_file)}}
+        {% if game.marquee %}
+            {% set widget_attr = {
+                'class': 'picture-input',
+                'hidden': true
+            } %}
+            {% set preview_style = '' %}
+        {% else %}
+            {% set widget_attr = {
+                'class': 'picture-input'
+            } %}
+            {% set preview_style = 'display:none;' %}
+        {% endif %}
+        <div class="upload-preview" data-file-input="game_marquee_file">
+            <img style="{{preview_style}}" id="game_marquee_file_preview" src="{{'/uploads/marquees/' ~ game.marquee}}">
+            <button type="button" style="{{preview_style}}" class="remove-file" data-file-input="game_marquee_file">ⓧ</button>
+        </div>
+        {{ form_widget(form.marquee_file, {'attr': widget_attr} ) }}
+    </div>
+    {{ form_rest(form) }}
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
+
+{% block javascripts %}
+    <script src="{{asset('/js/dist/forms.min.js')}}"></script>
+{% endblock %}

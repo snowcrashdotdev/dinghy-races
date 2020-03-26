@@ -59,6 +59,8 @@ class Game
      */
     private $marquee;
 
+    protected $marquee_file;
+
     public function __construct()
     {
         $this->scores = new ArrayCollection();
@@ -222,6 +224,18 @@ class Game
     public function setMarquee(?string $marquee): self
     {
         $this->marquee = $marquee;
+
+        return $this;
+    }
+
+    public function getMarqueeFile()
+    {
+        return $this->marquee_file;
+    }
+
+    public function setMarqueeFile($file)
+    {
+        $this->marquee_file = $file;
 
         return $this;
     }

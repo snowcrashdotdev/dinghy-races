@@ -82,7 +82,7 @@ class GameController extends AbstractController
         $upload_dir = $this->getParameter('marquee_dir');
 
         try {
-            $game->setMarquee(
+            $game->setMarqueeFile(
                 new File($upload_dir . '/' . $game->getMarquee())
             );
         } catch (FileException $e) {
@@ -90,7 +90,7 @@ class GameController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $marquee_file = $form['marquee']->getData();
+            $marquee_file = $form->get('marquee_file')->getData();
 
             if ($marquee_file) {
                 $uploader = new ImageUploader($upload_dir);

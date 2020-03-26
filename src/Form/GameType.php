@@ -6,7 +6,7 @@ use App\Entity\Game;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GameType extends AbstractType
@@ -18,15 +18,14 @@ class GameType extends AbstractType
             ->add('description')
             ->add('year')
             ->add('manufacturer')
-            ->add('marquee', FileType::class, [
+            ->add('marquee_file', FileType::class, [
                 'required' => false,
                 'mapped' => false,
+                'label' => 'Marquee',
                 'constraints' => [
-                    new File([
-                        'mimeTypes' => [
-                            'image/*'
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid image file.'
+                    new Image([
+                        'allowSquare' => false,
+                        'allowPortrait' => false
                     ])
                 ]
             ])
