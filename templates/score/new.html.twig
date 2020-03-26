@@ -3,11 +3,15 @@
 {% block title %}submit score for {{score.game.description}} in {{score.tournament.title}}{% endblock %}
 
 {% block body %}
-<header class="bg-accent padding">
+<header>
     <h1>{{score.tournament.title}}</h1>
     <p class="text-small">add your score for {{score.game.description}} <span class="text-small">({{ score.game.name ~ '.zip' }})</span></p>
 </header>
 <main>
     {{ include('score/_form.html.twig') }}
 </main>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{asset('/js/dist/forms.min.js')}}"></script>
 {% endblock %}

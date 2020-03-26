@@ -1,19 +1,15 @@
-{{ form_start(form,{
-    'attr':{
-        'class': 'bg-white padding flex-column'
-    }
-}) }}
+{{ form_start(form) }}
     {% if not form.vars.valid %}
         <ul>
         {% for child in form.children %}
-            {% for error in child.vars.errors%}
+            {% for error in child.vars.errors %}
                 <li>{{error.message}}</li>
             {% endfor %}
         {% endfor %}
         </ul>
     {% endif %}
 
-    <div class="flex-row align-items-center">
+    <div>
         {{ form_label(form.points) }}
         {{ form_widget(form.points) }}
     </div>
