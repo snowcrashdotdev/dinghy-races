@@ -14,7 +14,10 @@ class ProfileChange
     }
     public function preUpdate($profile, PreUpdateEventArgs $args)
     {
-        if ($args->hasChangedField('picture')) {
+        if (
+            $args->hasChangedField('picture') &&
+            $args->getOldValue('picture') !== null
+        ) {
             $prev_full_filename = $args->getOldValue('picture');
             $prev_screenshot_path = $this->getUploadDir() . '/' . $prev_full_filename;
             if ($this->getFilesystem()->exists($prev_screenshot_path)) {

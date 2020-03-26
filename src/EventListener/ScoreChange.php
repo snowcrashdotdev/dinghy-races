@@ -25,7 +25,10 @@ class ScoreChange
             $score->setUpdatedAt(new \DateTime('NOW'));
         }
 
-        if ($args->hasChangedField('screenshot')) {
+        if (
+            $args->hasChangedField('screenshot') &&
+            $args->getOldValue('screenshot') !== null
+        ) {
             $prev_full_filename = $args->getOldValue('screenshot');
             $prev_screenshot_path = $this->getUploadDir() . '/' . $prev_full_filename;
             if ($this->getFilesystem()->exists($prev_screenshot_path)) {

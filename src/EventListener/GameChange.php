@@ -14,7 +14,10 @@ class GameChange
     }
     public function preUpdate($game, PreUpdateEventArgs $args)
     {
-        if ($args->hasChangedField('marquee')) {
+        if (
+            $args->hasChangedField('marquee') &&
+            $args->getOldValue('marquee') !== null
+        ) {
             $prev_full_filename = $args->getOldValue('marquee');
             $prev_screenshot_path = $this->getUploadDir() . '/' . $prev_full_filename;
             if ($this->getFilesystem()->exists($prev_screenshot_path)) {
