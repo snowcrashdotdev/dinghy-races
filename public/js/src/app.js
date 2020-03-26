@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function closeSubMenus(event) {
         for (let menu of dropdownMenus) {
             let self = event.target.nextElementSibling
-            console.log(self)
+
             if (menu !== self)
                 menu.classList.remove('block')
             }
