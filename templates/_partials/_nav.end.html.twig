@@ -3,7 +3,18 @@
     {% else %}
         <div class="nav-item push-right has-sub-items">
             <a href="{{path('profile_show', {'username':app.user})}}">
-            <img class="navbar-pfp">
+            {% if app.user.profile.picture %}
+                {% set img_options = {
+                    'path': asset('uploads/pfps/'),
+                    'file': app.user.profile.picture,
+                    'sizes': '1rem',
+                    'classNames': 'navbar-pfp'
+                } %}
+                {% import '_macros/img.responsive.html.twig' as m_img %}
+                {{ m_img.responsive(img_options) }}
+            {% else %}
+                <img class="navbar-pfp">
+            {% endif %}
             <span class="nav-item-label">Profile</span></a>
             <div class="sub-navigation">
                 <a class="nav-item" href="{{path('profile_edit')}}">Edit Settings</a>

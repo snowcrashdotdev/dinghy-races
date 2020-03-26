@@ -1,7 +1,7 @@
-{% macro responsive(path, filename, sizes, classnames) %}
+{% macro responsive(config) %}
     {% set img_sizes = constant('App\\Service\\ImageUploader::IMAGE_SIZES') %}
     {% set prefix = constant('App\\Service\\ImageUploader::SIZE_PREFIX') %}
-    {% set srcset = img_sizes|map(s => "#{path ~ filename|split('.')|first ~ prefix ~ s ~ '.' ~ filename|split('.')|last} #{s}px")|join(', ') %}
+    {% set srcset = img_sizes|map(s => "#{config.path ~ config.file|split('.')|first ~ prefix ~ s ~ '.' ~ config.file|split('.')|last} #{s}w")|join(', ') %}
 
-    <img class="{{classnames}}" src="{{path ~ filename}}" srcset="{{srcset}}" sizes="{{sizes}}">
+    <img class="{{config.classNames}}" src="{{config.path ~ config.file}}" srcset="{{srcset}}" sizes="{{config.sizes}}">
 {% endmacro %}

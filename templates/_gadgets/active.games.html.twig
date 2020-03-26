@@ -13,10 +13,14 @@
         <div class="summary active-game">
             {% if game.marquee %}
                 {% import '_macros/img.responsive.html.twig' as m_img %}
-                {% set path = asset('/uploads/marquees/') %}
-                {% set sizes = '(min-width: 600px) 800px' %}
+                {% set img_options = {
+                    'path': asset('uploads/marquees/'),
+                    'file': game.marquee,
+                    'sizes': '30rem',
+                    'classNames': 'marquee'
+                } %}
 
-                {{ m_img.responsive( path, game.marquee, sizes, 'marquee' ) }}
+                {{ m_img.responsive(img_options) }}
             {% endif %}
             <div class="summary-details">
                 <a class="block" href="{{href_leaderboard}}">{{game.description}}</a>
