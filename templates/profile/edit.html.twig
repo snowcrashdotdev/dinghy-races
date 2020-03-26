@@ -3,7 +3,13 @@
 {% block title %}Settings{% endblock %}
 
 {% block body %}
-    <h1>Settings for {{website.name}}</h1>
+    <header>
+        <h1>Settings for {{website.name}}</h1>
+    </header>
 
     {% include 'profile/_form.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{asset('/js/dist/forms.min.js')}}"></script>
 {% endblock %}

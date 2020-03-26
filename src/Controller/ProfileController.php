@@ -10,31 +10,31 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class ProfileController extends AbstractController
 {
     /**
      * @Route("/settings", name="profile_edit", methods={"GET", "POST"})
-     * @IsGranted("ROLE_USER")
      */
     public function edit(Request $request): Response
     {
         $profile = $this->getUser()->getProfile();
-        $form = $this->createForm(UserProfileType::class, $profile);
         $upload_dir = $this->getParameter('pfp_dir');
 
         try {
-            $profile->setPicture(
-                new File($upload_dir . '/' . $profile->getPicture())
+            $profile->setPictureFile(
+                new File( join('/', [$upload_dir, $profile->getPicture()]) )
             );
         } catch (FileException $e) {
-            $profile->setPicture(null);
+            $profile->setPictureFile(null);
         }
 
+        $form = $this->createForm(UserProfileType::class, $profile);
+
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $picture_file = $form['picture']->getData();
+            $picture_file = $form->get('picture_file')->getData();
 
             if ($picture_file) {
                 $uploader = new ImageUploader($upload_dir);

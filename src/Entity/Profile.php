@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProfileRepository")
@@ -32,6 +33,14 @@ class Profile
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $picture;
+    
+    /**
+     * @Assert\Image(
+     *      allowLandscape = false,
+     *      allowPortrait = false
+     * )
+     */
+    protected $picture_file;
 
     public function getId(): ?int
     {
@@ -73,15 +82,25 @@ class Profile
         return 1 === preg_match('~^https?://(www\.)?twitch\.tv/[a-zA-Z0-9_]{3,}/?$~', $this->getSocial());
     }
 
-    public function getPicture(): ?string
+    public function getPicture()
     {
         return $this->picture;
     }
 
-    public function setPicture(?string $picture): self
+    public function setPicture($picture)
     {
         $this->picture = $picture;
 
         return $this;
+    }
+
+    public function setPictureFile(File $file)
+    {
+        $this->picture_file = $file;
+    }
+
+    public function getPictureFile()
+    {
+        return $this->picture_file;
     }
 }

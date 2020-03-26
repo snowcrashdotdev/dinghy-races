@@ -16,9 +16,10 @@ class UserProfileType extends AbstractType
     {
         $builder
             ->add('social', UrlType::class)
-            ->add('picture', FileType::class, [
+            ->add('picture_file', FileType::class, [
                 'required' => false,
                 'mapped' => false,
+                'label' => 'Picture',
                 'constraints' => [
                     new File([
                         'mimeTypes' => [

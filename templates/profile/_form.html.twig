@@ -1,4 +1,23 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    <div>
+        {{ form_label(form.social) }}
+        {{ form_widget(form.social) }}
+    </div>
+    <div class="positioned">
+    {% if profile.picture %}
+        {{ form_label(form.picture_file)}}
+        <div class="upload-preview" data-file-input="user_profile_picture_file">
+            <img src="{{'/uploads/pfps/' ~ profile.picture}}">
+        </div>
+        {{ form_widget(form.picture_file,{
+            'attr':{
+                'hidden': true
+            }
+        }) }}
+    {% else %}
+        {{ form_label(form.picture) }}
+        {{ form_widget(form.picture) }}
+    {% endif %}
+    </div>
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
