@@ -3,6 +3,10 @@
 {% block title %}{{ tournament.title }} scores for {{ game.description }}{% endblock %}
 
 {% block navigation %}
+    {% set href = path('tournament_show', {
+        'id': tournament.id
+    }) %}
+    <a class="nav-item" href="{{href}}">⏮<span class="nav-item-label">Tournament</a>
     {% if is_granted('ROLE_USER') %}
         {% set href = path('score_new', {
             'game_name': game.name,
