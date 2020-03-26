@@ -11,6 +11,7 @@
     --ratio: 1.61803;
     --padding: calc(0.5em + 0.1vw);
     --margin: calc(1rem * var(--ratio));
+    --margin-large: calc(var(--margin) * var(--ratio));
 
     --size-large: calc(1em * var(--ratio));
     --size-larger: calc(var(--size-large) * var(--ratio));

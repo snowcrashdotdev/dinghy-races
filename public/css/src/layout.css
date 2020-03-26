@@ -6,7 +6,7 @@ body {
 }
 
 header, main {
-    margin-top: var(--margin);
+    margin-top: var(--margin-large);
     padding-top: calc(var(--margin)/2);
     padding-left: 0.4rem;
     padding-right: 0.4rem;
@@ -27,7 +27,8 @@ main {
     top: 0;
     left: 0;
     width: 100vw;
-    height: var(--margin);
+    font-size: var(--margin);
+    height: var(--margin-large);
     margin: 0;
     padding: 0;
     background-color: #000;
@@ -51,7 +52,16 @@ main {
     display: none;
 }
 
-@media (min-width: 30rem) {
+@media (min-width: 35rem) {
+    .main-navigation {
+        font-size: 1em;
+        height: var(--margin);
+    }
+
+    header, main {
+        margin-top: var(--margin);
+    }
+
     .nav-item-label {
         display: initial;
     }
