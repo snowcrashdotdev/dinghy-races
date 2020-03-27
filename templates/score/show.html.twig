@@ -17,12 +17,23 @@
 {% endblock %}
 
 {% block body %}
+    <header>
+        {% set t_href = path('tournament_show', {
+            'id': tournament.id
+        }) %}
+        {% set g_href = path('pb_show', {
+            'game': game.name
+        }) %}
+        <h1><a href="{{t_href}}">{{ tournament.title }}</a><br>
+        scores for <a href="{{g_href}}">{{ game.description }}</a> <small>({{ game.name ~ '.zip' }})</small></h1>
+    </header>
     <main>
-        <h1>{{ tournament.title }} scores for {{ game.description }} (<small>{{ game.name ~ '.zip' }}</small>)</h1>
-        {% if scores %}
+        <section class="gadget-group">
             {% if user_score %}
                 {% include '_gadgets/your.score.html.twig' %}
             {% endif %}
+        </section>
+        {% if scores %}
             {% include '_leaderboards/team.html.twig' %}
             {% include '_leaderboards/individual.html.twig' %}
         {% else %}

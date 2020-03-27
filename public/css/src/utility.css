@@ -111,6 +111,10 @@
     color: var(--color-white);
 }
 
+.color-gray {
+    color: var(--color-gray);
+}
+
 .color-prime {
     color: var(--color-prime);
 }
@@ -121,4 +125,8 @@
 
 .color-three {
     color: var(--color-three);
+}
+
+.bg-black {
+    background-color: #000;
 }

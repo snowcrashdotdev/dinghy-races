@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Team{% endblock %}
+
+{% block body %}
+<main>
+    <h1>Edit Team</h1>
+
+    {{ include('team/_form.html.twig', {'button_label': 'Save'}) }}
+</main>
+<script src="{{asset('/js/tournament-admin.js')}}"></script>
+{% endblock %}

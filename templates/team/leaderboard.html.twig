@@ -1,19 +1,23 @@
-<table class="leaderboard leaderboard-game margin-y">
-    <tr>
-        <th class="row-rank">Rank</th>
-        <th class="align-right row-score">Score</th>
-        <th>Player</th>
-        <th>Completed</th>
-    </tr>
+<table>
+    <thead>
+        <tr>
+            <th class="td-index">Rank</th>
+            <th>Score</th>
+            <th>Player</th>
+            <th>Completed</th>
+        </tr>
+    </thead>
+    <tbody>
     {% for score in scores %}
         {% set href = path('profile_show', {
             'username': score.user
         }) %}
         <tr>
-            <td>{{ loop.index }}</td>
+            <td class="td-index">{{ loop.index }}</td>
             <td class="align-right">{{ score.points|number_format }}</td>
             <td><a href="{{href}}">{{ score.username }}</a></td>
             <td>{{score.completed}} out of {{gameCount}}</td>
         </tr>
     {% endfor %}
+    </tbody>
 </table>

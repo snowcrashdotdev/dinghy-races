@@ -1,10 +1,14 @@
 <article class="summary game-summary">
     {% if game.marquee %}
         {% import '_macros/img.responsive.html.twig' as m_img %}
-        {% set path = asset('/uploads/marquees/') %}
-        {% set sizes = '(min-width: 600px) 800px' %}
+        {% set img_config = {
+            'path': asset('/uploads/marquees/'),
+            'file': game.marquee,
+            'sizes': '(min-width: 74.75rem) 33vw, (min-width: 37.5rem) 50vw, 100vw',
+            'classNames': 'marquee'
+        } %}
 
-        {{ m_img.responsive( path, game.marquee, sizes, 'marquee' ) }}
+        {{ m_img.responsive(img_config) }}
     {% endif %}
 
     {% set href = path('score_show', {
@@ -12,7 +16,7 @@
         'tournament_id': tournament.id
     }) %}
     <a class="summary-details" href="{{href}}">
-        <h3 class="roboto outlined">{{game.description}}
+        <h3 class="outlined">{{game.description}}
             <br><small>{{game.manufacturer}}, {{game.year}}</small>
         </h3>
         {% if not tournament.isUpcoming %}

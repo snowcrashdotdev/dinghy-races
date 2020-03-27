@@ -3,8 +3,13 @@
 {% block title %}Permanent Leaderboards{% endblock %}
 
 {% block body %}
+    <header>
+        <h1>High Scores for {{website.name}} Games, Past &amp; Present</a>
+    </header>
+    <main>
     {% for game in games %}
         {% set href = path('pb_show', {game: game}) %}
         <p><a href="{{href}}">{{game}}</a></p>
     {% endfor %}
+    </main>
 {% endblock %}

@@ -5,7 +5,7 @@
         <div class="nav-item has-sub-items">
             <a href="#">➕<span class="nav-item-label">New</span></a>
             <div class="sub-navigation">
-                {% set href = path('pb_new') %}
+                {% set href = path('pb_index') %}
                 <a class="nav-item" href="{{href}}">Personal Best</a>
 
                 {% if is_granted('ROLE_TO') %}

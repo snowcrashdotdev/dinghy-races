@@ -6,7 +6,7 @@
 <header>
     <h1>{{team.name}}</h1>
 
-    <h2><a class="tournament-title" href="{{path('tournament_show', {'id': team.tournament.id})}}">{{ team.tournament.title }}</a></h2>
+    <h2 class="text-small">as seen in <a class="tournament-title" href="{{path('tournament_show', {'id': team.tournament.id})}}">{{ team.tournament.title }}</a></h2>
 </header>
 
 <main>
@@ -27,6 +27,6 @@
 {% block navigation %}
     {{ parent() }}
     {% if is_granted("ROLE_TO") %}
-        <a href="{{path('team_edit', {'id':team.id})}}">Edit</a>
+        <a class="nav-item" href="{{path('team_edit', {'id':team.id})}}">Edit</a>
     {% endif %}
 {% endblock %}

@@ -121,11 +121,18 @@ main {
     }
 }
 
+.tournament-summary {
+    margin-bottom: var(--margin);
+}
+
 /*
 *   Tables
 */
-table {
+table, tbody, thead {
     display: block;
+}
+
+table {
     border-collapse: collapse;
     margin-bottom: var(--margin);
 }
@@ -197,6 +204,11 @@ td {
 @media (min-width: 52rem) {
     table {
         display: table;
+    }
+
+    thead,
+    tbody {
+        display: table-row-group;
     }
 
     thead {

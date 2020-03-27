@@ -3,7 +3,10 @@
 {% block title %}Permanent Leaderboard for {{game.description}}{% endblock %}
 
 {% block body %}
-    <h1>Permanent Leaderboard for {{game.description}}</h1>
+    <header>
+        <h1>Permanent Leaderboard for {{game.description}}</h1>
+    </header>
+    <main>
     {% if game.personalBests|length > 0 %}
         {% set scores = game.personalBests %}
         {% set permanent_board = true %}
@@ -11,4 +14,12 @@
     {% else %}
         <p>No scores have been posted for this game</p>
     {% endif %}
+    </main>
+{% endblock %}
+
+{% block navigation %}
+    {% set href = path('pb_new', {
+        'game': game.name
+    }) %}
+    <a class="nav-item" href="{{href}}">✏️<span class="nav-item-label">Your PB</span></a>
 {% endblock %}

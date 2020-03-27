@@ -1,7 +1,11 @@
-<article>
-    <h3><a href="{{ path( 'tournament_show', {'id': tournament.id} ) }}">{{ tournament.title|title }}</a></h3>
+<article class="summary tournament-summary">
+    <h3 class="text-large">
+        <a href="{{ path( 'tournament_show', {'id': tournament.id} ) }}">{{ tournament.title|title }}</a>
 
-    <time>{{ tournament.startDate|date('F jS, Y @ g:ia') }} &mdash; {{tournament.endDate|date_modify('-1 minute')|date('F jS, Y @ g:ia')}}</time>
+        <br>
+
+        <time class="text-small">from {{ tournament.startDate|date('F jS, Y @ g:ia') }} until {{tournament.endDate|date_modify('-1 minute')|date('F jS, Y @ g:ia')}}</time>
+    </h3>
     
     <div>{{ tournament.description|raw }}</div>
 </article>
