@@ -1,10 +1,5 @@
-{{
-    form_start(form,{
-        'attr': {
-            'class': 'margin-y bg-white padding rounded text-align-center'
-        }
-    })
-}}
+{{ form_start(form) }}
     {{ form_widget(form) }}
     <button class="margin-y">{{ button_label|default('Sign up') }}</button>
+    <p>Already registered? <a href="{{path('app_login')}}">Sign in</a></p>
 {{ form_end(form) }}

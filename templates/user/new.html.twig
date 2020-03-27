@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New User{% endblock %}
+{% block title %}Sign Up{% endblock %}
 
 {% block body %}
-    <main class="flex-column align-items-center">
-        <h1 class="text-align-center">Sign Up</h1>
-
+    <header>
+        <h1 class="text-center">Register an account on {{website.name}}</h1>
+    </header>
+    <main class="content-true-center">
         {{ include('user/_form.html.twig') }}
-        <p>Already registered?<a href="{{path('app_login')}}" class="margin-left">Sign in</a></p>
     </main>
 {% endblock %}

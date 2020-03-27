@@ -19,13 +19,13 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'label' => false,
+                'label' => 'Username',
                 'attr'=> [
                     'placeholder'=>'Username'
                 ]
             ])
             ->add('email', EmailType::class, [
-                'label' => false,
+                'label' => 'Email',
                 'attr' => [
                     'placeholder' => 'Email address'
                 ]
@@ -45,11 +45,11 @@ class UserType extends AbstractType
                 'invalid_message' => 'Passwords must match',
                 'first_options' => [
                     'attr'=> ['placeholder'=>'Password'],
-                    'label' => false,
+                    'label' => 'Password',
                 ],
                 'second_options' => [
-                    'attr'=>['placeholder'=>'Repeat password'],
-                    'label' => false,
+                    'attr'=>['placeholder'=>'Repeat Password'],
+                    'label' => 'Repeat Password',
                 ]
             ]);
     }
