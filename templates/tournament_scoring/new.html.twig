@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New TournamentScoring{% endblock %}
+
+{% block body %}
+    <h1>Create new TournamentScoring</h1>
+
+    {{ include('tournament_scoring/_form.html.twig') }}
+
+    <a href="{{ path('tournament_scoring_index') }}">back to list</a>
+{% endblock %}

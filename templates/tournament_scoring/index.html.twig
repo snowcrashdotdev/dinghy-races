@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TournamentScoring index{% endblock %}
+
+{% block body %}
+    <h1>TournamentScoring index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Points_table</th>
+                <th>Cutoff_date</th>
+                <th>Cutoff_line</th>
+                <th>Cutoff_score</th>
+                <th>Noshow_score</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tournament_scoring in tournament_scorings %}
+            <tr>
+                <td>{{ tournament_scoring.id }}</td>
+                <td>{{ tournament_scoring.pointsTable ? tournament_scoring.pointsTable|join(', ') : '' }}</td>
+                <td>{{ tournament_scoring.cutoffDate ? tournament_scoring.cutoffDate|date('Y-m-d') : '' }}</td>
+                <td>{{ tournament_scoring.cutoffLine }}</td>
+                <td>{{ tournament_scoring.cutoffScore }}</td>
+                <td>{{ tournament_scoring.noshowScore }}</td>
+                <td>
+                    <a href="{{ path('tournament_scoring_show', {'id': tournament_scoring.id}) }}">show</a>
+                    <a href="{{ path('tournament_scoring_edit', {'id': tournament_scoring.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('tournament_scoring_new') }}">Create new</a>
+{% endblock %}

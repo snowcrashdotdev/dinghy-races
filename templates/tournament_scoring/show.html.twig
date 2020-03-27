@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TournamentScoring{% endblock %}
+
+{% block body %}
+    <h1>TournamentScoring</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ tournament_scoring.id }}</td>
+            </tr>
+            <tr>
+                <th>Points_table</th>
+                <td>{{ tournament_scoring.pointsTable ? tournament_scoring.pointsTable|join(', ') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Cutoff_date</th>
+                <td>{{ tournament_scoring.cutoffDate ? tournament_scoring.cutoffDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Cutoff_line</th>
+                <td>{{ tournament_scoring.cutoffLine }}</td>
+            </tr>
+            <tr>
+                <th>Cutoff_score</th>
+                <td>{{ tournament_scoring.cutoffScore }}</td>
+            </tr>
+            <tr>
+                <th>Noshow_score</th>
+                <td>{{ tournament_scoring.noshowScore }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('tournament_scoring_index') }}">back to list</a>
+
+    <a href="{{ path('tournament_scoring_edit', {'id': tournament_scoring.id}) }}">edit</a>
+
+    {{ include('tournament_scoring/_delete_form.html.twig') }}
+{% endblock %}
