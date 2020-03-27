@@ -7,8 +7,8 @@
         <h1>Permanent Leaderboard for {{game.description}}</h1>
     </header>
     <main>
-    {% if game.personalBests|length > 0 %}
-        {% set scores = game.personalBests %}
+    {% if personal_bests|length > 0 %}
+        {% set scores = personal_bests %}
         {% set permanent_board = true %}
         {% include '_leaderboards/individual.html.twig' %}
     {% else %}
