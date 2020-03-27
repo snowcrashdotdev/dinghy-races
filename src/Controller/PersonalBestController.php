@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\PersonalBest;
+use App\Entity\Game;
 use App\Form\PersonalBestType;
 use App\Repository\PersonalBestRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * @Route("/permanent-boards")
@@ -33,21 +35,18 @@ class PersonalBestController extends AbstractController
 
     /**
      * @Route("/{game}", name="pb_show", methods={"GET"})
+     * @ParamConverter("game", options={"mapping": {"game": "name"}})
      */
-    public function show(String $game): Response
+    public function show(Game $game): Response
     {
-        $game = $this->getDoctrine()
-            ->getRepository('App\Entity\Game')
-            ->findOneBy(['name' => $game
-        ]);
-
         return $this->render('personal_best/show.html.twig', [
             'game' => $game,
         ]);
     }
 
     /**
-     * @Route("/new", name="pb_new", methods={"GET","POST"})
+     * @Route("/{game}/new", name="pb_new", methods={"GET","POST"})
+     * @ParamConverter("game", options={"mapping": {"game": "name"}})
      * @Security("is_granted('ROLE_USER')")
      */
     public function new(Request $request, String $game, PersonalBestRepository $personalBestRepository): Response
