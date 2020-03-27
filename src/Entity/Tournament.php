@@ -92,6 +92,11 @@ class Tournament
      */
     private $noshow_score;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\TournamentScoring", inversedBy="tournament", cascade={"persist", "remove"})
+     */
+    private $scoring;
+
     public function __toString(): ?string
     {
         return $this->getTitle();
@@ -583,6 +588,24 @@ class Tournament
     public function setNoshowScore(?int $noshow_score): self
     {
         $this->noshow_score = $noshow_score;
+
+        return $this;
+    }
+
+    public function getScoring(): ?TournamentScoring
+    {
+        return $this->scoring;
+    }
+
+    public function setScoring(?TournamentScoring $scoring): self
+    {
+        $this->scoring = $scoring;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newTournament = null === $scoring ? null : $this;
+        if ($scoring->getTournament() !== $newTournament) {
+            $scoring->setTournament($newTournament);
+        }
 
         return $this;
     }
