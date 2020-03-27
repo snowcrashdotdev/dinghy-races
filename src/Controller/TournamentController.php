@@ -81,35 +81,10 @@ class TournamentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/{format?}", name="tournament_show", methods={"GET"})
+     * @Route("/{id}", name="tournament_show", methods={"GET"})
      */
     public function show(Tournament $tournament, TwitchChecker $twitchChecker, ?String $format): Response
     {
-        if ($format !== null) {
-            $scores = $this->getDoctrine()
-                ->getRepository('App\Entity\Score')
-                ->findByTournamentPublic($tournament)
-            ;
-
-            if ($format === '.json') {
-                return $this->json([
-                    'data' => $scores
-                ]);
-            } elseif ($format === '.csv') {
-                $csv = $this->get('serializer')->encode($scores, 'csv');
-                $response = new Response($csv);
-                $disposition = HeaderUtils::makeDisposition(
-                    HeaderUtils::DISPOSITION_ATTACHMENT,
-                    'scores.csv'
-                );
-                $response->headers->set('Content-Type', 'text/csv');
-                $response->headers->set('Content-Disposition', $disposition);
-
-                return $response;
-            } else {
-                throw $this->createNotFoundException('Unknown format requested.');
-            }
-        }
 
         $leadingTeams = false;
         $leadingPlayers = false;
@@ -249,7 +224,7 @@ class TournamentController extends AbstractController
     /**
      * @Route("/{tournament}/leaderboards/individual", name="leaderboard_individual", methods={"GET"})
      */
-    public function individual_leaderboard(Request $request, Tournament $tournament)
+    public function individual_leaderboard(Tournament $tournament)
     {
         if ($currentUser = $this->getUser()) {
             $user = $currentUser->getId();
@@ -281,5 +256,41 @@ class TournamentController extends AbstractController
         }
 
         return $this->redirectToRoute('tournament_index');
+    }
+
+    /**
+     * @Route("/{id}/.json", name="tournament_json", methods={"GET"})
+     */
+    public function show_json(Tournament $tournament)
+    {
+        $scores = $this->getDoctrine()
+            ->getRepository('App\Entity\Score')
+            ->findByTournamentPublic($tournament)
+        ;
+
+        return $this->json([
+            'data' => $scores
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/.csv", name="tournament_csv", methods={"GET"})
+     */
+    public function show_csv(Tournament $tournament)
+    {
+        $scores = $this->getDoctrine()
+            ->getRepository('App\Entity\Score')
+            ->findByTournamentPublic($tournament)
+        ;
+        $csv = $this->get('serializer')->encode($scores, 'csv');
+                $response = new Response($csv);
+                $disposition = HeaderUtils::makeDisposition(
+                    HeaderUtils::DISPOSITION_ATTACHMENT,
+                    $tournament->getTitle() . '-scores.csv'
+                );
+                $response->headers->set('Content-Type', 'text/csv');
+                $response->headers->set('Content-Disposition', $disposition);
+
+                return $response;
     }
 }
