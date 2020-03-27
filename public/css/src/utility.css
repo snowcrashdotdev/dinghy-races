@@ -74,7 +74,7 @@
 }
 
 .highlighted {
-    background-color: hsla(var(--hsl-two), 0.3) !important;
+    background-color: hsla(var(--hsl-two), 0.1) !important;
     border-color: var(--color-two) !important;
 }
 
