@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Team;
 use App\Form\TeamType;
-use App\Repository\TeamRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +17,7 @@ class TeamController extends AbstractController
 {
     /**
      * @Route("/new", name="team_new", methods={"GET","POST"})
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_TO")
      */
     public function new(Request $request): Response
     {
@@ -58,7 +57,7 @@ class TeamController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="team_edit", methods={"GET","POST"})
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_TO")
      */
     public function edit(Request $request, Team $team): Response
     {
@@ -79,7 +78,7 @@ class TeamController extends AbstractController
 
     /**
      * @Route("/{id}", name="team_delete", methods={"DELETE"})
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_TO")
      */
     public function delete(Request $request, Team $team): Response
     {
@@ -90,36 +89,5 @@ class TeamController extends AbstractController
         }
 
         return $this->redirectToRoute('team_index');
-    }
-
-    /**
-     * @Route("/promote/{team}/{username}", name="team_promotion", defaults={"username"=""},methods={"POST"})
-     */
-    public function promote(Request $request, Team $team, string $username)
-    {
-        $user = $this->getDoctrine()->getRepository('App\Entity\User')
-            ->findOneBy(['username' => $username]);
-        
-        if (!$user) {
-            return $this->json([
-                'success' => false
-            ]);
-        }
-
-        $em = $this->getDoctrine()->getEntityManager();
-        $demote = $request->query->get('demote');
-
-        if ($demote) {
-            $team->removeCaptain($user->getId());
-        } elseif (!$demote) {
-            $team->addCaptain($user->getId());
-        }
-
-        $em->persist($team);
-        $em->flush();
-        return $this->json([
-            'success' => true,
-            'data' => ['captains' => $team->getCaptains()]
-        ]);
     }
 }
