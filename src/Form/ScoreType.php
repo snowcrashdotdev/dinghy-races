@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class ScoreType extends AbstractType
 {
@@ -34,7 +34,7 @@ class ScoreType extends AbstractType
                 'label' => 'Video URL',
                 'label_attr' => ['class'=>'score-label']
             ])
-            ->add('screenshot', FileType::class, [
+            ->add('screenshot_file', FileType::class, [
                 'required' => false,
                 'mapped' => false,
                 'attr' => [
@@ -42,15 +42,7 @@ class ScoreType extends AbstractType
                     'class' => 'score-input'
                 ],
                 'label' => 'Screenshot',
-                'label_attr' => ['class'=>'score-label'],
-                'constraints' => [
-                    new File([
-                        'mimeTypes' => [
-                            'image/*'
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid image file.'
-                    ])
-                ]
+                'label_attr' => ['class'=>'score-label']
             ])
             ->add('comment', TextType::class, [
                 'required' => false,
@@ -60,6 +52,9 @@ class ScoreType extends AbstractType
                 ],
                 'label' => 'Comment',
                 'label_attr' => ['class'=>'score-label']
+            ])
+            ->add('remove_screenshot', HiddenType::class, [
+                'mapped' => false
             ])
         ;
     }

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\PersonalBest;
 use App\Entity\Game;
-use App\Form\PersonalBestType;
+use App\Form\ScoreType;
 use App\Repository\PersonalBestRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,9 +37,14 @@ class PersonalBestController extends AbstractController
      * @Route("/{game}", name="pb_show", methods={"GET"})
      * @ParamConverter("game", options={"mapping": {"game": "name"}})
      */
-    public function show(Game $game): Response
+    public function show(Game $game, PersonalBestRepository $pbRepo): Response
     {
+        $personalBests = $pbRepo->findBy([
+            'game' => $game
+        ]);
+
         return $this->render('personal_best/show.html.twig', [
+            'personal_bests' => $personalBests,
             'game' => $game,
         ]);
     }
@@ -69,7 +74,7 @@ class PersonalBestController extends AbstractController
             $this->getDoctrine()->getManager()->persist($personalBest);
         }
 
-        $form = $this->createForm(PersonalBestType::class, $personalBest);
+        $form = $this->createForm(ScoreType::class, $personalBest);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

@@ -83,7 +83,7 @@ class TournamentController extends AbstractController
     /**
      * @Route("/{id}", name="tournament_show", methods={"GET"})
      */
-    public function show(Tournament $tournament, TwitchChecker $twitchChecker, ?String $format): Response
+    public function show(Tournament $tournament, TwitchChecker $twitchChecker): Response
     {
 
         $leadingTeams = false;
@@ -92,7 +92,7 @@ class TournamentController extends AbstractController
         $liveStreams = false;
 
         if ($tournament->isInProgress()) {
-            $scoreRepo = $this->getDoctrine()->getRepository('App\Entity\Score');
+            $scoreRepo = $this->getDoctrine()->getRepository('App\Entity\TournamentScore');
             $leadingTeams = $scoreRepo->findTeamScores($tournament, null, 1);
             $leadingPlayers = $scoreRepo->findIndividualScores($tournament, 1);
             $recentScores = $scoreRepo->findRecentScores($tournament, 5);
@@ -212,7 +212,7 @@ class TournamentController extends AbstractController
     public function team_leaderboard(Request $request, Tournament $tournament)
     {
         $teamScores = $this->getDoctrine()
-            ->getRepository('App\Entity\Score')
+            ->getRepository('App\Entity\TournamentScore')
             ->findTeamScores($tournament);
 
         return $this->render('tournament/leaderboard.team.html.twig', [
@@ -233,7 +233,7 @@ class TournamentController extends AbstractController
         }
 
         $scores = $this->getDoctrine()
-            ->getRepository('App\Entity\Score')
+            ->getRepository('App\Entity\TournamentScore')
             ->findIndividualScores($tournament);
 
         return $this->render('tournament/leaderboard.individual.html.twig', [
@@ -264,7 +264,7 @@ class TournamentController extends AbstractController
     public function show_json(Tournament $tournament)
     {
         $scores = $this->getDoctrine()
-            ->getRepository('App\Entity\Score')
+            ->getRepository('App\Entity\TournamentScore')
             ->findByTournamentPublic($tournament)
         ;
 
@@ -279,7 +279,7 @@ class TournamentController extends AbstractController
     public function show_csv(Tournament $tournament)
     {
         $scores = $this->getDoctrine()
-            ->getRepository('App\Entity\Score')
+            ->getRepository('App\Entity\TournamentScore')
             ->findByTournamentPublic($tournament)
         ;
         $csv = $this->get('serializer')->encode($scores, 'csv');

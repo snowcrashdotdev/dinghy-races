@@ -25,7 +25,7 @@ class ScoreKeeper
 
     public function scoreGame(Game $game)
     {
-        $scores = $this->em->getRepository('App\Entity\Score')
+        $scores = $this->em->getRepository('App\Entity\TournamentScore')
             ->findSubmittedTournamentScores($this->tournament, $game)
         ;
         $teams = $this->tournament->getTeams();
@@ -64,7 +64,7 @@ class ScoreKeeper
             }
             $this->em->flush();
 
-            $team_points = $this->em->getRepository('App\Entity\Score')
+            $team_points = $this->em->getRepository('App\Entity\TournamentScore')
                 ->findTotalTeamPoints($team);
 
             $team->setPoints($team_points);

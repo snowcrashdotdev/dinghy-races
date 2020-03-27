@@ -17,7 +17,7 @@ class TournamentScoring
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Tournament", mappedBy="scoring", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Tournament", inversedBy="scoring", cascade={"persist", "remove"})
      */
     private $tournament;
 

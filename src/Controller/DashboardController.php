@@ -51,7 +51,7 @@ class DashboardController extends AbstractController
 
         foreach ($games as $game) {
             $scores = $this->getDoctrine()
-                ->getRepository('App\Entity\Score')
+                ->getRepository('App\Entity\TournamentScore')
                 ->findBy([
                     'game' => $game,
                     'auto_assigned' => false,

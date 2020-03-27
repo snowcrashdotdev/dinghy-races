@@ -57,10 +57,6 @@ services:
             -
                 name: 'doctrine.orm.entity_listener'
                 event: 'preUpdate'
-                entity: 'App\Entity\PersonalBest'
-            -
-                name: 'doctrine.orm.entity_listener'
-                event: 'preUpdate'
                 entity: 'App\Entity\Score'
             -
                 name: 'doctrine.orm.entity_listener'

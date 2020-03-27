@@ -24,11 +24,6 @@ class Draft
     private $tournament;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User")
-     */
-    private $entries;
-
-    /**
      * @ORM\Column(type="guid", nullable=true)
      */
     private $invite_token;
@@ -41,7 +36,6 @@ class Draft
 
     public function __construct()
     {
-        $this->entries = new ArrayCollection();
         $this->draftEntries = new ArrayCollection();
     }
 
@@ -58,32 +52,6 @@ class Draft
     public function setTournament(?Tournament $tournament): self
     {
         $this->tournament = $tournament;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|User[]
-     */
-    public function getEntries(): Collection
-    {
-        return $this->entries;
-    }
-
-    public function addEntry(User $entry): self
-    {
-        if (!$this->entries->contains($entry)) {
-            $this->entries[] = $entry;
-        }
-
-        return $this;
-    }
-
-    public function removeEntry(User $entry): self
-    {
-        if ($this->entries->contains($entry)) {
-            $this->entries->removeElement($entry);
-        }
 
         return $this;
     }

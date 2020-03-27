@@ -29,11 +29,6 @@ class Game
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Score", mappedBy="game", orphanRemoval=true)
-     */
-    private $scores;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Tournament", mappedBy="games")
      */
     private $tournaments;
@@ -49,23 +44,27 @@ class Game
     private $manufacturer;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PersonalBest", mappedBy="game")
-     * @ORM\OrderBy({"points" = "DESC"})
-     */
-    private $personalBests;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $marquee;
 
     protected $marquee_file;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="game")
+     */
+    private $tournament_scores;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PersonalBest", mappedBy="game")
+     */
+    private $personal_bests;
+
     public function __construct()
     {
-        $this->scores = new ArrayCollection();
         $this->tournaments = new ArrayCollection();
-        $this->personalBests = new ArrayCollection();
+        $this->tournament_scores = new ArrayCollection();
+        $this->personal_bests = new ArrayCollection();
     }
 
     public function __toString()
@@ -98,37 +97,6 @@ class Game
     public function setDescription(?string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Score[]
-     */
-    public function getScores(): Collection
-    {
-        return $this->scores;
-    }
-
-    public function addScore(Score $score): self
-    {
-        if (!$this->scores->contains($score)) {
-            $this->scores[] = $score;
-            $score->setGame($this);
-        }
-
-        return $this;
-    }
-
-    public function removeScore(Score $score): self
-    {
-        if ($this->scores->contains($score)) {
-            $this->scores->removeElement($score);
-            // set the owning side to null (unless already changed)
-            if ($score->getGame() === $this) {
-                $score->setGame(null);
-            }
-        }
 
         return $this;
     }
@@ -185,37 +153,6 @@ class Game
         return $this;
     }
 
-    /**
-     * @return Collection|PersonalBest[]
-     */
-    public function getPersonalBests(): Collection
-    {
-        return $this->personalBests;
-    }
-
-    public function addPersonalBest(PersonalBest $personalBest): self
-    {
-        if (!$this->personalBests->contains($personalBest)) {
-            $this->personalBests[] = $personalBest;
-            $personalBest->setGame($this);
-        }
-
-        return $this;
-    }
-
-    public function removePersonalBest(PersonalBest $personalBest): self
-    {
-        if ($this->personalBests->contains($personalBest)) {
-            $this->personalBests->removeElement($personalBest);
-            // set the owning side to null (unless already changed)
-            if ($personalBest->getGame() === $this) {
-                $personalBest->setGame(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getMarquee(): ?string
     {
         return $this->marquee;
@@ -236,6 +173,68 @@ class Game
     public function setMarqueeFile($file)
     {
         $this->marquee_file = $file;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TournamentScore[]
+     */
+    public function getTournamentScores(): Collection
+    {
+        return $this->tournament_scores;
+    }
+
+    public function addTournamentScore(TournamentScore $tournamentScore): self
+    {
+        if (!$this->tournament_scores->contains($tournamentScore)) {
+            $this->tournament_scores[] = $tournamentScore;
+            $tournamentScore->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTournamentScore(TournamentScore $tournamentScore): self
+    {
+        if ($this->tournament_scores->contains($tournamentScore)) {
+            $this->tournament_scores->removeElement($tournamentScore);
+            // set the owning side to null (unless already changed)
+            if ($tournamentScore->getGame() === $this) {
+                $tournamentScore->setGame(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PersonalBest[]
+     */
+    public function getPersonalBests(): Collection
+    {
+        return $this->personal_bests;
+    }
+
+    public function addPersonalBest(PersonalBest $personalBest): self
+    {
+        if (!$this->personal_bests->contains($personalBest)) {
+            $this->personal_bests[] = $personalBest;
+            $personalBest->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removePersonalBest(PersonalBest $personalBest): self
+    {
+        if ($this->personal_bests->contains($personalBest)) {
+            $this->personal_bests->removeElement($personalBest);
+            // set the owning side to null (unless already changed)
+            if ($personalBest->getGame() === $this) {
+                $personalBest->setGame(null);
+            }
+        }
 
         return $this;
     }

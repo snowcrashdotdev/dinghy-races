@@ -34,7 +34,7 @@ class GameRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('g')
             ->select('g')
-            ->join('g.scores', 's')
+            ->join('g.tournament_scores', 's')
             ->orderBy('g.name', 'ASC')
             ->getQuery()
             ->getResult()

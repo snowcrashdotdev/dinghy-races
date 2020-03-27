@@ -11,24 +11,24 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
-use App\Entity\Score;
+use App\Entity\TournamentScore;
 use App\Entity\Game;
 use App\Entity\Tournament;
 use App\Form\ScoreType;
-use App\Repository\ScoreRepository;
+use App\Repository\TournamentScoreRepository;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 /**
  * @Route("/scores")
  */
-class ScoreController extends AbstractController
+class TournamentScoreController extends AbstractController
 {
     /**
      * @Route("/{game_name}/{tournament_id}/new", name="score_new", methods={"GET","POST"})
      * @Entity("tournament", expr="repository.find(tournament_id)")
      * @ParamConverter("game", options={"mapping": {"game_name": "name"}})
      */
-    public function new(Request $request, ScoreRepository $scoreRepo, Game $game, Tournament $tournament): Response
+    public function new(Request $request, TournamentScoreRepository $scoreRepo, Game $game, Tournament $tournament): Response
     {
         $user = $this->getUser();
 
@@ -43,7 +43,7 @@ class ScoreController extends AbstractController
         ]);
 
         if (empty($score)) {
-            $score = new Score();
+            $score = new TournamentScore();
             $score->setUser($user);
             $score->setGame($game);
             $score->setTournament($tournament);
@@ -55,27 +55,24 @@ class ScoreController extends AbstractController
         $upload_dir = $this->getParameter('screenshot_dir');
 
         try {
-            $score->setScreenshot(
+            $score->setScreenshotFile(
                 new File($upload_dir . '/' . $score->getScreenshot())
             );
         } catch (FileException $e) {
-            $score->setScreenshot(null);
+            $score->setScreenshotFile(null);
         }
 
         $form = $this->createForm(ScoreType::class, $score);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $old_screenshot = $score->getScreenshot();
-            $new_screenshot_file = $form['screenshot']->getData();
+            $screenshot_file = $form->get('screenshot_file')->getData();
 
-            if ($new_screenshot_file) {
+            if ($screenshot_file) {
                 $uploader = new ImageUploader($upload_dir);
                 $score->setScreenshot(
-                    $uploader->upload($new_screenshot_file)
+                    $uploader->upload($screenshot_file)
                 );
-            } elseif (method_exists($old_screenshot, 'getFilename')) {
-                $score->setScreenshot($old_screenshot->getFilename());
             }
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -100,7 +97,7 @@ class ScoreController extends AbstractController
      * @Entity("tournament", expr="repository.find(tournament_id)")
      * @ParamConverter("game", options={"mapping": {"game_name": "name"}})
      */
-    public function show(Tournament $tournament, Game $game, ScoreRepository $repo)
+    public function show(Tournament $tournament, Game $game, TournamentScoreRepository $repo)
     {
         $scores = $repo->findBy([
             'game' => $game,

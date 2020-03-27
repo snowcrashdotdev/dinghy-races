@@ -82,12 +82,12 @@ class Profile
         return 1 === preg_match('~^https?://(www\.)?twitch\.tv/[a-zA-Z0-9_]{3,}/?$~', $this->getSocial());
     }
 
-    public function getPicture()
+    public function getPicture(): ?string
     {
         return $this->picture;
     }
 
-    public function setPicture($picture)
+    public function setPicture(?string $picture)
     {
         $this->picture = $picture;
 

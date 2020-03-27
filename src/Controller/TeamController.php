@@ -44,7 +44,7 @@ class TeamController extends AbstractController
      */
     public function show(Team $team): Response
     {
-        $scoreRepo = $this->getDoctrine()->getRepository('App\Entity\Score');
+        $scoreRepo = $this->getDoctrine()->getRepository('App\Entity\TournamentScore');
         $leaderboard = $scoreRepo->findTeamLeaderboard($team);
         $points_per_game = $scoreRepo->findTeamScoresPerGame($team);
 

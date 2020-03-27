@@ -5,8 +5,8 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TournamentRepository")
  *
@@ -31,17 +31,6 @@ class Tournament
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Game", inversedBy="tournaments", fetch="EAGER")
-     */
-    private $games;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Score", mappedBy="tournament", orphanRemoval=true)
-     * @ORM\OrderBy({"ranked_points" = "DESC", "updated_at" = "ASC"})
-     */
-    private $scores;
-
-    /**
      * @ORM\Column(type="date")
      */
     private $start_date;
@@ -50,6 +39,11 @@ class Tournament
      * @ORM\Column(type="date")
      */
     private $end_date;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Game", inversedBy="tournaments")
+     */
+    private $games;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Team", mappedBy="tournament", orphanRemoval=true, cascade={"persist","remove"})
@@ -68,34 +62,14 @@ class Tournament
     private $draft;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $scoring_table = [];
-
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $cutoff_date;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $cutoff_line;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $cutoff_score;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $noshow_score;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\TournamentScoring", inversedBy="tournament", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\TournamentScoring", mappedBy="tournament", cascade={"persist", "remove"})
      */
     private $scoring;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="tournament")
+     */
+    private $scores;
 
     public function __toString(): ?string
     {
@@ -105,9 +79,14 @@ class Tournament
     public function __construct()
     {
         $this->games = new ArrayCollection();
-        $this->scores = new ArrayCollection();
         $this->teams = new ArrayCollection();
         $this->users = new ArrayCollection();
+
+        $this->draft = new Draft();
+        $this->draft->setTournament($this);
+        $this->scoring = new TournamentScoring();
+        $this->scoring->setTournament($this);
+        $this->scores = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,6 +118,43 @@ class Tournament
         return $this;
     }
 
+    public function getStartDate(): ?\DateTimeInterface
+    {
+        return $this->start_date;
+    }
+
+    public function setStartDate(\DateTimeInterface $start_date): self
+    {
+        $this->start_date = $start_date;
+
+        return $this;
+    }
+
+    public function getEndDate(): ?\DateTimeInterface
+    {
+        return $this->end_date;
+    }
+
+    public function setEndDate(\DateTimeInterface $end_date): self
+    {
+        $this->end_date = $end_date;
+
+        return $this;
+    }
+
+    public function isUpcoming()
+    {
+        return ($this->getStartDate() > date_create('NOW'));
+    }
+
+    public function isInProgress() {
+        $now = new \DateTime('now');
+        return (
+            $this->getStartDate() < $now and
+            $this->getEndDate() > $now
+        );
+    }
+
     /**
      * @return Collection|Game[]
      */
@@ -161,61 +177,6 @@ class Tournament
         if ($this->games->contains($game)) {
             $this->games->removeElement($game);
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Score[]
-     */
-    public function getScores(): Collection
-    {
-        return $this->scores;
-    }
-
-    public function addScore(Score $score): self
-    {
-        if (!$this->scores->contains($score)) {
-            $this->scores[] = $score;
-            $score->setTournament($this);
-        }
-
-        return $this;
-    }
-
-    public function removeScore(Score $score): self
-    {
-        if ($this->scores->contains($score)) {
-            $this->scores->removeElement($score);
-            // set the owning side to null (unless already changed)
-            if ($score->getTournament() === $this) {
-                $score->setTournament(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getStartDate(): ?\DateTimeInterface
-    {
-        return $this->start_date;
-    }
-
-    public function setStartDate(\DateTimeInterface $start_date): self
-    {
-        $this->start_date = $start_date;
-
-        return $this;
-    }
-
-    public function getEndDate(): ?\DateTimeInterface
-    {
-        return $this->end_date;
-    }
-
-    public function setEndDate(\DateTimeInterface $end_date): self
-    {
-        $this->end_date = $end_date;
 
         return $this;
     }
@@ -251,68 +212,6 @@ class Tournament
         return $this;
     }
 
-    public function getTeamByUser(User $user)
-    {
-        $teams = $this->getTeams()->toArray();
-
-        foreach($teams as $team) {
-            if ($team->getMembers()->contains($user)) {
-                return $team;
-            }
-        }
-    }
-
-    public function getScoresByUser(User $user)
-    {
-        $criteria = Criteria::create()
-            ->andWhere(Criteria::expr()->eq('user', $user));
-        return $this->getScores()->matching($criteria);
-    }
-
-    public function getPoints(int $rank)
-    {
-        if (null === $scoringTable = $this->getScoringTable()) {
-            return 0;
-        } else {
-            $place = $rank + 1;
-            return $scoringTable[$place];
-        }
-    }
-
-    public function getHighscore(Game $game)
-    {
-        $exp = new Comparison('game', '=', $game);
-        $criteria = new Criteria();
-        $criteria->andWhere($exp)->orderBy(['points' => Criteria::DESC])->setMaxResults(1);
-        
-        return $this->getScores()->matching($criteria)->first();
-    }
-
-    public function getWinningTeam()
-    {
-        $totals = [];
-        foreach($this->getScores() as $score) {
-            $points = $this->getPoints($this->getScoreRank($score));
-            $name = $score->getTeam()->getName();
-            if (isset($totals[$name])) {
-                $totals[$name] += $points;
-            } else {
-                $totals[$name] = $points;
-            }
-        }
-        if (arsort($totals)) {
-            return [key($totals) => reset($totals)];
-        }
-    }
-
-    public function getScoreRank(Score $score) {
-        $criteria = Criteria::create()
-            ->andWhere(Criteria::expr()->eq('game', $score->getGame()))
-            ->orderBy(['points' => Criteria::DESC]);
-
-        return $this->getScores()->matching($criteria)->indexOf($score);
-    }
-
     /**
      * @return Collection|User[]
      */
@@ -345,133 +244,6 @@ class Tournament
         return ! $this->getScores()->isEmpty();
     }
 
-    public function isInProgress() {
-        $now = new \DateTime('now');
-        return (
-            $this->getStartDate() < $now and
-            $this->getEndDate() > $now
-        );
-    }
-
-    public function getIndividualScores() {
-        $result = array();
-
-        foreach ($this->getUsers() as $user) {
-            $total = 0;
-            $scores = $this->getScoresByUser($user);
-            foreach($scores as $score) {
-                $points = $this->getPoints($this->getScoreRank($score));
-                $total += $points;
-            }
-            $result[] = ['user' => $user, 'points' => $total];
-        }
-
-        $users = array_column($result, 'user');
-        $points = array_column($result, 'points');
-        array_multisort($points, SORT_DESC, $users, SORT_ASC, $result);
-
-        return $result;
-    }
-
-    public function getTeamScores() {
-        $result = array();
-
-        foreach($this->getTeams() as $team) {
-            $total = 0;
-            foreach($team->getScores() as $score) {
-                $total += $this->getPoints($this->getScoreRank($score));
-            }
-            $result[] = ['team' => $team, 'points' => $total];
-        }
-        $team = array_column($result, 'team');
-        $points = array_column($result, 'points');
-        array_multisort($points, SORT_DESC, $team, SORT_ASC, $result);
-        return $result;
-    }
-
-    public function getTopScorer() {
-        if (!empty($scores = $this->getIndividualScores())) {
-            if ($scores[0]['points'] > 0 ){
-                return $scores[0];
-            }
-        }
-        return false;
-    }
-
-    public function scoreTournament(string $type='team', bool $topOnly=false)
-    {
-        if (!$this->hasScores()) { return null; }
-        $scores = $this->getScores();
-
-        // Group By Game
-        $groupedByGame = [];
-
-        foreach($scores as $score) {
-            $key = $score->getGame()->getName();
-            $groupedByGame[$key][] = $score;
-        }
-
-        $individualScores = [];
-
-        foreach($groupedByGame as $set) {
-            foreach($set as $index => $score) {
-                $user = $score->getUser();
-                $team = $score->getTeam();
-                $key = $user->getUsername();
-                if (!isset($individualScores[$key])) {
-                    $individualScores[$key] = [
-                        'user' => $user,
-                        'team' => $team,
-                        'points' => 0
-                    ];
-                }
-                $individualScores[$key]['points'] += $this->getPoints($index);
-            }
-        }
-
-        if(
-            !usort($individualScores, function($a,$b) {
-                return $b['points'] <=> $a['points'];
-            }) 
-        ) { return null; }
-
-        if ($type === 'ind') {
-            if ($topOnly) {
-                return $individualScores[0];
-            } else {
-                return $individualScores;
-            }
-        }
-
-        $teamScores = [];
-
-        foreach($individualScores as $score) {
-            $team = $score['team'];
-            $key = $team->getName();
-            if (!isset($teamScores[$key])) {
-                $teamScores[$key] = [
-                    'team' => $team,
-                    'points' => 0
-                ];
-            }
-            $teamScores[$key]['points'] += $score['points'];
-        }
-
-        if (
-            !usort($teamScores, function($a,$b){
-                return $b['points'] <=> $a['points'];
-            })
-        ) { return null; }
-
-        if ($type === 'team') {
-            if ($topOnly) {
-                return $teamScores[0];
-            } else {
-                return $teamScores;
-            }
-        }
-    }
-
     public function getDraft(): ?Draft
     {
         return $this->draft;
@@ -499,99 +271,6 @@ class Tournament
         }
     }
 
-    public function getScoringTable(): ?array
-    {
-        return $this->scoring_table;
-    }
-
-    public function setScoringTable(?array $scoring_table): self
-    {
-        $this->scoring_table = $scoring_table;
-
-        return $this;
-    }
-
-    public function getCutoffDate(): ?\DateTimeInterface
-    {
-        return $this->cutoff_date;
-    }
-
-    public function setCutoffDate(?\DateTimeInterface $cutoff_date): self
-    {
-        $this->cutoff_date = $cutoff_date;
-
-        return $this;
-    }
-
-    public function isAfterCutoff()
-    {
-        $now = new \DateTime('now');
-        return ($now > $this->cutoff_date);
-    }
-
-    public function needsFullScoring()
-    {
-        return $this->getScores()->exists(function($i, $score) {
-            return $score->getRankedPoints() === null;
-        });
-    }
-
-    public function hasNoShows()
-    {
-        return ($this->getParticipationRate() < 1);
-    }
-
-    public function isUpcoming()
-    {
-        return ($this->getStartDate() > date_create('now'));
-    }
-
-    public function getParticipationRate()
-    {
-        $criteria = Criteria::create()
-            ->andWhere(Criteria::expr()->neq('auto_assigned', true));
-
-        $expectedScoreCount = $this->getUsers()->count() * $this->getGames()->count();
-        $actualScoreCount = $this->getScores()->matching($criteria)->count();
-        return $actualScoreCount / $expectedScoreCount;
-    }
-
-    public function getCutoffLine(): ?int
-    {
-        return $this->cutoff_line;
-    }
-
-    public function setCutoffLine(?int $cutoff_line): self
-    {
-        $this->cutoff_line = $cutoff_line;
-
-        return $this;
-    }
-
-    public function getCutoffScore(): ?int
-    {
-        return $this->cutoff_score;
-    }
-
-    public function setCutoffScore(?int $cutoff_score): self
-    {
-        $this->cutoff_score = $cutoff_score;
-
-        return $this;
-    }
-
-    public function getNoshowScore(): ?int
-    {
-        return $this->noshow_score;
-    }
-
-    public function setNoshowScore(?int $noshow_score): self
-    {
-        $this->noshow_score = $noshow_score;
-
-        return $this;
-    }
-
     public function getScoring(): ?TournamentScoring
     {
         return $this->scoring;
@@ -605,6 +284,52 @@ class Tournament
         $newTournament = null === $scoring ? null : $this;
         if ($scoring->getTournament() !== $newTournament) {
             $scoring->setTournament($newTournament);
+        }
+
+        return $this;
+    }
+
+    public function isAfterCutoff()
+    {
+        return (date_create('NOW') > $this->getScoring()->getCutoffDate());
+    }
+
+    public function getParticipationRate()
+    {
+        $criteria = Criteria::create()
+            ->andWhere(Criteria::expr()->neq('auto_assigned', true));
+
+        $expectedScoreCount = $this->getUsers()->count() * $this->getGames()->count();
+        $actualScoreCount = $this->getScores()->matching($criteria)->count();
+        return $actualScoreCount / $expectedScoreCount;
+    }
+
+    /**
+     * @return Collection|TournamentScore[]
+     */
+    public function getScores(): Collection
+    {
+        return $this->scores;
+    }
+
+    public function addScore(TournamentScore $score): self
+    {
+        if (!$this->scores->contains($score)) {
+            $this->scores[] = $score;
+            $score->setTournament($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScore(TournamentScore $score): self
+    {
+        if ($this->scores->contains($score)) {
+            $this->scores->removeElement($score);
+            // set the owning side to null (unless already changed)
+            if ($score->getTournament() === $this) {
+                $score->setTournament(null);
+            }
         }
 
         return $this;

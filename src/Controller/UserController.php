@@ -78,7 +78,7 @@ class UserController extends AbstractController
     public function show(User $user): Response
     {
         $scores = $this->getDoctrine()
-            ->getRepository('App\Entity\Score')
+            ->getRepository('App\Entity\TournamentScore')
             ->findUserScores($user, 15);
 
         return $this->render('user/show.html.twig', [

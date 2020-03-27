@@ -26,6 +26,11 @@ class User implements UserInterface
     private $id;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_at;
+
+    /**
      * @ORM\Column(type="string", unique=true)
      * @Assert\NotBlank
      * @Assert\Regex(
@@ -35,6 +40,12 @@ class User implements UserInterface
      * )
      */
     private $username;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, unique=true)
+     * @Assert\NotBlank
+     */
+    private $email;
 
     /**
      * @ORM\Column(type="json")
@@ -48,30 +59,9 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Team", mappedBy="members")
-     */
-    private $teams;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Score", mappedBy="user", orphanRemoval=true)
-     * @ORM\OrderBy({"updated_at" = "DESC"})
-     */
-    private $scores;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Tournament", inversedBy="users")
      */
     private $tournaments;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Regex(
-     *      pattern="/^(?!(?:(?:\x22?\x5C[\x00-\x7E]\x22?)|(?:\x22?[^\x5C\x22]\x22?)){255,})(?!(?:(?:\x22?\x5C[\x00-\x7E]\x22?)|(?:\x22?[^\x5C\x22]\x22?)){65,}@)(?:(?:[\x21\x23-\x27\x2A\x2B\x2D\x2F-\x39\x3D\x3F\x5E-\x7E]+)|(?:\x22(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|(?:\x5C[\x00-\x7F]))*\x22))(?:\.(?:(?:[\x21\x23-\x27\x2A\x2B\x2D\x2F-\x39\x3D\x3F\x5E-\x7E]+)|(?:\x22(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|(?:\x5C[\x00-\x7F]))*\x22)))*@(?:(?:(?!.*[^.]{64,})(?:(?:(?:xn--)?[a-z0-9]+(?:-[a-z0-9]+)*\.){1,126}){1,}(?:(?:[a-z][a-z0-9]*)|(?:(?:xn--)[a-z0-9]+))(?:-[a-z0-9]+)*)|(?:\[(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){7})|(?:(?!(?:.*[a-f0-9][:\]]){7,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?)))|(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){5}:)|(?:(?!(?:.*[a-f0-9]:){5,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3}:)?)))?(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))(?:\.(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))){3}))\]))$/iD",
-     *      match = true,
-     *      message="You must provide a valid email address."
-     * )
-     */
-    private $email;
 
     /**
      * @ORM\Column(type="boolean")
@@ -84,11 +74,6 @@ class User implements UserInterface
     private $reset_token;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $created_at;
-
-    /**
      * @ORM\OneToOne(targetEntity="App\Entity\Profile", inversedBy="user", cascade={"persist", "remove"})
      */
     private $profile;
@@ -99,23 +84,34 @@ class User implements UserInterface
     private $draftEntries;
 
     /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Team", mappedBy="members")
+     */
+    private $teams;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="user")
+     */
+    private $tournament_scores;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\PersonalBest", mappedBy="user")
      */
-    private $personalBests;
+    private $personal_bests;
 
     public function __construct()
     {
-        $this->verified = false;
-        $this->scores = new ArrayCollection();
+        $this->created_at = new \DateTime('now');
         $this->roles = ["ROLE_USER"];
-        $this->team = new ArrayCollection();
+        $this->verified = false;
+
         $this->teams = new ArrayCollection();
         $this->tournaments = new ArrayCollection();
-        $this->created_at = new \DateTime('now');
+        $this->draftEntries = new ArrayCollection();
+
         $this->profile = new Profile();
         $this->profile->setUser($this);
-        $this->draftEntries = new ArrayCollection();
-        $this->personalBests = new ArrayCollection();
+        $this->tournament_scores = new ArrayCollection();
+        $this->personal_bests = new ArrayCollection();
     }
 
     public function __toString()
@@ -186,66 +182,6 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-    }
-
-    /**
-     * @return Collection|Score[]
-     */
-    public function getScores(): Collection
-    {
-        return $this->scores;
-    }
-
-    public function addScore(Score $score): self
-    {
-        if (!$this->scores->contains($score)) {
-            $this->scores[] = $score;
-            $score->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeScore(Score $score): self
-    {
-        if ($this->scores->contains($score)) {
-            $this->scores->removeElement($score);
-            // set the owning side to null (unless already changed)
-            if ($score->getUser() === $this) {
-                $score->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function addTeam(Team $team): self
-    {
-        if (!$this->teams->contains($team)) {
-            $this->teams[] = $team;
-            $team->addMember($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTeam(Team $team): self
-    {
-        if ($this->teams->contains($team)) {
-            $this->teams->removeElement($team);
-            $this->removeTournament($team->getTournament());
-            $team->removeMember($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Team[]
-     */
-    public function getTeams(): Collection
-    {
-        return $this->teams;
     }
 
     /**
@@ -365,44 +301,13 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|PersonalBest[]
-     */
-    public function getPersonalBests(): Collection
-    {
-        return $this->personalBests;
-    }
-
-    public function addPersonalBest(PersonalBest $personalBest): self
-    {
-        if (!$this->personalBests->contains($personalBest)) {
-            $this->personalBests[] = $personalBest;
-            $personalBest->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removePersonalBest(PersonalBest $personalBest): self
-    {
-        if ($this->personalBests->contains($personalBest)) {
-            $this->personalBests->removeElement($personalBest);
-            // set the owning side to null (unless already changed)
-            if ($personalBest->getUser() === $this) {
-                $personalBest->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getScore(Tournament $tournament, Game $game)
     {
         $criteria = new Criteria();
         $expr = new Comparison('tournament', '=', $tournament);
         $expr2 = new Comparison('game', '=', $game);
         $criteria->where($expr)->andWhere($expr2);
-        return $this->getScores()->matching($criteria)->first();
+        return $this->getTournamentScores()->matching($criteria)->first();
     }
 
     public function getTeam(Tournament $tournament)
@@ -412,5 +317,93 @@ class User implements UserInterface
         $criteria->where($expr);
 
         return $this->getTeams()->matching($criteria)->first();
+    }
+
+    /**
+     * @return Collection|Team[]
+     */
+    public function getTeams(): Collection
+    {
+        return $this->teams;
+    }
+
+    public function addTeam(Team $team): self
+    {
+        if (!$this->teams->contains($team)) {
+            $this->teams[] = $team;
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(Team $team): self
+    {
+        if ($this->teams->contains($team)) {
+            $this->teams->removeElement($team);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TournamentScore[]
+     */
+    public function getTournamentScores(): Collection
+    {
+        return $this->tournament_scores;
+    }
+
+    public function addTournamentScore(TournamentScore $tournamentScore): self
+    {
+        if (!$this->tournament_scores->contains($tournamentScore)) {
+            $this->tournament_scores[] = $tournamentScore;
+            $tournamentScore->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTournamentScore(TournamentScore $tournamentScore): self
+    {
+        if ($this->tournament_scores->contains($tournamentScore)) {
+            $this->tournament_scores->removeElement($tournamentScore);
+            // set the owning side to null (unless already changed)
+            if ($tournamentScore->getUser() === $this) {
+                $tournamentScore->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PersonalBest[]
+     */
+    public function getPersonalBests(): Collection
+    {
+        return $this->personal_bests;
+    }
+
+    public function addPersonalBest(PersonalBest $personalBest): self
+    {
+        if (!$this->personal_bests->contains($personalBest)) {
+            $this->personal_bests[] = $personalBest;
+            $personalBest->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePersonalBest(PersonalBest $personalBest): self
+    {
+        if ($this->personal_bests->contains($personalBest)) {
+            $this->personal_bests->removeElement($personalBest);
+            // set the owning side to null (unless already changed)
+            if ($personalBest->getUser() === $this) {
+                $personalBest->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

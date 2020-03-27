@@ -4,8 +4,6 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,9 +19,10 @@ class Team
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="teams", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Tournament", inversedBy="teams")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $members;
+    private $tournament;
 
     /**
      * @ORM\Column(type="string")
@@ -31,10 +30,9 @@ class Team
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Tournament", inversedBy="teams")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="teams", fetch="EAGER")
      */
-    private $tournament;
+    private $members;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -42,7 +40,7 @@ class Team
     private $points;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Score", mappedBy="team", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="team")
      */
     private $scores;
 
@@ -130,14 +128,14 @@ class Team
     }
 
     /**
-     * @return Collection|Score[]
+     * @return Collection|TournamentScore[]
      */
     public function getScores(): Collection
     {
         return $this->scores;
     }
 
-    public function addScore(Score $score): self
+    public function addScore(TournamentScore $score): self
     {
         if (!$this->scores->contains($score)) {
             $this->scores[] = $score;
@@ -147,7 +145,7 @@ class Team
         return $this;
     }
 
-    public function removeScore(Score $score): self
+    public function removeScore(TournamentScore $score): self
     {
         if ($this->scores->contains($score)) {
             $this->scores->removeElement($score);
@@ -158,82 +156,5 @@ class Team
         }
 
         return $this;
-    }
-
-    public function getCaptains(): ?array
-    {
-        return $this->captains;
-    }
-
-    public function setCaptains(?array $captains): self
-    {
-        $this->captains = $captains;
-
-        return $this;
-    }
-
-    public function addCaptain(int $id)
-    {
-        if (empty($this->captains) or false === array_search($id, $this->captains)) {
-            $this->captains[] = $id;
-        }
-        return $this;
-    }
-
-    public function removeCaptain(int $id)
-    {
-        if ($index = array_search($id, $this->captains)) {
-            unset($this->captains[$index]);
-        }
-        return $this;
-    }
-
-    public function getAverageRank()
-    {
-        $scores = $this->getScores();
-        $count = count($scores);
-        $average = array_sum(
-            $scores->map(function($score) use ($count) {
-                return $score->getRank() / $count; })
-            ->toArray()
-        );
-
-        return $average;
-
-    }
-
-    public function getParticipationRate()
-    {
-        $criteria = Criteria::create()
-        ->andWhere(Criteria::expr()->neq('auto_assigned', true));
-
-        $expectedScoreCount = $this->getMembers()->count() * $this->getTournament()->getGames()->count();
-        $actualScoreCount = $this->getScores()->matching($criteria)->count();
-
-        return $actualScoreCount / $expectedScoreCount;
-    }
-
-    public function getLeaderboard()
-    {
-        $result = array();
-        $scores = $this->getScores();
-        foreach ($scores as $score) {
-            $rank = $this->getTournament()->getScoreRank($score);
-            $points = $this->getTournament()->getPoints($rank);
-            $id = $score->getUser()->getId();
-            if (!isset($result[$id])) {
-                $result[$id] = [
-                    'user' => $score->getUser(),
-                    'points' => 0,
-                    'completed' => 0
-                ];
-            }
-            $result[$id]['points'] += $points;
-            $result[$id]['completed']++;
-        }
-        $completed = array_column($result, 'completed');
-        $points = array_column($result, 'points');
-        array_multisort($points, SORT_DESC, $completed, SORT_DESC, $result);
-        return $result;
     }
 }
