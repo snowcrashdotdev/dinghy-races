@@ -62,7 +62,6 @@ class DraftController extends AbstractController
 
     /**
      * @Route("/drafts", name="draft_index", methods={"GET"})
-     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
      */
     public function index(DraftRepository $draftRepository)
     {
@@ -73,7 +72,6 @@ class DraftController extends AbstractController
 
     /**
      * @Route("/drafts/{id}", name="draft_show", methods={"GET"})
-     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
      */
     public function show(Draft $draft)
     {
