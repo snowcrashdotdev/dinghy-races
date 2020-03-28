@@ -36,7 +36,6 @@ class ScoreType extends AbstractType
             ])
             ->add('screenshot_file', FileType::class, [
                 'required' => false,
-                'mapped' => false,
                 'attr' => [
                     'placeholder' => 'Any image file will do',
                     'class' => 'score-input'
@@ -53,7 +52,7 @@ class ScoreType extends AbstractType
                 'label' => 'Comment',
                 'label_attr' => ['class'=>'score-label']
             ])
-            ->add('remove_screenshot', HiddenType::class, [
+            ->add('screenshot_file_remove', HiddenType::class, [
                 'mapped' => false
             ])
         ;

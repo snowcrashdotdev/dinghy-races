@@ -18,6 +18,12 @@ main {
     margin-right: auto;
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
 /*
 *   Navigation
 */
@@ -45,10 +51,10 @@ main {
     display: block;
     margin-left: calc(1rem / var(--ratio));
     margin-right: calc(1rem / var(--ratio));
+}
 
-    &:hover {
-        color: var(--color-white);
-    }
+.nav-item:hover {
+    color: var(--color-white);
 }
 
 .nav-item-label {
@@ -234,9 +240,4 @@ td {
     .comment-empty {
         display: table-cell;
     }
-}
-
-img {
-    max-width: 100%;
-    height: auto;
 }

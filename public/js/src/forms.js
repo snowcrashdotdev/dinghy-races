@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for (let input of pictureInputs) {
         const reader = new FileReader()
         const preview = document.getElementById(input.id + '_preview')
+        const inputRemove = document.getElementById(input.id + '_remove')
 
         reader.addEventListener('load', function(){
             preview.src = reader.result
@@ -23,18 +24,25 @@ document.addEventListener('DOMContentLoaded', function() {
             let file = this.files[0]
             if (file) {
                 reader.readAsDataURL(file)
+                inputRemove.value = 0
             }
         })
     }
 
     var fileRemovalButtons = document.getElementsByClassName('remove-file')
     for (let button of fileRemovalButtons) {
-        let fileInput = document.getElementById(button.getAttribute('data-file-input'))
+        let fileInputId = button.parentElement.getAttribute('data-file-input')
+        let fileInput = document.getElementById(fileInputId)
+        let fileRemoveInput = document.getElementById(fileInputId + '_remove')
+        let filePreview = document.getElementById(fileInputId + '_preview')
         let sibling = button.previousElementSibling
         button.addEventListener('click', function(e) {
             e.stopPropagation()  
             fileInput.value = ''
             fileInput.removeAttribute('hidden')
+            filePreview.src = ''
+            
+            fileRemoveInput.value = 1
 
             sibling.style.display = 'none'
             this.style.display = 'none'
