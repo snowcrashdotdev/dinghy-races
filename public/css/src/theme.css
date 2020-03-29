@@ -3,6 +3,11 @@ body {
     color: hsla(var(--hsl-white), 0.99);
 }
 
+.tournament-group {
+    border-left: 0.1em solid var(--color-three);
+    padding-left: var(--padding);
+}
+
 .game-summary {
     border: 0.1em solid var(--color-gray);
 }
