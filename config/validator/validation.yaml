@@ -1,8 +1,0 @@
-App\Entity\User:
-    constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-            fields: username
-            message: 'An account with that username already exists.'
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-            fields: email
-            message: 'It looks like you might already have an account.'

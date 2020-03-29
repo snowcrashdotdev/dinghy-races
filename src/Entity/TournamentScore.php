@@ -114,4 +114,15 @@ class TournamentScore extends Score
 
         return $this;
     }
+
+    /**
+     * @Assert\IsTrue(message="Tournament scores must be submitted between the tournament's start and end dates")
+     */
+    public function isOnTime(): boolean
+    {
+        return (
+            $this->updated_at > $this->tournament->getStartDate() &&
+            $this->updated_at < $this->tournament->getEndDate()
+        );
+    }
 }

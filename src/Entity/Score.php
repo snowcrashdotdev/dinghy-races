@@ -49,6 +49,7 @@ abstract class Score
 
     /**
      * @ORM\Column(type="bigint")
+     * @Assert\NotBlank
      */
     private $points;
 
@@ -59,6 +60,7 @@ abstract class Score
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Url
      */
     private $videoUrl;
 
@@ -67,6 +69,9 @@ abstract class Score
      */
     private $screenshot;
 
+    /**
+     * @Assert\Image
+     */
     protected $screenshot_file;
 
     /**
@@ -74,6 +79,9 @@ abstract class Score
      */
     private $replay;
 
+    /**
+     * @Assert\File
+     */
     protected $replay_file;
 
     /**
@@ -220,5 +228,17 @@ abstract class Score
         $this->comment = $comment;
 
         return $this;
+    }
+
+    /**
+     * @Assert\IsTrue(message="A valid score requires a video URL, screenshot, or replay file.")
+     */
+    public function hasRecording(): boolean
+    {
+        return (
+            ! empty($this->videoUrl) ||
+            ! empty($this->screenshot) ||
+            ! empty($this->replay)
+        );
     }
 }

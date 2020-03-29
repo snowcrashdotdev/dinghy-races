@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Profile;
 use App\Entity\Tournament;
@@ -15,6 +16,10 @@ use Doctrine\Common\Collections\Expr\Comparison;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(
+ *      fields={"username", "email"},
+ *      message="You may have already registered an account."
+ * )
  */
 class User implements UserInterface
 {
@@ -44,6 +49,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true, unique=true)
      * @Assert\NotBlank
+     * @Assert\Email
      */
     private $email;
 
