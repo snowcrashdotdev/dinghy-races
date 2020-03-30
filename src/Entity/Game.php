@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GameRepository")
@@ -77,6 +78,9 @@ class Game
         return $this->id;
     }
 
+    /**
+     * @Groups("public")
+     */
     public function getName(): ?string
     {
         return $this->name;
@@ -89,6 +93,9 @@ class Game
         return $this;
     }
 
+    /**
+     * @Groups("public")
+     */
     public function getDescription(): ?string
     {
         return $this->description;
@@ -129,6 +136,9 @@ class Game
         return $this;
     }
 
+    /**
+     * @Groups("public")
+     */
     public function getYear(): ?string
     {
         return $this->year;
@@ -141,6 +151,9 @@ class Game
         return $this;
     }
 
+    /**
+     * @Groups("public")
+     */
     public function getManufacturer(): ?string
     {
         return $this->manufacturer;
@@ -153,6 +166,9 @@ class Game
         return $this;
     }
 
+    /**
+     * @Groups("public")
+     */
     public function getMarquee(): ?string
     {
         return $this->marquee;
