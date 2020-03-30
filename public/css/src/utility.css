@@ -78,6 +78,7 @@
     border-color: var(--color-two) !important;
 }
 
+.show,
 .block {
     display: block;
 }

@@ -30,6 +30,13 @@
         </tbody>
     </table>
 
+    <h2>Has appeared in:
+    {% for tournament in game.tournaments %}
+        <p>{{tournament.title}}</p>
+    {% else %}
+        <p>No tournaments.</p>
+    {% endfor %}
+
     <a href="{{ path('game_index') }}">back to list</a>
 
     <a href="{{ path('game_edit', {'id': game.id}) }}">edit</a>

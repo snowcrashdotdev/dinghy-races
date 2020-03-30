@@ -7,35 +7,50 @@ form {
     max-width: calc(var(--max-content-width) / 2);
 }
 
+.form-section {
+    margin-bottom: var(--margin);
+}
+
 form div {
     margin-bottom: calc(var(--margin) / 2);
 }
 
-:--inputs {
+:--inputs,
+button,
+label {
+    box-sizing: border-box;
+}
+
+label {
+    float: left;
+    text-align: right;
+    width: var(--label-width);
+    padding-right: calc(var(--margin) / 2);
+}
+
+:--inputs,
+button {
     font-family: inherit;
     font-size: 100%;
-    width: 12rem;
     padding: 0;
     margin: 0;
-    box-sizing: border-box;
+}
+:--inputs {
+    width: var(--input-width);
 }
 
 input[type="checkbox"] {
     width: auto;
 }
 
-label {
-    float: left;
-    text-align: right;
-    width: 6rem;
-    margin-right: calc(var(--margin) / 2);
-}
-
 form button {
     display: block;
+    position: relative;
+    width: var(--label-width);
     margin-top: calc(var(--margin)/2);
     margin-bottom: var(--margin);
     margin-right: auto;
+    z-index: 0;
 }
 
 .upload-preview {
@@ -61,4 +76,51 @@ form button {
 
 .login {
     min-height: calc(100vh - 15rem);
+}
+
+.ajax-search-results {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    width: var(--input-width);
+    max-height: 300%;
+    list-style: none;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: #000;
+}
+
+.ajax-search-result {
+    cursor: pointer;
+}
+
+.ajax-search-result:nth-child(even) {
+    background-color: var(--shaded);
+}
+
+.game-form-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.game-form-list-item {
+    cursor: pointer;
+    border: 0.1em solid var(--color-white);
+    padding: var(--padding);
+    margin-right: var(--margin);
+    transition-property: color, border-color;
+    transition-delay: 0.5s;
+    transition-duration: 0.3s;
+
+    &::after {
+        content: '.zip';
+    }
+
+    &:hover {
+        border-color: var(--color-danger);
+        color: var(--color-danger);
+    }
 }

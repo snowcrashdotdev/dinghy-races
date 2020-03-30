@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class NameToGameTransformer implements DataTransformerInterface
+class GameToRomNameTransformer implements DataTransformerInterface
 {
     private $entityManager;
 
@@ -15,15 +15,21 @@ class NameToGameTransformer implements DataTransformerInterface
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * Transforms entity (Game) into  a string (ROM filename)
+     */
     public function transform($game)
     {
         if (null === $game) {
             return '';
         }
 
-        return $game->getDescription();
+        return $game->getName();
     }
 
+    /**
+     * Transforms a string (ROM filename) into a Game entity
+     */
     public function reverseTransform($game) {
         if (!$game) {
             return;
@@ -31,7 +37,7 @@ class NameToGameTransformer implements DataTransformerInterface
 
         $game = $this->entityManager
             ->getRepository(Game::class)
-            ->findOneBy(['description' => $game])
+            ->findOneBy(['name' => $game])
         ;
 
         if (null === $game) {

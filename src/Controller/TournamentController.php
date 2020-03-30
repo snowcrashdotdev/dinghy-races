@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Draft;
+use App\Form\GameCollectionType;
 use App\Repository\TournamentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -109,14 +110,13 @@ class TournamentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="tournament_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="tournament_edit", methods={"GET","POST","PATCH"})
      * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
      */
     public function edit(Request $request, Tournament $tournament): Response
     {
         $form = $this->createForm(TournamentType::class, $tournament);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             foreach($tournament->getTeams() as $team) {
@@ -132,9 +132,18 @@ class TournamentController extends AbstractController
             ]);
         }
 
+        $gamesForm = $this->createForm(GameCollectionType::class, $tournament);
+        $gamesForm->handleRequest($request);
+        if ($gamesForm->isSubmitted() && $gamesForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($tournament);
+            $em->flush();
+        }
+
         return $this->render('tournament/edit.html.twig', [
             'tournament' => $tournament,
             'form' => $form->createView(),
+            'games_form' => $gamesForm->createView()
         ]);
     }
 

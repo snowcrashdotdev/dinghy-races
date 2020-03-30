@@ -3,11 +3,33 @@
 {% block title %}Edit Tournament{% endblock %}
 
 {% block body %}
-    <main>
+    <header>
         <h1>Edit Tournament</h1>
+    </header>
+    <main>
+        <section class="form-section">
+            <h2>Title and Details</h2>
+            {{ include('tournament/_form.html.twig', {'button_label': 'Save'}) }}
+        </section>
 
-        {{ include('tournament/_form.html.twig', {'button_label': 'Update'}) }}
+        <section class="form-section">
+            <h2>Games</h2>
+            {{ include('tournament/_games_form.html.twig', { 'form': games_form }) }}
+        </section>
 
-        {{ include('tournament/_delete_form.html.twig') }}
+        <section class="form-section">
+        <h2>Teams</h2>
+
+        {% for team in tournament.teams %}
+            <p>{{team.name}} <a href="{{path('team_edit', {'id': team.id})}}">Edit</a></p>
+        {% endfor %}
+
+        <p><a href="{{path('team_new', {'tournament': tournament.id})}}">New Team</a></p>
+        </section>
+
     </main>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{asset('/js/dist/admin.min.js')}}"></script>
 {% endblock %}

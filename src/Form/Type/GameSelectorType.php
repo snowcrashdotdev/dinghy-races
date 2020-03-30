@@ -1,10 +1,9 @@
 <?php
 namespace App\Form\Type;
 
-use App\Form\DataTransformer\NameToGameTransformer;
-use Doctrine\Common\Persistence\ObjectManager;
+use App\Form\DataTransformer\GameToRomNameTransformer;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -12,7 +11,7 @@ class GameSelectorType extends AbstractType
 {
     private $transformer;
 
-    public function __construct(NameToGameTransformer $transformer)
+    public function __construct(GameToRomNameTransformer $transformer)
     {
         $this->transformer = $transformer;
     }
@@ -25,18 +24,13 @@ class GameSelectorType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'invalid_message' => 'The selected game does not exist',
-            'attr'=> [
-                'autocomplete' => 'off',
-                'placeholder' => 'Game',
-                'class' => 'ajax-search full-width margin-y',
-                'data-entity' => 'game' 
-            ]
+            'required' => false,
+            'invalid_message' => 'Unable to find game by that name',
         ]);
     }
 
     public function getParent()
     {
-        return TextType::class;
+        return HiddenType::class;
     }
 }
