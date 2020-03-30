@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Team;
+use App\Entity\Tournament;
 use App\Form\TeamType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 /**
  * @Route("/teams")
@@ -16,12 +18,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class TeamController extends AbstractController
 {
     /**
-     * @Route("/new", name="team_new", methods={"GET","POST"})
+     * @Route("/new/{tournament}", name="team_new", methods={"GET","POST"})
+     * @Entity("tournament", expr="repository.find(tournament)")
      * @IsGranted("ROLE_TO")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, Tournament $tournament): Response
     {
         $team = new Team();
+        $tournament->addTeam($team);
         $form = $this->createForm(TeamType::class, $team);
         $form->handleRequest($request);
 

@@ -9,8 +9,11 @@
                 <a class="nav-item" href="{{href}}">Personal Best</a>
 
                 {% if is_granted('ROLE_TO') %}
-                    <a class="nav-item" href="{{path('team_new')}}">Team</a>
                     <a class="nav-item" href="{{path('tournament_new')}}">Tournament</a>
+
+                    {% if tournament is defined %}
+                        <a class="nav-item" href="{{path('team_new', {'tournament': tournament.id})}}">Team
+                    {% endif %}
                 {% endif %}
             </div>
         </div>
