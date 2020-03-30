@@ -49,6 +49,7 @@ form button {
     width: var(--label-width);
     margin-top: calc(var(--margin)/2);
     margin-bottom: var(--margin);
+    margin-left: var(--label-width);
     margin-right: auto;
     z-index: 0;
 }

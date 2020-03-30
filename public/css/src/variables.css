@@ -38,6 +38,6 @@
     --outlined: 0.1em 0.1em 0.1em var(--color-black);
 
     --max-content-width: 100rem;
-    --label-width: 6rem;
+    --label-width: 8rem;
     --input-width: calc(100% - var(--label-width));
 }
