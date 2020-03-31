@@ -14,14 +14,10 @@ class TournamentScoringType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('cutoff_date', DateType::class, [
-                'widget' => 'single_text',
-                'label' => 'Cutoff Date'
-            ])
             ->add('cutoff_line', IntegerType::class, [
                 'label' => 'Cutoff #',
                 'attr' => [
-                    'placeholder' => 'Number of scores to drop from team.'
+                    'placeholder' => 'Number of scores to drop from each team.'
                 ]
             ])
             ->add('cutoff_score', IntegerType::class, [
@@ -30,13 +26,17 @@ class TournamentScoringType extends AbstractType
                     'placeholder' => 'Points to assign scores below cutoff.'
                 ]
             ])
+            ->add('cutoff_date', DateType::class, [
+                'widget' => 'single_text',
+                'label' => 'Deadline'
+            ])
             ->add('noshow_score', IntegerType::class, [
                 'label' => 'No-Show Score',
                 'label_attr' => [
                     'class' => 'text-small'
                 ],
                 'attr' => [
-                    'placeholder' => 'Points to assign to no-shows.',
+                    'placeholder' => 'Points to assign to no-shows above cutoff.',
                 ]
             ])
         ;
