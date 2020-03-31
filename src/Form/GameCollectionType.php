@@ -31,6 +31,9 @@ class GameCollectionType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Tournament::class,
+            'attr' => [
+                'class' => 'ajax-form'
+            ]
         ]);
     }
 }

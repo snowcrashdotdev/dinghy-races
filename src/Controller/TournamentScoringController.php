@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\TournamentScoring;
 use App\Entity\Tournament;
 use App\Form\TournamentScoringType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use App\Repository\TournamentScoringRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -95,7 +96,9 @@ class TournamentScoringController extends AbstractController
     {
         $forms = $this->get('form.factory');
         $count = $tournament->getUsers()->count();
-        $form = $forms->createNamedBuilder('scoring_table');
+        $form = $forms->createNamedBuilder('scoring_table', FormType::class, null, [
+            'attr' => [ 'class' => 'ajax-form' ]
+        ]);
         $place = 1;
         $table = $tournament->getScoring()->getPointsTable();
         while ($place <= $count) {

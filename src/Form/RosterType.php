@@ -31,6 +31,9 @@ class RosterType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Team::class,
+            'attr' => [
+                'class' => 'ajax-form'
+            ]
         ]);
     }
 }
