@@ -9,7 +9,7 @@
         {% if in_progress_tournaments %}
             <section class="tournament-group">
                 <h2 class="color-gray outlined">Happening now:</h2>
-                {% for tournament in in_progress_tournaments %}
+                {% for tournament in in_progress_tournaments|reverse %}
                     {{ include('tournament/_summary.html.twig', { 'tournament': tournament }) }}
                 {% endfor %}
             </section>
@@ -18,7 +18,7 @@
         {% if upcoming_tournaments %}
             <section class="tournament-group">
                 <h2 class="color-gray outlined">Upcoming:</h2>
-                {% for tournament in upcoming_tournaments %}
+                {% for tournament in upcoming_tournaments|reverse %}
                     {{ include('tournament/_summary.html.twig', { 'tournament': tournament }) }}
                 {% endfor %}
             </section>
