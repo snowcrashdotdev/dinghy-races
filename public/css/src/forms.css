@@ -30,6 +30,7 @@ label {
 
 :--inputs,
 button {
+    cursor: pointer;
     font-family: inherit;
     font-size: 100%;
     padding: 0;
@@ -112,9 +113,10 @@ form button {
     border: 0.1em solid var(--color-white);
     padding: var(--padding);
     margin-right: var(--margin);
+    margin-bottom: calc(var(--margin)/4);
     transition-property: color, border-color;
-    transition-delay: 0.5s;
-    transition-duration: 0.3s;
+    transition-delay: 0.1s;
+    transition-duration: 0.1s;
 
     &::after {
         content: '.zip';
@@ -124,4 +126,93 @@ form button {
         border-color: var(--color-danger);
         color: var(--color-danger);
     }
+}
+
+.team-roster-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.team-roster-list-item {
+    flex: 0 0 40%;
+    position: relative;
+    cursor: pointer;
+    border: 0.1em solid var(--color-gray);
+    padding: var(--padding);
+    margin-right: var(--margin);
+    margin-bottom: calc(var(--margin)/4);
+    transition-property: color, border-color;
+    transition-delay: 0.1s;
+    transition-duration: 0.1s;
+
+    &:hover {
+        border-color: var(--color-two);
+        color: var(--color-two);
+    }
+}
+
+.eligible-players-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding-top: var(--padding);
+    max-height: 18rem;
+    overflow-y: scroll;
+}
+
+.eligible-players-list-item {
+    flex: 0 0 40%;
+    margin-right: var(--margin);
+    margin-bottom: calc(var(--margin)/4);
+    color: var(--color-two);
+    cursor: pointer;
+}
+
+@media (min-width: 34rem) {
+    .eligible-players-list-item,
+    .team-roster-list-item {
+        flex-basis: 28%;
+    }
+}
+
+@media (min-width: 48rem) {
+    .eligible-players-list-item,
+    .team-roster-list-item {
+        flex-basis: 20%;
+    }
+}
+
+.roster-modal {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    width: calc(70vh * 3 / 4);
+    max-width: 100%;
+    top: var(--margin);
+    left: 50%;
+    transform: translate(-50%,0);
+    background-color: #000;
+    z-index: 9999;
+}
+
+.modal-close,
+.modal-back {
+    position: absolute;
+    top: 0;
+    margin: var(--padding);
+    padding: calc(var(--padding)/2);
+    background-color: transparent;
+    color: var(--color-two);
+    border: 0.1em solid var(--color-two);
+}
+
+.modal-close {
+    right: 0;
+}
+
+.modal-back {
+    left: 0;
 }

@@ -307,6 +307,22 @@ class User implements UserInterface
         return $this;
     }
 
+    public function setEligibility(Tournament $tournament, ?bool $eligibility): self
+    {
+        $draft = $tournament->getDraft();
+        $criteria = new Criteria();
+        $expr = new Comparison('draft', '=', $draft);
+        $criteria->where($expr);
+
+        $entry = $this->getDraftEntries()->matching($criteria)->first();
+
+        if ($entry) {
+            $entry->setEligible($eligibility);
+        }
+
+        return $this;
+    }
+
     public function getScore(Tournament $tournament, Game $game)
     {
         $criteria = new Criteria();
@@ -336,7 +352,10 @@ class User implements UserInterface
     public function addTeam(Team $team): self
     {
         if (!$this->teams->contains($team)) {
+            $tournament = $team->getTournament();
             $this->teams[] = $team;
+            $this->setEligibility($tournament, false);
+            $this->addTournament($tournament);
         }
 
         return $this;
@@ -345,7 +364,10 @@ class User implements UserInterface
     public function removeTeam(Team $team): self
     {
         if ($this->teams->contains($team)) {
+            $tournament = $team->getTournament();
             $this->teams->removeElement($team);
+            $this->setEligibility($tournament, true);
+            $this->removeTournament($tournament);
         }
 
         return $this;

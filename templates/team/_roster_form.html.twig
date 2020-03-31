@@ -1,0 +1,16 @@
+{{ form_start(form) }}
+    <label>Team Roster</label>
+    <div id="team-roster-list" class="team-roster-list">
+        {% for memberField in form.members %}
+            <span class="team-roster-list-item" data-input-id="{{memberField.vars.id}}">{{memberField.vars.value}}</span>
+        {% else %}
+            <span id="team-roster-placeholder">No team members.</span>
+        {% endfor %}
+    </div>
+    {{ form_row(form.members) }}
+    <button>Save</button>
+    <p>Available players:</p>
+    <input class="list-filter" id="eligible-player-search" type="search" placeholder="Search">
+    <div id="eligible-players-list" class="eligible-players-list"></div>
+    <input id="eligible-players" type="hidden" data-eligible-players="{{eligible_players ? eligible_players|json_encode|e('html_attr')}}">
+{{ form_end(form) }}

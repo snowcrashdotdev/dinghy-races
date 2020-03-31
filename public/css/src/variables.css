@@ -23,7 +23,7 @@
     --hsl-three: calc(240deg + var(--hue)), 76.8%, 51%;
     --hsl-white: var(--hue), 9%, 98%;
     --hsl-gray: var(--hue), 9%, 82%;
-    --hsl-black: var(--hue), 9%, 18%;
+    --hsl-black: var(--hue), 9%, 12%;
     --hsl-danger: calc(100deg + var(--hue)), 76.9%, 51%;
 
     --color-prime: hsl(var(--hsl-prime));

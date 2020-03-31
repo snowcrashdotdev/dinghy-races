@@ -1,14 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Team{% endblock %}
+{% block title %}{{tournament.title}} - Edit {{team.name}}{% endblock %}
 
 {% block body %}
+<header>
+    <h1><a href="{{path('tournament_show', {'id': tournament.id})}}">{{tournament.title}}</a> - Edit the team {{team.name}}</h1>
+</header>
 <main>
-    <h1>Edit Team</h1>
+    <section class="form-section">
+        {{ include('team/_form.html.twig') }}
+    </section>
 
-    {{ include('team/_form.html.twig', {'button_label': 'Update'}) }}
-
-    {{ include('team/_delete_form.html.twig') }}
+    <section class="form-section">
+        {{ include('team/_roster_form.html.twig', { 'form': roster_form }) }}
+    </section>
 </main>
-<script src="{{asset('/js/tournament-admin.js')}}"></script>
+{% endblock %}
+
+{% block footer %}
+    {% set teams = tournament.teams|filter(t => t is not same as(team)) %}
+    <div id="roster-modal" class="roster-modal off-canvas" data-team-id="{{team.id}}" data-token="{{ csrf_token('send' ~ team.id)|e('html_attr') }}" hidden=''>
+        <button class="modal-close" type="button">✕</button>
+        <button class="modal-back" type="button" hidden=''>⏎</button>
+        <p id="player-name"></p>
+        <button class="button" type="button" id="player-send" class="player-send">Send Player</button>
+        <select id="team-select" hidden=''>
+            <option selected="">--Select Team--</option>
+            {% for team in teams %}
+                <option value="{{team.id}}">{{team.name}}</option>
+            {% endfor %}
+        </select>
+        <button class="button danger" type="button" id="player-remove" class="player-remove">Remove Player</button>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{asset('/js/dist/admin.min.js')}}"></script>
 {% endblock %}

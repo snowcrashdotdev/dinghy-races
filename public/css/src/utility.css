@@ -65,6 +65,25 @@
     position: relative;
 }
 
+.off-canvas {
+    left: -9999px;
+}
+
+.modal-open {
+    overflow: hidden;
+}
+
+.modal-open::after {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: hsla(var(--hsl-black), 0.9);
+}
+
 .absolute-center {
     display: block;
     position: absolute;
@@ -130,4 +149,20 @@
 
 .bg-black {
     background-color: #000;
+}
+
+.button {
+    box-sizing: border-box;
+    text-align: center;
+    width: 9rem;
+    margin: calc(var(--margin)/2) 0;
+    padding: var(--padding);
+    color: var(--color-two);
+    border: 0.1em solid var(--color-two);
+    background-color: transparent;
+}
+
+.danger {
+    color: var(--color-gray);
+    border-color: var(--color-danger);
 }

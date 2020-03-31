@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\DraftEntry;
+use App\Entity\Tournament;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -17,6 +18,21 @@ class DraftEntryRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, DraftEntry::class);
+    }
+
+    public function findEligiblePlayers(Tournament $tournament)
+    {
+        return $this->createQueryBuilder('e')
+            ->join('e.user', 'u')
+            ->join('e.draft', 'd')
+            ->select('u.username as username')
+            ->andWhere('e.eligible = :eligible')
+            ->andWhere('d.tournament = :tournament')
+            ->setParameter('eligible', true)
+            ->setParameter('tournament', $tournament)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     // /**

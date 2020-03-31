@@ -4,13 +4,17 @@ namespace App\Controller;
 
 use App\Entity\Team;
 use App\Entity\Tournament;
+use App\Entity\User;
 use App\Form\TeamType;
+use App\Form\RosterType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
 
 /**
  * @Route("/teams")
@@ -34,17 +38,20 @@ class TeamController extends AbstractController
             $entityManager->persist($team);
             $entityManager->flush();
 
-            return $this->redirectToRoute('tournament_show', ['id'=>$team->tournament->getId()]);
+            return $this->redirectToRoute('team_edit', [
+                'id' => $team->getId()
+            ]);
         }
 
         return $this->render('team/new.html.twig', [
+            'tournament' => $tournament,
             'team' => $team,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{team}", name="team_show", methods={"GET"})
+     * @Route("/{id}", name="team_show", methods={"GET"})
      */
     public function show(Team $team): Response
     {
@@ -60,23 +67,37 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="team_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="team_edit", methods={"GET","POST", "PATCH"})
      * @IsGranted("ROLE_TO")
      */
     public function edit(Request $request, Team $team): Response
     {
+        $tournament = $team->getTournament();
+
+        $eligiblePlayers = $this->getDoctrine()
+            ->getRepository('App\Entity\DraftEntry')
+            ->findEligiblePlayers($tournament)
+        ;
+
         $form = $this->createForm(TeamType::class, $team);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+        }
 
-            return $this->redirectToRoute('tournament_show', ['id'=>$team->getTournament()->getId()]);
+        $rosterForm = $this->createForm(RosterType::class, $team);
+        $rosterForm->handleRequest($request);
+        if ($rosterForm->isSubmitted() && $rosterForm->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
         }
 
         return $this->render('team/edit.html.twig', [
+            'tournament' => $tournament,
             'team' => $team,
+            'eligible_players' => $eligiblePlayers,
             'form' => $form->createView(),
+            'roster_form' => $rosterForm->createView()
         ]);
     }
 
@@ -87,11 +108,45 @@ class TeamController extends AbstractController
     public function delete(Request $request, Team $team): Response
     {
         if ($this->isCsrfTokenValid('delete'.$team->getId(), $request->request->get('_token'))) {
+            $tournament = $team->getTournament();
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($team);
             $entityManager->flush();
+
+            return $this->redirectToRoute('tournament_show', [
+                'id' => $tournament->getId()
+            ]);
         }
 
-        return $this->redirectToRoute('team_index');
+        return $this->redirectToRoute('tournament_index');
+    }
+
+    /**
+     * @Route("/{id}/send/{user}/{receivingTeam}",
+     * name="team_send",
+     * methods={"POST"})
+     * @IsGranted("ROLE_TO")
+     * @Entity("user", expr="repository.findOneBy({username: user})")
+     */
+    public function send(Request $request, Team $team, Team $receivingTeam, User $user)
+    {
+        if ($this->isCsrfTokenValid('send'.$team->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $team->removeMember($user);
+            $receivingTeam->addMember($user);
+            $entityManager->flush();
+
+            if ($request->isXmlHttpRequest()) {
+                return $this->json(['success' => true]);
+            }
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->json(['success' => false]);
+        }
+
+        return $this->redirectToRoute('team_edit', [
+            'id' => $team->getId()
+        ]);
     }
 }

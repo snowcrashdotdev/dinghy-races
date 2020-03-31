@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Team{% endblock %}
+{% block title %}{{tournament.title}} - New Team{% endblock %}
 
 {% block body %}
+<header>
+    <h1>Add a new team to <a href="{{path('tournament_show', {'id': tournament.id})}}">{{tournament.title}}</a></h1>
+</header>
 <main>
-    <h1>Edit Team</h1>
-
     {{ include('team/_form.html.twig', {'button_label': 'Save'}) }}
 </main>
-<script src="{{asset('/js/tournament-admin.js')}}"></script>
 {% endblock %}

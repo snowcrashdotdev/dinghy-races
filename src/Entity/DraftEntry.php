@@ -33,6 +33,11 @@ class DraftEntry
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $eligible;
+
     public function __construct(Draft $draft, User $user)
     {
         $this->created_at = new \DateTime('now');
@@ -77,6 +82,18 @@ class DraftEntry
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getEligible(): ?bool
+    {
+        return $this->eligible;
+    }
+
+    public function setEligible(bool $eligible): self
+    {
+        $this->eligible = $eligible;
 
         return $this;
     }
