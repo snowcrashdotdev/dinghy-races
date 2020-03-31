@@ -227,3 +227,64 @@ function getNewItemIndex(el) {
         el.id.split('_').slice(-1)
     ) + 1
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    let ajaxForms = document.getElementsByClassName('ajax-form')
+    let flashBag = document.getElementById('flash-bag')
+
+    for (let form of ajaxForms) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault()
+            const formData = new FormData(this)
+
+            window.fetch(this.action, {
+                method: this.method,
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(res => res.json())
+            .then(json => {
+                if (json.success) {
+                    createFlash('success', json.message)
+                } else {
+                    createFlash('error', json.message)
+                }
+            })
+        })
+    }
+
+    function createFlash(key, message) {
+        let div = document.createElement('div')
+        div.classList.add('flash')
+        div.classList.add('flash-' + key)
+        div.innerText = message
+        flashBag.appendChild(flash)
+        showFlashBag()
+        fadeFlashBag()
+    }
+
+    function showFlashBag() {
+        flashBag.removeAttribute('hidden')
+        flashBag.classList.remove('fade')
+    }
+
+    function fadeFlashBag() {
+        if (flashBag.childElementCount > 0) {
+            setTimeout(function(){
+                flashBag.classList.add('fade')
+                setTimeout(function(){
+                    removeAllChildren(flashBag)
+                    flashBag.setAttribute('hidden', '')
+                }, 1000)
+            }, 6 * 1000)
+        }
+    }
+
+    function removeAllChildren(el) {
+        while(el.hasChildNodes()) {
+            el.removeChild(el.lastChild)
+        }
+    }
+})

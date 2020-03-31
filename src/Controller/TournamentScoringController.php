@@ -61,6 +61,10 @@ class TournamentScoringController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+            $this->addFlash(
+                'success',
+                'Your changes were saved!'
+            );
         }
 
         $tableForm->handleRequest($request);
@@ -68,6 +72,13 @@ class TournamentScoringController extends AbstractController
             $pointsTable = $tableForm->getData();
             $tournamentScoring->setPointsTable($pointsTable);
             $this->getDoctrine()->getManager()->flush();
+
+            if ($request->isXmlHttpRequest()) {
+                return $this->json([
+                    'success' => true,
+                    'message' => 'Tournaments points table updated.'
+                ]);
+            }
         }
 
         return $this->render('tournament_scoring/edit.html.twig', [
@@ -102,10 +113,9 @@ class TournamentScoringController extends AbstractController
         $place = 1;
         $table = $tournament->getScoring()->getPointsTable();
         while ($place <= $count) {
+            $options = ['required' => false];
             if ( isset( $table[$place] ) ) {
                 $options = ['data' => $table[$place]];
-            } else {
-                $options = [];
             }
             $form = $form->add($place, IntegerType::class, $options);
             $place++;

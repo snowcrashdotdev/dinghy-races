@@ -24,6 +24,38 @@ img {
     object-fit: contain;
 }
 
+.flash-bag {
+    position: fixed;
+    pointer-events: none;
+    box-sizing: border-box;
+    border-radius: 0.2em;
+    top: var(--margin);
+    right: var(--margin);
+    padding: var(--padding);
+    max-width: 50vw;
+    background-color: rgba(0,0,0,0.8);
+    transition-property: opacity;
+    transition-duration: 1s;
+    transition-timing-function: ease;
+}
+
+.flash {
+    margin: calc(var(--margin)/2) auto;
+    color: var(--color-three);
+    border-left: 0.1em solid var(--color-three);
+    padding-left: var(--padding);
+}
+
+.flash-error {
+    border-left-color: var(--color-danger);
+    color: var(--color-danger);
+}
+
+.flash-notice {
+    border-left-color: var(--color-two);
+    color: var(--color-two);
+}
+
 /*
 *   Navigation
 */

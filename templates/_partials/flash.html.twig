@@ -1,7 +1,9 @@
-{% for label, messages in app.flashes %}
-    {% for message in messages %}
-        <dialog class="flash flash-{{ label }}">
-            {{ message }}
-        </dialog>
+<aside id="flash-bag" class="flash-bag">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash flash-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
     {% endfor %}
-{% endfor %}
+</aside>

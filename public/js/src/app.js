@@ -98,3 +98,17 @@ document.addEventListener('DOMContentLoaded', function() {
         })
     }
 })
+
+document.addEventListener('DOMContentLoaded', function() {
+    let flashBag = document.getElementById('flash-bag')
+
+    if (flashBag.childElementCount > 0) {
+        setTimeout(function(){
+            flashBag.classList.add('fade')
+            setTimeout(function(){
+                removeAllChildren(flashBag)
+                flashBag.setAttribute('hidden', '')
+            }, 1000)
+        }, 6 * 1000)
+    }
+})

@@ -70,6 +70,10 @@
     position: relative;
 }
 
+.fade {
+    opacity: 0;
+}
+
 .off-canvas {
     left: -9999px;
 }

@@ -2,9 +2,6 @@
 @custom-selector :--anchor a, a:link, a:active, a:visited;
 @custom-selector :--body p, a;
 @custom-selector :--inputs input, select, textarea;
-@custom-media --content-width (min-width: 100rem);
-@custom-media --medium (min-width: 74rem);
-@custom-media --small (min-width: 37rem);
 
 :root {
     font-size: 16px;
