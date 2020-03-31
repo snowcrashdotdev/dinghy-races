@@ -233,7 +233,7 @@ abstract class Score
     /**
      * @Assert\IsTrue(message="A valid score requires a video URL, screenshot, or replay file.")
      */
-    public function hasRecording(): boolean
+    public function hasRecording(): bool
     {
         return (
             ! empty($this->videoUrl) ||

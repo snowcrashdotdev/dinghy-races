@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TournamentScoreRepository")
@@ -118,11 +119,11 @@ class TournamentScore extends Score
     /**
      * @Assert\IsTrue(message="Tournament scores must be submitted between the tournament's start and end dates")
      */
-    public function isOnTime(): boolean
+    public function isOnTime(): bool
     {
         return (
-            $this->updated_at > $this->tournament->getStartDate() &&
-            $this->updated_at < $this->tournament->getEndDate()
+            $this->getUpdatedAt() > $this->tournament->getStartDate() &&
+            $this->getUpdatedAt() < $this->tournament->getEndDate()
         );
     }
 }
