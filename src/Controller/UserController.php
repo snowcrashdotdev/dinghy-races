@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
@@ -73,21 +72,6 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="user_show", methods={"GET"})
-     */
-    public function show(User $user): Response
-    {
-        $scores = $this->getDoctrine()
-            ->getRepository('App\Entity\TournamentScore')
-            ->findUserScores($user, 15);
-
-        return $this->render('user/show.html.twig', [
-            'user' => $user,
-            'scores' => $scores
-        ]);
-    }
-
-    /**
      * @Route("/{id}", name="user_delete", methods={"DELETE"})
      * @IsGranted("ROLE_ADMIN")
      */
@@ -100,34 +84,5 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('user_index');
-    }
-
-    /**
-     * @Route("/search/{name}", name="user_search", defaults={"name"=""}, methods={"POST"})
-     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
-     */
-    public function search(Request $request, string $name, UserRepository $userRepository): Response
-    {
-        return $this->json([
-            'data'=> $userRepository->searchBySubstring($name)
-         ]);
-    }
-
-    /**
-     * @Route("/{user}/personal-bests", name="user_pbs")
-     */
-    public function personal_bests(Request $request, User $user)
-    {
-        $pbs = $this->getDoctrine()
-            ->getRepository('App\Entity\PersonalBest')
-            ->findBy([
-                'user' => $user
-            ])
-        ;
-
-        return $this->render('user/personal_bests.html.twig', [
-            'user' => $user,
-            'personal_bests' => $pbs
-        ]);
     }
 }
