@@ -14,6 +14,7 @@
                     {% if tournament is defined and not tournament.ended %}
                         <a class="nav-item" href="{{path('team_new', {'tournament': tournament.id})}}">Team</a>
                     {% endif %}
+                    <a class="nav-item" href="{{path('game_new')}}">Game</a>
                 {% endif %}
             </div>
         </div>
