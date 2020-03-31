@@ -46,9 +46,7 @@ class AuthController extends AbstractController
             ->add('email', EmailType::class, [
                 'attr' => [
                     'placeholder' => 'Your email address.',
-                    'class' => 'full-width',
-                ],
-                'label' => false
+                ]
             ])
             ->add('save', SubmitType::class, ['label' => 'Send'])
             ->getForm();
@@ -75,7 +73,7 @@ class AuthController extends AbstractController
                 $message = (new \Swift_Message('Password reset request'))
                     ->setFrom($this->getParameter('default_sender'))
                     ->setTo($email)
-                    ->setBody($this->renderView('emails/password-reset.html.twig',
+                    ->setBody($this->renderView('_emails/password-reset.html.twig',
                         [
                             'verify_url' => $verify_url
                         ]
@@ -105,7 +103,7 @@ class AuthController extends AbstractController
     {
         if ($user->getResetToken() !== $token) {
             $this->addFlash(
-                'warning',
+                'error',
                 'Invalid security token.'
             );
             return $this->redirectToRoute('tournament_index');
@@ -146,7 +144,7 @@ class AuthController extends AbstractController
             $em->flush();
 
             $this->addFlash(
-                'notice',
+                'success',
                 'Account verified!'
             );
 
