@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 
 /**
@@ -84,12 +83,24 @@ class TeamController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'Your changes have been saved!');
         }
 
         $rosterForm = $this->createForm(RosterType::class, $team);
         $rosterForm->handleRequest($request);
         if ($rosterForm->isSubmitted() && $rosterForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+            if ($request->isXmlHttpRequest()) {
+                return $this->json([
+                    'success' => true,
+                    'message' => 'The roster has been updated.'
+                ]);
+            } else {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Your changes were not saved.'
+                ]);
+            }
         }
 
         return $this->render('team/edit.html.twig', [
@@ -131,18 +142,23 @@ class TeamController extends AbstractController
     public function send(Request $request, Team $team, Team $receivingTeam, User $user)
     {
         if ($this->isCsrfTokenValid('send'.$team->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
             $team->removeMember($user);
             $receivingTeam->addMember($user);
-            $entityManager->flush();
+            $this->getDoctrine()->getManager()->flush();
 
             if ($request->isXmlHttpRequest()) {
-                return $this->json(['success' => true]);
+                return $this->json([
+                    'success' => true,
+                    'message' => "${user} succesfully sent to ${receivingTeam}!"
+                ]);
             }
         }
 
         if ($request->isXmlHttpRequest()) {
-            return $this->json(['success' => false]);
+            return $this->json([
+                'success' => false,
+                'message' => 'Unable to complete player transfer.'
+            ]);
         }
 
         return $this->redirectToRoute('team_edit', [
