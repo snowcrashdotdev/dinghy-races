@@ -105,6 +105,7 @@ class PersonalBestController extends AbstractController
             }
 
             $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'Your score has been saved!');
             return $this->redirectToRoute('pb_index');
         }
 
