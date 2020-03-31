@@ -22,6 +22,12 @@
     </main>
 {% endblock %}
 
+{% block navigation %}
+    {% if not tournament.upcoming %}
+        <a href="#" id="scoring-refresh" class="nav-item">♻️<span class="nav-item-label">Re-Score</span></a>
+    {% endif %}
+{% endblock %}
+
 {% block javascripts %}
     <script src="{{asset('/js/dist/admin.min.js')}}"></script>
 {% endblock %}
