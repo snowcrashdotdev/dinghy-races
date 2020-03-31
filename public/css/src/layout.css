@@ -169,9 +169,11 @@ img {
 
 .tournament-title {
     margin-right: var(--margin);
+    align-self: center;
 }
 
-.tournament-team-list {
+.tournament-team-list,
+.team-roster {
     font-size: 1rem;
     border-left: 0.1em solid var(--color-three);
     padding-left: var(--padding);
