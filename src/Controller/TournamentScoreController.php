@@ -32,8 +32,15 @@ class TournamentScoreController extends AbstractController
     {
         $user = $this->getUser();
 
+        /**
+         * Redirect if not logged in, or if not assigned to tournament team
+         */
         if (empty($user)) {
-            $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('app_login');
+        } elseif (empty(
+            $team = $user->getTeam($tournament)
+        )) {
+            return $this->redirectToRoute('tournament_index');
         }
 
         $score = $scoreRepo->findOneBy([    
@@ -47,7 +54,7 @@ class TournamentScoreController extends AbstractController
             $score->setUser($user);
             $score->setGame($game);
             $score->setTournament($tournament);
-            $score->setTeam($user->getTeam($tournament));
+            $score->setTeam($team);
             $score->setAutoAssigned(false);
             $this->getDoctrine()->getManager()->persist($score);
         }
