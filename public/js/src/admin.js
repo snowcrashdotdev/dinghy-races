@@ -188,6 +188,9 @@ function openRosterModal(e) {
                         closeRosterModal()
                         rosterListItem.remove()
                         rosterListInput.value = ''
+                        createFlash('success', json.message)
+                    } else {
+                        createFlash('error', json.message)
                     }
                 })
             }
@@ -230,7 +233,6 @@ function getNewItemIndex(el) {
 
 document.addEventListener('DOMContentLoaded', function() {
     let ajaxForms = document.getElementsByClassName('ajax-form')
-    let flashBag = document.getElementById('flash-bag')
 
     for (let form of ajaxForms) {
         form.addEventListener('submit', function(e) {
@@ -254,22 +256,24 @@ document.addEventListener('DOMContentLoaded', function() {
             })
         })
     }
+})
 
-    function createFlash(key, message) {
-        let div = document.createElement('div')
-        div.classList.add('flash')
-        div.classList.add('flash-' + key)
-        div.innerText = message
-        flashBag.appendChild(flash)
-        showFlashBag()
-        fadeFlashBag()
-    }
+
+function createFlash(key, message) {
+    let flashBag = document.getElementById('flash-bag')
+    let div = document.createElement('div')
+    div.classList.add('flash')
+    div.classList.add('flash-' + key)
+    div.innerText = message
+    flashBag.appendChild(div)
+    showFlashBag()
+    fadeFlashBag()
 
     function showFlashBag() {
         flashBag.removeAttribute('hidden')
         flashBag.classList.remove('fade')
     }
-
+    
     function fadeFlashBag() {
         if (flashBag.childElementCount > 0) {
             setTimeout(function(){
@@ -281,10 +285,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 6 * 1000)
         }
     }
+}
 
-    function removeAllChildren(el) {
-        while(el.hasChildNodes()) {
-            el.removeChild(el.lastChild)
-        }
+function removeAllChildren(el) {
+    while(el.hasChildNodes()) {
+        el.removeChild(el.lastChild)
     }
-})
+}
