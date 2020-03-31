@@ -19,21 +19,9 @@ class TournamentRepository extends ServiceEntityRepository
         parent::__construct($registry, Tournament::class);
     }
 
-    
-    /**
-     * @param $date
-     * @return Tournament[]
-     */
-    public function findByDate($date, $modifier='after')
+    public function findAll()
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.start_date > :date')
-            ->setParameter('date', $date)
-            ->orderBy('t.start_date', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->findBy([], ['start_date' => 'DESC']);
     }
 
     /*
