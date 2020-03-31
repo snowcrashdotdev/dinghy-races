@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Tournament;
 use App\Form\TournamentType;
 use App\Entity\Draft;
+use App\Entity\TournamentScoring;
 use App\Form\GameCollectionType;
 use App\Repository\TournamentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +27,7 @@ class TournamentController extends AbstractController
      */
     public function index(TournamentRepository $tournamentRepository): Response
     {
-        $today = new \DateTime('NOW');
+        $today = date_create('NOW');
         $tournaments = $tournamentRepository->findAll();
         $upcoming = array_filter($tournaments, function($t) use ($today) {
             return ( $t->getStartDate() > $today );
@@ -56,18 +57,13 @@ class TournamentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
             $draft = new Draft();
-            $draft->setTournament($tournament);
-            $draft->setInviteToken(bin2hex(random_bytes(8)));
-            $entityManager->persist($draft);
-            foreach($tournament->getTeams() as $team) {
-                foreach($team->getMembers() as $user) {
-                    $tournament->addUser($user);
-                }
-            }
-            $entityManager->persist($tournament);
-            $entityManager->flush();
+            $scoring = new TournamentScoring();
+            $tournament->setDraft($draft);
+            $tournament->setScoring($scoring);
+
+            $this->getDoctrine()->getManager()->persist($tournament);
+            $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('tournament_edit', ['id'=>$tournament->getId()]);
         }
@@ -107,43 +103,9 @@ class TournamentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="tournament_edit", methods={"GET","POST","PATCH"})
-     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
-     */
-    public function edit(Request $request, Tournament $tournament): Response
-    {
-        $form = $this->createForm(TournamentType::class, $tournament);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            foreach($tournament->getTeams() as $team) {
-                foreach($team->getMembers() as $user) {
-                    $tournament->addUser($user);
-                }
-            }
-            $em->persist($tournament);
-            $em->flush();
-        }
-
-        $gamesForm = $this->createForm(GameCollectionType::class, $tournament);
-        $gamesForm->handleRequest($request);
-        if ($gamesForm->isSubmitted() && $gamesForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($tournament);
-            $em->flush();
-        }
-
-        return $this->render('tournament/edit.html.twig', [
-            'tournament' => $tournament,
-            'form' => $form->createView(),
-            'games_form' => $gamesForm->createView()
-        ]);
-    }
-
-    /**
      * @Route("/{tournament}/leaderboards/team", name="leaderboard_team", methods={"GET"})
      */
-    public function team_leaderboard(Request $request, Tournament $tournament)
+    public function team_leaderboard(Tournament $tournament)
     {
         $teamScores = $this->getDoctrine()
             ->getRepository('App\Entity\TournamentScore')
@@ -175,21 +137,6 @@ class TournamentController extends AbstractController
             'tournament' => $tournament,
             'scores' => $scores,
         ]);
-    }
-
-    /**
-     * @Route("/{id}", name="tournament_delete", methods={"DELETE"})
-     * @IsGranted("ROLE_ADMIN")
-     */
-    public function delete(Request $request, Tournament $tournament): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$tournament->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($tournament);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('tournament_index');
     }
 
     /**
@@ -226,5 +173,54 @@ class TournamentController extends AbstractController
                 $response->headers->set('Content-Disposition', $disposition);
 
                 return $response;
+    }
+
+    /**
+     * @Route("/{id}/edit", name="tournament_edit", methods={"GET","POST","PATCH"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
+     */
+    public function edit(Request $request, Tournament $tournament): Response
+    {
+        $form = $this->createForm(TournamentType::class, $tournament);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            foreach($tournament->getTeams() as $team) {
+                foreach($team->getMembers() as $user) {
+                    $tournament->addUser($user);
+                }
+            }
+            $em->persist($tournament);
+            $em->flush();
+        }
+
+        $gamesForm = $this->createForm(GameCollectionType::class, $tournament);
+        $gamesForm->handleRequest($request);
+        if ($gamesForm->isSubmitted() && $gamesForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($tournament);
+            $em->flush();
+        }
+
+        return $this->render('tournament/edit.html.twig', [
+            'tournament' => $tournament,
+            'form' => $form->createView(),
+            'games_form' => $gamesForm->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/{id}", name="tournament_delete", methods={"DELETE"})
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function delete(Request $request, Tournament $tournament): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$tournament->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($tournament);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('tournament_index');
     }
 }
