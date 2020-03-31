@@ -14,6 +14,16 @@
     <section class="gadget-group">
         {% include '_gadgets/points.per.game.html.twig' %}
     </section>
+{% else %}
+    <section class="team-roster">
+        <h2>Featuring:</h2>
+        {% for user in team.members %}
+            {% set href = path('profile_show', {
+                'username': user
+            }) %}
+            <p><a href="{{href}}">{{user.username}}</a></p>
+        {% endfor %}
+    </section>
 {% endif %}
 
     <section>
