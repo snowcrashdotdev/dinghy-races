@@ -131,6 +131,20 @@ img {
     }
 }
 
+.tournament-header {
+    display: flex;
+}
+
+.tournament-title {
+    margin-right: var(--margin);
+}
+
+.tournament-team-list {
+    font-size: 1rem;
+    border-left: 0.1em solid var(--color-three);
+    padding-left: var(--padding);
+}
+
 .tournament-summary {
     margin-bottom: var(--margin);
 }
