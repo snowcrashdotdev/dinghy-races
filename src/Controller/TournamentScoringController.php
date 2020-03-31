@@ -42,8 +42,30 @@ class TournamentScoringController extends AbstractController
     }
 
     /**
+     * @Route("/{tournament}/refresh", name="scoring_refresh", methods={"POST"})
+     * @Entity("tournament", expr="repository.find(tournament)")
+     * @IsGranted("ROLE_TO")
+     */
+    public function refresh(Request $request, Tournament $tournament)
+    {
+        if ($this->isCsrfTokenValid('refresh'.$tournamentScoring->getId(), $request->request->get('_token'))) {
+            if ($request->isXmlHttpRequest()) {
+                return $this->json([
+                    'success' => true,
+                    'message' => "${$tournament} has been re-scored!"
+                ]);
+            }
+        }
+
+        return $this->redirectToRoute('tournament_show', [
+            'id' => $tournament->getId()
+        ]);
+    }
+
+    /**
      * @Route("/{tournament}/edit", name="scoring_edit", methods={"GET","POST"})
      * @Entity("tournament", expr="repository.find(tournament)")
+     * @IsGranted("ROLE_TO")
      */
     public function edit(Request $request, Tournament $tournament): Response
     {
@@ -76,9 +98,18 @@ class TournamentScoringController extends AbstractController
             if ($request->isXmlHttpRequest()) {
                 return $this->json([
                     'success' => true,
-                    'message' => 'Tournaments points table updated.'
+                    'message' => 'Tournament points table updated!'
                 ]);
+            } else {
+                $this->addFlash('success', 'Tournament points table updated!');
             }
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Could not save tournament points table.'
+            ]);
         }
 
         return $this->render('tournament_scoring/edit.html.twig', [
@@ -91,6 +122,7 @@ class TournamentScoringController extends AbstractController
 
     /**
      * @Route("/{id}", name="tournament_scoring_delete", methods={"DELETE"})
+     * @IsGranted("ROLE_TO")
      */
     public function delete(Request $request, TournamentScoring $tournamentScoring): Response
     {
@@ -100,7 +132,7 @@ class TournamentScoringController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('tournament_scoring_index');
+        return $this->redirectToRoute('tournament_index');
     }
 
     private function createScoringTableForm(Tournament $tournament)
