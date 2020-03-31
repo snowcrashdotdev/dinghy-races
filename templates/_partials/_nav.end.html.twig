@@ -1,3 +1,4 @@
+    {# continued from '_partials/nav.begin.html.twig' #}
     {% if not is_granted('ROLE_USER') %}
         <a class="nav-item push-right" href="{{path('app_login')}}">Log In</a>
     {% else %}

@@ -5,9 +5,6 @@
         <div class="nav-item has-sub-items">
             <a href="#">➕<span class="nav-item-label">New</span></a>
             <div class="sub-navigation">
-                {% set href = path('pb_index') %}
-                <a class="nav-item" href="{{href}}">Personal Best</a>
-
                 {% if is_granted('ROLE_TO') %}
                     <a class="nav-item" href="{{path('tournament_new')}}">Tournament</a>
 
@@ -16,6 +13,10 @@
                     {% endif %}
                     <a class="nav-item" href="{{path('game_new')}}">Game</a>
                 {% endif %}
+                {% set href = path('pb_index') %}
+                <a class="nav-item" href="{{href}}">Personal Best</a>
             </div>
         </div>
     {% endif %}
+
+    {# continued in '_partials/nav.end.html.twig' #}
