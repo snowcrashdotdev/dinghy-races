@@ -126,10 +126,6 @@ class TournamentController extends AbstractController
             }
             $em->persist($tournament);
             $em->flush();
-
-            return $this->redirectToRoute('tournament_index', [
-                'id' => $tournament->getId(),
-            ]);
         }
 
         $gamesForm = $this->createForm(GameCollectionType::class, $tournament);
