@@ -12,7 +12,7 @@
                     <a class="nav-item" href="{{path('tournament_new')}}">Tournament</a>
 
                     {% if tournament is defined %}
-                        <a class="nav-item" href="{{path('team_new', {'tournament': tournament.id})}}">Team
+                        <a class="nav-item" href="{{path('team_new', {'tournament': tournament.id})}}">Team</a>
                     {% endif %}
                 {% endif %}
             </div>
