@@ -37,6 +37,7 @@ class Draft
     public function __construct()
     {
         $this->draftEntries = new ArrayCollection();
+        $this->invite_token = bin2hex(random_bytes(8));
     }
 
     public function getId(): ?int
