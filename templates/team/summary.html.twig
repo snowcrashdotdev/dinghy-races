@@ -1,5 +1,5 @@
 <article class="summary summary-team bg-white flex-column margin">
-    <h3 class="bg-primary padding"><a href="{{ path( 'team_show', {'team': team.id} ) }}">{{ team.name }}</a></h3>
+    <h3 class="bg-primary padding"><a href="{{ path( 'team_show', {'id': team.id} ) }}">{{ team.name }}</a></h3>
     <ul class="list-style-none">
         {% for member in team.members %}
             {% set href = path('profile_show', {

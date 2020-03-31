@@ -31,7 +31,7 @@
                         'username': score.user
                     }) %}
                     <td><a href="{{href}}">{{ score.username }}</a></td>
-                    <td><a href="{{path('team_show', {'team': score.team})}}">{{score.teamName}}</a></td>
+                    <td><a href="{{path('team_show', {'id': score.team})}}">{{score.teamName}}</a></td>
                 </tr>
             {% endfor %}
             </table>
