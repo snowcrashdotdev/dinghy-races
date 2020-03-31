@@ -1,5 +1,5 @@
 <nav class="main-navigation">
-    <a class="nav-item" href="{{ path('index') }}">🏆<span class="nav-item-label">Home</a>
+    <a class="nav-item" href="{{path('tournament_index')}}">🏆<span class="nav-item-label">Home</a>
 
     {% if is_granted('ROLE_USER') %}
         <div class="nav-item has-sub-items">
