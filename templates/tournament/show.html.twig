@@ -50,14 +50,17 @@
 {% endblock %}
 
 {% block navigation %}
-    {% if is_granted('ROLE_TO') and not tournament.ended %}
+    {% if is_granted('ROLE_TO') %}
         <div class="nav-item has-sub-items">
             {% set href = path('tournament_edit', {
                 'id': tournament.id
             }) %}
              <a href="{{href}}">✏️<span class="nav-item-label">Edit</span></a>
              <div class="sub-navigation">
-                <a href="{{href}}" class="nav-item">Tournament</a>
+                 {% if not tournament.ended %}
+                    <a href="{{href}}" class="nav-item">Tournament</a>
+                {% endif %}
+
                 {% set href = path('scoring_edit', {
                     'tournament': tournament.id
                 }) %}
