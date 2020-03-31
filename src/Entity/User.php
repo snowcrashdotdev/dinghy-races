@@ -334,11 +334,9 @@ class User implements UserInterface
 
     public function getTeam(Tournament $tournament)
     {
-        $criteria = new Criteria();
-        $expr = new Comparison('tournament', '=', $tournament);
-        $criteria->where($expr);
-
-        return $this->getTeams()->matching($criteria)->first();
+        return $this->getTeams()->filter(function($t) use ($tournament) {
+            return $t->getTournament() === $tournament;
+        })->first();
     }
 
     /**
