@@ -3,13 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\TournamentScoring;
+use App\Entity\Tournament;
 use App\Form\TournamentScoringType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use App\Repository\TournamentScoringRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 /**
  * @Route("/tournament/scoring")
@@ -18,7 +21,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class TournamentScoringController extends AbstractController
 {
     /**
-     * @Route("/", name="tournament_scoring_index", methods={"GET"})
+     * @Route("/", name="scoring_index", methods={"GET"})
      */
     public function index(TournamentScoringRepository $tournamentScoringRepository): Response
     {
@@ -28,30 +31,7 @@ class TournamentScoringController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="tournament_scoring_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $tournamentScoring = new TournamentScoring();
-        $form = $this->createForm(TournamentScoringType::class, $tournamentScoring);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($tournamentScoring);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('tournament_scoring_index');
-        }
-
-        return $this->render('tournament_scoring/new.html.twig', [
-            'tournament_scoring' => $tournamentScoring,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="tournament_scoring_show", methods={"GET"})
+     * @Route("/{id}", name="scoring_show", methods={"GET"})
      */
     public function show(TournamentScoring $tournamentScoring): Response
     {
@@ -61,21 +41,38 @@ class TournamentScoringController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="tournament_scoring_edit", methods={"GET","POST"})
+     * @Route("/{tournament}/edit", name="scoring_edit", methods={"GET","POST"})
+     * @Entity("tournament", expr="repository.find(tournament)")
      */
-    public function edit(Request $request, TournamentScoring $tournamentScoring): Response
+    public function edit(Request $request, Tournament $tournament): Response
     {
-        $form = $this->createForm(TournamentScoringType::class, $tournamentScoring);
-        $form->handleRequest($request);
+        if (empty(
+            $tournamentScoring = $tournament->getScoring()
+        )) {
+            $tournamentScoring = new TournamentScoring();
+            $tournament->setScoring($tournamentScoring);
+            $this->getDoctrine()->getManager()->flush();
+        }
 
+        $form = $this->createForm(TournamentScoringType::class, $tournamentScoring);
+        $tableForm = $this->createScoringTableForm($tournament);
+
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+        }
 
-            return $this->redirectToRoute('tournament_scoring_index');
+        $tableForm->handleRequest($request);
+        if ($tableForm->isSubmitted() && $tableForm->isValid()) {
+            $pointsTable = $tableForm->getData();
+            $tournamentScoring->setPointsTable($pointsTable);
+            $this->getDoctrine()->getManager()->flush();
         }
 
         return $this->render('tournament_scoring/edit.html.twig', [
+            'tournament' => $tournament,
             'tournament_scoring' => $tournamentScoring,
+            'table_form' => $tableForm->createView(),
             'form' => $form->createView(),
         ]);
     }
@@ -92,5 +89,25 @@ class TournamentScoringController extends AbstractController
         }
 
         return $this->redirectToRoute('tournament_scoring_index');
+    }
+
+    private function createScoringTableForm(Tournament $tournament)
+    {
+        $forms = $this->get('form.factory');
+        $count = $tournament->getUsers()->count();
+        $form = $forms->createNamedBuilder('scoring_table');
+        $place = 1;
+        $table = $tournament->getScoring()->getPointsTable();
+        while ($place <= $count) {
+            if ( isset( $table[$place] ) ) {
+                $options = ['data' => $table[$place]];
+            } else {
+                $options = [];
+            }
+            $form = $form->add($place, IntegerType::class, $options);
+            $place++;
+        }
+
+        return $form->getForm();
     }
 }

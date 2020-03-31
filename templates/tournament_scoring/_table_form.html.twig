@@ -1,0 +1,6 @@
+{{ form_start(form) }}
+    <div class="overflow-y-scroll">
+        {{ form_widget(form) }}
+    </div>
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

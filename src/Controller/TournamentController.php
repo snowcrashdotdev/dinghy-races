@@ -4,9 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Tournament;
 use App\Form\TournamentType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Draft;
 use App\Form\GameCollectionType;
 use App\Repository\TournamentRepository;
@@ -140,74 +137,6 @@ class TournamentController extends AbstractController
             'tournament' => $tournament,
             'form' => $form->createView(),
             'games_form' => $gamesForm->createView()
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/scoring", name="tournament_scoring", methods={"GET", "POST"})
-     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
-     */
-    public function scoring(Request $request, Tournament $tournament): Response
-    {
-        $forms = $this->get('form.factory');
-        $count = $tournament->getUsers()->count();
-        $form = $forms->createNamedBuilder('scoring_table');
-        $place = 1;
-        $scoringTable = $tournament->getScoringTable();
-        while ($place <= $count) {
-            if ( isset( $scoringTable[$place] ) ) {
-                $options = ['data' => $scoringTable[$place]];
-            } else {
-                $options = [];
-            }
-            $form = $form->add($place, IntegerType::class, $options);
-            $place++;
-        }
-        $form = $form->add('save', SubmitType::class)->getForm();
-
-        $options = [
-            'data' => $tournament->getCutoffDate(),
-            'label' => 'Cutoff Date',
-            'widget' => 'single_text'
-        ];
-        $cutoffForm = $forms->createNamedBuilder('cutoff_date')
-            ->add('cutoff', DateType::class, $options)
-            ->add('cutoff_line', IntegerType::class, [
-                'data' => $tournament->getCutoffLine()
-            ])
-            ->add('cutoff_score', IntegerType::class, [
-                'data' => $tournament->getCutoffScore()
-            ])
-            ->add('noshow_score', IntegerType::class, [
-                'data' => $tournament->getNoshowScore()
-            ])
-            ->add('save', SubmitType::class)
-            ->getForm();
-
-        $form->handleRequest($request);
-        $cutoffForm->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $scoringTable = $form->getData();
-            $tournament->setScoringTable($scoringTable);
-            $em->persist($tournament);
-            $em->flush();
-        } else if ($cutoffForm->isSubmitted() && $cutoffForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $data = $cutoffForm->getData();
-            $tournament->setCutoffDate($data['cutoff']);
-            $tournament->setCutoffLine($data['cutoff_line']);
-            $tournament->setCutoffScore($data['cutoff_score']);
-            $tournament->setNoshowScore($data['noshow_score']);
-            $em->persist($tournament);
-            $em->flush();
-        }
-
-        return $this->render('tournament/scoring.html.twig', [
-            'tournament' => $tournament,
-            'form' => $form->createView(),
-            'cutoffForm' => $cutoffForm->createView()
         ]);
     }
 
