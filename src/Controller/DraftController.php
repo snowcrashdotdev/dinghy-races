@@ -7,13 +7,14 @@ use App\Entity\DraftEntry;
 use App\Repository\DraftRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class DraftController extends AbstractController
 {
     /**
      * @Route("/invite/{token}", name="draft_invite", methods={"GET"})
+     * @Entity("tournament", expr="repository.findBy(invite_token = token)")
      */
     public function invite(String $token, DraftRepository $draftRepository)
     {
@@ -33,10 +34,15 @@ class DraftController extends AbstractController
             ! $draft->hasEntered($this->getUser())
         
         ) {
-            $entry = new DraftEntry($draft, $this->getUser());
-            $draft->addDraftEntry($entry);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->flush();
+            $draftEntry = new DraftEntry();
+            $this->getUser()->addDraftEntry($draftEntry);
+            $draft->addDraftEntry($draftEntry);
+            
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'You entered the draft!');
+        } else {
+            $this->addFlash('error', 'You were unable to enter.');
         }
 
         return $this->redirectToRoute('tournament_show', ['id' => $draft->getTournament()->getId()]);
@@ -48,13 +54,13 @@ class DraftController extends AbstractController
     public function invite_decline(Request $request, Draft $draft)
     {
         if ($this->isCsrfTokenValid('invite'.$draft->getId(), $request->request->get('_token'))) {
-            $entry = $this->getDoctrine()
+            $draftEntry = $this->getDoctrine()
                 ->getRepository('App\Entity\DraftEntry')
                 ->findOneBy(['user' => $this->getUser()]);
-            $draft->removeDraftEntry($entry);
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($draft);
+            $entityManager->remove($draftEntry);
             $entityManager->flush();
+            $this->addFlash('notice', 'You withdew from the tournament.');
         }
 
         return $this->redirectToRoute('tournament_show', ['id' => $draft->getTournament()->getId()]);

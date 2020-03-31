@@ -38,11 +38,10 @@ class DraftEntry
      */
     private $eligible;
 
-    public function __construct(Draft $draft, User $user)
+    public function __construct()
     {
         $this->created_at = new \DateTime('now');
-        $this->draft = $draft;
-        $this->user = $user;
+        $this->eligible = true;
     }
 
     public function getId(): ?int

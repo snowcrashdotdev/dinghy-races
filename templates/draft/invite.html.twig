@@ -3,9 +3,11 @@
 {% block title %}Invitation - {{ draft.tournament.title }}{% endblock %}
 
 {% block body %}
-    <main class="flex-column">
-        <h1>You are formally invited to participate in:</h1>
-        {{ include('tournament/summary.html.twig', { 'tournament': draft.tournament }) }}
+    <header>
+        <h1>You are formally invited</h1>
+    </header>
+    <main>
+        {{ include('tournament/_summary.html.twig', { 'tournament': draft.tournament }) }}
         {% if is_granted("ROLE_USER") %}
             {% if draft.hasEntered(app.user) %}
                 {{ include('draft/_decline_invite.html.twig', {'id': draft.id}) }}
@@ -14,7 +16,7 @@
             {% endif %}
         {% else %}
             <section>
-                <p>Please <a href="{{ path('app_login') }}">sign in</a> to enter or leave this tournament.</p>
+                <p>Please <a href="{{ path('app_login') }}">sign in</a> to enter or withdraw from this tournament.</p>
             </section>
         {% endif %}
     </main>

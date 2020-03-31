@@ -29,7 +29,7 @@ class Draft
     private $invite_token;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\DraftEntry", mappedBy="draft", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\DraftEntry", mappedBy="draft", orphanRemoval=true, cascade={"persist", "remove"})
      * @ORM\OrderBy({"created_at" = "DESC"})
      */
     private $draftEntries;

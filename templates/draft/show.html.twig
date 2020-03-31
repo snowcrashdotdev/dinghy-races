@@ -3,7 +3,9 @@
 {% block title %}Draft Entries for {{ draft.tournament.title }}{% endblock %}
 
 {% block body %}
-    <h1>Draft Entries for {{ draft.tournament.title }}</h1>
+    <header>
+        <h1>Draft Entries for {{ draft.tournament.title }}</h1>
+    </header>
     <article class="summary bg-white flex-column margin">
         <h2 class="bg-primary padding">({{ draft.draftEntries|length }}) Entries:</h2>
         <ul class="list-style-none">
