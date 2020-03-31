@@ -28,17 +28,17 @@ class Tournament
     private $title;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", nullable=true)
      */
     private $start_date;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", nullable=true)
      */
     private $end_date;
 
@@ -70,6 +70,7 @@ class Tournament
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="tournament")
+     * @ORM\OrderBy({"points" = "DESC", "updated_at" = "DESC"})
      */
     private $scores;
 
