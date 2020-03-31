@@ -25,8 +25,10 @@
 {% endblock %}
 
 {% block navigation %}
-    {{ parent() }}
     {% if is_granted("ROLE_TO") %}
-        <a class="nav-item" href="{{path('team_edit', {'id':team.id})}}">Edit</a>
+        {% set href = path('team_edit', {
+            'id': team.id
+        }) %}
+        <a class="nav-item" href="{{href}}">✏️<span class="nav-item-label">Edit</a>
     {% endif %}
 {% endblock %}

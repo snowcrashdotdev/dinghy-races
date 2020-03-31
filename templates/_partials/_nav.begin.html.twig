@@ -11,7 +11,7 @@
                 {% if is_granted('ROLE_TO') %}
                     <a class="nav-item" href="{{path('tournament_new')}}">Tournament</a>
 
-                    {% if tournament is defined %}
+                    {% if tournament is defined and not tournament.ended %}
                         <a class="nav-item" href="{{path('team_new', {'tournament': tournament.id})}}">Team</a>
                     {% endif %}
                 {% endif %}

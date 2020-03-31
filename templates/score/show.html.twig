@@ -2,20 +2,6 @@
 
 {% block title %}{{ tournament.title }} scores for {{ game.description }}{% endblock %}
 
-{% block navigation %}
-    {% set href = path('tournament_show', {
-        'id': tournament.id
-    }) %}
-    <a class="nav-item" href="{{href}}">⏮<span class="nav-item-label">Tournament</a>
-    {% if is_granted('ROLE_USER') %}
-        {% set href = path('score_new', {
-            'game_name': game.name,
-            'tournament_id': tournament.id
-        }) %}
-        <a href="{{href}}" class="nav-item">✏️<span class="nav-item-label">Your Score</span></a>
-    {% endif %}
-{% endblock %}
-
 {% block body %}
     <header>
         {% set t_href = path('tournament_show', {
@@ -40,4 +26,18 @@
             <p>No scores posted.</p>
         {% endif %}
     </main>
+{% endblock %}
+
+{% block navigation %}
+    {% set href = path('tournament_show', {
+        'id': tournament.id
+    }) %}
+    <a class="nav-item" href="{{href}}">⏮<span class="nav-item-label">Tournament</a>
+    {% if not tournament.ended and is_granted('ROLE_USER') %}
+        {% set href = path('score_new', {
+            'game_name': game.name,
+            'tournament_id': tournament.id
+        }) %}
+        <a href="{{href}}" class="nav-item">🎖<span class="nav-item-label">Your Score</span></a>
+    {% endif %}
 {% endblock %}

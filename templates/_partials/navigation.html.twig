@@ -11,7 +11,6 @@
             {% endif %}
 
             {% if is_granted('ROLE_TO') %}
-                <a class="nav-item" href="{{path('team_new')}}">Team</a>
                 <a class="nav-item" href="{{path('tournament_new')}}">Tournament</a>
             {% endif %}
             </div>
@@ -19,20 +18,6 @@
     {% endif %}
 
     {% block navigation %}{% endblock %}
-
-    {% if app.request.attributes.get('_route') == 'tournament_show' and is_granted('ROLE_TO') %}
-        <div class="nav-item has-sub-items">
-            {% set href = path('tournament_edit', {
-                'id': tournament.id
-            }) %}
-            <a href="{{href}}">Edit</a>
-        </div>
-    {% endif %}
-
-    {% if app.request.attributes.get('_route') == 'score_show' %}
-        {% set href = path('tournament_show', {'id':tournament.id}) %}
-        <a class="nav-item" href="{{href}}">➦ Back</a>
-    {% endif %}
 
     {% if not is_granted('ROLE_USER') %}
         <a class="nav-item push-right" href="{{path('app_login')}}">Log In</a>
