@@ -73,3 +73,28 @@ function removeAllChildren(el) {
         el.removeChild(el.lastChild)
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    let listFilters = document.getElementsByClassName('list-filter')
+
+    for (let filter of listFilters) {
+        let list = filter.nextElementSibling
+        filter.addEventListener('keyup', function() {
+            let query = this.value.toUpperCase()
+            let listItems = Array.from(list.children)
+
+            if (query === '') {
+                listItems.forEach(item => item.removeAttribute('hidden'))
+            } else {
+                listItems.forEach(function(item) {
+                    let username = item.innerText.toUpperCase()
+                    if (username.indexOf(query) > -1) {
+                        item.removeAttribute('hidden')
+                    } else {
+                        item.setAttribute('hidden', '')
+                    }
+                })
+            }
+        })
+    }
+})
