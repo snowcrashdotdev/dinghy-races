@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -29,6 +30,10 @@ class AjaxController extends AbstractController
             );
 
             return $this->json($data);
+        } else {
+            $response = new Response();
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
+            $response->send();
         }
     }
 }
