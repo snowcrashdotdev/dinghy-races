@@ -237,8 +237,8 @@ abstract class Score
     {
         return (
             ! empty($this->videoUrl) ||
-            ! empty($this->screenshot) ||
-            ! empty($this->replay)
+            ! empty($this->screenshot_file) ||
+            ! empty($this->replay_file)
         );
     }
 }
