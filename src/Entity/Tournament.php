@@ -144,6 +144,11 @@ class Tournament
         return $this;
     }
 
+    public function hasEnded(): bool
+    {
+        return (date_create('NOW') > $this->getEndDate());
+    }
+
     public function isUpcoming()
     {
         return ($this->getStartDate() > date_create('NOW'));
