@@ -56,7 +56,7 @@ class UserController extends AbstractController
             $message = (new \Swift_Message('Please verify your email address'))
                 ->setFrom($this->getParameter('default_sender'))
                 ->setTo($user->getEmail())
-                ->setBody($this->renderView('emails/registration.html.twig', [
+                ->setBody($this->renderView('_emails/registration.html.twig', [
                     'verify_url' => $verify_url
                 ]), 'text/html'
             );
