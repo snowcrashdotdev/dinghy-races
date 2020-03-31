@@ -84,6 +84,7 @@ class TournamentScoreController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
+            $this->addFlash('success', 'Your score was saved!');
 
             return $this->redirectToRoute('score_show',
                 [
