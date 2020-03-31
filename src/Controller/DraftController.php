@@ -14,12 +14,10 @@ class DraftController extends AbstractController
 {
     /**
      * @Route("/invite/{token}", name="draft_invite", methods={"GET"})
-     * @Entity("tournament", expr="repository.findBy(invite_token = token)")
+     * @Entity("draft", expr="repository.findOneBy({invite_token: token})")
      */
-    public function invite(String $token, DraftRepository $draftRepository)
+    public function invite(Draft $draft)
     {
-        $draft = $draftRepository->findOneBy(['invite_token' => $token]);
-
         return $this->render('draft/invite.html.twig', ['draft' => $draft]);
     }
 
