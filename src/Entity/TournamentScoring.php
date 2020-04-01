@@ -29,7 +29,7 @@ class TournamentScoring
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private $cutoff_date;
+    private $deadline;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -75,14 +75,14 @@ class TournamentScoring
         return $this;
     }
 
-    public function getCutoffDate(): ?\DateTimeInterface
+    public function getDeadline(): ?\DateTimeInterface
     {
-        return $this->cutoff_date;
+        return $this->deadline;
     }
 
-    public function setCutoffDate(?\DateTimeInterface $cutoff_date): self
+    public function setDeadline(?\DateTimeInterface $deadline): self
     {
-        $this->cutoff_date = $cutoff_date;
+        $this->deadline = $deadline;
 
         return $this;
     }

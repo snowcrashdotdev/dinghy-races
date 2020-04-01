@@ -26,7 +26,7 @@ class TournamentScoringType extends AbstractType
                     'placeholder' => 'Points to assign scores below cutoff.'
                 ]
             ])
-            ->add('cutoff_date', DateType::class, [
+            ->add('deadline', DateType::class, [
                 'widget' => 'single_text',
                 'label' => 'Deadline'
             ])
