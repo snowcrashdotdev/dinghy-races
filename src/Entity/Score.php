@@ -93,6 +93,13 @@ abstract class Score
      */
     private $comment;
 
+    public function __construct()
+    {
+        $this->created_at = date_create('NOW');
+        $this->updated_at = date_create('NOW');
+        $this->points_history = array();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
