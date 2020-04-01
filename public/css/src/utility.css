@@ -156,6 +156,10 @@
     color: var(--color-three);
 }
 
+.color-danger {
+    color: var(--color-danger) !important;
+}
+
 .bg-black {
     background-color: #000;
 }

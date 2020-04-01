@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class DraftController extends AbstractController
 {
@@ -82,5 +83,33 @@ class DraftController extends AbstractController
         return $this->render('draft/show.html.twig', [
             'draft' => $draft
         ]);
+    }
+
+    /**
+     * @Route("/entry/{draft_entry}", name="entry_remove", methods={"DELETE"})
+     * @Entity("draftEntry", expr="repository.find(draft_entry)")
+     * @Security("is_granted('ROLE_TO')")
+     */
+    public function removeEntry(Request $request, DraftEntry $draftEntry)
+    {
+        $draft = $draftEntry->getDraft();
+
+        if ($this->isCsrfTokenValid('delete'.$draftEntry->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($draftEntry);
+            $entityManager->flush();
+
+            if ($request->isXmlHttpRequest()) {
+                return $this->json([
+                    'success' => true,
+                    'message' => 'Entry removed from draft.'
+                ]);
+            }
+        }
+
+        return $this->redirectToRoute('draft_show', [
+                'id' => $draft->getId()
+            ]
+        );
     }
 }

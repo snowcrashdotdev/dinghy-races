@@ -258,6 +258,45 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 })
 
+document.addEventListener('DOMContentLoaded', function() {
+    let removeDraftEntryLinks = document.getElementsByClassName('remove-draft-entry')
+    let draftEntryCount = document.getElementById('entry-count')
+
+    for (let link of removeDraftEntryLinks) {
+        let entryId = link.getAttribute('data-id')
+        let token = link.getAttribute('data-token')
+        let formData = new FormData()
+        formData.append('_method', 'DELETE')
+        formData.append('_token', token)
+        let action = `/entry/${entryId}`
+
+        link.addEventListener('click', function(e) {
+            e.preventDefault()
+            let consent = confirm('Remove draft entry?')
+
+            if (!consent) { return false }
+
+            window.fetch(action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(res => res.json())
+            .then(json => {
+                if (json.success) {
+                    createFlash('success', json.message)
+                    link.parentElement.parentElement.remove()
+                    draftEntryCount.innerText -= 1
+                } else {
+                    createFlash('error', json.message)
+                }
+            })
+        })
+    }
+})
+
 
 function createFlash(key, message) {
     let flashBag = document.getElementById('flash-bag')

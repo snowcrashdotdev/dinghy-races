@@ -6,20 +6,37 @@
     <header>
         <h1>Draft Entries for {{ draft.tournament.title }}</h1>
     </header>
-    <article class="summary bg-white flex-column margin">
-        <h2 class="bg-primary padding">({{ draft.draftEntries|length }}) Entries:</h2>
-        <ul class="list-style-none">
+    <main>
+        <table>
+            <h2>(<span id="entry-count">{{ draft.draftEntries|length }}</span>) Entries:</h2>
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Entered on</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for entry in draft.draftEntries %}
                 {% set href = path('profile_show', {
                     'username': entry.user
                 }) %}
-                <li>
-                    <small>({{ entry.createdAt|date('Y-m-d @ G:i') }})</small>
-                    <a href="{{href}}">{{entry.user}}</a>
-                </li>
+                <tr>
+                    <td><a href="{{href}}">{{entry.user}}</a></td>
+                    <td>{{ entry.createdAt|date('Y-m-d @ G:i') }}</td>
+                    {% if is_granted('ROLE_TO') %}
+                        <td><a href="#" class="color-danger remove-draft-entry" data-id="{{entry.id}}" data-token="{{ csrf_token('delete' ~ entry.id)|e('html_attr') }}">Remove</a></td>
+                    {% endif %}
+                </tr>
             {% else %}
-                <li>No entries.</li>
+                <tr>
+                    <td colspan="2">No entries.</td>
+                </tr>
             {% endfor %}
-        </ul>
-    </article>
+            </tbody>
+        </table>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{asset('/js/dist/admin.min.js')}}"></script>
 {% endblock %}

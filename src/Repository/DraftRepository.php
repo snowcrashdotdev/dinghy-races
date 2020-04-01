@@ -19,6 +19,15 @@ class DraftRepository extends ServiceEntityRepository
         parent::__construct($registry, Draft::class);
     }
 
+    public function findAll()
+    {
+        return $this->createQueryBuilder('d')
+            ->innerJoin('d.tournament', 't')
+            ->orderBy('t.end_date', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     // /**
     //  * @return Draft[] Returns an array of Draft objects
     //  */
