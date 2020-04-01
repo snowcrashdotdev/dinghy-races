@@ -61,6 +61,7 @@ class TournamentController extends AbstractController
             $scoring = new TournamentScoring();
             $tournament->setDraft($draft);
             $tournament->setScoring($scoring);
+            $scoring->setDeadline($tournament->getEndDate());
 
             $this->getDoctrine()->getManager()->persist($tournament);
             $this->getDoctrine()->getManager()->flush();
