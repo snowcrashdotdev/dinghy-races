@@ -28,7 +28,7 @@ class DraftEntry
     private $draft;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="draftEntries")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="draftEntries", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
