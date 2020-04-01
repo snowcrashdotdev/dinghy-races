@@ -1,49 +1,5 @@
 {{ form_start(form) }}
-    {% if not form.vars.valid %}
-        <ul>
-        {% for child in form.children %}
-            {% for error in child.vars.errors %}
-                <li>{{error.message}}</li>
-            {% endfor %}
-        {% endfor %}
-        </ul>
-    {% endif %}
-
-    <div>
-        {{ form_label(form.points) }}
-        {{ form_widget(form.points) }}
-    </div>
-
-    <div class="flex-row align-items-center">
-        {{ form_label(form.videoUrl) }}
-        {{ form_widget(form.videoUrl) }}
-    </div>
-
-    <div class="positioned">
-        {{ form_label(form.screenshot_file)}}
-        {% if score.screenshot %}
-            {% set widget_attr = {
-                'class': 'picture-input',
-                'hidden': true
-            } %}
-            {% set preview_style = '' %}
-        {% else %}
-            {% set widget_attr = {
-                'class': 'picture-input'
-            } %}
-            {% set preview_style = 'display:none;' %}
-        {% endif %}
-        <div class="upload-preview" data-file-input="score_screenshot_file">
-            <img style="{{preview_style}}" id="score_screenshot_file_preview" src="{{'/uploads/screenshots/' ~ score.screenshot}}">
-            <button style="{{preview_style}}" title="Remove screenshot" type="button" class="remove-file">ⓧ</button>
-        </div>
-        {{ form_widget(form.screenshot_file, { 'attr': widget_attr }) }}
-    </div>
-
-    <div class="flex-row align-items-center">
-        {{ form_label(form.comment) }}
-        {{ form_widget(form.comment) }}
-    </div>
+    {{ form_widget(form) }}
     <button>{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
 
