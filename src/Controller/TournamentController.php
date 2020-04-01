@@ -200,6 +200,20 @@ class TournamentController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($tournament);
             $em->flush();
+
+            if ($request->isXmlHttpRequest()) {
+                return $this->json([
+                    'success' => true,
+                    'message' => 'Tournament games updated!'
+                ]);
+            }
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Unable to update games list.'
+            ]);
         }
 
         return $this->render('tournament/edit.html.twig', [

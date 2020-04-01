@@ -1,22 +1,28 @@
 <nav class="main-navigation">
-    <a class="nav-item" href="{{path('tournament_index')}}">🏆<span class="nav-item-label">Home</a>
-
-    {% if is_granted('ROLE_USER') %}
-        <div class="nav-item has-sub-items">
-            <a href="#">➕<span class="nav-item-label">New</span></a>
-            <div class="sub-navigation">
-                {% if is_granted('ROLE_TO') %}
-                    <a class="nav-item" href="{{path('tournament_new')}}">Tournament</a>
-
-                    {% if tournament is defined and not tournament.ended %}
-                        <a class="nav-item" href="{{path('team_new', {'tournament': tournament.id})}}">Team</a>
-                    {% endif %}
-                    <a class="nav-item" href="{{path('game_new')}}">Game</a>
-                {% endif %}
-                {% set href = path('pb_index') %}
-                <a class="nav-item" href="{{href}}">Personal Best</a>
-            </div>
+    <div class="has-sub-items">
+        <a class="nav-item" href="/">🏆<span class="nav-item-label">Home</a>
+        <div class="sub-navigation">
+            {% if is_granted('ROLE_USER') %}
+                <a class="nav-item" href="{{path('dashboard')}}">Dashboard</a>
+            {% endif %}
+            <a class="nav-item" href="{{path('tournament_index')}}">Tournaments</a>
+            <a class="nav-item" href="{{path('draft_index')}}">Drafts</a>
+            <a class="nav-item" href="{{path('pb_index')}}">Permanent Boards</a>
         </div>
+    </div>
+    
+    {% if is_granted('ROLE_TO') %}
+    <div class="nav-item has-sub-items">
+        <a href="#">➕<span class="nav-item-label">New</span></a>
+        <div class="sub-navigation">
+            <a class="nav-item" href="{{path('game_new')}}">Game</a>
+            <a class="nav-item" href="{{path('tournament_new')}}">Tournament</a>
+
+            {% if tournament is defined and not tournament.ended %}
+                <a class="nav-item" href="{{path('team_new', {'tournament': tournament.id})}}">Team</a>
+            {% endif %}
+        </div>
+    </div>
     {% endif %}
 
     {# continued in '_partials/nav.end.html.twig' #}

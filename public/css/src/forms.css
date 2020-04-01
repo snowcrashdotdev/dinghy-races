@@ -16,19 +16,6 @@ form div {
     margin-bottom: calc(var(--margin) / 2);
 }
 
-form ul {
-    position: absolute;
-    margin: 0;
-    padding: 0;
-    top: var(--margin);
-    left: 0;
-    width: var(--label-width);
-    line-height: 1;
-    font-size: 0.5em;
-    list-style: none;
-    color: var(--color-danger);
-}
-
 :--inputs,
 button,
 label {

@@ -172,8 +172,7 @@ img {
     align-self: center;
 }
 
-.tournament-team-list,
-.team-roster {
+.header-list {
     font-size: 1rem;
     border-left: 0.1em solid var(--color-three);
     padding-left: var(--padding);

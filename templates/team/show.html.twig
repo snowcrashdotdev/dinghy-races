@@ -4,25 +4,17 @@
 
 {% block body %}
 <header>
-    <h1>{{team.name}}</h1>
-
-    <h2 class="text-small">as seen in <a class="tournament-title" href="{{path('tournament_show', {'id': team.tournament.id})}}">{{ team.tournament.title }}</a></h2>
+    <h1>{{team.name}}<br>
+        <small>as seen in 
+            <a class="tournament-title" href="{{path('tournament_show', {'id': team.tournament.id})}}">{{ team.tournament.title }}</a>
+        </small>
+    </h1>
 </header>
 
 <main>
 {% if not team.tournament.isUpcoming %}
     <section class="gadget-group">
         {% include '_gadgets/points.per.game.html.twig' %}
-    </section>
-{% else %}
-    <section class="team-roster">
-        <h2>Featuring:</h2>
-        {% for user in team.members %}
-            {% set href = path('profile_show', {
-                'username': user
-            }) %}
-            <p><a href="{{href}}">{{user.username}}</a></p>
-        {% endfor %}
     </section>
 {% endif %}
 

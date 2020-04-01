@@ -3,8 +3,16 @@
 {% block title %}Edit Tournament{% endblock %}
 
 {% block body %}
-    <header>
-        <h1>Edit Tournament</h1>
+    <header class="tournament-header">
+        <h1 class="tournament-title">Edit Tournament</h1>
+        <section class="header-list">
+            <h2>Teams</h2>
+
+            {% for team in tournament.teams %}
+                <p>{{team.name}} <a href="{{path('team_edit', {'id': team.id})}}">✏️</a></p>
+            {% endfor %}
+            <p>➕ <a href="{{path('team_new', {'tournament': tournament.id})}}">New Team</a></p>
+        </section>
     </header>
     <main>
         <section class="form-section">
@@ -16,17 +24,6 @@
             <h2>Games</h2>
             {{ include('tournament/_games_form.html.twig', { 'form': games_form }) }}
         </section>
-
-        <section class="form-section">
-        <h2>Teams</h2>
-
-        {% for team in tournament.teams %}
-            <p>{{team.name}} <a href="{{path('team_edit', {'id': team.id})}}">Edit</a></p>
-        {% endfor %}
-
-        <p><a href="{{path('team_new', {'tournament': tournament.id})}}">New Team</a></p>
-        </section>
-
     </main>
 {% endblock %}
 

@@ -19,7 +19,7 @@
         </section>
 
         {% if tournament.teams %}
-            <section class="tournament-team-list">
+            <section class="header-list">
                 <h2>Featuring:</h2>
                 {% for team in tournament.teams %}
                     {% set href = path('team_show', {
