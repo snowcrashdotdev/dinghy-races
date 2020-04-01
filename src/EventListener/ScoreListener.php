@@ -1,18 +1,22 @@
 <?php
 namespace App\EventListener;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use App\Entity\Score;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\Filesystem\Filesystem;
 use App\Service\ImageUploader;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
-class ScoreChange
+class ScoreListener
 {
-    public function __construct(String $upload_dir)
+    public function __construct(string $screenshot_dir, string $replay_dir)
     {
-        $this->upload_dir = $upload_dir;
+        $this->screenshot_dir = $screenshot_dir;
+        $this->replay_dir = $replay_dir;
         $this->fs = new Filesystem();
     }
+
     public function preUpdate($score, PreUpdateEventArgs $args)
     {
         if ($args->hasChangedField('points')) {
@@ -30,14 +34,14 @@ class ScoreChange
             $args->getOldValue('screenshot') !== null
         ) {
             $prev_full_filename = $args->getOldValue('screenshot');
-            $prev_screenshot_path = $this->getUploadDir() . '/' . $prev_full_filename;
+            $prev_screenshot_path = $this->getScreenshotDir() . '/' . $prev_full_filename;
             if ($this->getFilesystem()->exists($prev_screenshot_path)) {
                 $this->getFilesystem()->remove($prev_screenshot_path);
                 $prev_name = pathinfo($prev_screenshot_path, PATHINFO_FILENAME);
                 $prev_ext = pathinfo($prev_screenshot_path, PATHINFO_EXTENSION);
                 
                 foreach(ImageUploader::IMAGE_SIZES as $size) {
-                    $size_path = $this->getUploadDir()
+                    $size_path = $this->getScreenshotDir()
                         .'/'.$prev_name.ImageUploader::SIZE_PREFIX.$size.'.'.$prev_ext; 
                     $this->getFilesystem()->remove($size_path);
                 }
@@ -45,16 +49,38 @@ class ScoreChange
         }
     }
 
-    public function prePersist($score, LifecycleEventArgs $args)
+    public function postLoad(Score $score)
     {
-        $now = new \DateTime('NOW');
-        $score->setCreatedAt($now);
-        $score->setUpdatedAt($now);
+        try {
+            $score->setScreenshotFile(
+                new File(
+                    $this->getScreenshotDir() . '/' . $score->getScreenshot()
+                )
+            );
+        } catch (FileException $e) {
+            $score->setScreenshotFile(null);
+        }
+
+        try {
+            $score->setReplayFile(
+                new File(
+                    $this->getReplayDir() . '/' . $score->getReplay()
+                )
+            );
+        } catch (FileException $e) {
+            $score->setReplayFile(null);
+        }
+
     }
 
-    public function getUploadDir()
+    public function getScreenshotDir()
     {
-        return $this->upload_dir;
+        return $this->screenshot_dir;
+    }
+
+    public function getReplayDir()
+    {
+        return $this->replay_dir;
     }
 
     public function getFilesystem()
