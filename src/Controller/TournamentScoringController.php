@@ -7,6 +7,7 @@ use App\Entity\Tournament;
 use App\Form\TournamentScoringType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use App\Repository\TournamentScoringRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -78,7 +79,6 @@ class TournamentScoringController extends AbstractController
         }
 
         $form = $this->createForm(TournamentScoringType::class, $tournamentScoring);
-        $tableForm = $this->createScoringTableForm($tournament);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -89,6 +89,28 @@ class TournamentScoringController extends AbstractController
             );
         }
 
+        $tableByText = $this->createScoringTableTextForm();
+        $tableByText->handleRequest($request);
+        if ($tableByText->isSubmitted() && $tableByText->isValid()) {
+            $list = $tableByText->get('points_list')->getData();
+            $table = array_map(
+                'intval',
+                explode(',', preg_replace('/\s+/', '', trim($list)))
+            );
+
+            if (rsort($table)) {
+                array_unshift($table, null);
+                unset($table[0]);
+                $tournamentScoring->setPointsTable($table);
+                $this->addFlash('success', 'Points table updated!');
+                $this->getDoctrine()->getManager()->flush();
+                $this->redirectToRoute('scoring_edit', [
+                    'tournament' => $tournament->getId()
+                ]);
+            }
+        }
+
+        $tableForm = $this->createScoringTableForm($tournament);
         $tableForm->handleRequest($request);
         if ($tableForm->isSubmitted() && $tableForm->isValid()) {
             $pointsTable = $tableForm->getData();
@@ -117,6 +139,7 @@ class TournamentScoringController extends AbstractController
             'tournament_scoring' => $tournamentScoring,
             'table_form' => $tableForm->createView(),
             'form' => $form->createView(),
+            'table_by_text_form' => $tableByText->createView()
         ]);
     }
 
@@ -138,7 +161,7 @@ class TournamentScoringController extends AbstractController
     private function createScoringTableForm(Tournament $tournament)
     {
         $forms = $this->get('form.factory');
-        $count = $tournament->getUsers()->count();
+        $count = count($tournament->getScoring()->getPointsTable());
         $form = $forms->createNamedBuilder('scoring_table', FormType::class, null, [
             'attr' => [ 'class' => 'ajax-form' ]
         ]);
@@ -154,5 +177,17 @@ class TournamentScoringController extends AbstractController
         }
 
         return $form->getForm();
+    }
+
+    private function createScoringTableTextForm()
+    {
+        return $this->get('form.factory')
+            ->createNamedBuilder('scoring_table_text', FormType::class) 
+            ->add('points_list', TextareaType::class, [
+                'label' => 'List',
+                'attr' => ['placeholder' => '300,290,290...']
+            ])
+            ->getForm()
+        ;
     }
 }

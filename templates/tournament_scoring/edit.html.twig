@@ -12,11 +12,21 @@
             {{ include('tournament_scoring/_form.html.twig', {'button_label': 'Save'}) }}
         </section>
 
+        {% if tournament_scoring.pointsTable|length %}
         <section class="form-section">
             <h2>Ranked Points Table</h2>
             {{ include('tournament_scoring/_table_form.html.twig', {
                 'form': table_form,
                 'button_label': 'Save'
+            }) }}
+        </section>
+        {% endif %}
+
+        <section class="form-section">
+            <h2>Ranked Points (Comma Separated)</h2>
+            {{ include('tournament_scoring/_table_text_form.twig', {
+                'form': table_by_text_form,
+                'button_label': 'Submit'
             }) }}
         </section>
     </main>
