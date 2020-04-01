@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use App\Service\ImageUploader;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +14,6 @@ use App\Entity\Game;
 use App\Entity\Tournament;
 use App\Form\ScoreType;
 use App\Repository\TournamentScoreRepository;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 /**
  * @Route("/scores")
@@ -36,11 +33,15 @@ class TournamentScoreController extends AbstractController
          * Redirect if not logged in, or if not assigned to tournament team
          */
         if (empty($user)) {
+            $this->addFlash('notice', 'Log in to update your score.');
             return $this->redirectToRoute('app_login');
         } elseif (empty(
             $team = $user->getTeam($tournament)
         )) {
-            return $this->redirectToRoute('tournament_index');
+            $this->addFlash('notice', 'Unable to determine your team.');
+            return $this->redirectToRoute('tournament_show', [
+                'id' => $tournament->getId()
+            ]);
         }
 
         $score = $scoreRepo->findOneBy([    
@@ -51,41 +52,20 @@ class TournamentScoreController extends AbstractController
 
         if (empty($score)) {
             $score = new TournamentScore();
-            $score->setUser($user);
-            $score->setGame($game);
-            $score->setTournament($tournament);
-            $score->setTeam($team);
+            $game->addTournamentScore($score);
+            $user->addTournamentScore($score);
+            $tournament->addScore($score);
+            $team->addScore($score);
             $score->setAutoAssigned(false);
             $this->getDoctrine()->getManager()->persist($score);
         }
 
-        $upload_dir = $this->getParameter('screenshot_dir');
-
-        try {
-            $score->setScreenshotFile(
-                new File($upload_dir . '/' . $score->getScreenshot())
-            );
-        } catch (FileException $e) {
-            $score->setScreenshotFile(null);
-        }
-
         $form = $this->createForm(ScoreType::class, $score);
-
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $screenshot_file = $form->get('screenshot_file')->getData();
+            $this->getDoctrine()->getManager()->flush();
 
-            if ($screenshot_file) {
-                $uploader = new ImageUploader($upload_dir);
-                $score->setScreenshot(
-                    $uploader->upload($screenshot_file)
-                );
-            }
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->flush();
             $this->addFlash('success', 'Your score was saved!');
-
             return $this->redirectToRoute('score_show',
                 [
                     'tournament_id'=>$score->getTournament()->getId(),

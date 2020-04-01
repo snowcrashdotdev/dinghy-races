@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -60,7 +59,9 @@ abstract class Score
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Url
+     * @Assert\Url(
+     *      protocols= {"http", "https"}
+     * )
      */
     private $videoUrl;
 
@@ -69,9 +70,6 @@ abstract class Score
      */
     private $screenshot;
 
-    /**
-     * @Assert\Image
-     */
     protected $screenshot_file;
 
     /**
@@ -79,9 +77,6 @@ abstract class Score
      */
     private $replay;
 
-    /**
-     * @Assert\File
-     */
     protected $replay_file;
 
     /**
@@ -201,12 +196,12 @@ abstract class Score
         return $this;
     }
 
-    public function getScreenshotFile(): ?File
+    public function getScreenshotFile()
     {
         return $this->screenshot_file;
     }
 
-    public function setScreenshotFile(?File $file): self
+    public function setScreenshotFile($file): self
     {
         $this->screenshot_file = $file;
 
@@ -221,6 +216,18 @@ abstract class Score
     public function setReplay(?string $replay): self
     {
         $this->replay = $replay;
+
+        return $this;
+    }
+
+    public function getReplayFile()
+    {
+        return $this->replay_file;
+    }
+
+    public function setReplayFile($file): self
+    {
+        $this->replay_file = $file;
 
         return $this;
     }

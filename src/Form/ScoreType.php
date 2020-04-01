@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Score;
+use App\Service\ImageUploader;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -11,50 +12,74 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class ScoreType extends AbstractType
 {
+    public function __construct(string $screenshot_dir)
+    {
+        $this->uploader = new ImageUploader($screenshot_dir);
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('points', IntegerType::class, [
+                'label' => 'Score',
                 'attr' => [
                     'placeholder' => 'Enter your highscore',
-                    'class' => 'score-input'
-            ],
-                'label' => 'Score',
-                'label_attr' => ['class'=>'score-label']
+                ],
             ])
             ->add('videoUrl', UrlType::class, [
                 'required' => false,
+                'label' => 'Video URL',
                 'attr' => [
                     'placeholder' => 'Example: https://www.twitch.tv/videos/423907124',
-                    'class' => 'score-input'
-                ],
-                'label' => 'Video URL',
-                'label_attr' => ['class'=>'score-label']
+                    'type' => 'url'
+                ]
             ])
             ->add('screenshot_file', FileType::class, [
                 'required' => false,
-                'attr' => [
-                    'placeholder' => 'Any image file will do',
-                    'class' => 'score-input'
-                ],
                 'label' => 'Screenshot',
-                'label_attr' => ['class'=>'score-label']
+                'constraints' => [
+                    new Image([
+                        'maxSize' => '6M'
+                    ])
+                ]
+            ])
+            ->add('replay_file', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label' => 'Replay',
+                'constraints' => [
+                    new File([
+                        'maxSize' => '4M',
+                        'mimeTypes' => 'application/zip',
+                        'mimeTypesMessage' => 'ZIP and upload your INP'
+                    ])
+                ]
             ])
             ->add('comment', TextType::class, [
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Add comment (number of credits, stages, etc.)',
-                    'class' => 'score-input'
                 ],
-                'label' => 'Comment',
-                'label_attr' => ['class'=>'score-label']
+                'label' => 'Comment'
             ])
             ->add('screenshot_file_remove', HiddenType::class, [
                 'mapped' => false
             ])
+            ->add('replay_file_remove', HiddenType::class, [
+                'mapped' => false
+            ])
+            ->addEventListener(
+                FormEvents::POST_SUBMIT,
+                [$this, 'onScoreSubmit']
+            )
         ;
     }
 
@@ -63,5 +88,24 @@ class ScoreType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Score::class,
         ]);
+    }
+
+    public function onScoreSubmit(FormEvent $event)
+    {
+        $score = $event->getData();
+        if ($event->getForm()->isValid()) {
+            if ($screenshot_file = $score->getScreenshotFile()) {
+                $score->setScreenshot(
+                    $this->getUploader()->upload($screenshot_file)
+                );
+            }
+        } else {
+            $score->setScreenshotFile(null);
+        }
+    }
+
+    private function getUploader(): ImageUploader
+    {
+        return $this->uploader;
     }
 }

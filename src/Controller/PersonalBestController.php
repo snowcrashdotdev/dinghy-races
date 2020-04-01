@@ -10,8 +10,6 @@ use App\Service\ImageUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -57,14 +55,8 @@ class PersonalBestController extends AbstractController
      * @ParamConverter("game", options={"mapping": {"game": "name"}})
      * @Security("is_granted('ROLE_USER')")
      */
-    public function new(Request $request, String $game, PersonalBestRepository $personalBestRepository): Response
+    public function new(Request $request, Game $game, PersonalBestRepository $personalBestRepository): Response
     {
-        $upload_dir = $this->getParameter('screenshot_dir');
-        $game = $this->getDoctrine()
-            ->getRepository('App\Entity\Game')
-            ->findOneBy(['name' => $game])
-        ;
-
         if (empty(
                 $personalBest = $personalBestRepository->findOneBy([
                     'game' => $game,
@@ -78,35 +70,16 @@ class PersonalBestController extends AbstractController
             $this->getDoctrine()->getManager()->persist($personalBest);
         }
 
-        try {
-            $personalBest->setScreenshotFile(
-                new File($upload_dir . '/' . $personalBest->getScreenshot())
-            );
-        } catch (FileException $e) {
-            $personalBest->setScreenshotFile(null);
-        }
-
         $form = $this->createForm(ScoreType::class, $personalBest);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $screenshot_file = $form->get('screenshot_file')->getData();
-            $screenshot_remove = intval(
-                $form->get('screenshot_file_remove')->getData()
-            );
-
-            if ($screenshot_file) {
-                $uploader = new ImageUploader($upload_dir);
-                $personalBest->setScreenshot(
-                    $uploader->upload($screenshot_file)
-                );
-            } elseif ($screenshot_remove === 1) {
-                $personalBest->setScreenshot(null);
-            }
-
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Your score has been saved!');
-            return $this->redirectToRoute('pb_index');
+            return $this->redirectToRoute('pb_show', [
+                'game' => $game->getname()
+            ]);
         }
 
         return $this->render('personal_best/new.html.twig', [
