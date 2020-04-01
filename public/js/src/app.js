@@ -103,6 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let flashBag = document.getElementById('flash-bag')
 
     if (flashBag.childElementCount > 0) {
+        flashBag.removeAttribute('hidden')
         setTimeout(function(){
             flashBag.classList.add('fade')
             setTimeout(function(){
