@@ -299,11 +299,18 @@ class Tournament
 
     public function isAfterCutoff()
     {
-        return (date_create('NOW') > $this->getScoring()->getCutoffDate());
+        return (date_create('NOW') > $this->getScoring()->getDeadline());
     }
 
     public function getParticipationRate()
     {
+        if (
+            empty($this->getScores()) ||
+            empty($this->getUsers())
+        ) {
+            return null;
+        }
+
         $criteria = Criteria::create()
             ->andWhere(Criteria::expr()->neq('auto_assigned', true));
 
