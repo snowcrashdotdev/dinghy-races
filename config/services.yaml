@@ -32,6 +32,7 @@ services:
     App\Form\ScoreType:
         arguments:
             $screenshot_dir: '%screenshot_dir%'
+            $replay_dir: '/%replay_dir%/'
 
     App\Service\TwitchChecker:
         arguments:
@@ -39,6 +40,7 @@ services:
             $clientId: '%env(TWITCH_CLIENT_ID)%'
             $streamTag: '[calice]'
             $manager: '@doctrine.orm.default_entity_manager'
+
     App\EventListener\ProfileChange:
         arguments:
             $upload_dir: '%pfp_dir%'
@@ -47,14 +49,16 @@ services:
                     name: 'doctrine.orm.entity_listener'
                     event: 'preUpdate'
                     entity: 'App\Entity\Profile'
+
     App\EventListener\GameChange:
         arguments:
             $upload_dir: '%marquee_dir%'
         tags:
-                -
-                    name: 'doctrine.orm.entity_listener'
-                    event: 'preUpdate'
-                    entity: 'App\Entity\Game'
+            -
+                name: 'doctrine.orm.entity_listener'
+                event: 'preUpdate'
+                entity: 'App\Entity\Game'
+
     App\EventListener\ScoreListener:
         arguments:
             $screenshot_dir: '%screenshot_dir%'
