@@ -2,6 +2,9 @@
 namespace App\EventListener;
 
 use App\Entity\Score;
+use App\Entity\Tournament;
+use App\Entity\TournamentScore;
+use App\Service\ScoreKeeper;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\Filesystem\Filesystem;
 use App\Service\ImageUploader;
@@ -10,11 +13,12 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class ScoreListener
 {
-    public function __construct(string $screenshot_dir, string $replay_dir)
+    public function __construct(string $screenshot_dir, string $replay_dir, ScoreKeeper $score_keeper)
     {
         $this->screenshot_dir = $screenshot_dir;
         $this->replay_dir = $replay_dir;
         $this->fs = new Filesystem();
+        $this->score_keeper = $score_keeper;
     }
 
     public function preUpdate($score, PreUpdateEventArgs $args)
@@ -22,11 +26,17 @@ class ScoreListener
         if ($args->hasChangedField('points')) {
             $history = $score->getPointsHistory();
             $history[] = $args->getNewValue('points');
-            $new_history = array_unique($history);
-            sort($new_history, SORT_NUMERIC);
-            
-            $score->setPointsHistory($new_history);
-            $score->setUpdatedAt(new \DateTime('NOW'));
+            $score->setPointsHistory($history);
+            $score->setUpdatedAt(date_create('NOW'));
+
+            if (is_a($score, TournamentScore::class)) {
+                $tournament = $score->getTournament();
+                $game = $score->getGame();
+
+                $this->getScoreKeeper()
+                    ->scoreGame($tournament, $game)
+                ;
+            }
         }
 
         if (
@@ -86,5 +96,10 @@ class ScoreListener
     public function getFilesystem()
     {
         return $this->fs;
+    }
+
+    public function getScoreKeeper(): ScoreKeeper
+    {
+        return $this->score_keeper;
     }
 }

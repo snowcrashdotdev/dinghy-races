@@ -46,6 +46,8 @@ class Team
      */
     private $scores;
 
+    private $scores_available;
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
@@ -158,5 +160,24 @@ class Team
         }
 
         return $this;
+    }
+
+    public function setScoresAvailable(int $count): self
+    {
+        $this->scores_available = $count;
+
+        return $this;
+    }
+
+    public function useScore(): self
+    {
+        $this->scores_available -= 1;
+
+        return $this;
+    }
+
+    public function hasScoresAvailable(): bool
+    {
+        return ($this->scores_available > 0);
     }
 }

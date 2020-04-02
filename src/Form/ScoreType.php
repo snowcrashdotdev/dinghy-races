@@ -81,6 +81,10 @@ class ScoreType extends AbstractType
                 FormEvents::POST_SUBMIT,
                 [$this, 'onScoreSubmit']
             )
+            ->addEventListener(
+                FormEvents::POST_SET_DATA,
+                [$this, 'onScoreSetData']
+            )
         ;
     }
 
@@ -89,6 +93,11 @@ class ScoreType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Score::class,
         ]);
+    }
+
+    public function onScoreSetData(FormEvent $event)
+    {
+        $event->getData()->setUpdatedAt(date_create('NOW'));
     }
 
     public function onScoreSubmit(FormEvent $event)

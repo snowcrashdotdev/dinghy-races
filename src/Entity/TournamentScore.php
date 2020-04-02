@@ -92,6 +92,11 @@ class TournamentScore extends Score
         return $this;
     }
 
+    public function isNoShow(): bool
+    {
+        return $this->auto_assigned;
+    }
+
     public function getTournament(): ?Tournament
     {
         return $this->tournament;
