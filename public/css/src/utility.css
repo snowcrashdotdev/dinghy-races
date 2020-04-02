@@ -38,6 +38,27 @@
     justify-content: center;
 }
 
+.page-break {
+    text-align: center;
+    display: flex;
+}
+
+.page-break::before,
+.page-break::after {
+    content: '';
+    flex: 1 1;
+    margin: auto;
+    border-bottom: 0.05em solid var(--color-three);
+}
+
+.page-break::before {
+    margin-right: var(--padding);
+}
+
+.page-break::after {
+    margin-left: var(--padding);
+}
+
 @media (--small) {
     .float-right {
         float: right;

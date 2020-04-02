@@ -3,7 +3,9 @@
 }
 
 .gadget {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     position: relative;
     box-sizing: border-box;
     padding-top: calc(var(--margin) * 2);
