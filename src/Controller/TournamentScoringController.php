@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\TournamentScoring;
 use App\Entity\Tournament;
+use App\Service\ScoreKeeper;
 use App\Form\TournamentScoringType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -47,16 +48,26 @@ class TournamentScoringController extends AbstractController
      * @Entity("tournament", expr="repository.find(tournament)")
      * @IsGranted("ROLE_TO")
      */
-    public function refresh(Request $request, Tournament $tournament)
+    public function refresh(Request $request, Tournament $tournament, ScoreKeeper $score_keeper)
     {
-        if ($this->isCsrfTokenValid('refresh'.$tournamentScoring->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('refresh'.$tournament->getScoring()->getId(), $request->request->get('_token'))) {
             if ($request->isXmlHttpRequest()) {
+                $score_keeper->scoreTournament($tournament);
                 return $this->json([
                     'success' => true,
-                    'message' => "${$tournament} has been re-scored!"
+                    'message' => "${tournament} has been re-scored!"
                 ]);
             }
         }
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->json([
+                'success' => false,
+                'message' => "${tournament} could not be scored."
+            ]);
+        }
+
+
 
         return $this->redirectToRoute('tournament_show', [
             'id' => $tournament->getId()

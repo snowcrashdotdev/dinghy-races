@@ -4,7 +4,7 @@
 
 {% block body %}
     <header>
-        <h1>Edit Scoring for {{tournament.title}}</h1>
+        <h1>Edit Scoring for <a href="{{path('tournament_show', { 'id': tournament.id })}}">{{tournament.title}}</a></h1>
     </header>
     <main>
         <section class="form-section">
@@ -34,7 +34,7 @@
 
 {% block navigation %}
     {% if not tournament.upcoming %}
-        <a href="#" id="scoring-refresh" class="nav-item">♻️<span class="nav-item-label">Re-Score</span></a>
+        <a href="#" id="scoring-refresh" class="nav-item" data-tournament="{{tournament.id}}" data-token="{{csrf_token('refresh' ~ tournament_scoring.id)|e('html_attr')}}">♻️<span class="nav-item-label">Re-Score</span></a>
     {% endif %}
 {% endblock %}
 
