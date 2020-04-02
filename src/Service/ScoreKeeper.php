@@ -81,7 +81,7 @@ class ScoreKeeper
         unset($rank);
 
         if (!$skip_team_scores) {
-            $this->scoreTeams($teams, $score);
+            $this->scoreTeams($teams, $scores);
         }
 
         $this->getManager()->flush();
