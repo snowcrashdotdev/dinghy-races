@@ -71,11 +71,14 @@ class UserProfileType extends AbstractType
                 if ($picture_filename) {
                     $profile->setPicture($picture_filename);
                 } else {
+                    $profile->setPictureFile(null);
                     $event->getForm()->addError(new FormError('Unable to accept uploaded image.'));
                 }
             } else if ($picture_remove === '1') {
                 $profile->setPicture(null);
             }
+        } else {
+            $profile->setPictureFile(null);
         }
         $event->setData($profile);
     }
