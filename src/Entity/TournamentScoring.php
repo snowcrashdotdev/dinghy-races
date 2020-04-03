@@ -34,7 +34,7 @@ class TournamentScoring
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $cutoff_line;
+    private $cutoff;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -87,14 +87,14 @@ class TournamentScoring
         return $this;
     }
 
-    public function getCutoffLine(): ?int
+    public function getCutoff(): ?int
     {
-        return $this->cutoff_line;
+        return $this->cutoff;
     }
 
-    public function setCutoffLine(?int $cutoff_line): self
+    public function setCutoff(?int $cutoff): self
     {
-        $this->cutoff_line = $cutoff_line;
+        $this->cutoff = $cutoff;
 
         return $this;
     }
