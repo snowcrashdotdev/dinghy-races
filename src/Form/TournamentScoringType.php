@@ -14,8 +14,8 @@ class TournamentScoringType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('cutoff_line', IntegerType::class, [
-                'label' => 'Cutoff #',
+            ->add('cutoff', IntegerType::class, [
+                'label' => 'Cutoff',
                 'attr' => [
                     'placeholder' => 'Number of scores to drop from each team.'
                 ]
