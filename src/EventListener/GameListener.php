@@ -1,18 +1,21 @@
 <?php
 namespace App\EventListener;
 
+use App\Entity\Game;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\Filesystem\Filesystem;
 use App\Service\ImageUploader;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
-class GameChange
+class GameListener
 {
     public function __construct(String $upload_dir)
     {
         $this->upload_dir = $upload_dir;
         $this->fs = new Filesystem();
     }
-    public function preUpdate($game, PreUpdateEventArgs $args)
+    public function preUpdate(Game $game, PreUpdateEventArgs $args)
     {
         if (
             $args->hasChangedField('marquee') &&
@@ -31,6 +34,19 @@ class GameChange
                     $this->getFilesystem()->remove($size_path);
                 }
             }
+        }
+    }
+
+    public function postLoad(Game $game)
+    {
+        try {
+            $game->setMarqueeFile(
+                new File(
+                    $this->getUploadDir() . '/' . $game->getMarquee()
+                )
+            );
+        } catch (FileException $e) {
+            $game->setMarqueeFile(null);
         }
     }
 
