@@ -1,3 +1,4 @@
+{% if tournament.scores|length %}
 <aside class="gadget">
     <h3>Recent Scores</h3>
     {% for score in recent_scores %}
@@ -6,9 +7,10 @@
             'tournament_id': score.tournament.id
         }) %}
         <div class="text-justify" title="{{score.updatedAt|date('m/d G:i')}}">
-            <a href="{{href}}">{{score.game}}</a>
+            <a href="{{href}}">{{score.game.name}}</a>
             <span class="margin-x-auto roboto outlined">{{score.user|slice(0,3)|upper}}</span>
             <span class="roboto outlined">{{score.points|number_format}}</span>
         </div>
     {% endfor %}
 </aside>
+{% endif %}
