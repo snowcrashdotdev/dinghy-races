@@ -6,7 +6,6 @@ use App\Entity\PersonalBest;
 use App\Entity\Game;
 use App\Form\ScoreType;
 use App\Repository\PersonalBestRepository;
-use App\Service\ImageUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
