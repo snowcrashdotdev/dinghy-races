@@ -25,7 +25,7 @@ class ReplayUploader
             );
         }
 
-        if ($entry) {
+        if (isset($entry) && $entry) {
             zip_entry_open($zip, $entry, 'r');
             $zip_header = zip_entry_read($entry, 7);
             zip_entry_close($entry);
