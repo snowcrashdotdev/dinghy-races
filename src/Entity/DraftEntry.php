@@ -40,7 +40,7 @@ class DraftEntry
 
     public function __construct()
     {
-        $this->created_at = new \DateTime('now');
+        $this->created_at = date_create('NOW');
         $this->eligible = true;
     }
 
