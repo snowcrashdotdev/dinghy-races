@@ -36,7 +36,7 @@ class ScoreKeeper
         });
         $teams = $tournament->getTeams()->toArray();
         $scoring = $tournament->getScoring();
-        $cutoff = $scoring->getCutoffLine();
+        $cutoff = $scoring->getCutoff();
         $cutoff_score = $scoring->getCutoffScore();
         $noshow_score = $scoring->getNoshowScore();
         $points_table = $scoring->getPointsTable();
