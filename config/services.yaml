@@ -33,6 +33,9 @@ services:
         arguments:
             $screenshot_dir: '%screenshot_dir%'
             $replay_dir: '/%replay_dir%/'
+    App\Form\UserProfileType:
+        arguments:
+            $pfp_dir: '%pfp_dir%'
 
     App\Service\ScoreKeeper:
         arguments:
@@ -45,13 +48,17 @@ services:
             $streamTag: '[calice]'
             $manager: '@doctrine.orm.default_entity_manager'
 
-    App\EventListener\ProfileChange:
+    App\EventListener\ProfileListener:
         arguments:
             $upload_dir: '%pfp_dir%'
         tags:
                 -
                     name: 'doctrine.orm.entity_listener'
                     event: 'preUpdate'
+                    entity: 'App\Entity\Profile'
+                -
+                    name: 'doctrine.orm.entity_listener'
+                    event: 'postLoad'
                     entity: 'App\Entity\Profile'
 
     App\EventListener\GameChange:

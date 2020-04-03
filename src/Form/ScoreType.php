@@ -46,7 +46,6 @@ class ScoreType extends AbstractType
             ])
             ->add('screenshot_file', FileType::class, [
                 'required' => false,
-                'label' => 'Screenshot',
                 'constraints' => [
                     new Image([
                         'maxSize' => '6M'
@@ -55,7 +54,6 @@ class ScoreType extends AbstractType
             ])
             ->add('replay_file', FileType::class, [
                 'required' => false,
-                'label' => 'Replay',
                 'constraints' => [
                     new File([
                         'maxSize' => '4M',
@@ -97,12 +95,23 @@ class ScoreType extends AbstractType
 
     public function onScoreSetData(FormEvent $event)
     {
-        $event->getData()->setUpdatedAt(date_create('NOW'));
+        $score = $event->getData();
+        $score->setUpdatedAt(date_create('NOW'));
+        $event->setData($score);
     }
 
     public function onScoreSubmit(FormEvent $event)
     {
         $score = $event->getData();
+        $remove_screenshot_file = $event->getForm()
+            ->get('screenshot_file_remove')
+            ->getData()
+        ;
+        $remove_replay_file = $event->getForm()
+            ->get('replay_file_remove')
+            ->getData()
+        ;
+
         if ($event->getForm()->isValid()) {
             if ($screenshot_file = $score->getScreenshotFile()) {
                 $screenshot_filename = $this->getScreenshotUploader()
@@ -113,7 +122,10 @@ class ScoreType extends AbstractType
                     $score->setScreenshot($screenshot_filename);
                 } else {
                     $event->getForm()->addError(new FormError('Unable to accept uploaded image.'));
+                    $score->setScreenshotFile(null);
                 }
+            } else if ($remove_screenshot_file === '1') {
+                $score->setScreenshot(null);
             }
 
             if ($replay_file = $score->getReplayFile()) {
@@ -125,12 +137,13 @@ class ScoreType extends AbstractType
                     $score->setReplay($replay_filename);
                 } else {
                     $event->getForm()->addError(new FormError('Unable to accept uploaded INP.'));
+                    $score->setReplayFile(null);
                 }
+            } else if ($remove_replay_file === '1') {
+                $score->setReplay(null);
             }
-        } else {
-            $score->setScreenshotFile(null);
-            $score->setReplayFile(null);
         }
+        $event->setData($score);
     }
 
     private function getScreenshotUploader(): ImageUploader

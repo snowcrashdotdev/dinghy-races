@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\File\File;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProfileRepository")
  */
-class Profile
+class Profile implements \Serializable
 {
     /**
      * @ORM\Id()
@@ -34,12 +34,6 @@ class Profile
      */
     private $picture;
     
-    /**
-     * @Assert\Image(
-     *      allowLandscape = false,
-     *      allowPortrait = false
-     * )
-     */
     protected $picture_file;
 
     public function getId(): ?int
@@ -102,5 +96,15 @@ class Profile
     public function getPictureFile() : ?File
     {
         return $this->picture_file;
+    }
+
+    public function serialize()
+    {
+        return '';
+    }
+
+    public function unserialize($serialized)
+    {
+        return;
     }
 }

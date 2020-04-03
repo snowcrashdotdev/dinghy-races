@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      "personal_best" = "PersonalBest"
  * })
  */
-abstract class Score
+abstract class Score implements \Serializable
 {
     /**
      * @ORM\Id()
@@ -254,5 +254,15 @@ abstract class Score
             ! empty($this->screenshot_file) ||
             ! empty($this->replay_file)
         );
+    }
+
+    public function serialize()
+    {
+        return '';
+    }
+
+    public function unserialize($serialized)
+    {
+        return;
     }
 }

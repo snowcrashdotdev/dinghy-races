@@ -132,6 +132,10 @@
     display: block;
 }
 
+.inline {
+    display: inline;
+}
+
 .flex {
     display: flex;
     align-items: center;
@@ -181,12 +185,15 @@
     color: var(--color-danger) !important;
 }
 
+.color-transparent {
+    color: transparent;
+}
+
 .bg-black {
     background-color: #000;
 }
 
 .button {
-    box-sizing: border-box;
     text-align: center;
     width: 9rem;
     margin: calc(var(--margin)/2) 0;

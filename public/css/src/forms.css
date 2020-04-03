@@ -1,10 +1,8 @@
 form {
-    background-color: #000;
-    padding: var(--padding);
-    flex-grow: 0;
-    flex-shrink: 1;
-    flex-basis: calc(var(--max-content-width) / 2);
-    max-width: calc(var(--max-content-width) / 2);
+    width: var(--form-width);
+    padding: var(--padding) calc(var(--padding) * 3);
+    max-width: 100%;
+    border: 0.1em solid var(--color-white);
 }
 
 .form-section {
@@ -16,65 +14,105 @@ form div {
     margin-bottom: calc(var(--margin) / 2);
 }
 
-:--inputs,
-button,
 label {
-    box-sizing: border-box;
-}
-
-label {
-    float: left;
-    text-align: right;
-    width: var(--label-width);
-    padding-right: calc(var(--margin) / 2);
+    display: block;
 }
 
 :--inputs,
 button {
-    cursor: pointer;
     font-family: inherit;
     font-size: 100%;
     padding: 0;
     margin: 0;
 }
+
 :--inputs {
     width: var(--input-width);
+    max-width: 100%;
+    outline-color: var(--color-three);
 }
 
-input[type="checkbox"] {
+[type="checkbox"] {
     width: auto;
+}
+
+[type="file"] {
+    margin: 0;
+    padding: 0;
+    border: none;
+    clip: rect(0,0,0,0);
+    height: 1px;
+    width: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    position: absolute;
+}
+
+[for$="_file"] {
+    cursor: pointer;
+    text-align: center;
+    float: none;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--padding);
+    background-color: #000;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 0.1em solid var(--color-white);
+    border-radius: 0.1em;
+    text-shadow: var(--outlined);
+    font-family: 'Roboto', sans-serif;
+    text-overflow: ellipsis;
+    margin-top: var(--margin);
+
+    &:hover {
+        border-color: var(--color-three);
+    }
+}
+
+[for$="_file"]::before {
+    display: block;
+    content: attr(data-label);
+    position: absolute;
+    top: calc(var(--margin) * -1);
+    left: 0;
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    text-shadow: none;
+}
+
+[for$="_file"],
+.file-input-menu {
+    width: var(--input-width);
+    height: calc(var(--margin) * 6);
+    max-width: 100%;
+}
+
+.file-input-menu {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.file-input-control {
+    width: var(--input-width);
+    max-width: 16rem;
+    margin: calc(var(--margin)/2) 0;
+    padding: calc(var(--padding)/2);
 }
 
 form button {
     display: block;
-    position: relative;
     width: var(--label-width);
     margin-top: calc(var(--margin)/2);
-    margin-bottom: var(--margin);
-    margin-left: var(--label-width);
-    margin-right: auto;
-    z-index: 0;
-}
-
-.upload-preview {
-    cursor: pointer;
-}
-
-.remove-file {
-    position: absolute;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    top: 0;
-    right: 0;
-    width: 1rem;
-    background: none;
-    border: none;
-    color: var(--color-two);
-}
-
-.remove-file:active {
-    color: var(--color-white);
+    padding: var(--padding);
 }
 
 .login {
@@ -85,7 +123,6 @@ form button {
     display: none;
     position: absolute;
     z-index: 1;
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
     width: var(--input-width);
@@ -111,6 +148,7 @@ form button {
 
 .game-form-list-item {
     cursor: pointer;
+    flex: 0 0 9rem;
     border: 0.1em solid var(--color-white);
     padding: var(--padding);
     margin-right: var(--margin);

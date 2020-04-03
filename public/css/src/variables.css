@@ -35,6 +35,6 @@
     --outlined: 0.1em 0.1em 0.1em var(--color-black);
 
     --max-content-width: 100rem;
-    --label-width: 8rem;
-    --input-width: calc(100% - var(--label-width));
+    --form-width: calc(var(--max-content-width) * 2 / 3);
+    --input-width: calc(var(--form-width) * 2 / 6);
 }

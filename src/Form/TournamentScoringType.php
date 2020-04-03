@@ -32,9 +32,6 @@ class TournamentScoringType extends AbstractType
             ])
             ->add('noshow_score', IntegerType::class, [
                 'label' => 'No-Show Score',
-                'label_attr' => [
-                    'class' => 'text-small'
-                ],
                 'attr' => [
                     'placeholder' => 'Points to assign to no-shows above cutoff.',
                 ]

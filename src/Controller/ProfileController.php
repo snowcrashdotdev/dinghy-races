@@ -21,22 +21,16 @@ class ProfileController extends AbstractController
     public function edit(Request $request): Response
     {
         $profile = $this->getUser()->getProfile();
-        $upload_dir = $this->getParameter('pfp_dir');
 
         $form = $this->createForm(UserProfileType::class, $profile);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $picture_file = $form->get('picture_file')->getData();
-
-            if ($picture_file) {
-                $uploader = new ImageUploader($upload_dir);
-                $profile->setPicture(
-                    $uploader->upload($picture_file)
-                );
-            }
             $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('profile_show', [
+                'username' => $this->getUser()->getUsername()
+            ]);
         }
 
         return $this->render('profile/edit.html.twig', [

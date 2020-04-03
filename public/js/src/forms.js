@@ -1,51 +1,104 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var uploadPreviews = document.getElementsByClassName('upload-preview')
+    let fileInputs = document.querySelectorAll('[type="file"]')
 
-    for (let preview of uploadPreviews) {
-        preview.addEventListener('click', function(e) {
-            document.getElementById(preview.getAttribute('data-file-input')).click()
-        })
-    }
+    for (let input of fileInputs) {
+        let label = input.parentElement.firstElementChild
+        let type = input.getAttribute('data-type')
+        let src = input.getAttribute('data-src').replace('public', '')
+        let defaultLabel = input.getAttribute('data-default-label')
 
-    var pictureInputs = document.getElementsByClassName('picture-input')
-    for (let input of pictureInputs) {
+        if (type === 'image' && src !== '') {
+            label.style.backgroundImage = `url(${src})`
+        }
+
         const reader = new FileReader()
-        const preview = document.getElementById(input.id + '_preview')
-        const inputRemove = document.getElementById(input.id + '_remove')
+        reader.addEventListener('load', function() {
+            label.style.backgroundImage = `url(${reader.result})`
+        })
 
-        reader.addEventListener('load', function(){
-            preview.src = reader.result
-            preview.style.display = 'block'
-            preview.nextElementSibling.style.display = 'block'
-            input.setAttribute('hidden', '')
+        let menu = document.createElement('div')
+        menu.classList.add('file-input-menu')
+        let optionRemove = document.createElement('button')
+        optionRemove.innerText = 'Remove This File'
+        let optionReplace = document.createElement('button')
+        optionReplace.innerText = 'Upload Different File'
+
+        let removeFieldId = input.id + '_remove'
+        let removeField = document.getElementById(removeFieldId)
+
+        for (let button of [optionRemove, optionReplace]) {
+            button.type = 'button'
+            button.classList.add('file-input-control')
+        }
+
+        optionRemove.hide = function() {
+            this.style.display = 'none'
+        }
+
+        optionRemove.show = function() {
+            this.removeAttribute('style')
+        }
+
+        if (src === '') {
+            optionRemove.hide()
+        }
+
+        menu.open = function() {
+            this.classList.add('flex')
+        }
+
+        menu.close = function() {
+            this.classList.remove('flex')
+        }
+
+        menu.appendChild(optionReplace)
+        menu.appendChild(optionRemove)
+        label.parentElement.appendChild(menu)
+
+        label.addEventListener('click', function(e) {
+            e.preventDefault()
+            if (input.getAttribute('data-src') === '') {
+                input.click()
+            } else {
+                menu.open()
+            }
         }, false)
 
-        input.addEventListener('change', function(){
-            let file = this.files[0]
-            if (file) {
-                reader.readAsDataURL(file)
-                inputRemove.value = 0
+        optionReplace.addEventListener('click', function(e) {
+            input.click()
+        })
+
+        optionRemove.addEventListener('click', function(e) {
+            if (removeField) {
+                removeField.value = 1
+                input.setAttribute('data-src', '')
+                label.removeAttribute('style')
+                label.innerText = defaultLabel
+                optionRemove.hide()
             }
         })
-    }
 
-    var fileRemovalButtons = document.getElementsByClassName('remove-file')
-    for (let button of fileRemovalButtons) {
-        let fileInputId = button.parentElement.getAttribute('data-file-input')
-        let fileInput = document.getElementById(fileInputId)
-        let fileRemoveInput = document.getElementById(fileInputId + '_remove')
-        let filePreview = document.getElementById(fileInputId + '_preview')
-        let sibling = button.previousElementSibling
-        button.addEventListener('click', function(e) {
-            e.stopPropagation()  
-            fileInput.value = ''
-            fileInput.removeAttribute('hidden')
-            filePreview.src = ''
-            
-            fileRemoveInput.value = 1
+        document.addEventListener('click', function(e) {
+            if (e.target !== label) {
+                menu.close()
+            }
+        })
 
-            sibling.style.display = 'none'
-            this.style.display = 'none'
+        input.addEventListener('change', function() {
+            let file = this.files[0]
+
+            if (file) {
+                let filename = this.value.split('\\').pop()
+                if (type === 'image') {
+                    reader.readAsDataURL(file)
+                }
+
+                label.innerText = filename
+                input.setAttribute('data-src', filename)
+
+                removeField.value = 0
+                optionRemove.show()
+            }
         })
     }
 })

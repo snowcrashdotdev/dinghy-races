@@ -1,5 +1,39 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_errors(form) }}
+    {{ form_row(form.points) }}
+    {{ form_row(form.videoUrl) }}
+
+    {% set file = form.vars.data.screenshotFile %}
+    {% set label = 'Select an image file.' %}
+    {{ form_row(form.screenshot_file, {
+        'label': file.filename|default(label),
+        'label_attr': {
+            'data-label': 'Screenshot'
+        },
+        'attr': {
+            'data-type': 'image',
+            'data-src': file.realPath|default('')|file_relative,
+            'data-default-label': label
+        } 
+    }) }}
+
+    {% set file = form.vars.data.replayFile %}
+    {% set label = 'Select a ZIP archive.' %}
+    {{ form_row(form.replay_file, {
+            'label': file.filename|default(label),
+            'label_attr': {
+                'data-label': 'Replay File'
+            },
+            'attr': {
+                'data-type': 'zip',
+                'data-src': file.realPath|default('')|file_relative,
+                'data-default-label': label
+            }
+        })
+    }}
+
+    {{ form_row(form.comment) }}
+
     <button>{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
 

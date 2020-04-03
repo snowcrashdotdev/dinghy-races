@@ -1,11 +1,14 @@
 <?php
 namespace App\EventListener;
 
+use App\Entity\Profile;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\Filesystem\Filesystem;
 use App\Service\ImageUploader;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
-class ProfileChange
+class ProfileListener
 {
     public function __construct(String $upload_dir)
     {
@@ -31,6 +34,19 @@ class ProfileChange
                     $this->getFilesystem()->remove($size_path);
                 }
             }
+        }
+    }
+
+    public function postLoad(Profile $profile)
+    {
+        try {
+            $profile->setPictureFile(
+                new File(
+                    $this->getUploadDir() . '/' . $profile->getPicture()
+                )
+            );
+        } catch (FileException $e) {
+            $profile->setPictureFile(null);
         }
     }
 

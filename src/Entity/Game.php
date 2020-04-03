@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GameRepository")
  */
-class Game
+class Game implements \Serializable
 {
     /**
      * @ORM\Id()
@@ -253,5 +253,15 @@ class Game
         }
 
         return $this;
+    }
+
+    public function serialize()
+    {
+        return '';
+    }
+
+    public function unserialize($serialized)
+    {
+        return;
     }
 }

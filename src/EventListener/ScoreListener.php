@@ -2,7 +2,6 @@
 namespace App\EventListener;
 
 use App\Entity\Score;
-use App\Entity\Tournament;
 use App\Entity\TournamentScore;
 use App\Service\ScoreKeeper;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -27,7 +26,6 @@ class ScoreListener
             $history = $score->getPointsHistory();
             $history[] = $args->getNewValue('points');
             $score->setPointsHistory($history);
-            $score->setUpdatedAt(date_create('NOW'));
 
             if (is_a($score, TournamentScore::class)) {
                 $tournament = $score->getTournament();

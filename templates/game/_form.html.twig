@@ -1,25 +1,21 @@
 {{ form_start(form) }}
-    <div class="positioned">
-        {{ form_label(form.marquee_file)}}
-        {% if game.marquee %}
-            {% set widget_attr = {
-                'class': 'picture-input',
-                'hidden': true
-            } %}
-            {% set preview_style = '' %}
-        {% else %}
-            {% set widget_attr = {
-                'class': 'picture-input'
-            } %}
-            {% set preview_style = 'display:none;' %}
-        {% endif %}
-        <div class="upload-preview" data-file-input="game_marquee_file">
-            <img style="{{preview_style}}" id="game_marquee_file_preview" src="{{'/uploads/marquees/' ~ game.marquee}}">
-            <button type="button" style="{{preview_style}}" class="remove-file" data-file-input="game_marquee_file">ⓧ</button>
-        </div>
-        {{ form_widget(form.marquee_file, {'attr': widget_attr} ) }}
-    </div>
-    {{ form_rest(form) }}
+    {{form_errors(form)}}
+    {% set file = form.vars.data.marqueeFile %}
+    {% set label = 'Select an image file (landscape).' %}
+    {{ form_row(form.marquee_file, {
+        'label': file.filename|default(label),
+        'label_attr': {
+            'data-label': 'Marquee'
+        },
+        'attr': {
+            'data-type': 'image',
+            'data-src': file.realPath|default('')|file_relative,
+            'data-default-label': label
+        } 
+    }) }}
+
+    {{form_rest(form)}}
+
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
 

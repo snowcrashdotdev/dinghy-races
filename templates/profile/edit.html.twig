@@ -7,7 +7,9 @@
         <h1>Settings for {{website.name}}</h1>
     </header>
 
-    {% include 'profile/_form.html.twig' %}
+    <main>
+        {{ include('profile/_form.html.twig') }}
+    </main>
 {% endblock %}
 
 {% block javascripts %}

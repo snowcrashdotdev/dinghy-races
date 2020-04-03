@@ -7,7 +7,6 @@
     flex-direction: column;
     justify-content: center;
     position: relative;
-    box-sizing: border-box;
     padding-top: calc(var(--margin) * 2);
     padding-bottom: var(--padding);
     padding-left: var(--padding);
