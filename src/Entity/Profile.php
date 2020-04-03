@@ -71,11 +71,6 @@ class Profile implements \Serializable
         return $this;
     }
 
-    public function hasTwitch(): bool
-    {
-        return 1 === preg_match('~^https?://(www\.)?twitch\.tv/[a-zA-Z0-9_]{3,}/?$~', $this->getSocial());
-    }
-
     public function getPicture(): ?string
     {
         return $this->picture;
@@ -88,12 +83,14 @@ class Profile implements \Serializable
         return $this;
     }
 
-    public function setPictureFile(?File $file)
+    public function setPictureFile($file) : self
     {
         $this->picture_file = $file;
+
+        return $this;
     }
 
-    public function getPictureFile() : ?File
+    public function getPictureFile()
     {
         return $this->picture_file;
     }
