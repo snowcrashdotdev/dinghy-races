@@ -61,13 +61,17 @@ services:
                     event: 'postLoad'
                     entity: 'App\Entity\Profile'
 
-    App\EventListener\GameChange:
+    App\EventListener\GameListener:
         arguments:
             $upload_dir: '%marquee_dir%'
         tags:
             -
                 name: 'doctrine.orm.entity_listener'
                 event: 'preUpdate'
+                entity: 'App\Entity\Game'
+            -
+                name: 'doctrine.orm.entity_listener'
+                event: 'postLoad'
                 entity: 'App\Entity\Game'
 
     App\EventListener\ScoreListener:
