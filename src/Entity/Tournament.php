@@ -84,11 +84,6 @@ class Tournament
         $this->games = new ArrayCollection();
         $this->teams = new ArrayCollection();
         $this->users = new ArrayCollection();
-
-        $this->draft = new Draft();
-        $this->draft->setTournament($this);
-        $this->scoring = new TournamentScoring();
-        $this->scoring->setTournament($this);
         $this->scores = new ArrayCollection();
     }
 
