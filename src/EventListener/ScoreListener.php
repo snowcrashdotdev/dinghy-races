@@ -20,39 +20,62 @@ class ScoreListener
         $this->score_keeper = $score_keeper;
     }
 
-    public function preUpdate($score, PreUpdateEventArgs $args)
+    public function preUpdate(Score $score, PreUpdateEventArgs $args)
     {
+        $score = $args->getObject();
         if ($args->hasChangedField('points')) {
-            $history = $score->getPointsHistory();
-            $history[] = $args->getNewValue('points');
-            $score->setPointsHistory($history);
+            $old_points = $args->getOldValue('points');
+            $new_points = $args->getNewValue('points');
 
-            if (is_a($score, TournamentScore::class)) {
-                $tournament = $score->getTournament();
-                $game = $score->getGame();
-
-                $this->getScoreKeeper()
-                    ->scoreGame($tournament, $game)
-                ;
+            if ($new_points > $old_points) {
+                $score->setUpdatedAt(date_create('NOW'));
+                $history = $score->getPointsHistory();
+                $history[] = $args->getNewValue('points');
+                $score->setPointsHistory($history);
             }
         }
 
-        if (
-            $args->hasChangedField('screenshot') &&
-            $args->getOldValue('screenshot') !== null
-        ) {
-            $prev_full_filename = $args->getOldValue('screenshot');
-            $prev_screenshot_path = $this->getScreenshotDir() . '/' . $prev_full_filename;
-            if ($this->getFilesystem()->exists($prev_screenshot_path)) {
-                $this->getFilesystem()->remove($prev_screenshot_path);
-                $prev_name = pathinfo($prev_screenshot_path, PATHINFO_FILENAME);
-                $prev_ext = pathinfo($prev_screenshot_path, PATHINFO_EXTENSION);
+        if ($args->hasChangedField('screenshot')) {
+            $old_screenshot = $args->getOldValue('screenshot');
+
+            if ($old_screenshot) {
+                $old_path = $this->getScreenshotDir() . '/' . $old_screenshot;
+
+                if ($this->getFilesystem()->exists($old_path)) {
+                    $this->getFilesystem()->remove($old_path);
+                    $old_name = pathinfo($old_path, PATHINFO_FILENAME);
+                    $old_ext = pathinfo($old_path, PATHINFO_EXTENSION);
                 
-                foreach(ImageUploader::IMAGE_SIZES as $size) {
-                    $size_path = $this->getScreenshotDir()
-                        .'/'.$prev_name.ImageUploader::SIZE_PREFIX.$size.'.'.$prev_ext; 
-                    $this->getFilesystem()->remove($size_path);
+                    foreach(ImageUploader::IMAGE_SIZES as $size) {
+                        $size_path = $this->getScreenshotDir()
+                        .'/'.$old_name.ImageUploader::SIZE_PREFIX.$size.'.'.$old_ext; 
+                        $this->getFilesystem()->remove($size_path);
+                    }
                 }
+            }
+        }
+
+        if ($args->hasChangedField('replay')) {
+            $old_replay = $args->getOldValue('replay');
+
+            if ($old_replay) {
+                $old_path = $this->getReplayDir() . '/' . $old_replay;
+
+                if ($this->getFilesystem()->exists($old_path)) {
+                    $this->getFilesystem()->remove($old_path);
+                }
+            }
+        }
+
+        if ($args->hasChangedField('points') && $score instanceof TournamentScore) {
+            $old_score = $args->getOldValue('points');
+            $new_score = $args->getNewValue('points');
+
+            if ($new_score > $old_score) {
+                $this->getScoreKeeper()->scoreGame(
+                    $score->getTournament(),
+                    $score->getGame()
+                );
             }
         }
     }
