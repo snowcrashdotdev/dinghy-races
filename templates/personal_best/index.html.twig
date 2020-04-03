@@ -8,8 +8,8 @@
     </header>
     <main>
     {% for game in games %}
-        {% set href = path('pb_show', {game: game}) %}
-        <p><a href="{{href}}">{{game}}</a></p>
+        {% set href = path('pb_show', {game: game.name}) %}
+        <p><a href="{{href}}">{{game.name}}</a></p>
     {% endfor %}
     </main>
 {% endblock %}
