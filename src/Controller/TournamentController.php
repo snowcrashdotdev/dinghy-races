@@ -185,28 +185,22 @@ class TournamentController extends AbstractController
         $form = $this->createForm(TournamentType::class, $tournament);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            foreach($tournament->getTeams() as $team) {
-                foreach($team->getMembers() as $user) {
-                    $tournament->addUser($user);
-                }
-            }
-            $em->persist($tournament);
-            $em->flush();
+            $this->addFlash('success', 'Tournament details updated!');
+            $this->getDoctrine()->getManager()->flush();
         }
 
         $gamesForm = $this->createForm(GameCollectionType::class, $tournament);
         $gamesForm->handleRequest($request);
         if ($gamesForm->isSubmitted() && $gamesForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($tournament);
-            $em->flush();
+            $this->getDoctrine()->getManager()->flush();
 
             if ($request->isXmlHttpRequest()) {
                 return $this->json([
                     'success' => true,
                     'message' => 'Tournament games updated!'
                 ]);
+            } else {
+                $this->addFlash('success', 'Games added to tournament');
             }
         }
 
