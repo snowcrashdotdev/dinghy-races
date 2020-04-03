@@ -49,7 +49,7 @@ class Game implements \Serializable
      */
     private $marquee;
 
-    protected $marquee_file;
+    private $marquee_file;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="game")
@@ -66,11 +66,6 @@ class Game implements \Serializable
         $this->tournaments = new ArrayCollection();
         $this->tournament_scores = new ArrayCollection();
         $this->personal_bests = new ArrayCollection();
-    }
-
-    public function __toString()
-    {
-        return $this->name;
     }
 
     public function getId(): ?int
