@@ -59,9 +59,6 @@ abstract class Score implements \Serializable
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Url(
-     *      protocols= {"http", "https"}
-     * )
      */
     private $videoUrl;
 
@@ -81,10 +78,6 @@ abstract class Score implements \Serializable
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Length(
-     *      max = 140,
-     *      maxMessage = "Your comment should fit in a tweet."
-     * )
      */
     private $comment;
 
@@ -92,7 +85,6 @@ abstract class Score implements \Serializable
     {
         $this->created_at = date_create('NOW');
         $this->updated_at = date_create('NOW');
-        $this->points_history = array();
     }
 
     public function getId(): ?int
@@ -242,18 +234,6 @@ abstract class Score implements \Serializable
         $this->comment = $comment;
 
         return $this;
-    }
-
-    /**
-     * @Assert\IsTrue(message="A valid score requires a video URL, screenshot, or replay file.")
-     */
-    public function hasRecording(): bool
-    {
-        return (
-            ! empty($this->videoUrl) ||
-            ! empty($this->screenshot_file) ||
-            ! empty($this->replay_file)
-        );
     }
 
     public function serialize()
