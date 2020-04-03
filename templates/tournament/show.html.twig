@@ -44,7 +44,10 @@
         <h2 class="page-break text-large outlined">Games</h2>
         <section class="summary-group">
         {% for game in tournament.games %}
-            {% include 'game/_summary.html.twig' %}
+            {{ include('game/_summary.html.twig', {
+                'tournament': tournament,
+                'scores': false
+            })}}
         {% endfor %}
         </section>
     </main>
