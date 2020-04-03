@@ -83,8 +83,6 @@ class ScoreKeeper
         if (!$skip_team_scores) {
             $this->scoreTeams($teams, $scores);
         }
-
-        $this->getManager()->flush();
     }
 
     private function scoreTeams(array $teams, array $scores) {
