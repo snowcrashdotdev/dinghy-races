@@ -19,22 +19,12 @@
         <h3 class="outlined">{{game.description}}
             <br><small>{{game.manufacturer}}, {{game.year}}</small>
         </h3>
-        {% if not tournament.isUpcoming %}
+        {% if scores %}
         <div class="game-summary-scores">
-            {% set game_scores = tournament.scores|filter(
-                s => s.game is same as(game)
-            ) %}
-            {% set high_score = game_scores|first %}
-
             <span class="block">High Score</span>
             <p class="text-large color-white">{{high_score.points|number_format}}<small class="block">{{high_score.user.username}}</small></p>
-            {% if is_granted('ROLE_USER') %}
-                {% set user_score = game_scores|filter(
-                    s => s.user is same as(app.user)
-                )|first %}
                     <span class="block">Your Score</span>
                     <p class="color-white">{{ user_score.points|number_format }}</p>
-            {% endif %}
         </div>
         {% endif %}
     </a>
