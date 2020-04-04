@@ -1,8 +1,0 @@
-{% for team in leading_teams %}
-{% set href = path('team_show', {'id': team.id}) %}
-<aside class="gadget gadget-top-score">
-    <h3>Top Team</h3>
-    <a class="text-large" href="{{href}}">{{team.name}}</a>
-    <p class="roboto text-larger outlined">{{team.points|number_format}}</p>
-</aside>
-{% endfor %}
