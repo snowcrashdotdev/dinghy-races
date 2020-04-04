@@ -1,5 +1,18 @@
 {% extends 'base.html.twig' %}
 
+{% set now = date('now') %}
+{% set in_progress_tournaments = tournaments|filter(
+    t => t.startDate < now and t.endDate > now
+) %}
+
+{% set upcoming_tournaments = tournaments|filter(
+    t => t.startDate > now
+) %}
+
+{% set past_tournaments = tournaments|filter(
+    t => t.endDate < now
+) %}
+
 {% block body %}
     <header>
         <h1>{{ website.name }}</h1>

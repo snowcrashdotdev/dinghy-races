@@ -3,29 +3,52 @@
 {% block title %}{{ tournament.title }} scores for {{ game.description }}{% endblock %}
 
 {% block body %}
-    <header>
-        {% set t_href = path('tournament_show', {
-            'id': tournament.id
-        }) %}
-        {% set g_href = path('pb_show', {
-            'game': game.name
-        }) %}
-        <h1><a href="{{t_href}}">{{ tournament.title }}</a><br>
-        scores for <a href="{{g_href}}">{{ game.description }}</a> <small>({{ game.name ~ '.zip' }})</small></h1>
-    </header>
-    <main>
-        <section class="gadget-group">
+<header class="tournament-header">
+    {% set t_href = path('tournament_show', {
+        'id': tournament.id
+    }) %}
+    {% set g_href = path('pb_show', {
+        'game': game.name
+    }) %}
+    <h1 class="tournament-title"><a href="{{t_href}}">{{ tournament.title }}</a><br>
+    scores for <a href="{{g_href}}">{{ game.description }}</a> <small>({{ game.name ~ '.zip' }})</small></h1>
+
+    {% if team_totals|length %}
+    <section class="header-list">
+        <h2>Team Totals:</h2>
+        {% for team in team_totals %}
+            {% set href = path('team_show', { 'id': team.id }) %}
+            <p>
+                <a href="{{href}}">{{team.name}}</a>
+                <span>{{team.points}}</span>
+            </p>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if is_granted('ROLE_USER') %}
+        <section class="header-list">
+            {% set user_score = scores|filter(
+                s => s.user is same as(app.user))|first
+            %}
+
+            <h2>Your Score:</h2>
             {% if user_score %}
-                {% include '_gadgets/your.score.html.twig' %}
+                <p>#{{user_score.rank}}) {{user_score.points}}</p>
+            {% else %}
+                <p><a href="">➕ Add Score</a></p>
             {% endif %}
         </section>
-        {% if scores %}
-            {% include '_leaderboards/team.html.twig' %}
-            {% include '_leaderboards/individual.html.twig' %}
-        {% else %}
-            <p>No scores posted.</p>
-        {% endif %}
-    </main>
+    {% endif %}
+</header>
+
+<main>
+    {% if scores|length %}
+        {% include '_leaderboards/individual.html.twig' %}
+    {% else %}
+        <p>No scores posted.</p>
+    {% endif %}
+</main>
 {% endblock %}
 
 {% block navigation %}

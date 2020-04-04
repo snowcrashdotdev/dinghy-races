@@ -47,6 +47,20 @@
             {% endif %}
             {% if not tournament.upcoming %}
                 {{
+                    include('_gadgets/top.html.twig', {
+                        'type': 'team',
+                        'result': top_team
+                    })
+                }}
+
+                {{
+                    include('_gadgets/top.html.twig', {
+                        'type': 'player',
+                        'result': top_player
+                    })
+                }}
+
+                {{
                     include('_gadgets/participation.html.twig', {
                         'rate': tournament.participationRate
                     })

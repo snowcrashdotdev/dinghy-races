@@ -8,9 +8,6 @@
     </header>
 
     <main>
-
-    {{ include('score/_form.html.twig', { 'score': personal_best }) }}
-
-    <a href="{{ path('pb_index') }}">back to list</a>
+        {{ include('score/_form.html.twig', { 'score': personal_best }) }}
     </main>
 {% endblock %}

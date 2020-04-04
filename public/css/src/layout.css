@@ -178,6 +178,8 @@ img {
 @media (min-width: 37rem) {
     .tournament-header {
         display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
     }
 }
 
@@ -188,8 +190,11 @@ img {
 }
 
 .header-list {
+    flex: 1;
     font-size: 1rem;
     border-left: 0.1em solid var(--color-three);
+    margin-right: var(--margin);
+    margin-bottom: var(--margin);
     padding-left: var(--padding);
 }
 

@@ -1,0 +1,16 @@
+{% if result %}
+    {% if type == 'team' %}
+        {% set href = path('team_show', {
+            'id': result.id
+        }) %}
+    {% elseif type == 'player' %}
+        {% set href = path('profile_show', {
+            'username': result.name
+        }) %}
+    {% endif %}
+    <aside class="gadget gadget-top-score">
+        <h3>Top {{type|capitalize}}</h3>
+        <a class="text-large" href="{{href}}">{{result.name}}</a>
+        <p class="roboto text-larger outlined">{{result.points|number_format}}</p>
+    </aside>
+{% endif %}
