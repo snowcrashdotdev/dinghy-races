@@ -8,6 +8,7 @@ use App\Entity\Draft;
 use App\Entity\TournamentScoring;
 use App\Form\GameCollectionType;
 use App\Repository\TournamentRepository;
+use App\Repository\TournamentScoreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,22 +28,10 @@ class TournamentController extends AbstractController
      */
     public function index(TournamentRepository $tournamentRepository): Response
     {
-        $today = date_create('NOW');
         $tournaments = $tournamentRepository->findAll();
-        $upcoming = array_filter($tournaments, function($t) use ($today) {
-            return ( $t->getStartDate() > $today );
-        });
-        $in_progress = array_filter($tournaments, function($t) use ($today) {
-            return ( $t->getStartDate() < $today && $today < $t->getEndDate() );
-        });
-        $past = array_filter($tournaments, function($t) use ($today) {
-            return ( $t->getEndDate() < $today );
-        });
 
         return $this->render('tournament/index.html.twig', [
-            'upcoming_tournaments' => $upcoming,
-            'in_progress_tournaments' => $in_progress,
-            'past_tournaments' => $past
+            'tournaments' => $tournaments
         ]);
     }
 
@@ -78,23 +67,32 @@ class TournamentController extends AbstractController
     /**
      * @Route("/{id}", name="tournament_show", methods={"GET"})
      */
-    public function show(Tournament $tournament, TwitchChecker $twitch): Response
+    public function show(Tournament $tournament, TournamentScoreRepository $scoreRepository, TwitchChecker $twitch): Response
     {
         $recentScores = [];
         $liveStreams  = [];
+        $topTeam = null;
+        $topPlayer = null;
+
         if ($tournament->isInProgress()) {
-            $recentScores = $this->getDoctrine()
-                ->getRepository('App\Entity\TournamentScore')
-                ->findBy([
-                    'tournament' => $tournament
-                ], ['updated_at' => 'DESC'], 5)
-            ;
+            $recentScores = $scoreRepository->findBy([
+                'tournament' => $tournament],
+                ['updated_at' => 'DESC'],
+                5
+            );
 
             $liveStreams = $twitch->getLiveStreams($tournament);
         }
 
+        if (!$tournament->isUpcoming()) {
+            $topTeam = $scoreRepository->findTeamScores($tournament, null, 1);
+            $topPlayer = $scoreRepository->findIndividualScores($tournament, 1);
+        }
+
         return $this->render('tournament/show.html.twig', [
             'tournament' => $tournament,
+            'top_team' => $topTeam,
+            'top_player' => $topPlayer,
             'recent_scores' => $recentScores,
             'live_streams' => $liveStreams
         ]);
@@ -111,7 +109,7 @@ class TournamentController extends AbstractController
 
         return $this->render('tournament/leaderboard.team.html.twig', [
             'tournament' => $tournament,
-            'teamScores' => $teamScores 
+            'teamScores' => $teamScores
         ]);
     }
 
