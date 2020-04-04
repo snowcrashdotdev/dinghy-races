@@ -1,3 +1,4 @@
+{% if teams|length %}
 <table>
     <thead>
         <h2>Team Scores</h2>
@@ -5,6 +6,7 @@
             <th>Team Name</th>
             <th class="text-right">Ranked Points</th>
         </tr>
+    </thead>
     <tbody>
     {% for team in teams %}
             <tr>
@@ -14,3 +16,4 @@
     {% endfor %}
     </tbody>
 </table>
+{% endif %}

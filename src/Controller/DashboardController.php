@@ -19,18 +19,10 @@ class DashboardController extends AbstractController
 
         if (empty($user)) {
             return $this->redirectToRoute('tournament_index');
-        } else {
-            $tournaments = $this->getUser()
-                ->getTournaments()
-                ->filter(function($tournament) {
-                    return $tournament->isInProgress();
-                })
-            ;
-
-            return $this->render('dashboard/index.html.twig', [
-                'tournaments' => $tournaments,
-                'user' => $user
-            ]);
         }
+
+        return $this->render('dashboard/index.html.twig', [
+            'user' => $user
+        ]);
     }
 }

@@ -13,15 +13,16 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use App\Service\ImageUploader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 /**
  * @Route("/games")
- * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
  */
 class GameController extends AbstractController
 {
     /**
      * @Route("/", name="game_index", methods={"GET"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
      */
     public function index(GameRepository $gameRepository): Response
     {
@@ -32,6 +33,7 @@ class GameController extends AbstractController
 
     /**
      * @Route("/new", name="game_new", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
      */
     public function new(Request $request): Response
     {
@@ -62,7 +64,8 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="game_show", methods={"GET"})
+     * @Route("/{name}", name="game_show", methods={"GET"})
+     * @Entity("game", expr="repository.findOneBy({name: name})")
      */
     public function show(Game $game): Response
     {

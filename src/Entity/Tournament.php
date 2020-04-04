@@ -54,7 +54,7 @@ class Tournament
     private $teams;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="tournaments", fetch="EAGER")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="tournaments")
      */
     private $users;
 

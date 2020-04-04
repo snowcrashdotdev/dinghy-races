@@ -1,3 +1,9 @@
+{% set high_score = scores|first %}
+{% set user_score = is_granted('ROLE_USER') ?
+    scores|filter(s => s.user is same as(app.user))|first
+    : null
+%}
+
 <article class="summary game-summary">
     {% if game.marquee %}
         {% import '_macros/img.responsive.html.twig' as m_img %}
@@ -11,21 +17,36 @@
         {{ m_img.responsive(img_config) }}
     {% endif %}
 
-    {% set href = path('score_show', {
-        'game_name': game.name,
-        'tournament_id': tournament.id
-    }) %}
-    <a class="summary-details" href="{{href}}">
-        <h3 class="outlined">{{game.description}}
+    {% set score_show = tournament ?
+        path('score_show', {
+            'game_name': game.name,
+            'tournament_id': tournament.id
+        }) :
+        path('pb_show', {
+            'game': game.name
+        })
+    %}
+    <div class="summary-details">
+        <h3>
+            <a href="{{path('game_show', {'name': game.name})}}">{{game.description}}</a>
             <br><small>{{game.manufacturer}}, {{game.year}}</small>
         </h3>
-        {% if scores %}
-        <div class="game-summary-scores">
-            <span class="block">High Score</span>
-            <p class="text-large color-white">{{high_score.points|number_format}}<small class="block">{{high_score.user.username}}</small></p>
-                    <span class="block">Your Score</span>
-                    <p class="color-white">{{ user_score.points|number_format }}</p>
+        <div class="game-score-details">
+            {% if scores|length %}
+                <p class="roboto text-center text-large outlined">
+                    {{high_score.points|number_format}}
+                    <br>
+                    <small>{{high_score.user.username}}</small>
+                </p>
+                {% if user_score and not user_score is same as(high_score) %}
+                    <p>
+                        Your Score: {{user_score.points|number_format}}
+                    </p>
+                {% endif %}
+                <p><a href="{{score_show}}">All Scores</a></p>
+            {% else %}
+                <p><a href="{{score_show}}">No scores posted.</a></p>
+            {% endif %}
         </div>
-        {% endif %}
-    </a>
+    </div>
 </article>

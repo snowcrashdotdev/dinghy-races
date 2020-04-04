@@ -1,39 +1,40 @@
-{% if points_per_game %}
-    {% set ratio = 1 / 6 %}
-    {% set highest = points_per_game|first %}
-    {% set view_width = highest.points * ratio %}
-    {% set view_height = points_per_game|length * 25 %}
+{% if scores %}
+    {% set img_width = 100 %}
+    {% set rect_height = img_width / 16 %}
+    {% set highest = scores|first %}
+    {% set rect_count = scores|length %}
+    {% set img_height = rect_height * rect_count %}
+    {% set font_size = rect_height * 0.46 %}
     <aside class="gadget gadget-pbg">
         <h3>Points By Game</h3>
-        <svg class="gauge" viewBox="0 0 {{view_width}} {{view_height}}">
-            {% for game in points_per_game %}
-            <g>
-                    {% set height = 20 %}
-                    {% set width = game.points * ratio %}
-                    {% set y = (loop.index - 1) * (height + 5) %}
-                    <rect
-                        class="linear-gauge-rect"
-                        width="{{width}}"
-                        height="{{height}}"
-                        y="{{y}}">
-                    </rect>
-                    <text
-                        class="linear-gauge-value"
-                        x="5"
-                        y="{{y + 9.5}}"
-                        dy=".35em">
-                        {{game.points|number_format}}
-                    </text>
-                    <text
-                        class="linear-gauge-label"
-                        x="60"
-                        y="{{y + 9.5}}"
-                        dy=".35em">
-                        {{game.description}}
-                    </text>
-            </g>
+        <svg class="gauge" width="{{img_width}}" height="{{img_height}}" viewBox="0 0 {{img_width}} {{img_height}}">
+            {% for game in scores %}
+                {% set width = game.points / highest.points * 100 %}
+                {% set y = loop.index0 * rect_height %}
+                {% set y_label = y + rect_height / 2 %}
+                <rect
+                    class="linear-gauge-rect"
+                    width="{{width}}"
+                    height="{{rect_height}}"
+                    y="{{y}}">
+                </rect>
+                <text
+                    class="linear-gauge-value"
+                    font-size="{{font_size}}"
+                    x="1"
+                    y="{{y_label}}"
+                    dy="0.3em">{{game.points|number_format}}
+                </text>
+                <text
+                    class="linear-gauge-label"
+                    font-size="{{font_size}}"
+                    x="{{width - 1}}"
+                    y="{{y_label}}"
+                    style="text-anchor:end;"
+                    dy="0.3em">{{game.description}}
+                </text>
             {% endfor %}
         </svg>
-        <p class="roboto text-large outlined">Total: {{team.points|number_format}}</p>
+        <p class="roboto text-large outlined">Total: {{total|number_format}}</p>
     </aside>
 {% endif %}

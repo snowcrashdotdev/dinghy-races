@@ -27,18 +27,19 @@ class TwitchChecker
         $this->manager = $manager;
     }
 
-    public function getLiveTwitchStreams(Tournament $tournament)
+    public function getLiveStreams(Tournament $tournament)
     {
         $this->setCacheHandle( 'live_streams_' . $tournament->getId() );
 
         $liveStreams = $this->cache->get($this->getCacheHandle(), function(ItemInterface $item) use ($tournament) { 
-            $item->expiresAfter(60);
+            $item->expiresAfter(120);
 
-            $twitch_users = $this->manager->getRepository('App\Entity\Profile')
+            $twitch_users = $this->manager
+                ->getRepository('App\Entity\Profile')
                 ->findTournamentTwitchLinks($tournament)
             ;
 
-            if (empty($twitch_users)) { return false; }
+            if (empty($twitch_users)) { return []; }
 
             $twitch_users = array_map(function($profile) {
                     $url = parse_url($profile['twitchUrl']);
@@ -73,12 +74,12 @@ class TwitchChecker
     
                 return $live;
             } else {
-                return false;
+                return [];
             }
         });
 
         if (empty($liveStreams)) {
-            return false;
+            return [];
         } else {
             return $liveStreams;
         }

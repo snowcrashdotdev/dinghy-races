@@ -18,7 +18,7 @@
             {% endif %}
         </section>
 
-        {% if tournament.teams %}
+        {% if tournament.teams|length %}
             <section class="header-list">
                 <h2>Featuring:</h2>
                 {% for team in tournament.teams %}
@@ -31,22 +31,29 @@
         {% endif %}
     </header>
     <main>
-        {% if tournament.inProgress %}
-            <section class="gadget-group">
-                {% include '_gadgets/recent.scores.html.twig' %}
-                {% include '_gadgets/participation.html.twig' %}
-                {% include '_gadgets/top.player.html.twig' %}
-                {% include '_gadgets/top.team.html.twig' %}
-                {% include '_gadgets/live.streams.html.twig' %}
-            </section>
-        {% endif %}
+        <section class="gadget-group">
+            {% if tournament.inProgress %}
+                {{
+                    include('_gadgets/recent.scores.html.twig', {
+                        'scores': recent_scores
+                    })
+                }}
 
-        <h2 class="page-break text-large outlined">Games</h2>
+                {{
+                    include('_gadgets/live.streams.html.twig', {
+                        'streams': live_streams
+                    })
+                }}
+            {% endif %}
+        </section>
+
+        <h2 class="uppercase page-break outlined">Games</h2>
         <section class="summary-group">
         {% for game in tournament.games %}
             {{ include('game/_summary.html.twig', {
+                'game': game,
                 'tournament': tournament,
-                'scores': false
+                'scores': tournament.scores|filter(s => s.game is same as(game))
             })}}
         {% endfor %}
         </section>

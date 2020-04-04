@@ -78,26 +78,23 @@ class TournamentController extends AbstractController
     /**
      * @Route("/{id}", name="tournament_show", methods={"GET"})
      */
-    public function show(Tournament $tournament, TwitchChecker $twitchChecker): Response
+    public function show(Tournament $tournament, TwitchChecker $twitch): Response
     {
-
-        $leadingTeams = false;
-        $leadingPlayers = false;
-        $recentScores = false;
-        $liveStreams = false;
-
+        $recentScores = [];
+        $liveStreams  = [];
         if ($tournament->isInProgress()) {
-            $scoreRepo = $this->getDoctrine()->getRepository('App\Entity\TournamentScore');
-            $leadingTeams = $scoreRepo->findTeamScores($tournament, null, 1);
-            $leadingPlayers = $scoreRepo->findIndividualScores($tournament, 1);
-            $recentScores = $scoreRepo->findRecentScores($tournament, 5);
-            $liveStreams = $twitchChecker->getLiveTwitchStreams($tournament);
+            $recentScores = $this->getDoctrine()
+                ->getRepository('App\Entity\TournamentScore')
+                ->findBy([
+                    'tournament' => $tournament
+                ], ['updated_at' => 'DESC'], 5)
+            ;
+
+            $liveStreams = $twitch->getLiveStreams($tournament);
         }
 
         return $this->render('tournament/show.html.twig', [
             'tournament' => $tournament,
-            'leading_players' => $leadingPlayers,
-            'leading_teams' => $leadingTeams,
             'recent_scores' => $recentScores,
             'live_streams' => $liveStreams
         ]);

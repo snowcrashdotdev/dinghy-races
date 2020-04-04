@@ -25,7 +25,7 @@
                 <td>{{ game.year }}</td>
                 <td>{{ game.manufacturer }}</td>
                 <td>
-                    <a href="{{ path('game_show', {'id': game.id}) }}">show</a>
+                    <a href="{{ path('game_show', {'name': game.name}) }}">show</a>
                     <a href="{{ path('game_edit', {'id': game.id}) }}">edit</a>
                 </td>
             </tr>

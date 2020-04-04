@@ -12,9 +12,15 @@
 </header>
 
 <main>
-{% if not team.tournament.isUpcoming %}
+{% if not team.tournament.upcoming %}
     <section class="gadget-group">
-        {% include '_gadgets/points.per.game.html.twig' %}
+        {{
+            include('_gadgets/points.per.game.html.twig', {
+                'scores': points_per_game,
+                'tournament': team.tournament,
+                'total': team.points
+            })
+        }}
     </section>
 {% endif %}
 

@@ -35,6 +35,7 @@
     --outlined: 0.1em 0.1em 0.1em var(--color-black);
 
     --max-content-width: 100rem;
+    --max-column-width: calc(var(--max-content-width) / 5);
     --form-width: calc(var(--max-content-width) * 2 / 3);
     --input-width: calc(var(--form-width) * 2 / 6);
 }

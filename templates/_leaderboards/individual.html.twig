@@ -1,3 +1,4 @@
+{% if scores|length %}
 <table>
     <thead>
         <h3>All Scores</h3>
@@ -5,10 +6,8 @@
             <th class="td-index">Rank</th>
             <th>Score</th>
             <th>Player</th>
-            {% if not permanent_board is defined %}
+            {% if tournament %}
                 <th>Team</th>
-            {% endif %}
-            {% if not permanent_board is defined %}
                 <th>Ranked Points</th>
                 <th>Team Points</th>
             {% endif %}
@@ -27,10 +26,10 @@
             <td class="td-index">{{ loop.index }}</td>
             <td>{{ score.points|number_format }}</td>
             <td><a href="{{path('profile_show', {'username': score.user})}}">{{ score.user.username }}</a></td>
-            {% if not permanent_board is defined %}
+            {% if tournament %}
                 <td><a href="{{path('team_show', {'id': score.team.id})}}">{{score.team.name}}</a></td>
             {% endif %}
-            {% if not permanent_board is defined %}
+            {% if tournament %}
                 <td class="text-right labeled-data ranked-points">{{score.rankedPoints}}</td>
                 <td class="text-right labeled-data team-points">{{score.teamPoints}}</td>
             {% endif %}
@@ -47,3 +46,4 @@
     {% endfor %}
     </tbody>
 </table>
+{% endif %}

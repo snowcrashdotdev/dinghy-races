@@ -1,3 +1,4 @@
+{% for score in user_score %}
 <aside class="gadget gadget-your-score">
     <h3>Your Score</h3>
     <p class="text-center text-larger roboto outlined absolute-center">{{user_score.points|number_format}}</p>
@@ -18,4 +19,4 @@
         </svg>
     {% endif %}
 </aside>
-
+{% endfor %}
