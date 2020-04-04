@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
 use App\Entity\TournamentScore;
 use App\Entity\Game;
 use App\Entity\Tournament;
@@ -105,26 +104,17 @@ class TournamentScoreController extends AbstractController
         $scores = $repo->findBy([
             'game' => $game,
             'tournament' => $tournament
-        ], ['points' => 'DESC']);
+            ],
+            ['points' => 'DESC']
+        );
 
-        $teams = $repo->findTeamScores($tournament, $game);
-
-        $user_score = null;
-        $user = $this->getUser();
-        if (!empty($user)) {
-            $user_score = $repo->findOneBy([
-                'game' => $game,
-                'tournament' => $tournament,
-                'user' => $user
-            ]);
-        }
+        $teamTotals = $repo->findTeamScores($tournament, $game);
 
         return $this->render('score/show.html.twig', [
             'scores' => $scores,
             'game' => $game,
             'tournament' => $tournament,
-            'teams' => $teams,
-            'user_score' => $user_score
+            'team_totals' => $teamTotals
         ]);
     }
 }
