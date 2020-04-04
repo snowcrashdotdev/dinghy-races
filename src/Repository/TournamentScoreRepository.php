@@ -23,45 +23,6 @@ class TournamentScoreRepository extends ServiceEntityRepository
         parent::__construct($registry, TournamentScore::class);
     }
 
-
-
-    public function findSubmittedTournamentScores(Tournament $tournament=null, Game $game=null, Team $team=null, Integer $limit=null)
-    {
-        $q = $this->createQueryBuilder('s')
-            ->andWhere('s.auto_assigned != 1')
-            ->orderBy('s.points', 'DESC')
-        ;
-
-        if ($tournament !== null) {
-            $q->andWhere('s.tournament = :tournament')
-                ->setParameter('tournament', $tournament)
-            ;
-        }
-
-        if ($game !== null) {
-            $q->andWhere('s.game = :game')
-                ->setParameter('game', $game)
-            ;
-        }
-
-        if ($team !== null) {
-            $q->andWhere('s.team = :team')
-                ->setParameter('team', $team)
-            ;
-        }
-
-        return $q->getQuery()->getResult();
-    }
-
-    public function findTotalTeamPoints(Team $team)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.team = :team')
-            ->setParameter('team', $team)
-            ->select('SUM(s.team_points) as total')
-            ->getQuery()->getSingleScalarResult();
-    }
-
     public function findRecentScores(Tournament $tournament, $limit=null)
     {
         $q = $this->createQueryBuilder('s')
@@ -77,27 +38,12 @@ class TournamentScoreRepository extends ServiceEntityRepository
         return $q->getQuery()->getResult();
     }
 
-    public function findByGameAndTournament($tournament, $game, $limit=null)
-    {
-        $q = $this->createQueryBuilder('s')
-            ->andWhere('s.tournament = :tournament')
-            ->setParameter('tournament', $tournament)
-            ->andWhere('s.game = :game')
-            ->setParameter('game', $game)
-            ->orderBy('s.points', 'DESC');
-        if ($limit !== null) {
-            $q->setMaxResults($limit);
-        }
-        
-        return $q->getQuery()->getResult();
-    }
-
     public function findIndividualScores($tournament, $limit=null)
     {
         $q = $this->createQueryBuilder('s')
             ->join('s.user', 'u')
             ->leftJoin('s.team', 't')
-            ->select('u.id as id', 'u.username as name', 't.name as team', 'SUM(s.ranked_points) as points')
+            ->select('u.id as id', 'u.username as name', 'SUM(s.ranked_points) as points')
             ->groupBy('s.user', 's.team')
             ->andWhere('s.tournament = :tournament')
             ->setParameter('tournament', $tournament)
@@ -108,6 +54,10 @@ class TournamentScoreRepository extends ServiceEntityRepository
             $q->setMaxResults($limit);
         }
 
+        if ($limit === 1) {
+            return $q->getQuery()->getOneOrNullResult();
+        }
+
         return $q->getQuery()->getArrayResult();
     }
 
@@ -115,7 +65,7 @@ class TournamentScoreRepository extends ServiceEntityRepository
     {
         $q = $this->createQueryBuilder('s')
             ->join('s.team', 't')
-            ->select('t.id as id', 't.name as name', 'SUM(s.ranked_points) as points')
+            ->select('t.id as id', 't.name as name', 'SUM(s.team_points) as points')
             ->groupBy('s.team')
             ->andWhere('s.tournament = :tournament')
             ->setParameter('tournament', $tournament)
@@ -128,6 +78,10 @@ class TournamentScoreRepository extends ServiceEntityRepository
 
         if ($limit) {
             $q->setMaxResults($limit);
+        }
+
+        if ($limit === 1) {
+            return $q->getQuery()->getOneOrNullResult();
         }
 
         return $q->getQuery()->getArrayResult();
@@ -158,36 +112,6 @@ class TournamentScoreRepository extends ServiceEntityRepository
             ->orderBy('points', 'DESC');
 
         return $q->getQuery()->getResult();
-    }
-
-    public function findUserScores(User $user, $limit=null)
-    {
-        $q = $this->createQueryBuilder('s')
-            ->select('s')
-            ->andWhere('s.user = :user')
-            ->setParameter('user', $user)
-            ->andWhere('s.points > 0')
-            ->orderBy('s.updated_at', 'DESC')
-            ->setMaxResults($limit);
-
-        return $q->getQuery()->getResult();
-    }
-
-    public function findCountGreaterThanPoints(Score $score)
-    {
-        $q = $this->createQueryBuilder('s')
-            ->select('s.id')
-            ->andWhere('s.id != :id')
-            ->setParameter('id', $score->getId())
-            ->andWhere('s.tournament = :tournament')
-            ->setParameter('tournament', $score->getTournament())
-            ->andWhere('s.game = :game')
-            ->setParameter('game', $score->getGame())
-            ->andWhere('s.points >= :points')
-            ->setParameter('points', $score->getPoints())
-            ->getQuery();
-
-        return count($q->execute());
     }
 
     public function findByTournamentPublic(Tournament $tournament)
