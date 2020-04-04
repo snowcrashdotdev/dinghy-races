@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TwitchChecker
 {
+    public const CACHE_EXPIRES = 120;
     private $cache;
     private $clientId;
     private $streamTag;
@@ -32,7 +33,7 @@ class TwitchChecker
         $this->setCacheHandle( 'live_streams_' . $tournament->getId() );
 
         $liveStreams = $this->cache->get($this->getCacheHandle(), function(ItemInterface $item) use ($tournament) { 
-            $item->expiresAfter(120);
+            $item->expiresAfter($this::CACHE_EXPIRES);
 
             $twitch_users = $this->manager
                 ->getRepository('App\Entity\Profile')
