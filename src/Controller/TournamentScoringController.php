@@ -25,6 +25,7 @@ class TournamentScoringController extends AbstractController
 {
     /**
      * @Route("/", name="scoring_index", methods={"GET"})
+     * @IsGranted('ROLE_ADMIN')
      */
     public function index(TournamentScoringRepository $tournamentScoringRepository): Response
     {
@@ -35,6 +36,7 @@ class TournamentScoringController extends AbstractController
 
     /**
      * @Route("/{id}", name="scoring_show", methods={"GET"})
+     * @IsGranted('ROLE_TO')
      */
     public function show(TournamentScoring $tournamentScoring): Response
     {
@@ -66,8 +68,6 @@ class TournamentScoringController extends AbstractController
                 'message' => "${tournament} could not be scored."
             ]);
         }
-
-
 
         return $this->redirectToRoute('tournament_show', [
             'id' => $tournament->getId()
@@ -156,7 +156,7 @@ class TournamentScoringController extends AbstractController
 
     /**
      * @Route("/{id}", name="tournament_scoring_delete", methods={"DELETE"})
-     * @IsGranted("ROLE_TO")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, TournamentScoring $tournamentScoring): Response
     {
