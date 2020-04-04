@@ -1,0 +1,24 @@
+{% if user %}
+    {% set profile = user.profile %}
+    {% set href = path('profile_show', {
+        'username': user.username
+    }) %}
+        <article class="summary profile-summary flex">
+        {% if profile.picture %}
+            {% import '_macros/img.responsive.html.twig' as m_img %}
+            {% set img_config = {
+                'path': asset('/uploads/pfps/'),
+                'file': profile.picture,
+                'sizes': '(min-width: 600px) 200px',
+                'classNames': 'profile-picture'
+            } %}
+            {{ m_img.responsive(img_config) }}
+        {% endif %}
+        <div>
+            <h2><a href="{{href}}">{{user.username}}</a></h2>
+            {% if profile.social %}
+                <p><a target="_blank" href="{{profile.social}}">{{profile.social}}</a></p>
+            {% endif %}
+        </div>
+    </article>
+{% endif %}

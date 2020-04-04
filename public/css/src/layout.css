@@ -244,7 +244,6 @@ td {
     flex-basis: 100%;
     overflow: hidden;
     margin: 0 -0.1em -0.1em 0;
-    text-align: right;
 }
 
 .td-index {
@@ -305,8 +304,10 @@ td {
 
 .gadget-group {
     display: grid;
-    grid-template-columns: var(--max-column-width);
-    grid-auto-rows: 1fr;
+    grid-template-columns: repeat(
+        auto-fit, var(--max-column-width)
+    );
+    grid-auto-rows: min-content;
     grid-gap: calc(var(--margin)/2);
     justify-items: stretch;
 }

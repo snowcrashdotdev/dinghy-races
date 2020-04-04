@@ -24,11 +24,20 @@
     </section>
 {% endif %}
 
-    <section>
-        {% if (leaderboard) %}
-            {{ include('team/leaderboard.html.twig', {'scores':leaderboard,'gameCount':team.tournament.games|length}) }}
-        {% endif %}
+{% if team.members|length %}
+    <h3 class="page-break">Roster</h3>
+    <section class="summary-group">
+        {% for user in team.members %}
+            {{
+                include('profile/_summary.html.twig', {
+                    'user': user
+                })
+            }}
+        {% endfor %}
     </section>
+{% else %}
+    <p>No team members selected.</p>
+{% endif %}
 </main>
 {% endblock %}
 

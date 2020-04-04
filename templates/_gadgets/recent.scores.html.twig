@@ -6,11 +6,15 @@
             'game_name': score.game.name,
             'tournament_id': score.tournament.id
         }) %}
-        <div class="text-justify" title="{{score.updatedAt|date('m/d G:i')}}">
-            <a href="{{href}}">{{score.game.name}}</a>
-            <span class="margin-x-auto roboto outlined">{{score.user|slice(0,3)|upper}}</span>
-            <span class="roboto outlined">{{score.points|number_format}}</span>
-            <span>{{ date("now").diff(date(score.updatedAt)).format('%h hours ago')}}</span>
+        <div class="flex flex-space-between">
+            <a class="flex-1" href="{{href}}">{{score.game.name}}</a>
+
+            {% set diff = date("now").diff(date(score.updatedAt)) %}
+            {% set span = diff.format('%i') > 60 ?
+                diff.format('%h hours ago') :
+                diff.format('%i minutes ago')
+            %}
+            <span class="flex-1 text-right">{{span}}</span>
         </div>
     {% endfor %}
 </aside>

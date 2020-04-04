@@ -45,6 +45,13 @@
                     })
                 }}
             {% endif %}
+            {% if not tournament.upcoming %}
+                {{
+                    include('_gadgets/participation.html.twig', {
+                        'rate': tournament.participationRate
+                    })
+                }}
+            {% endif %}
         </section>
 
         <h2 class="uppercase page-break outlined">Games</h2>

@@ -45,8 +45,14 @@ body {
 }
 
 .profile-picture {
-    width: 8rem;
+    width: 4rem;
+    margin-right: calc(var(--margin)/2);
     max-width: 100%;
+}
+
+.profile-summary {
+    background-color: var(--shaded);
+    padding: var(--padding);
 }
 
 header {
