@@ -34,7 +34,7 @@ class Profile implements \Serializable
      */
     private $picture;
     
-    protected $picture_file;
+    private $picture_file;
 
     public function getId(): ?int
     {
