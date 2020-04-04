@@ -20,6 +20,20 @@ class ScoreListener
         $this->score_keeper = $score_keeper;
     }
 
+    public function prePersist(Score $score)
+    {
+        $score->setCreatedAt(date_create('NOW'));
+        $score->setUpdatedAt(date_create('NOW'));
+
+        if ($score instanceof TournamentScore) {
+            $this->getScoreKeeper()->scoreGame(
+                $score->getTournament(),
+                $score->getGame()
+            );
+        }
+        
+    }
+
     public function preUpdate(Score $score, PreUpdateEventArgs $args)
     {
         $score = $args->getObject();
