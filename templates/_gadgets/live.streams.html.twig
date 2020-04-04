@@ -1,8 +1,8 @@
 {% if streams %}
-<aside>
+<aside class="gadget">
     <h3>Live Streams</h3>
-    {% for stream in live_streams %}
-        <a target="_blank" href="{{'https://www.twitch.tv/' ~ stream.user_name}}">{{stream.user_name}} &mdash; {{stream.title}}</a>
+    {% for stream in streams %}
+        <p><a target="_blank" href="{{'https://www.twitch.tv/' ~ stream.user_name}}">{{stream.user_name}} &mdash; {{stream.title}}</a></p>
     {% endfor %}
 </aside>
 {% endif %}
