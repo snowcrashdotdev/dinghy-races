@@ -51,24 +51,4 @@ class ProfileController extends AbstractController
             'profile' => $profile
         ]);
     }
-
-
-    /**
-     * @Route("/{user}/personal-bests", name="user_pbs")
-     * @Entity("user", expr="repository.findOneBy({username: user})")
-     */
-    public function personal_bests(User $user)
-    {
-        $pbs = $this->getDoctrine()
-            ->getRepository('App\Entity\PersonalBest')
-            ->findBy([
-                'user' => $user
-            ])
-        ;
-
-        return $this->render('user/personal_bests.html.twig', [
-            'user' => $user,
-            'personal_bests' => $pbs
-        ]);
-    }
 }
