@@ -18,6 +18,7 @@
             {% endif %}
             <span class="nav-item-label">Profile</span></a>
             <div class="sub-navigation text-right">
+                <a href="{{path('profile_show', {'username':app.user})}}">View Profile</a>
                 <a class="nav-item" href="{{path('profile_edit')}}">Edit Settings</a>
                 <a class="nav-item" href="{{path('app_logout')}}">Log Out</a>
             </div>
