@@ -104,7 +104,7 @@ class GameController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('game_show', [
-                'id' => $game->getId(),
+                'name' => $game->getName(),
             ]);
         }
 
