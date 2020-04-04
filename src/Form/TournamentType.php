@@ -34,7 +34,7 @@ class TournamentType extends AbstractType
             ])
             ->add('description', CKEditorType::class, [
                 'label' => false,
-                'required' => false,
+                'required' => true,
                 'attr'=> ['placeholder'=>'Describe this tournament.']
             ])
         ;
