@@ -39,6 +39,7 @@ final class Version20200404093855 extends AbstractMigration
         $this->addSql('UPDATE score SET points_history = "' . $empty_array . '"'); // initialize score history
         $this->addSql('UPDATE draft_entry e JOIN draft d ON e.draft_id = d.id JOIN tournament t ON t.id = d.tournament_id SET e.eligible = 1 WHERE t.start_date > CURRENT_TIMESTAMP');
         $this->addSql('UPDATE score SET points = 0, ranked_points = 0 WHERE auto_assigned = 1');
+        $this->addSql('INSERT score (user_id, game_id, created_at, updated_at, points, points_history, video_url, screenshot, comment, type) SELECT user_id, game_id, created_at, updated_at, points, "a:0:{}" as points_history, video_url, screenshot, comment, "personal_best" as type FROM calice.score WHERE points > 0');
     }
 
     public function down(Schema $schema) : void
