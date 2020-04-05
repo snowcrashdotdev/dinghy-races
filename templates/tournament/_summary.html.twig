@@ -4,8 +4,9 @@
 
         <br>
 
-        <time class="text-small">from {{ tournament.startDate|date('F jS, Y @ g:ia') }} until {{tournament.endDate|date_modify('-1 minute')|date('F jS, Y @ g:ia')}}</time>
+        <time class="text-small">{{ tournament.startDate|date('F jS, Y') }} &mdash; {{tournament.endDate|date_modify('-1 minute')|date('F jS, Y')}}</time>
     </h3>
-    
-    <div>{{ tournament.description|raw }}</div>
+    {% if show_description is not defined or show_description == true %}
+        <div>{{ tournament.description|raw }}</div>
+    {% endif %}
 </article>

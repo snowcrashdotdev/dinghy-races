@@ -181,6 +181,14 @@
     flex: 0;
 }
 
+.flex-self-center {
+    align-self: center;
+}
+
+.flex-self-end {
+    align-self: flex-end;
+}
+
 .push-right {
     margin-left: auto;
 }

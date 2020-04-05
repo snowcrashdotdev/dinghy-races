@@ -3,31 +3,61 @@
 {% block title %}{{user}}'s player profile{% endblock %}
 
 {% block body %}
-    <header>
-    {% if profile.picture %}
-        {% import '_macros/img.responsive.html.twig' as m_img %}
-        {% set img_config = {
-            'path': asset('/uploads/pfps/'),
-            'file': profile.picture,
-            'sizes': '(min-width: 600px) 200px',
-            'classNames': 'profile-picture'
-        } %}
-        {{ m_img.responsive(img_config) }} 
-    {% endif %}
+<header>
+    <div>
+        {% if profile.picture %}
+            {% import '_macros/img.responsive.html.twig' as m_img %}
+            {% set img_config = {
+                'path': asset('/uploads/pfps/'),
+                'file': profile.picture,
+                'sizes': '(min-width: 600px) 200px',
+                'classNames': 'profile-picture'
+            } %}
+            {{ m_img.responsive(img_config) }} 
+        {% endif %}
 
-    <h1>{{user}}</h1>
-    {% if profile.social %}
-        <p><small><a href="{{profile.social}}">{{profile.social}}</a></small></p>
-    {% endif %}
-    </header>
+        <h1>
+            {{user}}
+            {% if profile.social %}
+            <br>
+            <small><a target="_blank" href="{{profile.social}}">{{profile.social}}</a></small>
+        {% endif %}
+        </h1>
+    </div>
+    <div class="tournament-list text-small flex-self-center">
+        <p>Member since: {{user.createdAt|date('M j, Y')}}</p>
+    </div>
+</header>
 
-    <main>
-    {% if user.teams %}
-        <h2>Has appeared in:</h2>
+<main>
+    {% if user.teams|length %}
+        <h2 class="page-break">Tournament Appearances</h2>
+        <section class="summary-group">
         {% for team in user.teams %}
-            <p>{{team.tournament}} on {{team}}</p>
+            {{
+                include('team/_summary.html.twig', {
+                    'team': team
+                })
+            }}
         {% endfor %}
+        </section>
     {% endif %}
-    </main>
 
+    {% if user.personalBests|length %}
+        <h2 class="page-break">Personal Bests</h2>
+        <section class="summary-group">
+        {% for score in user.personalBests %}
+            {{
+                include('game/_summary.html.twig', {
+                    'game': score.game,
+                    'scores': score,
+                    'tournament': false
+                })
+            }}
+        {% endfor %}
+        </section>
+    {% else %}
+        <p>No personal bests recorded.</p>
+    {% endif %}
+</main>
 {% endblock %}

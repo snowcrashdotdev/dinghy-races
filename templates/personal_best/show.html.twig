@@ -7,10 +7,14 @@
         <h1>Permanent Leaderboard for {{game.description}}</h1>
     </header>
     <main>
-    {% if personal_bests|length > 0 %}
-        {% set scores = personal_bests %}
-        {% set permanent_board = true %}
-        {% include '_leaderboards/individual.html.twig' %}
+    {% if personal_bests|length %}
+        {{
+            include('_leaderboards/individual.html.twig', {
+                'scores': personal_bests,
+                'tournament': false,
+                'user_score': personal_bests|filter(s => s.user is same as(app.user))|first
+            })
+        }}
     {% else %}
         <p>No scores have been posted for this game</p>
     {% endif %}

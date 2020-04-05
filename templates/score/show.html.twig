@@ -2,6 +2,10 @@
 
 {% block title %}{{ tournament.title }} scores for {{ game.description }}{% endblock %}
 
+{% set user_score = scores|filter(
+    s => s.user is same as(app.user))|first
+%}
+
 {% block body %}
 <header class="tournament-header">
     {% set t_href = path('tournament_show', {
@@ -28,10 +32,6 @@
 
     {% if is_granted('ROLE_USER') %}
         <section class="header-list">
-            {% set user_score = scores|filter(
-                s => s.user is same as(app.user))|first
-            %}
-
             <h2>Your Score:</h2>
             {% if user_score %}
                 <p>#{{user_score.rank}}) {{user_score.points}}</p>
@@ -44,7 +44,13 @@
 
 <main>
     {% if scores|length %}
-        {% include '_leaderboards/individual.html.twig' %}
+        {{
+            include('_leaderboards/individual.html.twig', {
+                'scores': scores,
+                'tournament': tournament,
+                'user_score': user_score
+            })
+        }}
     {% else %}
         <p>No scores posted.</p>
     {% endif %}

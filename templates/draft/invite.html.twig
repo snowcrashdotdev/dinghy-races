@@ -7,7 +7,7 @@
         <h1>You are formally invited</h1>
     </header>
     <main>
-        {{ include('tournament/_summary.html.twig', { 'tournament': draft.tournament }) }}
+        {{ include('tournament/_summary.html.twig', { 'tournament': draft.tournament, 'show_description': true }) }}
         {% if is_granted("ROLE_USER") %}
             {% if draft.hasEntered(app.user) %}
                 {{ include('draft/_decline_invite.html.twig', {'id': draft.id}) }}

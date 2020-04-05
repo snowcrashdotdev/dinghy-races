@@ -68,7 +68,6 @@ img {
 /*
 *   Navigation
 */
-
 .main-navigation {
     position: fixed;
     top: 0;
@@ -167,6 +166,7 @@ img {
     grid-auto-rows: 1fr;
     grid-gap: calc(var(--margin)/2);
     justify-items: stretch;
+    margin-bottom: var(--margin);
 }
 
 @media (min-width: 73.75rem) {
@@ -175,11 +175,20 @@ img {
     }
 }
 
+header section {
+    margin-bottom: var(--margin);
+}
+
 @media (min-width: 37rem) {
-    .tournament-header {
+    header {
         display: flex;
         flex-wrap: wrap;
         align-items: flex-start;
+    }
+
+    header h1,
+    header section {
+        margin-right: var(--margin);
     }
 }
 
@@ -193,8 +202,6 @@ img {
     flex: 1;
     font-size: 1rem;
     border-left: 0.1em solid var(--color-three);
-    margin-right: var(--margin);
-    margin-bottom: var(--margin);
     padding-left: var(--padding);
 }
 

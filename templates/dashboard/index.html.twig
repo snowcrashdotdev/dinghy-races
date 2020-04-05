@@ -40,7 +40,8 @@
         {% for tournament in upcoming %}
             <section class="border-left">
                 {{ include('tournament/_summary.html.twig', {
-                    'tournament': tournament
+                    'tournament': tournament,
+                    'show_description': true
                 }) }}
             </section>
         {% endfor %}

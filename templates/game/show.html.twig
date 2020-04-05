@@ -10,12 +10,32 @@
     </h1>
 </header>
 <main>
-    <h2>Has appeared in:</h2>
+    <h2 class="page-break">Tournaments</h2>
+    <section class="summary-group">
     {% for tournament in game.tournaments %}
-        <p>{{tournament.title}}</p>
+        {{
+            include('tournament/_summary.html.twig', {
+                'tournament': tournament,
+                'show_description': false
+            })
+        }}
     {% else %}
-        <p>No tournaments.</p>
+        <p>This game has not been played in a tournament.</p>
     {% endfor %}
+    </section>
+
+    <h2 class="page-break">All Time High Scores</h2>
+    {% if game.personalBests|length %}
+        {{
+            include('_leaderboards/individual.html.twig', {
+                'scores': game.personalBests,
+                'tournament': false,
+                'user_score': game.personalBests|filter(s => s.user is same as(app.user))|first
+            })
+        }}
+    {% else %}
+        <p>No scores recorded for this game.</p>
+    {% endif %}
 </main>
 {% endblock %}
 
