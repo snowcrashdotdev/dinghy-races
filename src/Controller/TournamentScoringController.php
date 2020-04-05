@@ -25,7 +25,6 @@ class TournamentScoringController extends AbstractController
 {
     /**
      * @Route("/", name="scoring_index", methods={"GET"})
-     * @IsGranted('ROLE_ADMIN')
      */
     public function index(TournamentScoringRepository $tournamentScoringRepository): Response
     {
@@ -36,7 +35,6 @@ class TournamentScoringController extends AbstractController
 
     /**
      * @Route("/{id}", name="scoring_show", methods={"GET"})
-     * @IsGranted('ROLE_TO')
      */
     public function show(TournamentScoring $tournamentScoring): Response
     {
@@ -48,7 +46,6 @@ class TournamentScoringController extends AbstractController
     /**
      * @Route("/{tournament}/refresh", name="scoring_refresh", methods={"POST"})
      * @Entity("tournament", expr="repository.find(tournament)")
-     * @IsGranted("ROLE_TO")
      */
     public function refresh(Request $request, Tournament $tournament, ScoreKeeper $score_keeper)
     {
@@ -77,7 +74,6 @@ class TournamentScoringController extends AbstractController
     /**
      * @Route("/{tournament}/edit", name="scoring_edit", methods={"GET","POST"})
      * @Entity("tournament", expr="repository.find(tournament)")
-     * @IsGranted("ROLE_TO")
      */
     public function edit(Request $request, Tournament $tournament): Response
     {
@@ -156,7 +152,6 @@ class TournamentScoringController extends AbstractController
 
     /**
      * @Route("/{id}", name="tournament_scoring_delete", methods={"DELETE"})
-     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, TournamentScoring $tournamentScoring): Response
     {
