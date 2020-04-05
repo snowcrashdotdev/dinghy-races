@@ -297,23 +297,6 @@ class Tournament
         return (date_create('NOW') > $this->getScoring()->getDeadline());
     }
 
-    public function getParticipationRate()
-    {
-        if (
-            empty($this->getScores()) ||
-            empty($this->getUsers())
-        ) {
-            return null;
-        }
-
-        $criteria = Criteria::create()
-            ->andWhere(Criteria::expr()->neq('auto_assigned', true));
-
-        $expectedScoreCount = $this->getUsers()->count() * $this->getGames()->count();
-        $actualScoreCount = $this->getScores()->matching($criteria)->count();
-        return $actualScoreCount / $expectedScoreCount;
-    }
-
     /**
      * @return Collection|TournamentScore[]
      */
