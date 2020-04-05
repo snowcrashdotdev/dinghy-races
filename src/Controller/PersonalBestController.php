@@ -63,10 +63,10 @@ class PersonalBestController extends AbstractController
                 ])
             )
         ) {
-            $personalBest = new PersonalBest();
-            $personalBest->setGame($game);
-            $personalBest->setUser($this->getUser());
-            $this->getDoctrine()->getManager()->persist($personalBest);
+            $this->addFlash('notice', 'Unable to find your previous score.');
+            return $this->redirectToRoute('pb_show', [
+                'game' => $game->getName()
+            ]);
         }
 
         $form = $this->createForm(ScoreType::class, $personalBest);

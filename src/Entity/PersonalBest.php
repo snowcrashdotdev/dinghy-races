@@ -13,18 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PersonalBest extends Score
 {
-    public function fromTournamentScore(TournamentScore $score): self
+    public function __construct()
     {
-        $this->setCreatedAt($score->getCreatedAt());
-        $this->setUpdatedAt($score->getUpdatedAt());
-        $this->setUser($score->getUser());
-        $this->setGame($score->getGame());
-        $this->setPoints($score->getPoints());
-        $this->setPointsHistory($score->getPointsHistory());
-        $this->setVideoUrl($score->getVideoUrl());
-        $this->setScreenshot($score->getScreenshot());
-        $this->setComment($score->getComment());
-
-        return $this;
+        parent::__construct();
     }
 }

@@ -95,12 +95,13 @@ class User implements UserInterface
     private $teams;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="user", cascade={"persist"})
      */
     private $tournament_scores;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PersonalBest", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\PersonalBest", mappedBy="user", cascade={"persist"})
+     * @ORM\OrderBy({"updated_at" = "DESC"})
      */
     private $personal_bests;
 

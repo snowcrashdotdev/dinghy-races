@@ -52,12 +52,13 @@ class Game implements \Serializable
     private $marquee_file;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="game")
+     * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="game", cascade={"persist"})
      */
     private $tournament_scores;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PersonalBest", mappedBy="game")
+     * @ORM\OneToMany(targetEntity="App\Entity\PersonalBest", mappedBy="game", cascade={"persist"})
+     * @ORM\OrderBy({"points" = "DESC"})
      */
     private $personal_bests;
 

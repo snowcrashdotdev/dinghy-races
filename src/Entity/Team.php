@@ -32,7 +32,8 @@ class Team
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="teams", fetch="EAGER")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="teams")
+     * @ORM\OrderBy({"username" = "ASC"})
      */
     private $members;
 
@@ -42,7 +43,7 @@ class Team
     private $points;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="team")
+     * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="team", cascade={"persist"})
      */
     private $scores;
 

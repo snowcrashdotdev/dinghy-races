@@ -3,8 +3,13 @@ namespace App\EventListener;
 
 use App\Entity\Score;
 use App\Entity\TournamentScore;
+use App\Entity\PersonalBest;
 use App\Service\ScoreKeeper;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\UnitOfWork;
 use Symfony\Component\Filesystem\Filesystem;
 use App\Service\ImageUploader;
 use Symfony\Component\HttpFoundation\File\File;
@@ -20,11 +25,8 @@ class ScoreListener
         $this->score_keeper = $score_keeper;
     }
 
-    public function prePersist(Score $score)
+    public function prePersist(Score $score, LifecycleEventArgs $args)
     {
-        $score->setCreatedAt(date_create('NOW'));
-        $score->setUpdatedAt(date_create('NOW'));
-
         if ($score instanceof TournamentScore) {
             $this->getScoreKeeper()->scoreGame(
                 $score->getTournament(),
@@ -85,11 +87,29 @@ class ScoreListener
             $old_score = $args->getOldValue('points');
             $new_score = $args->getNewValue('points');
 
-            if ($new_score > $old_score) {
+            if ($new_score > $old_score && $new_score !== 0) {
                 $this->getScoreKeeper()->scoreGame(
                     $score->getTournament(),
                     $score->getGame()
                 );
+            }
+        }
+    }
+
+    public function onFlush(OnFlushEventArgs $args)
+    {
+        $manager = $args->getEntityManager();
+        $uow = $manager->getUnitOfWork();
+
+        foreach($uow->getScheduledEntityInsertions() as $entity) {
+            if ($entity instanceof TournamentScore) {
+                $this->syncPersonalBest($entity, $manager, $uow);
+            }
+        }
+
+        foreach($uow->getScheduledEntityUpdates() as $entity) {
+            if ($entity instanceof TournamentScore) {
+                $this->syncPersonalBest($entity, $manager, $uow);
             }
         }
     }
@@ -115,7 +135,6 @@ class ScoreListener
         } catch (FileException $e) {
             $score->setReplayFile(null);
         }
-
     }
 
     public function getScreenshotDir()
@@ -136,5 +155,54 @@ class ScoreListener
     public function getScoreKeeper(): ScoreKeeper
     {
         return $this->score_keeper;
+    }
+
+    private function syncPersonalBest(TournamentScore $score, EntityManager $manager, UnitOfWork $uow)
+    {
+        $game = $score->getGame();
+        $user = $score->getUser();
+        $changeSet = $uow->getEntityChangeSet($score);
+        $metaData = $manager->getClassMetaData(PersonalBest::class);
+
+        if(empty(
+            $personalBest = $manager->getRepository('App\Entity\PersonalBest')
+                ->findOneBy([
+                    'game' => $game,
+                    'user' => $user
+                ])
+            )
+        ) {
+            $new_personalBest = $this->newPersonalBestFrom($score);
+            $manager->persist($new_personalBest);
+            $uow->computeChangeSet($metaData, $new_personalBest);
+        } elseif (
+            isset($changeSet['points']) &&
+            $changeSet['points'][0] < $changeSet['points'][1] &&
+            $changeSet['points'][1] > $personalBest->getPoints()
+        ) {
+            $new_personalBest = $this->newPersonalBestFrom($score, $personalBest);
+            $uow->computeChangeSet($metaData, $new_personalBest);
+        }
+    }
+
+    private function newPersonalBestFrom(TournamentScore $score, ?PersonalBest $personalBest=null): PersonalBest
+    {
+        if (empty($personalBest)) {
+            $personalBest = new PersonalBest();
+            $score->getGame()->addPersonalBest($personalBest);
+            $score->getUser()->addPersonalBest($personalBest);
+        }
+        $personalBest->setPoints($score->getPoints());
+
+        $history = $personalBest->getPointsHistory();
+        $history[] = $score->getPoints();
+        $personalBest->setPointsHistory($history);
+
+        $personalBest->setScreenshot($score->getScreenshot());
+        $personalBest->setVideoUrl($score->getVideoUrl());
+        $personalBest->setReplay($score->getReplay());
+        $personalBest->setComment($score->getComment());
+
+        return $personalBest;
     }
 }

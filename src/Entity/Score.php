@@ -81,6 +81,12 @@ abstract class Score implements \Serializable
      */
     private $comment;
 
+    public function __construct()
+    {
+        $this->created_at = date_create('NOW');
+        $this->updated_at = date_create('NOW');
+    }
+
     public function getId(): ?int
     {
         return $this->id;
