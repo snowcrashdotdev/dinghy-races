@@ -56,16 +56,17 @@ class TournamentScoreController extends AbstractController
             $tournament->addScore($score);
             $team->addScore($score);
             if (
+                $tournament->getScoring()->getDeadline() &&
                 $tournament->getScoring()->getDeadline() > date_create('NOW')
             ) {
                 $score->setAutoAssigned(false);
             } else {
                 $score->setAutoAssigned(true);
             }
-            $this->getDoctrine()->getManager()->persist($score);
 
             if ($score->isNoShow()) {
                 $score->setPoints(0);
+                $this->getDoctrine()->getManager()->persist($score);
                 $this->getDoctrine()->getManager()->flush();
                 $this->addFlash('notice', 'New score submissions are closed.');
                 $this->redirectToRoute('tournament_show', [
