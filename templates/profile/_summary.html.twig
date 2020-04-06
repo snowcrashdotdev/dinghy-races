@@ -3,7 +3,7 @@
     {% set href = path('profile_show', {
         'username': user.username
     }) %}
-        <article class="summary profile-summary flex">
+        <article class="summary profile-summary">
         {% if profile.picture %}
             {% import '_macros/img.responsive.html.twig' as m_img %}
             {% set img_config = {

@@ -3,45 +3,55 @@
 {% block title %}{{ tournament.title }}{% endblock %}
 
 {% block body %}
-    <header class="tournament-header">
-        <section class="tournament-title">
-            <h1>{{tournament.title}}</h1>
-
-            {% if not tournament.ended %}
-                <time class="block text-small">
-                {% if tournament.upcoming %}
-                    starts {{ tournament.startDate|date('F jS, g:ia') }}
-                {% else %}
-                    ends {{ tournament.endDate|date_modify('-1 minute')|date('F jS, g:ia') }}
-                {% endif %}
-                </time>
-            {% endif %}
-        </section>
-
-        {% if tournament.teams|length %}
-            <section class="header-list">
-                <h2>Featuring:</h2>
-                {% for team in tournament.teams %}
-                    {% set href = path('team_show', {
-                        'id': team.id
-                    }) %}
-                    <p><a href="{{href}}">{{team.name}}</a></p>
-                {% endfor %}
-            </section>
+<header>
+    <h1>
+        {{tournament.title}}
+        {% if not tournament.ended %}
+        <br>
+        <time class="block text-small">
+        {% if tournament.upcoming %}
+            starts {{ tournament.startDate|date('F jS, g:ia') }}
+        {% else %}
+            ends {{ tournament.endDate|date_modify('-1 minute')|date('F jS, g:ia') }}
         {% endif %}
-    </header>
+        </time>
+    {% endif %}
+    </h1>
+
+    {% if tournament.teams|length %}
+        <section class="header-list">
+            <h2>Featuring:</h2>
+            {% for team in tournament.teams %}
+                {% set href = path('team_show', {
+                    'id': team.id
+                }) %}
+                <p><a href="{{href}}">{{team.name}}</a></p>
+            {% endfor %}
+        </section>
+    {% endif %}
+
+    {% if not tournament.upcoming %}
+        <section class="header-list">
+            <h2>View Leaderboards</h2>
+            <p><a href="{{path('team_leaderboard', {'id': tournament.id})}}">Team</a></p>
+            <p><a href="{{path('individual_leaderboard', {'id': tournament.id})}}">Individual</a></p>
+        </section>
+    {% endif %}
+
+    {% if tournament.inProgress and live_streams|length %}
+        {{
+            include('_gadgets/live.streams.html.twig', {
+                'streams': live_streams
+            })
+        }}
+    {% endif %}
+</header>
     <main>
         <section class="gadget-group">
             {% if tournament.inProgress %}
                 {{
                     include('_gadgets/recent.scores.html.twig', {
                         'scores': recent_scores
-                    })
-                }}
-
-                {{
-                    include('_gadgets/live.streams.html.twig', {
-                        'streams': live_streams
                     })
                 }}
             {% endif %}

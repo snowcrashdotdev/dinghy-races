@@ -17,7 +17,7 @@
     <tbody>
     {% for score in scores %}
         <tr {{ score is same as(user_score) ? 'class="highlighted"'  }}>
-            <td class="td-index">{{ loop.index }}</td>
+            <td class="td-index">{{ loop.index }}{{ score is same as(user_score) ? '<a id="your_score"></a>' }}</td>
             <td>{{ score.points|number_format }}</td>
             <td><a href="{{path('profile_show', {'username': score.user})}}">{{ score.user.username }}</a></td>
             {% if tournament %}

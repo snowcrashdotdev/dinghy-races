@@ -1,4 +1,4 @@
-<aside id="flash-bag" class="flash-bag" hidden=''>
+<div id="flash-bag" class="flash-bag" hidden=''>
     {% for label, messages in app.flashes %}
         {% for message in messages %}
             <div class="flash flash-{{ label }}">
@@ -6,4 +6,4 @@
             </div>
         {% endfor %}
     {% endfor %}
-</aside>
+</div>

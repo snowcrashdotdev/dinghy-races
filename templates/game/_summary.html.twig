@@ -23,7 +23,7 @@
     })
 %}
 
-<article class="summary game-summary">
+<article class="game-summary">
     {% if game.marquee %}
         {% import '_macros/img.responsive.html.twig' as m_img %}
         {% set img_config = {
@@ -35,31 +35,26 @@
 
         {{ m_img.responsive(img_config) }}
     {% endif %}
+    <h3>
+        <a href="{{score_show}}">{{game.description}}</a>
+        <br><small>{{game.manufacturer}}, {{game.year}}</small>
+    </h3>
+    {% if high_score %}
+        <p class="roboto text-center text-large outlined">
+        {{high_score.points|number_format}}
+        <br>
+        {% if not single %}
+            <small>{{high_score.user.username}}</small>
+        {% endif %}
+        </p>
+        {% if user_score and not user_score is same as(high_score) %}
+        <p>
+            Your Score: {{user_score.points|number_format}}
+        </p>
+        {% endif %}
+    {% else %}
+        <p class="text-center">No scores.</p>
+    {% endif %}
 
-    <div class="summary-details">
-        <h3>
-            <a href="{{score_show}}">{{game.description}}</a>
-            <br><small>{{game.manufacturer}}, {{game.year}}</small>
-        </h3>
-        <div class="game-score-details">
-            {% if high_score %}
-                <p class="roboto text-center text-large outlined">
-                    {{high_score.points|number_format}}
-                    <br>
-                    {% if not single %}
-                        <small>{{high_score.user.username}}</small>
-                    {% endif %}
-                </p>
-                {% if user_score and not user_score is same as(high_score) %}
-                    <p>
-                        Your Score: {{user_score.points|number_format}}
-                    </p>
-                {% endif %}
-            {% else %}
-                <p class="text-center">No scores.</p>
-            {% endif %}
-            
-            <p class="text-small"><a href="{{game_show}}">Game info.</a></p>
-        </div>
-    </div>
+    <p class="text-small"><a href="{{game_show}}">Game info.</a></p>
 </article>

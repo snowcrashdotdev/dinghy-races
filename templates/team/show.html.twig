@@ -11,22 +11,9 @@
     </h1>
 </header>
 
-<main class="flex">
-{% if not team.tournament.upcoming %}
-    <section class="gadget-group">
-        {{
-            include('_gadgets/points.per.game.html.twig', {
-                'scores': points_per_game,
-                'tournament': team.tournament,
-                'total': team.points
-            })
-        }}
-    </section>
-{% endif %}
-
+<main>
+<h2 class="page-break">Roster</h2>
 {% if team.members|length %}
-    <div class="flex-1">
-    <h3 class="page-break">Roster</h3>
     <section class="summary-group">
         {% for user in team.members %}
             {{
@@ -39,7 +26,27 @@
 {% else %}
     <p>No team members selected.</p>
 {% endif %}
-    </div>
+
+{% if not team.tournament.upcoming %}
+    <h2 class="page-break">Stats</h2>
+    <section class="column-2">
+        {{
+            include('_gadgets/points.per.game.html.twig', {
+                'scores': points_per_game,
+                'tournament': team.tournament,
+                'total': team.points
+            })
+        }}
+
+        {{
+            include('_leaderboards/_stats.html.twig', {
+                'tournament': team.tournament,
+                'users': team.members,
+                'scores': team.scores|filter(s => not s.noShow)
+            })
+        }}
+    </section>
+{% endif %}
 </main>
 {% endblock %}
 

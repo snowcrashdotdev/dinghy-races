@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{tournament.title}} Individual Results{% endblock %}
+
+{% block body %}
+    <header>
+        <h1><a href="{{path('tournament_show', {'id': tournament.id})}}">{{tournament.title}}</a> Individual Results</h1>
+    </header>
+    <main>
+        <h2 class="page-break">Leaderboard Stats</h2>
+        {% if tournament.scores|length %}
+            {{
+                include('_leaderboards/_stats.html.twig', {
+                    'tournament': tournament,
+                    'scores': tournament.scores|filter(s => not s.noShow),
+                    'users': tournament.users,
+                    'show_total': false
+                })
+            }}
+        {% else %}
+            <p>No scores submitted.</p>
+        {% endif %}
+    </main>
+{% endblock %}

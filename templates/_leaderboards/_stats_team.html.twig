@@ -1,0 +1,34 @@
+{% if teams|length %}
+    {% set team_stats = [] %}
+
+    {% for team in teams %}
+        {% set scores = team.scores|filter(s => not s.noShow) %}
+        {% set team_stats = team_stats|merge([{
+            'name': team.name,
+            'points': team.points,
+            'avg_rank': scores|length ? scores|reduce((c,s) => c + (s.rank / scores|length))|number_format(0) : 0,
+            'completion': scores|length ? (scores|length / (tournament.games|length * team.members|length))|number_format(0) * 100 : 0
+        }]) %}
+    {% endfor %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>Team</th>
+                <th>Points</th>
+                <th>Avg Rank</th>
+                <th>Completion</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for team in team_stats|sort((a,b) => b.points <=> a.points) %}
+                <tr>
+                    <td>{{team.name}}</td>
+                    <td class="labeled-data team-points">{{team.points}}</td>
+                    <td class="labeled-data avg-rank">{{team.avg_rank}}</td>
+                    <td class="labeled-data completion">{{team.completion ~ '%'}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

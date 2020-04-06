@@ -9,12 +9,15 @@
         <div class="flex flex-space-between">
             <a class="flex-1" href="{{href}}">{{score.game.name}}</a>
 
-            {% set diff = date("now").diff(date(score.updatedAt)) %}
-            {% set span = diff.format('%i') > 60 ?
-                diff.format('%h hours ago') :
-                diff.format('%i minutes ago')
-            %}
-            <span class="flex-1 text-right">{{span}}</span>
+            {% set diff = date("now").diff(score.updatedAt, true) %}
+            {% set daysHoursMinutes = diff.format('%d days,%hh,%imin')|split(',') %}
+            <span class="flex-1 text-right text-small">
+                {% for interval in daysHoursMinutes %}
+                    {% if interval|first|number_format > 0 %}
+                        {{interval}}{{not loop.last ? ', '}}{{ loop.last ? ' ago' }}
+                    {% endif %}
+                {% endfor %}
+            </span>
         </div>
     {% endfor %}
 </aside>

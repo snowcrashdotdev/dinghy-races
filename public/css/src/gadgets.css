@@ -1,17 +1,22 @@
-.gadget-group {
-    margin-bottom: var(--margin);
+@media (min-width: 37rem) {
+    .gadget-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, calc(
+            (var(--max-content-width) / 5) - calc(var(--margin) * 2)
+        ));
+        grid-auto-rows: auto;
+        grid-gap: var(--margin);
+    }
+
+    .gadget {
+        margin-bottom: 0;
+    }
 }
 
 .gadget {
-    display: flex;
-    flex-direction: column;
     justify-content: center;
-    position: relative;
+    margin-bottom: var(--margin);
     padding-top: calc(var(--margin) * 2);
-    padding-bottom: var(--padding);
-    padding-left: var(--padding);
-    padding-right: var(--padding);
-    margin-bottom: calc(var(--margin) / 2);
     border: 0.15em solid var(--color-gray);
     border-radius: 0.3em 0.6em 0.2em 0.2em;
     background-image: linear-gradient(105deg, var(--color-black) 40%, var(--color-prime));
@@ -19,25 +24,34 @@
 }
 
 .gadget :--heading {
-    background-color: var(--color-gray);
-    border-left: 0.1em solid var(--color-three);    
-    color: var(--color-white);
-    text-shadow: var(--outlined);
-    text-transform: uppercase;
     position: absolute;
     top: 0;
     left: 0;
-    padding: 0.9em;
+    margin: 0;
+    padding: calc(var(--margin) / 2);
+    background-color: var(--color-gray);
+    border-left: 0.3em solid var(--color-three);    
+    color: var(--color-white);
+    text-shadow: var(--outlined);
+    text-transform: uppercase;
 
     &::after {
         display: block;
         content: '';
         position: absolute;
         top: 0;
-        right: -3rem;
-        width: 3rem;
-        height: 100%;
-        background: linear-gradient(315deg, transparent 50%, var(--color-gray) 51%);
+        right: calc(var(--margin-large) * -1);
+        width: var(--margin-large);
+        height: var(--margin-large);
+        background-image: linear-gradient(315deg, transparent 50%, var(--color-gray) 51%);
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
+
+@media (min-width: 41.25rem) {
+    .gadget-points-breakdown {
+        max-width: 66vw;
     }
 }
 

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{tournament.title}} Team Results{% endblock %}
+
+{% block body %}
+    <header>
+        <h1><a href="{{path('tournament_show', {'id': tournament.id})}}">{{tournament.title}}</a> Team Results</h1>
+    </header>
+    <main>
+        <h2 class="page-break">Team Statistics</h2>
+        {{
+            include('_leaderboards/_stats_team.html.twig', {
+                'tournament': tournament,
+                'teams': tournament.teams
+            })
+        }}
+    </main>
+{% endblock %}

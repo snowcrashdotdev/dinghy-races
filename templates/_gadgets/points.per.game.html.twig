@@ -5,7 +5,7 @@
     {% set rect_count = scores|length %}
     {% set img_height = rect_height * rect_count %}
     {% set font_size = rect_height * 0.46 %}
-    <aside class="gadget gadget-pbg">
+    <aside class="gadget gadget-points-breakdown">
         <h3>Points By Game</h3>
         <svg class="gauge" width="{{img_width}}" height="{{img_height}}" viewBox="0 0 {{img_width}} {{img_height}}">
             {% for game in scores %}
@@ -28,7 +28,7 @@
                 <text
                     class="linear-gauge-label"
                     font-size="{{font_size}}"
-                    x="{{width - 1}}"
+                    x="{{img_width - 1}}"
                     y="{{y_label}}"
                     style="text-anchor:end;"
                     dy="0.3em">{{game.description}}

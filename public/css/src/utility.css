@@ -189,6 +189,12 @@
     align-self: flex-end;
 }
 
+@media (min-width: 65rem) {
+    .column-2 {
+        column-count: 2;
+    }
+}
+
 .push-right {
     margin-left: auto;
 }

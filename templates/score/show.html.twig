@@ -32,9 +32,12 @@
 
     {% if is_granted('ROLE_USER') %}
         <section class="header-list">
-            <h2>Your Score:</h2>
+            <h2>Your Score</h2>
             {% if user_score %}
-                <p>#{{user_score.rank}}) {{user_score.points}}</p>
+                <p class="text-large">
+                    <a href="#your_score">#{{user_score.rank}}</a>
+                    <span>{{user_score.points}}</a>
+                </p>
             {% else %}
                 <p><a href="">➕ Add Score</a></p>
             {% endif %}

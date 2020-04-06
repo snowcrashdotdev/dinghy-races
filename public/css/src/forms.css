@@ -140,6 +140,7 @@ form button {
 }
 
 .ajax-search-result {
+    color: var(--color-white);
     cursor: pointer;
 }
 
