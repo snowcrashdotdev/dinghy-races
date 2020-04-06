@@ -28,6 +28,7 @@ class ProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'Profile updated!');
             return $this->redirectToRoute('profile_show', [
                 'username' => $this->getUser()->getUsername()
             ]);
