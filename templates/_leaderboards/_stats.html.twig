@@ -1,45 +1,25 @@
-{% if users|length and tournament is defined %}
-    {% set stats = [] %}
-    {% for u in users %}
-        {% set user_scores = scores|filter(s => s.user is same as(u)) %}
-
-        {% set stats = stats|merge([{
-            'username': u.username,
-            'ranked_points': user_scores|reduce(
-                (carry, score) => carry + score.rankedPoints
-            ),
-            'team_points': user_scores|reduce(
-                (carry, score) => carry + score.teamPoints
-            ),
-            'participation': user_scores|length ?
-                (user_scores|length / tournament.games|length * 100)|number_format(0)
-                : 0,
-            'average_rank': user_scores|length ?
-                user_scores|reduce((carry,s) => carry + (s.rank/user_scores|length))|number_format(0) : 0,
-        }]) %}
-    {% endfor %}
-    {% set stats = stats|sort((a,b) => b.ranked_points <=> a.ranked_points)  %}
-
+{% if stats|length and tournament is defined %}
     {% if show_total is not defined or show_total != false %}
-    {% set stats = stats|merge([{
-        'username': 'Total',
-        'ranked_points': stats|reduce(
-            (carry, u) => carry + u.ranked_points
-        ),
-        'team_points': stats|reduce(
-            (carry, u) => carry + u.team_points
-        ),
-        'participation': scores|length ?
-            (scores|length / (users|length * tournament.games|length) * 100)|number_format(0)
-            : 0,
-        'average_rank': stats|length ?
-            stats|reduce((carry,u) => carry + (u.average_rank / stats|length))|number_format(0) : 0
-    }]) %}
+        {% set stats = stats|merge([{
+            'name': 'Total',
+            'ranked_points': stats|reduce(
+                (carry, u) => carry + u.ranked_points
+            ),
+            'team_points': stats|reduce(
+                (carry, u) => carry + u.team_points
+            ),
+            'completion': scores|length ?
+                (scores|length / (users|length * tournament.games|length) * 100)|number_format(0)
+                : 0,
+            'avg_rank': stats|length ?
+                stats|reduce((carry,u) => carry + (u.avg_rank / stats|length))|number_format(0) : 0
+        }]) %}
     {% endif %}
 
     <table>
         <thead>
             <tr>
+                <th>Rank</th>
                 <th>Player</th>
                 <th>Ranked Points</th>
                 <th>Team Points</th>
@@ -50,11 +30,12 @@
         <tbody>
             {% for user in stats %}
             <tr>
-                <td>{{user.username}}</td>
+                <td>{{loop.index}}</td>
+                <td>{{user.name}}</td>
                 <td class="labeled-data ranked-points">{{user.ranked_points|number_format}}</td>
-                <td class="labeled-data team-points">{{user.team_points}}</td>
-                <td class="labeled-data avg-rank">{{user.average_rank}}</td>
-                <td class="labeled-data completion">{{user.participation ~ '%'}}</td>
+                <td class="labeled-data team-points">{{user.team_points|number_format}}</td>
+                <td class="labeled-data avg-rank">{{user.avg_rank|number_format}}</td>
+                <td class="labeled-data completion">{{user.completion|number_format ~ '%'}}</td>
             </tr>
         {% endfor %}
         </tbody>

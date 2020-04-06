@@ -23,19 +23,30 @@ class TournamentScoreRepository extends ServiceEntityRepository
         parent::__construct($registry, TournamentScore::class);
     }
 
-    public function findRecentScores(Tournament $tournament, $limit=null)
+    public function findTournamentResults(Tournament $tournament, ?Team $team=null, ?bool $groupByTeam=false)
     {
         $q = $this->createQueryBuilder('s')
+            ->join('s.team', 't')
+            ->join('s.tournament', 'n')
+            ->join('s.user', 'u')
+            ->addSelect('u.username as name')
+            ->addSelect('SUM(s.ranked_points) as ranked_points')
+            ->addSelect('SUM(s.team_points) as team_points')
+            ->addSelect('AVG(s.rank) as avg_rank')
+            ->addSelect('100 * SUM(case when s.auto_assigned = 1 then 0 else 1 end) / SIZE(n.games) as completion')
+            ->groupBy('u.username')
             ->andWhere('s.tournament = :tournament')
-            ->andWhere('s.points != 0')
-            ->orderBy('s.updated_at', 'DESC')
-            ->setParameter('tournament', $tournament);
-        
-        if ($limit !== null) {
-            $q->setMaxResults($limit);
+            ->setParameter('tournament', $tournament)
+            ->orderBy('ranked_points', 'DESC')
+        ;
+
+        if ($team) {
+            $q->andWhere('s.team = :team')
+                ->setParameter('team', $team)
+            ;
         }
 
-        return $q->getQuery()->getResult();
+        return $q->getQuery()->getArrayResult();
     }
 
     public function findIndividualScores($tournament, $limit=null)
@@ -83,19 +94,6 @@ class TournamentScoreRepository extends ServiceEntityRepository
         if ($limit === 1) {
             return $q->getQuery()->getOneOrNullResult();
         }
-
-        return $q->getQuery()->getArrayResult();
-    }
-
-    public function findTeamLeaderboard(Team $team)
-    {
-        $q = $this->createQueryBuilder('s')
-            ->join('s.user', 'u')
-            ->select('u.id as user', 'u.username as username', 'SUM(s.ranked_points) as points', 'SUM(CASE WHEN s.points > 0 THEN 1 ELSE 0 END) as completed')
-            ->groupBy('s.user')
-            ->andWhere('s.team = :team')
-            ->setParameter('team', $team)
-            ->orderBy('points', 'DESC');
 
         return $q->getQuery()->getArrayResult();
     }

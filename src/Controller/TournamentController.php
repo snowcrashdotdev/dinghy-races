@@ -111,10 +111,12 @@ class TournamentController extends AbstractController
     /**
      * @Route("/{id}/leaderboards/individual", name="individual_leaderboard", methods={"GET"})
      */
-    public function individual_leaderboard(Tournament $tournament)
+    public function individual_leaderboard(Tournament $tournament, TournamentScoreRepository $tournamentScoreRepository)
     {
+        $stats = $tournamentScoreRepository->findTournamentResults($tournament);
         return $this->render('tournament/_results.individual.html.twig', [
-            'tournament' => $tournament
+            'tournament' => $tournament,
+            'stats' => $stats
         ]);
     }
 

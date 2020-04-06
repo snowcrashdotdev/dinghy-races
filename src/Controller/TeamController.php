@@ -55,12 +55,12 @@ class TeamController extends AbstractController
     public function show(Team $team): Response
     {
         $scoreRepo = $this->getDoctrine()->getRepository('App\Entity\TournamentScore');
-        $leaderboard = $scoreRepo->findTeamLeaderboard($team);
         $points_per_game = $scoreRepo->findTeamScoresPerGame($team);
+        $stats = $scoreRepo->findTournamentResults($team->getTournament(), $team);
 
         return $this->render('team/show.html.twig', [
             'team' => $team,
-            'leaderboard' => $leaderboard,
+            'stats' => $stats,
             'points_per_game' => $points_per_game
         ]);
     }
