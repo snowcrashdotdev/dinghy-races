@@ -99,39 +99,22 @@ class TournamentController extends AbstractController
     }
 
     /**
-     * @Route("/{tournament}/leaderboards/team", name="leaderboard_team", methods={"GET"})
+     * @Route("/{id}/leaderboards/team", name="team_leaderboard", methods={"GET"})
      */
     public function team_leaderboard(Tournament $tournament)
     {
-        $teamScores = $this->getDoctrine()
-            ->getRepository('App\Entity\TournamentScore')
-            ->findTeamScores($tournament);
-
-        return $this->render('tournament/leaderboard.team.html.twig', [
-            'tournament' => $tournament,
-            'teamScores' => $teamScores
+        return $this->render('tournament/_results.team.html.twig', [
+            'tournament' => $tournament
         ]);
     }
 
     /**
-     * @Route("/{tournament}/leaderboards/individual", name="leaderboard_individual", methods={"GET"})
+     * @Route("/{id}/leaderboards/individual", name="individual_leaderboard", methods={"GET"})
      */
     public function individual_leaderboard(Tournament $tournament)
     {
-        if ($currentUser = $this->getUser()) {
-            $user = $currentUser->getId();
-        } else {
-            $user = null;
-        }
-
-        $scores = $this->getDoctrine()
-            ->getRepository('App\Entity\TournamentScore')
-            ->findIndividualScores($tournament);
-
-        return $this->render('tournament/leaderboard.individual.html.twig', [
-            'user' => $user,
-            'tournament' => $tournament,
-            'scores' => $scores,
+        return $this->render('tournament/_results.individual.html.twig', [
+            'tournament' => $tournament
         ]);
     }
 
