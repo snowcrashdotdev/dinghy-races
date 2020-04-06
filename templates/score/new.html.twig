@@ -5,7 +5,7 @@
 {% block body %}
 <header>
     <h1>{{score.tournament.title}}</h1>
-    <p class="text-small">add your score for {{score.game.description}} <span class="text-small">({{ score.game.name ~ '.zip' }})</span></p>
+    <p>add your score for {{score.game.description}} <span class="text-small">({{ score.game.name ~ '.zip' }})</span></p>
 </header>
 <main>
     {{ include('score/_form.html.twig') }}

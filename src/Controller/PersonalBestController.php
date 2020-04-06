@@ -41,7 +41,7 @@ class PersonalBestController extends AbstractController
     {
         $personalBests = $pbRepo->findBy([
             'game' => $game
-        ]);
+        ], ['points' => 'DESC']);
 
         return $this->render('personal_best/show.html.twig', [
             'personal_bests' => $personalBests,

@@ -39,7 +39,7 @@
                     <span>{{user_score.points}}</a>
                 </p>
             {% else %}
-                <p><a href="">➕ Add Score</a></p>
+                <p><a href="{{path('score_new', { 'game_name': game.name, 'tournament_id': tournament.id })}}">➕ Add Score</a></p>
             {% endif %}
         </section>
     {% endif %}

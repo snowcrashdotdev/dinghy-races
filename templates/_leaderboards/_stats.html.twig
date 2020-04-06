@@ -20,7 +20,7 @@
     {% endfor %}
     {% set stats = stats|sort((a,b) => b.ranked_points <=> a.ranked_points)  %}
 
-    {% if show_total is not defined and show_total != false %}
+    {% if show_total is not defined or show_total != false %}
     {% set stats = stats|merge([{
         'username': 'Total',
         'ranked_points': stats|reduce(
