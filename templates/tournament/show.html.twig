@@ -84,7 +84,7 @@
             {{ include('game/_summary.html.twig', {
                 'game': game,
                 'tournament': tournament,
-                'scores': tournament.scores|filter(s => s.game is same as(game))
+                'high_score': tournament.scores|filter(s => s.game is same as(game))|first
             })}}
         {% endfor %}
         </section>

@@ -50,8 +50,8 @@
             {{
                 include('game/_summary.html.twig', {
                     'game': score.game,
-                    'scores': score,
-                    'tournament': false
+                    'high_score': score,
+                    'tournament': null,
                 })
             }}
         {% endfor %}

@@ -22,21 +22,21 @@
         <h2>Team Totals:</h2>
         {% for team in team_totals %}
             {% set href = path('team_show', { 'id': team.id }) %}
-            <p>
-                <a href="{{href}}">{{team.name}}</a>
-                <span>{{team.points}}</span>
+            <p class="flex">
+                <a class="flex-1 margin-right" href="{{href}}">{{team.name}}</a>
+                <span class="text-right">{{team.points|number_format}}</span>
             </p>
         {% endfor %}
     </section>
     {% endif %}
 
     {% if is_granted('ROLE_USER') %}
-        <section class="header-list">
+        <section class="header-list positioned">
             <h2>Your Score</h2>
             {% if user_score %}
                 <p class="text-large">
                     <a href="#your_score">#{{user_score.rank}}</a>
-                    <span>{{user_score.points}}</a>
+                    <span>{{user_score.points|number_format}}</a>
                 </p>
             {% else %}
                 <p><a href="{{path('score_new', { 'game_name': game.name, 'tournament_id': tournament.id })}}">➕ Add Score</a></p>

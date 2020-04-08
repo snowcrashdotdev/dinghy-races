@@ -13,7 +13,7 @@
                 include('game/_summary.html.twig', {
                     'game': game,
                     'tournament': null,
-                    'scores': game.personalBests
+                    'high_score': game.personalBests|first
                 })
             }}
         {% endfor %}

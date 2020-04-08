@@ -24,9 +24,9 @@
             {% for team in team_stats|sort((a,b) => b.points <=> a.points) %}
                 <tr>
                     <td>{{team.name}}</td>
-                    <td class="labeled-data team-points">{{team.points}}</td>
-                    <td class="labeled-data avg-rank">{{team.avg_rank}}</td>
-                    <td class="labeled-data completion">{{team.completion ~ '%'}}</td>
+                    <td class="labeled-data team-points">{{team.points|number_format}}</td>
+                    <td class="labeled-data avg-rank">{{team.avg_rank|number_format}}</td>
+                    <td class="labeled-data completion">{{team.completion|number_format ~ '%'}}</td>
                 </tr>
             {% endfor %}
         </tbody>
