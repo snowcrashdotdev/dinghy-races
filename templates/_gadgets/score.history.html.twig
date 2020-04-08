@@ -1,0 +1,17 @@
+{% if history and history|length > 3 %}
+    {% set width = 1600 %}
+    {% set height = 900 %}
+    {% set ratio = height / history|last %}
+    {% set offset = width / (history|length - 1) %}
+    {% set points = history|map(
+        (p,i) => "#{i * offset},#{height - (ratio * p)}"
+    )|join(' ') %}
+
+    <svg class="gauge linear-gauge gadget-history" width="{{width}}" height="{{height}}" viewBox="0 0 {{width}} {{height}}">
+        <polyline
+            class="linear-gauge-line"
+            points="{{points}}"
+        >
+        </polyline>
+    </svg>
+{% endif %}
