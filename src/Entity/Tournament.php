@@ -54,12 +54,12 @@ class Tournament
     private $teams;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="tournaments")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="tournaments", fetch="EAGER")
      */
     private $users;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Draft", mappedBy="tournament", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Draft", mappedBy="tournament", cascade={"persist", "remove"}, fetch="LAZY")
      */
     private $draft;
 
