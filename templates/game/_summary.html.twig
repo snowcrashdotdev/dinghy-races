@@ -41,25 +41,17 @@
     </h3>
     {% if high_score %}
         <p class="color-three text-center">High Score</p>
-        <p class="roboto text-larger outlined text-center">{{high_score.points|number_format}}</p>
+        <p class="roboto text-large outlined text-center {{high_score is same as(user_score) ? 'margin-bottom'}}">{{high_score.points|number_format}}</p>
         {% if not high_score is same as(user_score) %}
             <p class="text-center">{{high_score.user.username}}</p>
-        {% endif %}
-
-        {% if tournament and tournament.inProgress %}
-            {% if not high_score is same as(user_score) %}
-                {% if user_score %}
-                    <p class="text-small">Your Score: <span class="color-three">{{'#' ~ user_score.rank}}</span> {{user_score.points|number_format}}</p>
-                {% elseif is_granted('ROLE_USER') %}
-                    <p><a href="{{score_new}}">Add score.</a></p>
-                {% endif %}
+            {% if user_score %}
+                <p class="text-small">Your Score: <span class="color-three">{{'#' ~ user_score.rank}}</span> {{user_score.points|number_format}}</p>
+            {% elseif is_granted('ROLE_USER') %}
+                <p class="text-small"><a href="{{score_new}}">Add score.</a></p>
             {% endif %}
         {% endif %}
-    {% elseif tournament and tournament.inProgress %}
-        <p class="text-center">No scores.</p>
-        {% if is_granted('ROLE_USER') %}
-            <p><a href="{{score_new}}">Add score.</a></p>
-        {% endif %}
+    {% else %}
+        <p class="justify-self-center">No scores posted.</p>
     {% endif %}
     <p class="text-small absolute bottom right"><a href="{{game_show}}">Game info.</a></p>
 </article>

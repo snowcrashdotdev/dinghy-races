@@ -111,6 +111,10 @@
     margin-right: var(--margin);
 }
 
+.margin-bottom {
+    margin-bottom: var(--margin);
+}
+
 .outlined {
     text-shadow: var(--outlined);
 }
@@ -183,6 +187,11 @@
 
 .flex-center {
     justify-content: center;
+}
+
+.justify-self-center {
+    align-self: center;
+    margin-bottom: auto;
 }
 
 .flex-1 {
