@@ -53,6 +53,7 @@ class Game implements \Serializable
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="game", cascade={"persist"})
+     * @ORM\OrderBy({"points" = "DESC"})
      */
     private $tournament_scores;
 

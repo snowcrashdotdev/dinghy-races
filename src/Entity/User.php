@@ -96,6 +96,7 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="user", cascade={"persist"})
+     * @ORM\OrderBy({"points" = "DESC"})
      */
     private $tournament_scores;
 
