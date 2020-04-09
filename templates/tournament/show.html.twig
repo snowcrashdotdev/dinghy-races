@@ -82,9 +82,11 @@
         <section class="summary-group">
         {% for game in tournament.games %}
             {{ include('game/_summary.html.twig', {
-                'game': game,
                 'tournament': tournament,
-                'high_score': tournament.scores|filter(s => s.game is same as(game))|first
+                'game': game,
+                'high_score': game.tournamentScores|filter(s => s.tournament is same as(tournament))|first,
+                'user_score': game.tournamentScores|filter(
+                    s => s.tournament is same as(tournament) and s.user is same as(app.user))|first
             })}}
         {% endfor %}
         </section>

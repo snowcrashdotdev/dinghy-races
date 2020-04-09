@@ -13,7 +13,7 @@
 .text-large,
 .text-larger {
     line-height: 1;
-    margin-bottom: calc(var(--margin)/2);
+    margin-bottom: calc(var(--margin)/4);
 }
 
 .text-small {
@@ -46,6 +46,18 @@
 
 .float-left {
     float: left;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.right {
+    right: var(--padding);
+}
+
+.bottom {
+    bottom: calc(var(--padding) / 2);
 }
 
 .content-true-center {

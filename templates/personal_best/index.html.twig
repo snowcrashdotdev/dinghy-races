@@ -12,8 +12,8 @@
             {{
                 include('game/_summary.html.twig', {
                     'game': game,
-                    'tournament': null,
-                    'high_score': game.personalBests|first
+                    'high_score': game.personalBests|first,
+                    'user_score': game.personalBests|filter(s => s.user is same as(app.user))|first
                 })
             }}
         {% endfor %}
