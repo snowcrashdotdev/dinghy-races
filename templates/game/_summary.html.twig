@@ -45,7 +45,7 @@
         {% if not high_score is same as(user_score) %}
             <p class="text-center">{{high_score.user.username}}</p>
             {% if user_score %}
-                <p class="text-small">Your Score: <span class="color-three">{{user_score.rank ? '#' ~ user_score.rank}}</span> {{user_score.points|number_format}}</p>
+                <p class="text-small"><a href="{{score_new}}">Your Score:</a> <span class="color-three">{{user_score.rank ? '#' ~ user_score.rank}}</span> {{user_score.points|number_format}}</p>
             {% elseif is_granted('ROLE_USER') %}
                 <p class="text-small"><a href="{{score_new}}">Add score.</a></p>
             {% endif %}

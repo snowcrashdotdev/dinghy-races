@@ -15,7 +15,7 @@
         'game': game.name
     }) %}
     <h1 class="tournament-title"><a href="{{t_href}}">{{ tournament.title }}</a><br>
-    scores for <a href="{{g_href}}">{{ game.description }}</a> <small>({{ game.name ~ '.zip' }})</small></h1>
+    scores for <a href="{{g_href}}">{{ game.description }}</a></h1>
 
     {% if team_totals|length %}
     <section class="header-list">
@@ -70,6 +70,6 @@
             'game_name': game.name,
             'tournament_id': tournament.id
         }) %}
-        <a href="{{href}}" class="nav-item">🎖<span class="nav-item-label">Your Score</span></a>
+        <a href="{{href}}" class="nav-item">🎖<span class="nav-item-label">Add Score</span></a>
     {% endif %}
 {% endblock %}
