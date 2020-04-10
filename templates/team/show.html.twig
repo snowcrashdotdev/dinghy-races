@@ -41,8 +41,9 @@
         {{
             include('_leaderboards/_stats.html.twig', {
                 'tournament': team.tournament,
-                'users': team.members,
-                'scores': team.scores|filter(s => not s.noShow)
+                'team': team,
+                'stats': stats,
+                'show_total': true
             })
         }}
     </section>
