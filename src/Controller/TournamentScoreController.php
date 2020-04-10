@@ -106,7 +106,7 @@ class TournamentScoreController extends AbstractController
             'game' => $game,
             'tournament' => $tournament
             ],
-            ['points' => 'DESC']
+            ['points' => 'DESC', 'updated_at' => 'ASC']
         );
 
         $teamTotals = $repo->findTeamScores($tournament, $game);
