@@ -45,7 +45,7 @@ services:
         arguments:
             $connection: '@doctrine.dbal.default_connection'
             $clientId: '%env(TWITCH_CLIENT_ID)%'
-            $streamTag: '[calice]'
+            $streamTag: 'calice'
             $manager: '@doctrine.orm.default_entity_manager'
 
     App\EventListener\ProfileListener:
