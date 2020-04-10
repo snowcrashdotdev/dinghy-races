@@ -25,7 +25,7 @@ class ScoreListener
         $this->score_keeper = $score_keeper;
     }
 
-    public function prePersist(Score $score, LifecycleEventArgs $args)
+    public function postPersist(Score $score, LifecycleEventArgs $args)
     {
         if ($score instanceof TournamentScore) {
             $this->getScoreKeeper()->scoreGame(
