@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TwitchChecker
 {
-    public const CACHE_EXPIRES = 120;
+    public const CACHE_EXPIRES = 180;
     private $cache;
     private $clientId;
     private $streamTag;
@@ -65,11 +65,11 @@ class TwitchChecker
             curl_close($curl);
 
             if (property_exists($json, 'data')) {
-                $tag = $this->streamTag;
+                $tag = strtolower($this->streamTag);
                 $live = array_filter($json->data, function($stream) use ($tag) {
                     return (
                         $stream->type === 'live' &&
-                        false !== strpos($stream->title, $tag)
+                        ! (strpos(strtolower($stream->title), $tag) === false)
                     );
                 });
     
