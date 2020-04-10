@@ -31,6 +31,13 @@ class ScoreKeeper
     public function scoreGame(Tournament $tournament, Game $game, $skip_team_scores = false)
     {
         $scores = $tournament->getScores()->toArray();
+        usort($scores, function($a,$b) {
+            if ($a->getPoints() == $b->getPoints()) {
+                return ($a->getUpdatedAt() < $b->getUpdatedAt()) ? -1 : 1;
+            } else {
+                return ($a->getPoints() > $b->getPoints()) ? -1 : 1;
+            }
+        });
         $scores_game = array_filter($scores, function($score) use ($game) {
             return $score->getGame()->getId() === $game->getId();
         });
@@ -82,6 +89,7 @@ class ScoreKeeper
 
         if (!$skip_team_scores) {
             $this->scoreTeams($teams, $scores);
+            $this->getManager()->flush();
         }
     }
 
