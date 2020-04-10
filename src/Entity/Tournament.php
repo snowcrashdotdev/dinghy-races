@@ -44,6 +44,7 @@ class Tournament
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Game", inversedBy="tournaments")
+     * @ORM\OrderBy({"description" = "ASC"})
      */
     private $games;
 
