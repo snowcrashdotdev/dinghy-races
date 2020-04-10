@@ -7,13 +7,15 @@
             'name': team.name,
             'points': team.points,
             'avg_rank': scores|length ? scores|reduce((c,s) => c + (s.rank / scores|length))|number_format(0) : 0,
-            'completion': scores|length ? (scores|length / (tournament.games|length * team.members|length))|number_format(0) * 100 : 0
+            'completion': scores|length ?
+                100 * scores|length / (tournament.games|length * team.members|length)|number_format(0) : 0
         }]) %}
     {% endfor %}
 
     <table>
         <thead>
             <tr>
+                <th>Rank</th>
                 <th>Team</th>
                 <th>Points</th>
                 <th>Avg Rank</th>
@@ -23,6 +25,7 @@
         <tbody>
             {% for team in team_stats|sort((a,b) => b.points <=> a.points) %}
                 <tr>
+                    <td>{{loop.index}}</td>
                     <td>{{team.name}}</td>
                     <td class="labeled-data team-points">{{team.points|number_format}}</td>
                     <td class="labeled-data avg-rank">{{team.avg_rank|number_format}}</td>
