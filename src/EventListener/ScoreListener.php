@@ -32,6 +32,7 @@ class ScoreListener
                 $score->getTournament(),
                 $score->getGame()
             );
+            $args->getObjectManager()->flush();
         }
         
     }
