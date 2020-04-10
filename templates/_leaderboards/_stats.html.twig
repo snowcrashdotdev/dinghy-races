@@ -1,5 +1,6 @@
 {% if stats|length and tournament is defined %}
-    {% if show_total is not defined or show_total != false %}
+    {% set show_total = show_total|default(true) %}
+    {% if show_total %}
         {% set stats = stats|merge([{
             'name': 'Total',
             'ranked_points': stats|reduce(
@@ -29,8 +30,8 @@
         </thead>
         <tbody>
             {% for user in stats %}
-            <tr>
-                <td>{{loop.index}}</td>
+            <tr {{loop.last and show_total ? 'class="color-three"'}}>
+                <td>{{not loop.last and show_total ? loop.index}}</td>
                 <td>{{user.name}}</td>
                 <td class="labeled-data ranked-points">{{user.ranked_points|number_format}}</td>
                 <td class="labeled-data team-points">{{user.team_points|number_format}}</td>
