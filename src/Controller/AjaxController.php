@@ -55,11 +55,20 @@ class AjaxController extends AbstractController
                 'auto_assigned' => 0,
             ], ['team_points' => 'DESC']);
 
+            $team_scores = $repo->findTeamScores($tournament);
+
+            $top_player = $repo->findIndividualScores($tournament, 1);
+
             $stats = $repo->findTournamentResults($tournament, null, $user);
             unset($stats[0]);
 
             $data = $serializer->serialize(
-                ['stats' => $stats, 'scores' => $scores],
+                [
+                    'stats' => $stats,
+                    'scores' => $scores,
+                    'teamScores' => $team_scores,
+                    'topPlayer' => $top_player
+                ],
                 'json',
                 ['groups' => 'public']
             );

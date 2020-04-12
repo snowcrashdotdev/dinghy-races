@@ -7,11 +7,13 @@ document.addEventListener('DOMContentLoaded', function() {
         el: '#stream-kit',
         data: {
             scores: [],
-            stats: {}
+            stats: {},
+            teamScores: [],
+            topPlayer: {}
         },
         methods: {
             fetch: function () {
-                let self = this
+                let app = this
                 let options = {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
@@ -23,8 +25,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .then(function(json) {
                         let result = JSON.parse(json)
-                        self.scores = result.scores
-                        self.stats = result.stats
+                        for (let prop in result) {
+                            app[prop] = result[prop]
+                        }
                     })
             }
         },

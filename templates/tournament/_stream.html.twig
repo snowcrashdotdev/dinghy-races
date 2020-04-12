@@ -11,8 +11,8 @@
     <body data-endpoint="{{endpoint}}">
         {% verbatim %}
         <main id="stream-kit">
-            <article class="gadget">
-                <h3>Current High Scores</h3>
+            <article class="gadget my-scores">
+                <h3>My High Scores</h3>
                 <ul class="score-list" v-for="score in scores">
                     <li class="score">
                         <span class="score-rank">{{score.rank}}</span>
@@ -22,7 +22,7 @@
                 </ul>
             </article>
 
-            <article class="gadget">
+            <article class="gadget my-stats">
                 <h3>Personal Stats</h3>
                 <ul class="stats-list">
                     <li class="stat">
@@ -38,6 +38,23 @@
                         <span class="stat-value">{{stats.completion|number_format}}%</span>
                     </li>
                 </ul>
+            </article>
+
+            <article class="gadget team-scores">
+                <h3>Team Leaderboard</h3>
+                <ul class="team-leaderboard" v-for="team in teamScores">
+                    <li class="team">
+                        <span class="team-name">{{team.name}}</span>
+                        <span class="team-points">{{team.points|number_format}}</span>
+                    </li>
+                </ul>
+            </article>
+
+            <article class="gadget top-player">
+            <h3>Top Player</h3>
+                <p class="top-player-name">{{topPlayer.name}}</p>
+                <p class="top-player-team">{{topPlayer.team}}</p>
+                <p class="top-player-points">{{topPlayer.points|number_format}}</p>
             </article>
         </main>
         {% endverbatim %}

@@ -11,14 +11,42 @@ body {
     background-color: transparent;
 }
 
+:root {
+    font-size: calc(10px + 1vw);
+}
+
+main {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.gadget {
+    margin-bottom: calc(var(--padding)/2);
+    padding-left: var(--padding);
+    padding-right: var(--padding);
+}
+
 li {
     display: flex;
     margin-bottom: calc(var(--margin)/3);
 }
 
-.score-rank, .stat-label {
+li:last-child {
+    margin-bottom: 0;
+}
+
+.score-rank,
+.stat-label,
+.team-name {
     color: var(--color-three);
     margin-right: var(--padding);
+}
+
+.team-name {
+    color: var(--color-two);
 }
 
 .score-rank::before {
@@ -26,6 +54,28 @@ li {
 }
 
 .score-game,
+.team-name,
 .stat-label {
     flex-grow: 1;
+}
+
+.top-player {
+    text-align: center;
+}
+
+.top-player-name {
+    color: var(--color-white);
+    font-size: var(--size-large);
+    text-shadow: var(--outlined);
+}
+
+.top-player-team {
+    color: var(--color-two);
+}
+
+.top-player-points {
+    font-family: 'Roboto', sans-serif;
+    font-size: var(--size-larger);
+    text-shadow: var(--outlined);
+    margin-bottom: var(--margin);
 }
