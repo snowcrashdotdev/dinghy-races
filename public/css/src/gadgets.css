@@ -59,6 +59,22 @@
     }
 }
 
+.recent-scores {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.recent-score {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.recent-score-value {
+    flex: 0;
+    flex-basis: 25%;
+}
+
 .gauge {
     width: 100%;
     height: auto;

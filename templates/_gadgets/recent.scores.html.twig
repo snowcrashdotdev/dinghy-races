@@ -1,25 +1,27 @@
 {% if scores %}
-<aside class="gadget">
+<aside class="gadget recent-scores">
     <h3>Recent Scores</h3>
     {% for score in recent_scores %}
         {% set href = path('score_show', {
             'game_name': score.game.name,
             'tournament_id': score.tournament.id
         }) %}
-        <div class="flex flex-space-between">
-            <a class="flex-1" href="{{href}}">{{score.game.name}}</a>
+        <div class="recent-score">
+            <span class="recent-score-value roboto color-white outlined">{{score.points|number_format}}</span>
+
+            <a class="recent-score-value" href="{{href}}">{{score.game.name}}</a>
+
+            <span class="recent-score-value color-three">{{score.user.username}}</span>
 
             {% set diff = date("now").diff(score.updatedAt, true) %}
-            {% set daysHoursMinutes = diff.format('%dd,%hh,%im')|split(',') %}
-            <span class="flex-1 text-right text-small">
-                {% if daysHoursMinutes|reduce(
-                    (c,v) => c + v|first|number_format
-                ) == 0 %}
+            {% set daysHoursMinutes = diff.format('%dd,%hh,%im')|split(',')|filter(d => not d|first|number_format == 0) %}
+            <span class="recent-score-value text-right text-small">
+                {% if not daysHoursMinutes|length %}
                     {{ '<1m ago' }}
                 {% else %}
                     {% for interval in daysHoursMinutes %}
                         {% if interval|first|number_format > 0 %}
-                            {{interval}}{{not loop.last ? ', '}}{{ loop.last ? ' ago' }}
+                            {{interval}}{{not loop.last ? ', ' : ' ago'}}
                         {% endif %}
                     {% endfor %}
                 {% endif %}
