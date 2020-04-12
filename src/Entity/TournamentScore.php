@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TournamentScoreRepository")
@@ -16,16 +17,19 @@ class TournamentScore extends Score
 {
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("public")
      */
     private $rank;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("public")
      */
     private $ranked_points;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("public")
      */
     private $team_points;
 

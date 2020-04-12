@@ -7,8 +7,8 @@
     "test": "tests"
   },
   "scripts": {
-    "build:css": "postcss ./public/css/style.css -o ./public/css/dist/style.min.css",
-    "build:js": "webpack app=./public/js/src/app.js forms=./public/js/src/forms.js --output-path='./public/js/dist' --output-filename='[name].min.js' --mode=production && terser ./public/js/src/admin.js --keep-fnames --compress -o ./public/js/dist/admin.min.js",
+    "build:css": "postcss ./public/css/*.css --ext .min.css --dir ./public/css/dist/",
+    "build:js": "webpack stream=./public/js/src/stream.js app=./public/js/src/app.js forms=./public/js/src/forms.js --output-path='./public/js/dist' --output-filename='[name].min.js' --mode=production && terser ./public/js/src/admin.js --keep-fnames --compress -o ./public/js/dist/admin.min.js",
     "build": "npm run build:css && npm run build:js",
     "build:watch": "nodemon -e css,js --ignore *.min.* --exec \"npm run build\"",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -26,15 +26,16 @@
   "devDependencies": {
     "cssnano": "^4.1.10",
     "cssnano-preset-advanced": "^4.0.7",
-    "nodemon": "^2.0.2",
+    "nodemon": "^2.0.3",
     "postcss-cli": "^7.1.0",
     "postcss-import": "^12.0.1",
     "postcss-preset-env": "^6.7.0",
-    "terser": "^4.6.10",
+    "terser": "^4.6.11",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
+    "vue": "^2.6.11",
     "whatwg-fetch": "^3.0.0"
   }
 }

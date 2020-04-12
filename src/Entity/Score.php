@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
@@ -33,6 +34,7 @@ abstract class Score implements \Serializable
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Game")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups("public")
      */
     private $game;
 
@@ -43,12 +45,14 @@ abstract class Score implements \Serializable
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups("public")
      */
     private $updated_at;
 
     /**
      * @ORM\Column(type="bigint")
      * @Assert\NotBlank
+     * @Groups("public")
      */
     private $points;
 

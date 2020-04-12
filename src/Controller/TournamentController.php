@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Service\TwitchChecker;
+use Doctrine\ORM\Query;
 
 /**
  * @Route("/tournaments")
@@ -154,6 +155,27 @@ class TournamentController extends AbstractController
                 $response->headers->set('Content-Disposition', $disposition);
 
                 return $response;
+    }
+
+    /**
+     * @Route("/{id}/stream")
+     */
+    public function stream_kit(Request $request, Tournament $tournament)
+    {
+        if (! $tournament->isInProgress()) {
+            throw $this->createNotFoundException('That tournament has ended.');
+        }
+
+        $query = $request->query->all();
+
+        if (empty($query) || ! isset($query['username'])) {
+            throw $this->createNotFoundException('Could not find stream kit for that user and tournament.');
+        }
+
+        return $this->render('tournament/_stream.html.twig', [
+            'tournament' => $tournament,
+            'query' => $query
+        ]);
     }
 
     /**

@@ -1,0 +1,47 @@
+{% set endpoint = path('stream_kit', {
+    'user': query.username,
+    'tournament': tournament.id
+}) %}
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="{{asset('css/dist/stream.min.css')}}">
+    </head>
+    <body data-endpoint="{{endpoint}}">
+        {% verbatim %}
+        <main id="stream-kit">
+            <article class="gadget">
+                <h3>Current High Scores</h3>
+                <ul class="score-list" v-for="score in scores">
+                    <li class="score">
+                        <span class="score-rank">{{score.rank}}</span>
+                        <span class="score-game">{{score.game.name}}</span>
+                        <span class="score-points">{{score.points|number_format}}</span>
+                    </li>
+                </ul>
+            </article>
+
+            <article class="gadget">
+                <h3>Personal Stats</h3>
+                <ul class="stats-list">
+                    <li class="stat">
+                        <span class="stat-label">Avg Rank</span>
+                        <span class="stat-value">{{stats.avg_rank|number_format}}</span>
+                    </li>
+                    <li class="stat">
+                        <span class="stat-label">Ranked Points</span>
+                        <span class="stat-value">{{stats.ranked_points|number_format}}
+                    </li>
+                    <li class="stat">
+                        <span class="stat-label">Completion</span>
+                        <span class="stat-value">{{stats.completion|number_format}}%</span>
+                    </li>
+                </ul>
+            </article>
+        </main>
+        {% endverbatim %}
+
+        <script src="{{asset('js/dist/stream.min.js')}}"></script>
+    </body>
+</html>

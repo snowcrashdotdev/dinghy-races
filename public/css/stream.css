@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:500|Roboto:900&display=swap');
+@import 'src/variables.css';
+@import 'src/typography.css';
+@import 'src/gadgets.css';
+
+body {
+    width: 100vw;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+}
+
+li {
+    display: flex;
+    margin-bottom: calc(var(--margin)/3);
+}
+
+.score-rank, .stat-label {
+    color: var(--color-three);
+    margin-right: var(--padding);
+}
+
+.score-rank::before {
+    content: '#'
+}
+
+.score-game,
+.stat-label {
+    flex-grow: 1;
+}

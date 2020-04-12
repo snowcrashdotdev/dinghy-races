@@ -23,7 +23,7 @@ class TournamentScoreRepository extends ServiceEntityRepository
         parent::__construct($registry, TournamentScore::class);
     }
 
-    public function findTournamentResults(Tournament $tournament, ?Team $team=null, ?bool $groupByTeam=false)
+    public function findTournamentResults(Tournament $tournament, ?Team $team=null, ?User $user=null, ?bool $groupByTeam=false)
     {
         $q = $this->createQueryBuilder('s')
             ->join('s.team', 't')
@@ -39,6 +39,14 @@ class TournamentScoreRepository extends ServiceEntityRepository
             ->setParameter('tournament', $tournament)
             ->orderBy('ranked_points', 'DESC')
         ;
+
+        if ($user) {
+            $q->andWhere('s.user = :user')
+                ->setParameter('user', $user)
+            ;
+
+            return $q->getQuery()->getOneOrNullResult();
+        }
 
         if ($team) {
             $q->andWhere('s.team = :team')
