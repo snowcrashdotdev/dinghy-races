@@ -70,6 +70,7 @@
             'game_name': game.name,
             'tournament_id': tournament.id
         }) %}
-        <a href="{{href}}" class="nav-item">🎖<span class="nav-item-label">Add Score</span></a>
+        {% set action = user_score ? 'Edit' : 'Add' %}
+        <a href="{{href}}" class="nav-item">🎖<span class="nav-item-label">{{action}} Score</span></a>
     {% endif %}
 {% endblock %}
