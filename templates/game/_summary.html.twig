@@ -43,7 +43,7 @@
         <p class="color-three text-center">High Score</p>
         <p class="roboto text-large outlined text-center {{high_score is same as(user_score) ? 'margin-bottom'}}">{{high_score.points|number_format}}</p>
         {% if not high_score is same as(user_score) %}
-            <p class="text-center">{{high_score.user.username}}</p>
+            <a href="{{path('profile_show', {'username': high_score.user.username})}}" class="color-white text-center">{{high_score.user.username}}</a>
             {% if user_score %}
                 <p class="text-small"><a href="{{score_new}}">Your Score:</a> <span class="color-three">{{user_score.rank is defined ? '#' ~ user_score.rank}}</span> {{user_score.points|number_format}}</p>
             {% elseif is_granted('ROLE_USER') %}

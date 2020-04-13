@@ -111,7 +111,7 @@ class TournamentScoreRepository extends ServiceEntityRepository
     {
         $q = $this->createQueryBuilder('s')
             ->join('s.game', 'g')
-            ->select('g.id as game', 'g.description as description', 'SUM(s.team_points) as points')
+            ->select('g.name as name', 'g.description as description', 'SUM(s.team_points) as points')
             ->groupBy('s.game')
             ->andWhere('s.team = :team')
             ->setParameter('team', $team)

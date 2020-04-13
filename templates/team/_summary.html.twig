@@ -1,7 +1,8 @@
 {% if team %}
 {% set href = path('team_show', { 'id': team.id }) %}
+{% set t_href = path('tournament_show', { 'id': team.tournament.id }) %}
 <article>
-    <p class="text-large">{{team.name}}</p>
-    <p><a href="{{href}}">{{team.tournament.title}}</a></p>
+    <p class="text-large"><a class="color-white" href="{{href}}">{{team.name}}</a></p>
+    <p><a href="{{t_href}}">{{team.tournament.title}}</a></p>
 </article>
 {% endif %}

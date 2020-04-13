@@ -12,6 +12,10 @@
                 {% set width = game.points / highest.points * 100 %}
                 {% set y = loop.index0 * rect_height %}
                 {% set y_label = y + rect_height / 2 %}
+                {% set href = path('score_show', {
+                    'game_name': game.name,
+                    'tournament_id': tournament.id
+                }) %}
                 <rect
                     class="linear-gauge-rect"
                     width="{{width}}"
@@ -25,14 +29,16 @@
                     y="{{y_label}}"
                     dy="0.3em">{{game.points|number_format}}
                 </text>
-                <text
-                    class="linear-gauge-label"
-                    font-size="{{font_size}}"
-                    x="{{img_width - 1}}"
-                    y="{{y_label}}"
-                    style="text-anchor:end;"
-                    dy="0.3em">{{game.description}}
-                </text>
+                <a xlink:href="{{href}}">
+                    <text
+                        class="linear-gauge-label"
+                        font-size="{{font_size}}"
+                        x="{{img_width - 1}}"
+                        y="{{y_label}}"
+                        style="text-anchor:end;"
+                        dy="0.3em">{{game.description}}
+                    </text>
+                </a>
             {% endfor %}
         </svg>
         <p class="roboto text-large outlined">Total: {{total|number_format}}</p>

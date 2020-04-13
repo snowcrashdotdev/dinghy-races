@@ -6,12 +6,15 @@
             'game_name': score.game.name,
             'tournament_id': score.tournament.id
         }) %}
+        {% set u_href = path('profile_show', {
+            'username': score.user.username
+        }) %}
         <div class="recent-score">
             <span class="recent-score-value roboto color-white outlined">{{score.points|number_format}}</span>
 
             <a class="recent-score-value" href="{{href}}">{{score.game.name}}</a>
 
-            <span class="recent-score-value color-three">{{score.user.username}}</span>
+            <a href="{{u_href}}" class="recent-score-value color-three">{{score.user.username}}</a>
 
             {% set diff = date("now").diff(score.updatedAt, true) %}
             {% set daysHoursMinutes = diff.format('%dd,%hh,%im')|split(',')|filter(d => not d|first|number_format == 0) %}
