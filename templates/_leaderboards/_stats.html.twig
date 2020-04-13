@@ -23,6 +23,9 @@
             <tr>
                 <th>Rank</th>
                 <th>Player</th>
+                {% if not show_total %}
+                    <th>Team</th>
+                {% endif %}
                 <th>Ranked Points</th>
                 <th>Team Points</th>
                 <th>Average Rank</th>
@@ -31,9 +34,20 @@
         </thead>
         <tbody>
             {% for user in stats %}
+                {% set u_href = path('profile_show', {
+                    'username': user.name
+                }) %}
+                {% if not show_total %}
+                    {% set t_href = path('team_show', {
+                        'id': user.team_id
+                    }) %}
+                {% endif %}
             <tr {{loop.last and show_total ? 'class="color-three"'}}>
                 <td>{{not (loop.last and show_total) ? loop.index}}</td>
-                <td>{{user.name}}</td>
+                <td><a href="{{u_href}}">{{user.name}}</a></td>
+                {% if not show_total %}
+                    <td><a href="{{t_href}}">{{user.team}}</a></td>
+                {% endif %}
                 <td class="labeled-data ranked-points">{{user.ranked_points|number_format}}</td>
                 <td class="labeled-data team-points">{{user.team_points|number_format}}</td>
                 <td class="labeled-data avg-rank">{{user.avg_rank|number_format}}</td>
