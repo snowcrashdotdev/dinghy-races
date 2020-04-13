@@ -4,6 +4,7 @@
     {% for team in teams %}
         {% set scores = team.scores|filter(s => not s.noShow) %}
         {% set team_stats = team_stats|merge([{
+            'id': team.id,
             'name': team.name,
             'points': team.points,
             'avg_rank': scores|length ? scores|reduce((c,s) => c + (s.rank / scores|length))|number_format(0) : 0,
@@ -24,9 +25,10 @@
         </thead>
         <tbody>
             {% for team in team_stats|sort((a,b) => b.points <=> a.points) %}
+                {% set href = path('team_show', { 'id': team.id }) %}
                 <tr>
                     <td>{{loop.index}}</td>
-                    <td>{{team.name}}</td>
+                    <td><a href="{{href}}">{{team.name}}</a></td>
                     <td class="labeled-data team-points">{{team.points|number_format}}</td>
                     <td class="labeled-data avg-rank">{{team.avg_rank|number_format}}</td>
                     <td class="labeled-data completion">{{team.completion|number_format ~ '%'}}</td>
