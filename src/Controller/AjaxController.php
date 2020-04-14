@@ -55,6 +55,11 @@ class AjaxController extends AbstractController
                 'auto_assigned' => 0,
             ], ['team_points' => 'DESC']);
 
+            $recent_scores = $repo->findBy([
+                'tournament' => $tournament,
+                'auto_assigned' => 0,
+            ], ['updated_at' => 'DESC'], 5);
+
             $team_scores = $repo->findTeamScores($tournament);
 
             $top_player = $repo->findIndividualScores($tournament, 1);
@@ -66,6 +71,7 @@ class AjaxController extends AbstractController
                 [
                     'stats' => $stats,
                     'scores' => $scores,
+                    'recent_scores' => $recent_scores,
                     'teamScores' => $team_scores,
                     'topPlayer' => $top_player
                 ],

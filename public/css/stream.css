@@ -16,6 +16,7 @@ body {
 }
 
 main {
+    position: relative;
     width: 100%;
     height: 100%;
     display: flex;
@@ -32,6 +33,7 @@ main {
 
 li {
     display: flex;
+    flex-wrap: nowrap;
     margin-bottom: calc(var(--margin)/3);
 }
 
@@ -43,6 +45,44 @@ li:last-child {
     flex-grow: 1;
     flex-shrink: 0;
     justify-content: flex-start;
+}
+
+.recent-scores {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    transition-property: opacity;
+    transition-duration: 1s;
+}
+
+.recent-score {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.recent-score span {
+    flex: 0;
+    flex-basis: 25%;
+}
+
+.recent-score-points {
+    color: var(--color-white);
+    text-shadow: var(--outlined);
+}
+
+.recent-score-game {
+    color: var(--color-two);
+}
+
+.recent-score-user {
+    color: var(--color-three);
+}
+
+.recent-score-date {
+    font-size: var(--size-small);
+    text-align: right;
 }
 
 .score-rank,
@@ -85,4 +125,8 @@ li:last-child {
     font-size: var(--size-larger);
     text-shadow: var(--outlined);
     margin-bottom: var(--margin);
+}
+
+.fade {
+    opacity: 0;
 }

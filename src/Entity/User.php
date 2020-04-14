@@ -13,6 +13,7 @@ use App\Entity\Tournament;
 use App\Entity\Game;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Comparison;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -43,6 +44,7 @@ class User implements UserInterface
      *      match="true",
      *      message="Your name must start with a letter and contain only letters, numbers, and underscores."
      * )
+     * @Groups("public")
      */
     private $username;
 
