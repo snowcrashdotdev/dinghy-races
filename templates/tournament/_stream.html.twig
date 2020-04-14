@@ -57,8 +57,8 @@
 
             <article class="gadget team-scores">
                 <h3>Team Leaderboard</h3>
-                <ul class="team-leaderboard" v-for="team in teamScores">
-                    <li class="team">
+                <ul class="team-leaderboard">
+                    <li class="team" v-for="team in teamScores">
                         <span class="team-name">{{team.name}}</span>
                         <span class="team-points">{{team.points|number_format}}</span>
                     </li>
