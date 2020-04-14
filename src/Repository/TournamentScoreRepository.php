@@ -29,24 +29,34 @@ class TournamentScoreRepository extends ServiceEntityRepository
             ->join('s.team', 't')
             ->join('s.tournament', 'n')
             ->join('s.user', 'u')
-            ->addSelect('u.username as name', 'u.id as id')
+            ->select('u.username as name', 'u.id as id')
             ->addSelect('t.name as team', 't.id as team_id')
             ->addSelect('SUM(s.ranked_points) as ranked_points')
             ->addSelect('SUM(s.team_points) as team_points')
             ->addSelect('AVG(s.rank) as avg_rank')
             ->addSelect('100 * SUM(case when s.auto_assigned = 1 then 0 else 1 end) / SIZE(n.games) as completion')
-            ->groupBy('u.username')
+            ->groupBy('u.id')
             ->andWhere('s.tournament = :tournament')
             ->setParameter('tournament', $tournament)
             ->orderBy('ranked_points', 'DESC')
         ;
 
         if ($user) {
-            $q->andWhere('s.user = :user')
-                ->setParameter('user', $user)
-            ;
+            $results = $q->getQuery()->getArrayResult();
 
-            return $q->getQuery()->getOneOrNullResult();
+            if (empty($results)) { return null; }
+            
+            if (
+                false === (
+                    $index = array_search(
+                        $user->getId(), array_column($results, 'id')
+                    )
+                )
+            ) { return null; }
+
+            $results[$index]['rank'] = $index + 1;
+
+            return $results[$index];
         }
 
         if ($team) {
