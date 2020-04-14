@@ -38,6 +38,12 @@ li:last-child {
     margin-bottom: 0;
 }
 
+.my-scores {
+    flex-grow: 1;
+    flex-shrink: 0;
+    justify-content: flex-start;
+}
+
 .score-rank,
 .stat-label,
 .team-name {
