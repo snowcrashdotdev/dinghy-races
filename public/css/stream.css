@@ -4,6 +4,7 @@
 @import 'src/gadgets.css';
 
 body {
+    line-height: 1.125;
     width: 100vw;
     height: 100vh;
     margin: 0;
