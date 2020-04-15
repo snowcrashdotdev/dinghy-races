@@ -1,18 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Permanent Leaderboard for {{game.description}}{% endblock %}
+{% block title %}Community Leaderboard for {{game.description}}{% endblock %}
 
 {% block body %}
     <header>
-        <h1>Permanent Leaderboard for {{game.description}}</h1>
+        <h1>Community Leaderboard for {{game.description}}</h1>
     </header>
     <main>
+    {% set user_score = personal_bests|filter(s => s.user is same as(app.user))|first %}
     {% if personal_bests|length %}
         {{
             include('_leaderboards/individual.html.twig', {
                 'scores': personal_bests,
                 'tournament': false,
-                'user_score': personal_bests|filter(s => s.user is same as(app.user))|first
+                'user_score': user_score
             })
         }}
     {% else %}
@@ -25,5 +26,6 @@
     {% set href = path('pb_new', {
         'game': game.name
     }) %}
-    <a class="nav-item" href="{{href}}">✏️<span class="nav-item-label">Your PB</span></a>
+    {% set action = user_score ? 'Edit' : 'Add' %}
+    <a class="nav-item" href="{{href}}">✏️<span class="nav-item-label">{{action}} PB</span></a>
 {% endblock %}

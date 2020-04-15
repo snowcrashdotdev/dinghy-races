@@ -14,7 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
- * @Route("/permanent-boards")
+ * @Route("/leaderboards")
  */
 class PersonalBestController extends AbstractController
 {
