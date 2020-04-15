@@ -11,18 +11,7 @@
     <body data-endpoint="{{endpoint}}">
         {% verbatim %}
         <main id="stream-kit">
-            <article ref="recentScores" class="gadget recent-scores fade">
-                <h3>Recent Scores</h3>
-                <ul class="recent-score-list">
-                    <li class="recent-score" v-for="score in recent_scores">
-                        <span class="recent-score-points">{{score.points|number_format}}</span>
-                        <span class="recent-score-game">{{score.game.name}}</span>
-                        <span class="recent-score-user">{{score.user.username}}</span>
-                        <span class="recent-score-date">{{score.updated_at|date_diff}}
-                    </li>
-                </ul>
-            </article>
-            <article ref="myScores" class="gadget my-scores">
+            <article class="gadget my-scores">
                 <h3>My High Scores</h3>
                 <ul class="score-list">
                     <li class="score" v-for="score in scores">
@@ -61,6 +50,18 @@
                     <li class="team" v-for="team in teamScores">
                         <span class="team-name">{{team.name}}</span>
                         <span class="team-points">{{team.points|number_format}}</span>
+                    </li>
+                </ul>
+            </article>
+
+            <article class="gadget recent-scores">
+                <h3>Recent Scores</h3>
+                <ul class="recent-score-list">
+                    <li class="recent-score" v-for="score in recent_scores">
+                        <span class="recent-score-points">{{score.points|number_format}}</span>
+                        <span class="recent-score-game">{{score.game.name}}</span>
+                        <span class="recent-score-user">{{score.user.username}}</span>
+                        <span class="recent-score-date">{{score.updated_at|date_diff}}
                     </li>
                 </ul>
             </article>

@@ -70,5 +70,4 @@ document.addEventListener('DOMContentLoaded', function() {
     })
 
     setInterval(streamKit.fetch, 1000 * 60)
-    setInterval(streamKit.fadeScores, 1000 * 60 * 5)
 })
