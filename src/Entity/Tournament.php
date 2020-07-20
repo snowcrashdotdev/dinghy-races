@@ -75,6 +75,13 @@ class Tournament
      */
     private $scores;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $format;
+
+    public const FORMATS = [ 'TEAM', 'INDIVIDUAL' ];
+
     public function __toString(): ?string
     {
         return $this->getTitle();
@@ -325,6 +332,18 @@ class Tournament
                 $score->setTournament(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFormat(): ?string
+    {
+        return $this->format;
+    }
+
+    public function setFormat(string $format): self
+    {
+        $this->format = $format;
 
         return $this;
     }
