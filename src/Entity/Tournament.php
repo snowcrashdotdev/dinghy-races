@@ -166,6 +166,11 @@ class Tournament
         );
     }
 
+    public function hasAlreadyStarted()
+    {
+        return ($this->isInProgress() || $this->hasEnded());
+    }
+
     /**
      * @return Collection|Game[]
      */
