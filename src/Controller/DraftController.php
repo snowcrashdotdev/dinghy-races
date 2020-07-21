@@ -55,11 +55,11 @@ class DraftController extends AbstractController
     public function invite_decline(Request $request, Draft $draft)
     {
         if ($this->isCsrfTokenValid('invite'.$draft->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
             if ($draft->getTournament()->getFormat() === 'TEAM') {
                 $draftEntry = $this->getDoctrine()
                     ->getRepository('App\Entity\DraftEntry')
                     ->findOneBy(['user' => $this->getUser()]);
-                $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->remove($draftEntry);
             } else {
                 $draft->getTournament()->removeUser($this->getUser());
