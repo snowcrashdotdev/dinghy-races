@@ -5,14 +5,15 @@
 {% block body %}
     <header class="tournament-header">
         <h1 class="tournament-title">Edit Tournament</h1>
+        {% if tournament.format == 'TEAM' %}
         <section class="header-list">
             <h2>Teams</h2>
-
             {% for team in tournament.teams %}
                 <p>{{team.name}} <a href="{{path('team_edit', {'id': team.id})}}">✏️</a></p>
             {% endfor %}
             <p>➕ <a href="{{path('team_new', {'tournament': tournament.id})}}">New Team</a></p>
         </section>
+        {% endif %}
     </header>
     <main>
         <section class="form-section">
