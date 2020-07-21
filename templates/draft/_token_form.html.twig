@@ -1,0 +1,9 @@
+<form method="POST" action="{{path('draft_edit', {'id': draft.id})}}">
+    <input type="text" name="invite_token" value="{{draft.inviteToken}}">
+    <input type="hidden" name="_token" value="{{ csrf_token('edit' ~ draft.id) }}">
+    <button class="button">Update invite token</button>
+</form>
+
+<div class="margin-bottom">
+    <p>Invite Url: {{url('draft_invite', {'token': draft.inviteToken})}}</p>
+</div>

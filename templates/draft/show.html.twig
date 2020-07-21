@@ -4,9 +4,11 @@
 
 {% block body %}
     <header>
-        <h1>Draft Entries for {{ draft.tournament.title }}</h1>
+        <h1>Draft for {{ draft.tournament.title }}</h1>
     </header>
     <main>
+        {% include('draft/_token_form.html.twig') %}
+        {% if draft.tournament.format == 'TEAM' %}
         <table>
             <h2>(<span id="entry-count">{{ draft.draftEntries|length }}</span>) Entries:</h2>
             <thead>
@@ -34,6 +36,17 @@
             {% endfor %}
             </tbody>
         </table>
+        {% else %}
+        <h2>Players ({{draft.tournament.users.count}}):</h2>
+        <ul>
+            {% for player in draft.tournament.users %}
+                {% set href = path('profile_show', {
+                    'username': player.username
+                }) %}
+                <li><a href="{{href}}">{{player.username}}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </main>
 {% endblock %}
 

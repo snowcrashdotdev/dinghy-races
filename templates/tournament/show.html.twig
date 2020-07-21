@@ -109,6 +109,11 @@
                     'tournament': tournament.id
                 }) %}
                 <a href="{{href}}" class="nav-item">Scoring</a>
+
+                {% set href= path('draft_show', {'id': tournament.draft.id}) %}
+                {% if not tournament.alreadyStarted %}
+                    <a href="{{href}}" class="nav-item">Draft</a>
+                {% endif %}
              </div>
         </div>
     {% endif %}
