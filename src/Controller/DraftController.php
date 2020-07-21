@@ -93,6 +93,7 @@ class DraftController extends AbstractController
 
     /**
      * @Route("/drafts/{id}/edit", name="draft_edit", methods={"POST"})
+     * @Security("is_granted('ROLE_TO')")
      */
     public function edit(Draft $draft, Request $request)
     {

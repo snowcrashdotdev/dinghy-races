@@ -7,7 +7,9 @@
         <h1>Draft for {{ draft.tournament.title }}</h1>
     </header>
     <main>
-        {% include('draft/_token_form.html.twig') %}
+        {% if is_granted('ROLE_TO') %}
+            {% include('draft/_token_form.html.twig') %}
+        {% endif %}
         {% if draft.tournament.format == 'TEAM' %}
         <table>
             <h2>(<span id="entry-count">{{ draft.draftEntries|length }}</span>) Entries:</h2>
