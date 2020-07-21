@@ -24,7 +24,7 @@ class Draft
     private $tournament;
 
     /**
-     * @ORM\Column(type="guid", nullable=true)
+     * @ORM\Column(type="guid", nullable=true, unique=true)
      */
     private $invite_token;
 
