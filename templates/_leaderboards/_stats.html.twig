@@ -43,7 +43,7 @@
                     }) %}
                 {% endif %}
             <tr {{loop.last and show_total ? 'class="color-three"'}}>
-                <td>{{not (loop.last and show_total) ? loop.index}}</td>
+                <td>{{(not (loop.last and show_total)) ? loop.index}}</td>
                 <td><a href="{{u_href}}">{{user.name}}</a></td>
                 {% if not show_total %}
                     <td><a href="{{t_href}}">{{user.team}}</a></td>

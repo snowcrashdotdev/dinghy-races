@@ -24,7 +24,7 @@
                 {% else %}
                     {% for interval in daysHoursMinutes %}
                         {% if interval|first|number_format > 0 %}
-                            {{interval}}{{not loop.last ? ', ' : ' ago'}}
+                            {{interval}}{{(not loop.last) ? ', ' : ' ago'}}
                         {% endif %}
                     {% endfor %}
                 {% endif %}
