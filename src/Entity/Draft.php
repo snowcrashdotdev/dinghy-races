@@ -71,6 +71,10 @@ class Draft
 
     public function hasEntered(User $user)
     {
+        if ($this->getTournament()->getFormat() === 'INDIVIDUAL') {
+            return $this->getTournament()->getUsers()->contains($user);
+        }
+
         return(
             $this->draftEntries->exists(function($key, $entry) use ($user) {
                 return $entry->getUser() === $user;
