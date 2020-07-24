@@ -48,6 +48,11 @@ class TournamentScore extends Score
      */
     private $team;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=TournamentUser::class, inversedBy="tournamentScores")
+     */
+    private $tournament_user;
+
     public function getRank(): ?int
     {
         return $this->rank;
@@ -134,5 +139,17 @@ class TournamentScore extends Score
             $this->getUpdatedAt() > $this->tournament->getStartDate() &&
             $this->getUpdatedAt() < $this->tournament->getEndDate()
         );
+    }
+
+    public function getTournamentUser(): ?TournamentUser
+    {
+        return $this->tournament_user;
+    }
+
+    public function setTournamentUser(?TournamentUser $tournament_user): self
+    {
+        $this->tournament_user = $tournament_user;
+
+        return $this;
     }
 }

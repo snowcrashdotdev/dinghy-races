@@ -80,6 +80,11 @@ class Tournament
      */
     private $format;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TournamentUser::class, mappedBy="tournament")
+     */
+    private $tournamentUsers;
+
     public const FORMATS = [ 'TEAM', 'INDIVIDUAL' ];
 
     public function __toString(): ?string
@@ -93,6 +98,7 @@ class Tournament
         $this->teams = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->scores = new ArrayCollection();
+        $this->tournamentUsers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -349,6 +355,37 @@ class Tournament
     public function setFormat(string $format): self
     {
         $this->format = $format;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TournamentUser[]
+     */
+    public function getTournamentUsers(): Collection
+    {
+        return $this->tournamentUsers;
+    }
+
+    public function addTournamentUser(TournamentUser $tournamentUser): self
+    {
+        if (!$this->tournamentUsers->contains($tournamentUser)) {
+            $this->tournamentUsers[] = $tournamentUser;
+            $tournamentUser->setTournament($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTournamentUser(TournamentUser $tournamentUser): self
+    {
+        if ($this->tournamentUsers->contains($tournamentUser)) {
+            $this->tournamentUsers->removeElement($tournamentUser);
+            // set the owning side to null (unless already changed)
+            if ($tournamentUser->getTournament() === $this) {
+                $tournamentUser->setTournament(null);
+            }
+        }
 
         return $this;
     }

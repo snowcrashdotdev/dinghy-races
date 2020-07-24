@@ -108,6 +108,11 @@ class User implements UserInterface
      */
     private $personal_bests;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TournamentUser::class, mappedBy="user")
+     */
+    private $appearances;
+
     public function __construct()
     {
         $this->created_at = new \DateTime('now');
@@ -122,6 +127,7 @@ class User implements UserInterface
         $this->profile->setUser($this);
         $this->tournament_scores = new ArrayCollection();
         $this->personal_bests = new ArrayCollection();
+        $this->appearances = new ArrayCollection();
     }
 
     public function __toString()
@@ -431,6 +437,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($personalBest->getUser() === $this) {
                 $personalBest->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TournamentUser[]
+     */
+    public function getAppearances(): Collection
+    {
+        return $this->appearances;
+    }
+
+    public function addAppearance(TournamentUser $appearance): self
+    {
+        if (!$this->appearances->contains($appearance)) {
+            $this->appearances[] = $appearance;
+            $appearance->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppearance(TournamentUser $appearance): self
+    {
+        if ($this->appearances->contains($appearance)) {
+            $this->appearances->removeElement($appearance);
+            // set the owning side to null (unless already changed)
+            if ($appearance->getUser() === $this) {
+                $appearance->setUser(null);
             }
         }
 

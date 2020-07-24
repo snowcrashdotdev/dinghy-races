@@ -49,10 +49,16 @@ class Team
 
     private $scores_available;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TournamentUser::class, mappedBy="team")
+     */
+    private $tournamentUsers;
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
         $this->scores = new ArrayCollection();
+        $this->tournamentUsers = new ArrayCollection();
     }
 
     public function __toString()
@@ -180,5 +186,36 @@ class Team
     public function hasScoresAvailable(): bool
     {
         return ($this->scores_available > 0);
+    }
+
+    /**
+     * @return Collection|TournamentUser[]
+     */
+    public function getTournamentUsers(): Collection
+    {
+        return $this->tournamentUsers;
+    }
+
+    public function addTournamentUser(TournamentUser $tournamentUser): self
+    {
+        if (!$this->tournamentUsers->contains($tournamentUser)) {
+            $this->tournamentUsers[] = $tournamentUser;
+            $tournamentUser->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTournamentUser(TournamentUser $tournamentUser): self
+    {
+        if ($this->tournamentUsers->contains($tournamentUser)) {
+            $this->tournamentUsers->removeElement($tournamentUser);
+            // set the owning side to null (unless already changed)
+            if ($tournamentUser->getTeam() === $this) {
+                $tournamentUser->setTeam(null);
+            }
+        }
+
+        return $this;
     }
 }
