@@ -27,7 +27,7 @@ abstract class Score implements \Serializable
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      * @Groups("public")
      */
     private $user;

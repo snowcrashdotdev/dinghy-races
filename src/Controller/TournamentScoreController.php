@@ -8,10 +8,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Entity\TournamentScore;
 use App\Entity\Game;
 use App\Entity\Tournament;
 use App\Form\ScoreType;
+use App\Repository\TournamentUserRepository;
 use App\Repository\TournamentScoreRepository;
 
 /**
@@ -21,58 +23,32 @@ class TournamentScoreController extends AbstractController
 {
     /**
      * @Route("/{game_name}/{tournament_id}/new", name="score_new", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_USER')")
      * @Entity("tournament", expr="repository.find(tournament_id)")
      * @ParamConverter("game", options={"mapping": {"game_name": "name"}})
      */
-    public function new(Request $request, TournamentScoreRepository $scoreRepo, Game $game, Tournament $tournament): Response
+    public function new(Request $request, TournamentUserRepository $tournamentUsers, TournamentScoreRepository $tournamentScores, Game $game, Tournament $tournament): Response
     {
-        $user = $this->getUser();
+        $this->denyAccessUnlessGranted('submit_score', $tournament);
 
-        /**
-         * Redirect if not logged in, or if not assigned to tournament team
-         */
-        if (empty($user)) {
-            $this->addFlash('notice', 'Log in to update your score.');
-            return $this->redirectToRoute('app_login');
-        } elseif (empty(
-            $team = $user->getTeam($tournament)
-        )) {
-            $this->addFlash('notice', 'Unable to determine your team.');
-            return $this->redirectToRoute('tournament_show', [
-                'id' => $tournament->getId()
-            ]);
-        }
-
-        $score = $scoreRepo->findOneBy([    
-            'user' => $user,
+        $user = $tournamentUsers->findOneBy([
             'tournament' => $tournament,
+            'user' => $this->getUser()
+        ]);
+
+        $score = $tournamentScores->findOneBy([
+            'tournament_user' => $user,
             'game' => $game
         ]);
 
         if (empty($score)) {
             $score = new TournamentScore();
+            $tournament->addScore($score);
+            if ($tournament->getFormat() === 'TEAM') {
+                $user->getTeam()->addScore($score);
+            }
             $game->addTournamentScore($score);
             $user->addTournamentScore($score);
-            $tournament->addScore($score);
-            $team->addScore($score);
-            if (
-                $tournament->getScoring()->getDeadline() &&
-                $tournament->getScoring()->getDeadline() > date_create('NOW')
-            ) {
-                $score->setAutoAssigned(false);
-            } else {
-                $score->setAutoAssigned(true);
-            }
-
-            if ($score->isNoShow()) {
-                $score->setPoints(0);
-                $this->getDoctrine()->getManager()->persist($score);
-                $this->getDoctrine()->getManager()->flush();
-                $this->addFlash('notice', 'New score submissions are closed.');
-                $this->redirectToRoute('tournament_show', [
-                    'id' => $tournament->getId()
-                ]);
-            }
         }
 
         $form = $this->createForm(ScoreType::class, $score);

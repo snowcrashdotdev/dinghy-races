@@ -52,7 +52,7 @@ class TournamentUser
 
     public function __toString(): ?string
     {
-        return $this->getUser()->getUsername();   
+        return (string) $this->getUser();
     }
 
     public function getId(): ?int
