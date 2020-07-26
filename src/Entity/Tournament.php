@@ -82,6 +82,7 @@ class Tournament
 
     /**
      * @ORM\OneToMany(targetEntity=TournamentUser::class, mappedBy="tournament")
+     * @ORM\OrderBy({"created_at" = "DESC"})
      */
     private $tournamentUsers;
 

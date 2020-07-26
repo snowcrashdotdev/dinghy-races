@@ -9,7 +9,7 @@
     <main>
         {{ include('tournament/_summary.html.twig', { 'tournament': draft.tournament, 'show_description': true }) }}
         {% if is_granted("ROLE_USER") %}
-            {% if draft.hasEntered(app.user) %}
+            {% if app.user.isInTournament(draft.tournament) %}
                 {{ include('draft/_decline_invite.html.twig', {'id': draft.id}) }}
             {% else %}
                 {{ include('draft/_accept_invite.html.twig', {'id': draft.id}) }}

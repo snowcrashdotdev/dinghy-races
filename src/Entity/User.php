@@ -333,6 +333,15 @@ class User implements UserInterface
         return $this;
     }
 
+    public function isInTournament(Tournament $tournament): bool
+    {
+        $criteria = new Criteria();
+        $expr = new Comparison('tournament', '=', $tournament);
+        $criteria->where($expr);
+
+        return ! $this->getAppearances()->matching($criteria)->isEmpty();
+    }
+
     public function getScore(Tournament $tournament, Game $game)
     {
         $criteria = new Criteria();

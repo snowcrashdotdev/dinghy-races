@@ -1,18 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Draft Entries for {{ draft.tournament.title }}{% endblock %}
+{% block title %}Sign-Ups for {{ draft.tournament.title }}{% endblock %}
 
 {% block body %}
     <header>
-        <h1>Draft for {{ draft.tournament.title }}</h1>
+        <h1>Sign-Ups for {{ draft.tournament.title }}</h1>
     </header>
     <main>
         {% if is_granted('ROLE_TO') %}
             {% include('draft/_token_form.html.twig') %}
         {% endif %}
-        {% if draft.tournament.format == 'TEAM' %}
         <table>
-            <h2>(<span id="entry-count">{{ draft.draftEntries|length }}</span>) Entries:</h2>
+            <h2>(<span id="entry-count">{{ draft.tournament.tournamentUsers|length }}</span>) Entries:</h2>
             <thead>
                 <tr>
                     <th>Player</th>
@@ -20,15 +19,15 @@
                 </tr>
             </thead>
             <tbody>
-            {% for entry in draft.draftEntries %}
+            {% for user in draft.tournament.tournamentUsers %}
                 {% set href = path('profile_show', {
-                    'username': entry.user
+                    'username': user
                 }) %}
                 <tr>
-                    <td><a href="{{href}}">{{entry.user}}</a></td>
-                    <td>{{ entry.createdAt|date('Y-m-d @ G:i') }}</td>
+                    <td><a href="{{href}}">{{user}}</a></td>
+                    <td>{{ user.createdAt|date('Y-m-d @ G:i') }}</td>
                     {% if is_granted('ROLE_TO') %}
-                        <td><a href="#" class="color-danger remove-draft-entry" data-id="{{entry.id}}" data-token="{{ csrf_token('delete' ~ entry.id)|e('html_attr') }}">Remove</a></td>
+                        <td><a href="#" class="color-danger remove-draft-entry" data-id="{{user.id}}" data-token="{{ csrf_token('delete' ~ user.id)|e('html_attr') }}">Remove</a></td>
                     {% endif %}
                 </tr>
             {% else %}
@@ -38,17 +37,6 @@
             {% endfor %}
             </tbody>
         </table>
-        {% else %}
-        <h2>Players ({{draft.tournament.users.count}}):</h2>
-        <ul>
-            {% for player in draft.tournament.users %}
-                {% set href = path('profile_show', {
-                    'username': player.username
-                }) %}
-                <li><a href="{{href}}">{{player.username}}</a></li>
-            {% endfor %}
-        </ul>
-        {% endif %}
     </main>
 {% endblock %}
 

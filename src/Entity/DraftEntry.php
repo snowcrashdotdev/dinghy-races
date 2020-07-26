@@ -38,6 +38,11 @@ class DraftEntry
      */
     private $eligible;
 
+    /**
+     * @ORM\OneToOne(targetEntity=TournamentUser::class, cascade={"persist", "remove"})
+     */
+    private $tournament_user;
+
     public function __construct()
     {
         $this->created_at = date_create('NOW');
@@ -93,6 +98,18 @@ class DraftEntry
     public function setEligible(bool $eligible): self
     {
         $this->eligible = $eligible;
+
+        return $this;
+    }
+
+    public function getTournamentUser(): ?TournamentUser
+    {
+        return $this->tournament_user;
+    }
+
+    public function setTournamentUser(?TournamentUser $tournament_user): self
+    {
+        $this->tournament_user = $tournament_user;
 
         return $this;
     }

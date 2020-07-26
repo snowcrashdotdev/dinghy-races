@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Draft;
 use App\Entity\DraftEntry;
+use App\Entity\TournamentUser;
 use App\Repository\DraftRepository;
+use App\Repository\TournamentUserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -25,25 +27,34 @@ class DraftController extends AbstractController
     /**
      * @Route("/invite/accept/{id}", name="invite_accept", methods={"POST"})
      */
-    public function invite_accept(Request $request, Draft $draft)
+    public function invite_accept(Request $request, Draft $draft, TournamentUserRepository $tournamentUsers)
     {
-        if (
-            $this->isCsrfTokenValid('invite'.$draft->getId(), $request->request->get('_token')) &&
+        if ($this->isCsrfTokenValid('invite'.$draft->getId(), $request->request->get('_token'))) {
+            $user = $tournamentUsers->findOneBy([
+                'user' => $this->getUser(),
+                'tournament' => $draft->getTournament()
+            ]);
 
-            ! $draft->hasEntered($this->getUser())
-        
-        ) {
-            if ($draft->getTournament()->getFormat() === 'TEAM') {
-                $draftEntry = new DraftEntry();
-                $this->getUser()->addDraftEntry($draftEntry);
-                $draft->addDraftEntry($draftEntry);
+            if ($user) {
+                $this->addFlash('error', 'You have already entered this tournament.');
             } else {
-                $draft->getTournament()->addUser($this->getUser());
+                $manager = $this->getDoctrine()->getManager();
+                $user = new TournamentUser();
+                $draft->getTournament()->addTournamentUser($user);
+                $this->getUser()->addAppearance($user);
+                $manager->persist($user);
+
+                if ($draft->getTournament()->getFormat() === 'TEAM') {
+                    $draftEntry = new DraftEntry();
+                    $draftEntry->setTournamentUser($user);
+                    $draft->addDraftEntry($draftEntry);
+                    $manager->persist($draftEntry);
+                }
+                $this->addFlash('success', 'You entered the draft!');
+                $manager->flush();
             }
-            $this->addFlash('success', 'You entered the draft!');
-            $this->getDoctrine()->getManager()->flush();
         } else {
-            $this->addFlash('error', 'You were unable to enter.');
+            $this->addFlash('error', 'Invalid request.');
         }
 
         return $this->redirectToRoute('tournament_show', ['id' => $draft->getTournament()->getId()]);
@@ -52,20 +63,24 @@ class DraftController extends AbstractController
     /**
      * @Route("/invite/decline/{id}", name="invite_decline", methods={"DELETE"})
      */
-    public function invite_decline(Request $request, Draft $draft)
+    public function invite_decline(Request $request, Draft $draft, TournamentUserRepository $tournamentUsers)
     {
         if ($this->isCsrfTokenValid('invite'.$draft->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            if ($draft->getTournament()->getFormat() === 'TEAM') {
-                $draftEntry = $this->getDoctrine()
-                    ->getRepository('App\Entity\DraftEntry')
-                    ->findOneBy(['user' => $this->getUser()]);
-                $entityManager->remove($draftEntry);
+            $user = $tournamentUsers->findOneBy([
+                'user' => $this->getUser(),
+                'tournament' => $draft->getTournament()
+            ]);
+
+            if ($user) {
+                $manager = $this->getDoctrine()->getManager();
+                $manager->remove($user);
+                $manager->flush();
+                $this->addFlash('success', 'You have withdrawn from the tournament.');
             } else {
-                $draft->getTournament()->removeUser($this->getUser());
+                $this->addFlash('error', 'You have not signed up for this tournament.');
             }
-            $entityManager->flush();
-            $this->addFlash('notice', 'You withdew from the tournament.');
+        } else {
+            $this->addFlash('error', 'Invalid request.');
         }
 
         return $this->redirectToRoute('tournament_show', ['id' => $draft->getTournament()->getId()]);
@@ -102,23 +117,25 @@ class DraftController extends AbstractController
             $inviteToken = urlencode($request->request->get('invite_token'));
             $draft->setInviteToken($inviteToken);
             $manager->flush();
+
+            $this->addFlash('success', 'Invite URL updated.');
         }
+
         return $this->redirectToRoute('draft_show', [
             'id' => $draft->getId()
         ]);
     }
+
     /**
-     * @Route("/entry/{draft_entry}", name="entry_remove", methods={"DELETE"})
-     * @Entity("draftEntry", expr="repository.find(draft_entry)")
+     * @Route("/entry/{user}", name="entry_remove", methods={"DELETE"})
+     * @Entity("user", expr="repository.find(user)")
      * @Security("is_granted('ROLE_TO')")
      */
-    public function removeEntry(Request $request, DraftEntry $draftEntry)
+    public function removeEntry(Request $request, TournamentUser $user)
     {
-        $draft = $draftEntry->getDraft();
-
-        if ($this->isCsrfTokenValid('delete'.$draftEntry->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($draftEntry);
+            $entityManager->remove($user);
             $entityManager->flush();
 
             if ($request->isXmlHttpRequest()) {

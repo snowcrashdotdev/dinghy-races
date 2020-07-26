@@ -46,7 +46,13 @@ class TournamentUser
 
     public function __construct()
     {
+        $this->created_at = new \DateTime('now');
         $this->tournamentScores = new ArrayCollection();
+    }
+
+    public function __toString(): ?string
+    {
+        return $this->getUser()->getUsername();   
     }
 
     public function getId(): ?int
