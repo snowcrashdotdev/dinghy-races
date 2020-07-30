@@ -23,6 +23,43 @@ class TournamentScoreRepository extends ServiceEntityRepository
         parent::__construct($registry, TournamentScore::class);
     }
 
+    public function findHighScores(Tournament $tournament)
+    {
+        $q = $this->createQueryBuilder('s')
+            ->leftJoin('s.game', 'g')
+            ->select('s', 'g.id AS HIDDEN game')
+            ->groupBy('game')
+            ->andwhere('s.tournament = :tournament')
+            ->andWhere('s.rank = 1')
+            ->setParameter('tournament', $tournament)
+        ;
+
+        return $q->getQuery()->getResult();
+    }
+
+    public function findUserScores(User $user, Tournament $tournament)
+    {
+        $q = $this->createQueryBuilder('s')
+            ->join('s.user', 'u')
+            ->andWhere('s.tournament = :tournament')
+            ->andWhere('u.user = :user')
+            ->setParameter('tournament', $tournament)
+            ->setParameter('user', $user)
+        ;
+
+        return $q->getQuery()->getResult();
+    }
+
+    public function updateTournamentUserStats(TournamentUser $user)
+    {
+        $q = $this->createQueryBuilder('s')
+            ->update('s')
+            ->set('s.avg_rank', 'SELECT ')
+        ;
+
+        return $q->getQuery()->execute();
+    }
+
     public function findTournamentResults(Tournament $tournament, ?Team $team=null, ?User $user=null, ?bool $groupByTeam=false)
     {
         $q = $this->createQueryBuilder('s')
