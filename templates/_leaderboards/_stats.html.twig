@@ -1,23 +1,4 @@
-{% if stats|length and tournament is defined %}
-    {% if show_total %}
-        {% set scores = team.scores %}
-        {% set users = team.members %}
-        {% set stats = stats|merge([{
-            'name': 'Total',
-            'ranked_points': stats|reduce(
-                (carry, u) => carry + u.ranked_points
-            ),
-            'team_points': stats|reduce(
-                (carry, u) => carry + u.team_points
-            ),
-            'completion': scores|length ?
-                (scores|length / (users|length * tournament.games|length) * 100)|number_format(0)
-                : 0,
-            'avg_rank': stats|length ?
-                stats|reduce((carry,u) => carry + (u.avg_rank / stats|length))|number_format(0) : 0
-        }]) %}
-    {% endif %}
-
+{% if users is defined %}
     <table>
         <thead>
             <tr>
@@ -33,27 +14,54 @@
             </tr>
         </thead>
         <tbody>
-            {% for user in stats %}
-                {% set u_href = path('profile_show', {
-                    'username': user.name
-                }) %}
+            {% for user in users %}
                 {% if not show_total %}
                     {% set t_href = path('team_show', {
-                        'id': user.team_id
+                        'id': user.team.id
                     }) %}
                 {% endif %}
-            <tr {{loop.last and show_total ? 'class="color-three"'}}>
-                <td>{{(not (loop.last and show_total)) ? loop.index}}</td>
-                <td><a href="{{u_href}}">{{user.name}}</a></td>
+
+                {% set u_href = path('profile_show', {
+                    'username': user
+                }) %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td><a href="{{u_href}}">{{user}}</a></td>
                 {% if not show_total %}
                     <td><a href="{{t_href}}">{{user.team}}</a></td>
                 {% endif %}
-                <td class="labeled-data ranked-points">{{user.ranked_points|number_format}}</td>
-                <td class="labeled-data team-points">{{user.team_points|number_format}}</td>
-                <td class="labeled-data avg-rank">{{user.avg_rank|number_format}}</td>
-                <td class="labeled-data completion">{{user.completion|number_format ~ '%'}}</td>
+                <td class="labeled-data ranked-points">{{user.rankedPoints|number_format}}</td>
+                <td class="labeled-data team-points">{{user.teamPoints|number_format}}</td>
+                <td class="labeled-data avg-rank">{{user.avgRank|number_format(1)}}</td>
+                {% set completion = user.completion / tournament.games|length * 100 %}
+                <td class="labeled-data completion">{{ completion|number_format ~ '%' }}</td>
             </tr>
         {% endfor %}
+        {% if show_total %}
+            <tr class="color-three">
+                <td></td>
+                <td>Total:</td>
+
+                {% set ranked_points = users|reduce(
+                    (c,v) => c + v.rankedPoints
+                ) %}
+                <td class="labeled-data ranked-points">{{ ranked_points|number_format }}</td>
+
+                <td class="labeled-data team-points">{{ team.points|number_format }}</td>
+
+                {% set avg_rank = users|reduce(
+                    (c,v) => c + (v.avgRank / users|length)
+                ) %}
+                <td class="labeled-data avg-rank">{{ avg_rank|number_format(1) }}</td>
+
+                {% set completion = users|reduce(
+                    (c,v) => c + (
+                        (v.completion / tournament.games|length)
+                        / users|length ) * 100
+                ) %}
+                <td class="labeled-data completion">{{ completion|number_format ~ '%' }}</td>
+            </tr>
+        {% endif %}
         </tbody>
     </table>
 {% endif %}
