@@ -10,10 +10,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Profile;
-use App\Entity\Tournament;
-use App\Entity\Game;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Expr\Comparison;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -99,12 +95,9 @@ class User implements UserInterface
         $this->roles = ["ROLE_USER"];
         $this->verified = false;
 
-        $this->teams = new ArrayCollection();
-        $this->tournaments = new ArrayCollection();
-        $this->draftEntries = new ArrayCollection();
-
         $this->profile = new Profile();
         $this->profile->setUser($this);
+
         $this->tournament_scores = new ArrayCollection();
         $this->personal_bests = new ArrayCollection();
         $this->appearances = new ArrayCollection();
@@ -180,32 +173,6 @@ class User implements UserInterface
         // If you store any temporary, sensitive data on the user, clear it here
     }
 
-    /**
-     * @return Collection|Tournament[]
-     */
-    public function getTournaments(): Collection
-    {
-        return $this->tournaments;
-    }
-
-    public function addTournament(Tournament $tournament): self
-    {
-        if (!$this->tournaments->contains($tournament)) {
-            $this->tournaments[] = $tournament;
-        }
-
-        return $this;
-    }
-
-    public function removeTournament(Tournament $tournament): self
-    {
-        if ($this->tournaments->contains($tournament)) {
-            $this->tournaments->removeElement($tournament);
-        }
-
-        return $this;
-    }
-
     public function getEmail(): ?string
     {
         return $this->email;
@@ -262,141 +229,6 @@ class User implements UserInterface
     public function setProfile(?Profile $profile): self
     {
         $this->profile = $profile;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|DraftEntry[]
-     */
-    public function getDraftEntries(): Collection
-    {
-        return $this->draftEntries;
-    }
-
-    public function addDraftEntry(DraftEntry $draftEntry): self
-    {
-        if (!$this->draftEntries->contains($draftEntry)) {
-            $this->draftEntries[] = $draftEntry;
-            $draftEntry->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDraftEntry(DraftEntry $draftEntry): self
-    {
-        if ($this->draftEntries->contains($draftEntry)) {
-            $this->draftEntries->removeElement($draftEntry);
-            // set the owning side to null (unless already changed)
-            if ($draftEntry->getUser() === $this) {
-                $draftEntry->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function setEligibility(Tournament $tournament, ?bool $eligibility): self
-    {
-        $draft = $tournament->getDraft();
-        $criteria = new Criteria();
-        $expr = new Comparison('draft', '=', $draft);
-        $criteria->where($expr);
-
-        $entry = $this->getDraftEntries()->matching($criteria)->first();
-
-        if ($entry) {
-            $entry->setEligible($eligibility);
-        }
-
-        return $this;
-    }
-
-    public function isInTournament(Tournament $tournament): bool
-    {
-        $criteria = new Criteria();
-        $expr = new Comparison('tournament', '=', $tournament);
-        $criteria->where($expr);
-
-        return ! $this->getAppearances()->matching($criteria)->isEmpty();
-    }
-
-    public function getScore(Tournament $tournament, Game $game)
-    {
-        $criteria = new Criteria();
-        $expr = new Comparison('tournament', '=', $tournament);
-        $expr2 = new Comparison('game', '=', $game);
-        $criteria->where($expr)->andWhere($expr2);
-        return $this->getTournamentScores()->matching($criteria)->first();
-    }
-
-    public function getTeam(Tournament $tournament)
-    {
-        return $this->getTeams()->filter(function($t) use ($tournament) {
-            return $t->getTournament() === $tournament;
-        })->first();
-    }
-
-    /**
-     * @return Collection|Team[]
-     */
-    public function getTeams(): Collection
-    {
-        return $this->teams;
-    }
-
-    public function addTeam(Team $team): self
-    {
-        if (!$this->teams->contains($team)) {
-            $tournament = $team->getTournament();
-            $this->teams[] = $team;
-            $this->setEligibility($tournament, false);
-            $this->addTournament($tournament);
-        }
-
-        return $this;
-    }
-
-    public function removeTeam(Team $team): self
-    {
-        if ($this->teams->contains($team)) {
-            $tournament = $team->getTournament();
-            $this->teams->removeElement($team);
-            $this->setEligibility($tournament, true);
-            $this->removeTournament($tournament);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|TournamentScore[]
-     */
-    public function getTournamentScores(): Collection
-    {
-        return $this->tournament_scores;
-    }
-
-    public function addTournamentScore(TournamentScore $tournamentScore): self
-    {
-        if (!$this->tournament_scores->contains($tournamentScore)) {
-            $this->tournament_scores[] = $tournamentScore;
-            $tournamentScore->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTournamentScore(TournamentScore $tournamentScore): self
-    {
-        if ($this->tournament_scores->contains($tournamentScore)) {
-            $this->tournament_scores->removeElement($tournamentScore);
-            // set the owning side to null (unless already changed)
-            if ($tournamentScore->getUser() === $this) {
-                $tournamentScore->setUser(null);
-            }
-        }
 
         return $this;
     }
