@@ -72,10 +72,9 @@ class Draft
 
     public function hasEntered(User $user)
     {
-        return $this->getTournament()
-                ->getTournamentUsers()
-                ->contains($user)
-        ;
+        return $this->getTournament()->getUsers()->exists(function($i, $entry) use ($user) {
+            return $entry->getUser() === $user;
+        });
     }
 
     /**
