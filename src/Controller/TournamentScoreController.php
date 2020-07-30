@@ -37,7 +37,7 @@ class TournamentScoreController extends AbstractController
         ]);
 
         $score = $tournamentScores->findOneBy([
-            'tournament_user' => $user,
+            'user' => $user,
             'game' => $game
         ]);
 
@@ -48,7 +48,7 @@ class TournamentScoreController extends AbstractController
                 $user->getTeam()->addScore($score);
             }
             $game->addTournamentScore($score);
-            $user->addTournamentScore($score);
+            $user->addScore($score);
         }
 
         $form = $this->createForm(ScoreType::class, $score);
