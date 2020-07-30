@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\ProfiletRepository;
+use App\Repository\ProfileRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;

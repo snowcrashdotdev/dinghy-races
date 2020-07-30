@@ -70,26 +70,34 @@ class TournamentController extends AbstractController
      */
     public function show(Tournament $tournament, TournamentScoreRepository $scores, TwitchChecker $twitch): Response
     {
-        $liveStreams  = [];
-        $topTeam = null;
-        $topPlayer = null;
+        $live_streams  = [];
+        $top_team = null;
+        $top_player = null;
         $user_scores = [];
         $high_scores = $scores->findHighScores($tournament);
+        $recent_scores = [];
 
-        if ($this->isGranted('ROLE_USER')) {
+        if ($this->isGranted('ROLE_USER') && ! $tournament->isUpcoming()) {
             $user_scores = $scores->findUserScores($this->getUser(), $tournament);
         }
 
         if ($tournament->isInProgress()) {
-            $liveStreams = $twitch->getLiveStreams($tournament);
+            $live_streams = $twitch->getLiveStreams($tournament);
+
+            $recent_scores = $scores->findBy(
+                [ 'tournament' => $tournament ],
+                [ 'updated_at' => 'DESC' ],
+                10, 0
+            );
         }
 
         return $this->render('tournament/show.html.twig', [
             'tournament' => $tournament,
-            'top_team' => $topTeam,
-            'top_player' => $topPlayer,
-            'live_streams' => $liveStreams,
+            'top_team' => $top_team,
+            'top_player' => $top_player,
+            'live_streams' => $live_streams,
             'high_scores' => $high_scores,
+            'recent_scores' => $recent_scores,
             'user_scores' => $user_scores
         ]);
     }

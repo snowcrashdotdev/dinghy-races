@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Profile;
 use App\Entity\Tournament;
+use App\Entity\TournamentUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -24,9 +25,9 @@ class ProfileRepository extends ServiceEntityRepository
     {
         $q = $this->createQueryBuilder('p')
             ->select('p.social as twitchUrl')
-            ->innerJoin('App\Entity\User', 'u', 'WITH', 'u.profile = p')
-            ->join('u.tournaments', 't')
-            ->andWhere('t.id = :tournament')
+            ->join('p.user', 'u')
+            ->join('u.appearances', 't')
+            ->andWhere('t.tournament = :tournament')
             ->andWhere('p.social LIKE :twitch')
             ->setParameter('tournament', $tournament->getId())
             ->setParameter('twitch', '%twitch.tv%')
