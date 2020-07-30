@@ -18,7 +18,7 @@
         {% for user in team.members %}
             {{
                 include('profile/_summary.html.twig', {
-                    'user': user
+                    'user': user.user
                 })
             }}
         {% endfor %}
@@ -41,8 +41,7 @@
         {{
             include('_leaderboards/_stats.html.twig', {
                 'tournament': team.tournament,
-                'team': team,
-                'stats': stats,
+                'users': team.members,
                 'show_total': true
             })
         }}
