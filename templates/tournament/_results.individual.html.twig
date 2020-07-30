@@ -12,7 +12,7 @@
             {{
                 include('_leaderboards/_stats.html.twig', {
                     'tournament': tournament,
-                    'stats': stats,
+                    'users': tournament.users,
                     'show_total': false
                 })
             }}
