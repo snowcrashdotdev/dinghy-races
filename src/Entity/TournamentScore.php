@@ -53,6 +53,15 @@ class TournamentScore extends Score
      */
     private $auto_assigned;
 
+    public function __toString(): ?string
+    {
+        return join(' ', [
+            $this->getUser()->getUsername(),
+            $this->getGame()->getName(),
+            $this->getPoints()
+        ]);
+    }
+
     public function getRank(): ?int
     {
         return $this->rank;
@@ -146,7 +155,7 @@ class TournamentScore extends Score
         return $this->user;
     }
 
-    public function setUser(?TournamentUser $tournament_user): self
+    public function setUser(?TournamentUser $user): self
     {
         $this->user = $user;
 
