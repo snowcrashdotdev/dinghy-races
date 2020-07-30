@@ -36,7 +36,7 @@
 
     {% if upcoming_tournaments|length %}
         <h2>Upcoming:</h2>
-        {% for upcoming_tournament in upcoming %}
+        {% for tournament in upcoming_tournaments %}
             <section class="border-left">
                 {{ include('tournament/_summary.html.twig', {
                     'tournament': tournament,
