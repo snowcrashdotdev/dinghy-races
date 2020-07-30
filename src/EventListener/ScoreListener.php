@@ -161,15 +161,15 @@ class ScoreListener
     private function syncPersonalBest(TournamentScore $score, EntityManager $manager, UnitOfWork $uow)
     {
         $game = $score->getGame();
-        $user = $score->getUser();
+        $tournamentUser = $score->getUser();
         $changeSet = $uow->getEntityChangeSet($score);
         $metaData = $manager->getClassMetaData(PersonalBest::class);
 
         if(empty(
-            $personalBest = $manager->getRepository('App\Entity\PersonalBest')
+            $personalBest = $manager->getRepository(PersonalBest::class)
                 ->findOneBy([
                     'game' => $game,
-                    'user' => $user
+                    'user' => $tournamentUser->getUser()
                 ])
             )
         ) {
