@@ -81,13 +81,14 @@
         <h2 class="uppercase page-break outlined">Games</h2>
         <section class="summary-group">
         {% for game in tournament.games %}
-            {{ include('game/_summary.html.twig', {
-                'tournament': tournament,
-                'game': game,
-                'high_score': game.tournamentScores|filter(s => s.tournament is same as(tournament))|first,
-                'user_score': game.tournamentScores|filter(
-                    s => s.tournament is same as(tournament) and s.user is same as(app.user))|first
-            })}}
+            {{
+                include('game/_summary.html.twig', {
+                    'tournament': tournament,
+                    'game': game,
+                    'high_score': high_scores|filter(s => s.game is same as(game))|first,
+                    'user_score': user_scores|filter(s => s.game is same as(game))|first
+                })
+            }}
         {% endfor %}
         </section>
     </main>
@@ -110,8 +111,9 @@
                 }) %}
                 <a href="{{href}}" class="nav-item">Scoring</a>
 
+                {% if not tournament.alreadyStarted and tournament.draft %}
                 {% set href= path('draft_show', {'id': tournament.draft.id}) %}
-                {% if not tournament.alreadyStarted %}
+                
                     <a href="{{href}}" class="nav-item">Draft</a>
                 {% endif %}
              </div>
