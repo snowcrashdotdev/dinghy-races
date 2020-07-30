@@ -181,6 +181,20 @@ class TournamentScoreRepository extends ServiceEntityRepository
         return $q->getQuery()->getArrayResult();
     }
 
+    public function findActiveForUser(User $user)
+    {
+        $q = $this->createQueryBuilder('s')
+            ->join('s.tournament', 't')
+            ->join('s.user', 'p')
+            ->andWhere('t.start_date < CURRENT_DATE()')
+            ->andWhere('t.end_date > CURRENT_DATE()')
+            ->andWhere('p.user = :user')
+            ->setParameter('user', $user)
+        ;
+
+        return $q->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Score[] Returns an array of Score objects
     //  */

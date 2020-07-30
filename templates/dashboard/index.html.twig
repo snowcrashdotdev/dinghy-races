@@ -9,10 +9,9 @@
 </header>
 
 <main>
-    {% set happening_now = user.tournaments|filter(t => t.inProgress) %}
-    {% if happening_now|length %}
+    {% if in_progress_tournaments|length %}
         <h2>Happening now:</h2>
-        {% for tournament in happening_now %}
+        {% for tournament in in_progress_tournaments %}
             <section class="border-left">
                 {% set href = path('tournament_show', {
                     'id': tournament.id
@@ -27,7 +26,7 @@
                         'tournament': tournament,
                         'game': game,
                         'high_score': tournament.scores|filter(s => s.game is same as(game))|first,
-                        'user_score': user.tournamentScores|filter(s => s.tournament is same as(tournament) and s.game is same as(game))|first
+                        'user_score': user_scores|filter(s => s.game is same as(game))|first
                     }) }}
                 {% endfor %}
                 </section>
@@ -35,10 +34,9 @@
         {% endfor %}
     {% endif %}
 
-    {% set upcoming = user.tournaments|filter(t => t.upcoming) %}
-    {% if upcoming|length %}
+    {% if upcoming_tournaments|length %}
         <h2>Upcoming:</h2>
-        {% for tournament in upcoming %}
+        {% for upcoming_tournament in upcoming %}
             <section class="border-left">
                 {{ include('tournament/_summary.html.twig', {
                     'tournament': tournament,

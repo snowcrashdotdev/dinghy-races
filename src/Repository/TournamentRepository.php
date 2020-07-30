@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Tournament;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -22,6 +23,25 @@ class TournamentRepository extends ServiceEntityRepository
     public function findAll()
     {
         return $this->findBy([], ['start_date' => 'DESC']);
+    }
+
+    public function findForUser(User $user, $timing='UPCOMING')
+    {
+        $q = $this->createQueryBuilder('t')
+            ->join('t.users', 'tu')
+            ->andWhere('tu.user = :user')
+            ->setParameter('user', $user)
+        ;
+
+        if ($timing === 'UPCOMING') {
+            $q->andWhere('t.start_date > CURRENT_DATE()');
+        } else if ($timing === 'IN_PROGRESS') {
+            $q->andWhere('t.start_date < CURRENT_DATE()')
+                ->andWhere('t.end_date > CURRENT_DATE()')
+            ;
+        }
+
+        return $q->getQuery()->getResult();
     }
 
     /*
