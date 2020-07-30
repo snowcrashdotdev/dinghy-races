@@ -54,7 +54,6 @@ class Team
     {
         $this->members = new ArrayCollection();
         $this->scores = new ArrayCollection();
-        $this->tournamentUsers = new ArrayCollection();
     }
 
     public function __toString()

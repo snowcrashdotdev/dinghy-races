@@ -140,7 +140,7 @@ class TournamentUser
     {
         if (!$this->scores->contains($score)) {
             $this->scores[] = $score;
-            $score->setTournamentUser($this);
+            $score->setUser($this);
         }
 
         return $this;
@@ -151,8 +151,8 @@ class TournamentUser
         if ($this->scores->contains($score)) {
             $this->scores->removeElement($score);
             // set the owning side to null (unless already changed)
-            if ($score->getTournamentUser() === $this) {
-                $score->setTournamentUser(null);
+            if ($score->getUser() === $this) {
+                $score->setUser(null);
             }
         }
 

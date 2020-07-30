@@ -191,7 +191,7 @@ class ScoreListener
         if (empty($personalBest)) {
             $personalBest = new PersonalBest();
             $score->getGame()->addPersonalBest($personalBest);
-            $score->getTournamentUser()->getUser()->addPersonalBest($personalBest);
+            $score->getUser()->getUser()->addPersonalBest($personalBest);
         }
         $personalBest->setPoints($score->getPoints());
 

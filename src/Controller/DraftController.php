@@ -40,13 +40,13 @@ class DraftController extends AbstractController
             } else {
                 $manager = $this->getDoctrine()->getManager();
                 $user = new TournamentUser();
-                $draft->getTournament()->addTournamentUser($user);
+                $draft->getTournament()->addUser($user);
                 $this->getUser()->addAppearance($user);
                 $manager->persist($user);
 
                 if ($draft->getTournament()->getFormat() === 'TEAM') {
                     $draftEntry = new DraftEntry();
-                    $draftEntry->setTournamentUser($user);
+                    $draftEntry->setUser($user);
                     $draft->addDraftEntry($draftEntry);
                     $manager->persist($draftEntry);
                 }
