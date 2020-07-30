@@ -1,21 +1,22 @@
 {% if users is defined %}
+    {% set is_team_format = (tournament.format is same as('TEAM')) %}
     <table>
         <thead>
             <tr>
                 <th>Rank</th>
                 <th>Player</th>
-                {% if not show_total %}
+                {% if not show_total and is_team_format %}
                     <th>Team</th>
+                    <th>Team Points</th>
                 {% endif %}
                 <th>Ranked Points</th>
-                <th>Team Points</th>
                 <th>Average Rank</th>
                 <th>Completion</th>
             </tr>
         </thead>
         <tbody>
             {% for user in users %}
-                {% if not show_total %}
+                {% if is_team_format %}
                     {% set t_href = path('team_show', {
                         'id': user.team.id
                     }) %}
@@ -27,11 +28,11 @@
             <tr>
                 <td>{{loop.index}}</td>
                 <td><a href="{{u_href}}">{{user}}</a></td>
-                {% if not show_total %}
+                {% if is_team_format %}
                     <td><a href="{{t_href}}">{{user.team}}</a></td>
+                    <td class="labeled-data team-points">{{user.teamPoints|number_format}}</td>
                 {% endif %}
                 <td class="labeled-data ranked-points">{{user.rankedPoints|number_format}}</td>
-                <td class="labeled-data team-points">{{user.teamPoints|number_format}}</td>
                 <td class="labeled-data avg-rank">{{user.avgRank|number_format(1)}}</td>
                 {% set completion = user.completion / tournament.games|length * 100 %}
                 <td class="labeled-data completion">{{ completion|number_format ~ '%' }}</td>
