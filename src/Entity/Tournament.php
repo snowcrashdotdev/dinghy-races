@@ -59,12 +59,12 @@ class Tournament
     private $teams;
 
     /**
-     * @ORM\OneToOne(targetEntity=Draft::class, mappedBy="tournament", fetch="LAZY")
+     * @ORM\OneToOne(targetEntity=Draft::class, mappedBy="tournament", fetch="LAZY", cascade={"persist", "remove"})
      */
     private $draft;
 
     /**
-     * @ORM\OneToOne(targetEntity=TournamentScoring::class, mappedBy="tournament")
+     * @ORM\OneToOne(targetEntity=TournamentScoring::class, mappedBy="tournament", cascade={"persist", "remove"})
      */
     private $scoring;
 
