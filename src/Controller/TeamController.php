@@ -7,6 +7,7 @@ use App\Entity\Tournament;
 use App\Entity\User;
 use App\Form\TeamType;
 use App\Form\RosterType;
+use App\Repository\TournamentScoreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,15 +53,12 @@ class TeamController extends AbstractController
     /**
      * @Route("/{id}", name="team_show", methods={"GET"})
      */
-    public function show(Team $team): Response
+    public function show(Team $team, TournamentScoreRepository $scores): Response
     {
-        $scoreRepo = $this->getDoctrine()->getRepository('App\Entity\TournamentScore');
-        $points_per_game = $scoreRepo->findTeamScoresPerGame($team);
-        $stats = $scoreRepo->findTournamentResults($team->getTournament(), $team);
+        $points_per_game = $scores->findTeamScoresPerGame($team);
 
         return $this->render('team/show.html.twig', [
             'team' => $team,
-            'stats' => $stats,
             'points_per_game' => $points_per_game
         ]);
     }
