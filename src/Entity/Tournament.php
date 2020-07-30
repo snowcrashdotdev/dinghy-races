@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\TournamentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -9,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\TournamentRepository")
+ * @ORM\Entity(repositoryClass=TournamentRepository::class)
  *
  */
 class Tournament
@@ -43,48 +44,42 @@ class Tournament
     private $end_date;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Game", inversedBy="tournaments")
-     * @ORM\OrderBy({"description" = "ASC"})
-     */
-    private $games;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Team", mappedBy="tournament", orphanRemoval=true, cascade={"persist","remove"})
-     * @ORM\OrderBy({"name" = "ASC"})
-     */
-    private $teams;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="tournaments", fetch="EAGER")
-     */
-    private $users;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Draft", mappedBy="tournament", cascade={"persist", "remove"}, fetch="LAZY")
-     */
-    private $draft;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\TournamentScoring", mappedBy="tournament", cascade={"persist", "remove"})
-     */
-    private $scoring;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="tournament")
-     * @ORM\OrderBy({"points" = "DESC", "updated_at" = "DESC"})
-     */
-    private $scores;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $format;
 
     /**
-     * @ORM\OneToMany(targetEntity=TournamentUser::class, mappedBy="tournament")
-     * @ORM\OrderBy({"created_at" = "DESC"})
+     * @ORM\ManyToMany(targetEntity=Game::class, inversedBy="tournaments")
+     * @ORM\OrderBy({"description" = "ASC"})
      */
-    private $tournamentUsers;
+    private $games;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Team::class, mappedBy="tournament", orphanRemoval=true)
+     */
+    private $teams;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Draft::class, mappedBy="tournament", fetch="LAZY")
+     */
+    private $draft;
+
+    /**
+     * @ORM\OneToOne(targetEntity=TournamentScoring::class, mappedBy="tournament")
+     */
+    private $scoring;
+
+    /**
+     * @ORM\OneToMany(targetEntity=TournamentScore::class, mappedBy="tournament")
+     * @ORM\OrderBy({"points" = "DESC", "updated_at" = "DESC"})
+     */
+    private $scores;
+
+    /**
+     * @ORM\OneToMany(targetEntity=TournamentUser::class, mappedBy="tournament")
+     * @ORM\OrderBy({"ranked_points" = "DESC", "created_at" = "DESC"})
+     */
+    private $users;
 
     public const FORMATS = [ 'TEAM', 'INDIVIDUAL' ];
 
@@ -99,7 +94,6 @@ class Tournament
         $this->teams = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->scores = new ArrayCollection();
-        $this->tournamentUsers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -243,7 +237,7 @@ class Tournament
         return $this->users;
     }
 
-    public function addUser(User $user): self
+    public function addUser(TournamentUser $user): self
     {
         if (!$this->users->contains($user)) {
             $this->users[] = $user;
@@ -253,7 +247,7 @@ class Tournament
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function removeUser(TournamentUser $user): self
     {
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
@@ -283,15 +277,6 @@ class Tournament
         }
 
         return $this;
-    }
-
-    public function hasEntered(User $user)
-    {
-        if (null === $draft = $this->getDraft()) {
-            return false;
-        } else {
-            return $draft->hasEntered($user);
-        }
     }
 
     public function getScoring(): ?TournamentScoring
@@ -356,37 +341,6 @@ class Tournament
     public function setFormat(string $format): self
     {
         $this->format = $format;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|TournamentUser[]
-     */
-    public function getTournamentUsers(): Collection
-    {
-        return $this->tournamentUsers;
-    }
-
-    public function addTournamentUser(TournamentUser $tournamentUser): self
-    {
-        if (!$this->tournamentUsers->contains($tournamentUser)) {
-            $this->tournamentUsers[] = $tournamentUser;
-            $tournamentUser->setTournament($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTournamentUser(TournamentUser $tournamentUser): self
-    {
-        if ($this->tournamentUsers->contains($tournamentUser)) {
-            $this->tournamentUsers->removeElement($tournamentUser);
-            // set the owning side to null (unless already changed)
-            if ($tournamentUser->getTournament() === $this) {
-                $tournamentUser->setTournament(null);
-            }
-        }
 
         return $this;
     }

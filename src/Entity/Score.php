@@ -26,20 +26,6 @@ abstract class Score implements \Serializable
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(nullable=true)
-     * @Groups("public")
-     */
-    private $user;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Game")
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups("public")
-     */
-    private $game;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $created_at;
@@ -86,6 +72,13 @@ abstract class Score implements \Serializable
      */
     private $comment;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Game::class)
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups("public")
+     */
+    private $game;
+
     public function __construct()
     {
         $this->created_at = date_create('NOW');
@@ -117,18 +110,6 @@ abstract class Score implements \Serializable
     public function setUpdatedAt(\DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
 
         return $this;
     }

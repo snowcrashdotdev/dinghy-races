@@ -20,34 +20,54 @@ class TournamentUser
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="appearances")
-     */
-    private $user;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Tournament::class, inversedBy="tournamentUsers")
-     */
-    private $tournament;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="tournamentUsers")
-     */
-    private $team;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $created_at;
 
     /**
-     * @ORM\OneToMany(targetEntity=TournamentScore::class, mappedBy="tournament_user")
+     * @ORM\Column(type="integer")
      */
-    private $tournamentScores;
+    private $ranked_points;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $team_points;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="appearances", fetch="EAGER")
+     */
+    private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Tournament::class, inversedBy="users")
+     */
+    private $tournament;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="members")
+     */
+    private $team;
+
+    /**
+     * @ORM\OneToMany(targetEntity=TournamentScore::class, mappedBy="user", fetch="LAZY")
+     */
+    private $scores;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $avg_rank;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $completion;
 
     public function __construct()
     {
         $this->created_at = new \DateTime('now');
-        $this->tournamentScores = new ArrayCollection();
+        $this->scores = new ArrayCollection();
     }
 
     public function __toString(): ?string
@@ -111,30 +131,78 @@ class TournamentUser
     /**
      * @return Collection|TournamentScore[]
      */
-    public function getTournamentScores(): Collection
+    public function getScores(): Collection
     {
-        return $this->tournamentScores;
+        return $this->scores;
     }
 
-    public function addTournamentScore(TournamentScore $tournamentScore): self
+    public function addScore(TournamentScore $score): self
     {
-        if (!$this->tournamentScores->contains($tournamentScore)) {
-            $this->tournamentScores[] = $tournamentScore;
-            $tournamentScore->setTournamentUser($this);
+        if (!$this->scores->contains($score)) {
+            $this->scores[] = $score;
+            $score->setTournamentUser($this);
         }
 
         return $this;
     }
 
-    public function removeTournamentScore(TournamentScore $tournamentScore): self
+    public function removeTournamentScore(TournamentScore $score): self
     {
-        if ($this->tournamentScores->contains($tournamentScore)) {
-            $this->tournamentScores->removeElement($tournamentScore);
+        if ($this->scores->contains($score)) {
+            $this->scores->removeElement($score);
             // set the owning side to null (unless already changed)
-            if ($tournamentScore->getTournamentUser() === $this) {
-                $tournamentScore->setTournamentUser(null);
+            if ($score->getTournamentUser() === $this) {
+                $score->setTournamentUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRankedPoints(): ?int
+    {
+        return $this->ranked_points;
+    }
+
+    public function setRankedPoints(int $ranked_points): self
+    {
+        $this->ranked_points = $ranked_points;
+
+        return $this;
+    }
+
+    public function getTeamPoints(): ?int
+    {
+        return $this->team_points;
+    }
+
+    public function setTeamPoints(?int $team_points): self
+    {
+        $this->team_points = $team_points;
+
+        return $this;
+    }
+
+    public function getAvgRank(): ?float
+    {
+        return $this->avg_rank;
+    }
+
+    public function setAvgRank(?float $avg_rank): self
+    {
+        $this->avg_rank = $avg_rank;
+
+        return $this;
+    }
+
+    public function getCompletion(): ?float
+    {
+        return $this->completion;
+    }
+
+    public function setCompletion(?float $completion): self
+    {
+        $this->completion = $completion;
 
         return $this;
     }

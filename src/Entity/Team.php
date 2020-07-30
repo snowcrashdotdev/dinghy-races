@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use App\Repository\TeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\TeamRepository")
+ * @ORM\Entity(repositoryClass=TeamRepository::class)
  */
 class Team
 {
@@ -20,22 +21,10 @@ class Team
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Tournament", inversedBy="teams")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $tournament;
-
-    /**
      * @ORM\Column(type="string")
      * @Assert\NotBlank
      */
     private $name;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="teams")
-     * @ORM\OrderBy({"username" = "ASC"})
-     */
-    private $members;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -43,7 +32,13 @@ class Team
     private $points;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="team", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=Tournament::class, inversedBy="teams")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $tournament;
+
+    /**
+     * @ORM\OneToMany(targetEntity=TournamentScore::class, mappedBy="team")
      */
     private $scores;
 
@@ -51,8 +46,9 @@ class Team
 
     /**
      * @ORM\OneToMany(targetEntity=TournamentUser::class, mappedBy="team")
+     * @ORM\OrderBy({"team_points" = "DESC"})
      */
-    private $tournamentUsers;
+    private $members;
 
     public function __construct()
     {
@@ -79,7 +75,7 @@ class Team
         return $this->members;
     }
 
-    public function addMember(User $member): self
+    public function addMember(TournamentUser $member): self
     {
         if (!$this->members->contains($member)) {
             $this->members[] = $member;
@@ -89,7 +85,7 @@ class Team
         return $this;
     }
 
-    public function removeMember(User $member): self
+    public function removeMember(TournamentUser $member): self
     {
         if ($this->members->contains($member)) {
             $this->members->removeElement($member);
@@ -186,36 +182,5 @@ class Team
     public function hasScoresAvailable(): bool
     {
         return ($this->scores_available > 0);
-    }
-
-    /**
-     * @return Collection|TournamentUser[]
-     */
-    public function getTournamentUsers(): Collection
-    {
-        return $this->tournamentUsers;
-    }
-
-    public function addTournamentUser(TournamentUser $tournamentUser): self
-    {
-        if (!$this->tournamentUsers->contains($tournamentUser)) {
-            $this->tournamentUsers[] = $tournamentUser;
-            $tournamentUser->setTeam($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTournamentUser(TournamentUser $tournamentUser): self
-    {
-        if ($this->tournamentUsers->contains($tournamentUser)) {
-            $this->tournamentUsers->removeElement($tournamentUser);
-            // set the owning side to null (unless already changed)
-            if ($tournamentUser->getTeam() === $this) {
-                $tournamentUser->setTeam(null);
-            }
-        }
-
-        return $this;
     }
 }

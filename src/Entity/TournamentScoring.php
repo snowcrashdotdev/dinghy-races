@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
+use App\Repository\TournamentScoringRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\TournamentScoringRepository")
+ * @ORM\Entity(repositoryClass=TournamentScoringRepository::class)
  */
 class TournamentScoring
 {
@@ -17,7 +18,7 @@ class TournamentScoring
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Tournament", inversedBy="scoring", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Tournament::class, inversedBy="scoring")
      */
     private $tournament;
 

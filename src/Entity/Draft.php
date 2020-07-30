@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Repository\DraftRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\DraftRepository")
+ * @ORM\Entity(repositoryClass=DraftRepository::class)
  */
 class Draft
 {
@@ -19,17 +20,17 @@ class Draft
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Tournament", inversedBy="draft", cascade={"persist", "remove"})
-     */
-    private $tournament;
-
-    /**
      * @ORM\Column(type="guid", nullable=true, unique=true)
      */
     private $invite_token;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\DraftEntry", mappedBy="draft", orphanRemoval=true, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Tournament::class, inversedBy="draft")
+     */
+    private $tournament;
+
+    /**
+     * @ORM\OneToMany(targetEntity=DraftEntry::class, mappedBy="draft")
      * @ORM\OrderBy({"created_at" = "DESC"})
      */
     private $draftEntries;

@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Repository\ProfiletRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ProfileRepository")
+ * @ORM\Entity(repositoryClass=ProfileRepository::class)
  */
 class Profile implements \Serializable
 {
@@ -19,7 +20,7 @@ class Profile implements \Serializable
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", mappedBy="profile")
+     * @ORM\OneToOne(targetEntity=User::class, mappedBy="profile")
      */
     private $user;
 

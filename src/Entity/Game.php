@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\GameRepository")
+ * @ORM\Entity(repositoryClass=GameRepository::class)
  */
 class Game implements \Serializable
 {
@@ -30,11 +31,6 @@ class Game implements \Serializable
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Tournament", mappedBy="games")
-     */
-    private $tournaments;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $year;
@@ -52,13 +48,18 @@ class Game implements \Serializable
     private $marquee_file;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="game", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity=Tournament::class, mappedBy="games")
+     */
+    private $tournaments;
+
+    /**
+     * @ORM\OneToMany(targetEntity=TournamentScore::class, mappedBy="game")
      * @ORM\OrderBy({"points" = "DESC"})
      */
     private $tournament_scores;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PersonalBest", mappedBy="game", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=PersonalBest::class, mappedBy="game")
      * @ORM\OrderBy({"points" = "DESC"})
      */
     private $personal_bests;
@@ -68,6 +69,11 @@ class Game implements \Serializable
         $this->tournaments = new ArrayCollection();
         $this->tournament_scores = new ArrayCollection();
         $this->personal_bests = new ArrayCollection();
+    }
+
+    public function __toString(): ?string
+    {
+        return $this->getName();
     }
 
     public function getId(): ?int

@@ -2,19 +2,34 @@
 
 namespace App\Entity;
 
+use App\Repository\TournamentScoreRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\TournamentScoreRepository")
+ * @ORM\Entity(repositoryClass=TournamentScoreRepository::class)
  * @ORM\AssociationOverrides({
- *      @ORM\AssociationOverride(name="user", inversedBy="tournament_scores"),
  *      @ORM\AssociationOverride(name="game", inversedBy="tournament_scores")
  * })
  */
 class TournamentScore extends Score
 {
+    /**
+     * @ORM\ManyToOne(targetEntity=Tournament::class, inversedBy="scores")
+     */
+    private $tournament;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="scores")
+     */
+    private $team;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=TournamentUser::class, inversedBy="scores", fetch="EAGER")
+     */
+    private $user;
+
     /**
      * @ORM\Column(type="integer", nullable=true)
      * @Groups("public")
@@ -37,21 +52,6 @@ class TournamentScore extends Score
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $auto_assigned;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Tournament", inversedBy="scores")
-     */
-    private $tournament;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Team", inversedBy="scores")
-     */
-    private $team;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=TournamentUser::class, inversedBy="tournamentScores")
-     */
-    private $tournament_user;
 
     public function getRank(): ?int
     {
@@ -141,14 +141,14 @@ class TournamentScore extends Score
         );
     }
 
-    public function getTournamentUser(): ?TournamentUser
+    public function getUser(): ?TournamentUser
     {
-        return $this->tournament_user;
+        return $this->user;
     }
 
-    public function setTournamentUser(?TournamentUser $tournament_user): self
+    public function setUser(?TournamentUser $tournament_user): self
     {
-        $this->tournament_user = $tournament_user;
+        $this->user = $user;
 
         return $this;
     }

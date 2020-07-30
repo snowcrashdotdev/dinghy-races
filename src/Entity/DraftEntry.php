@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
+use App\Repository\DraftEntryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\DraftEntryRepository")
+ * @ORM\Entity(repositoryClass=DraftEntryRepository::class)
  */
 class DraftEntry
 {
@@ -20,28 +21,22 @@ class DraftEntry
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $created_at;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Draft", inversedBy="draftEntries")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $draft;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="draftEntries", fetch="EAGER")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
-
+    
     /**
      * @ORM\Column(type="boolean")
      */
     private $eligible;
 
     /**
-     * @ORM\OneToOne(targetEntity=TournamentUser::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Draft::class, inversedBy="draftEntries")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $tournament_user;
+    private $draft;
+
+    /**
+     * @ORM\OneToOne(targetEntity=TournamentUser::class)
+     */
+    private $user;
 
     public function __construct()
     {
@@ -78,12 +73,12 @@ class DraftEntry
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): ?TournamentUser
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(?TournamentUser $user): self
     {
         $this->user = $user;
 
@@ -98,18 +93,6 @@ class DraftEntry
     public function setEligible(bool $eligible): self
     {
         $this->eligible = $eligible;
-
-        return $this;
-    }
-
-    public function getTournamentUser(): ?TournamentUser
-    {
-        return $this->tournament_user;
-    }
-
-    public function setTournamentUser(?TournamentUser $tournament_user): self
-    {
-        $this->tournament_user = $tournament_user;
 
         return $this;
     }

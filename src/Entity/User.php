@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,7 +17,7 @@ use Doctrine\Common\Collections\Expr\Comparison;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(
  *      fields={"username", "email"},
  *      message="You may have already registered an account."
@@ -67,11 +68,6 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Tournament", inversedBy="users")
-     */
-    private $tournaments;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $verified;
@@ -82,28 +78,12 @@ class User implements UserInterface
     private $reset_token;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Profile", inversedBy="user", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity=Profile::class, inversedBy="user", fetch="EAGER")
      */
     private $profile;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\DraftEntry", mappedBy="user", orphanRemoval=true)
-     */
-    private $draftEntries;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Team", mappedBy="members")
-     */
-    private $teams;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TournamentScore", mappedBy="user", cascade={"persist"})
-     * @ORM\OrderBy({"points" = "DESC"})
-     */
-    private $tournament_scores;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PersonalBest", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=PersonalBest::class, mappedBy="user")
      * @ORM\OrderBy({"updated_at" = "DESC"})
      */
     private $personal_bests;
@@ -132,7 +112,7 @@ class User implements UserInterface
 
     public function __toString()
     {
-        return strtolower($this->username);
+        return strtolower($this->getUsername());
     }
 
     public function getId(): ?int
