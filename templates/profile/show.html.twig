@@ -30,13 +30,13 @@
 </header>
 
 <main>
-    {% if user.teams|length %}
+    {% if user.appearances|length %}
         <h2 class="page-break">Tournament Appearances</h2>
         <section class="summary-group">
-        {% for team in user.teams %}
+        {% for appearance in user.appearances %}
             {{
-                include('team/_summary.html.twig', {
-                    'team': team
+                include('profile/_appearance.html.twig', {
+                    'appearance': appearance
                 })
             }}
         {% endfor %}
