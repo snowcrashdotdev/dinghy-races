@@ -68,34 +68,29 @@ class TournamentController extends AbstractController
     /**
      * @Route("/{id}", name="tournament_show", methods={"GET"})
      */
-    public function show(Tournament $tournament, TournamentScoreRepository $scoreRepository, TwitchChecker $twitch): Response
+    public function show(Tournament $tournament, TournamentScoreRepository $scores, TwitchChecker $twitch): Response
     {
-        $recentScores = [];
         $liveStreams  = [];
         $topTeam = null;
         $topPlayer = null;
+        $user_scores = [];
+        $high_scores = $scores->findHighScores($tournament);
 
-        if ($tournament->isInProgress()) {
-            $recentScores = $scoreRepository->findBy([
-                'tournament' => $tournament],
-                ['updated_at' => 'DESC'],
-                5
-            );
-
-            $liveStreams = $twitch->getLiveStreams($tournament);
+        if ($this->isGranted('ROLE_USER')) {
+            $user_scores = $scores->findUserScores($this->getUser(), $tournament);
         }
 
-        if (!$tournament->isUpcoming()) {
-            $topTeam = $scoreRepository->findTeamScores($tournament, null, 1);
-            $topPlayer = $scoreRepository->findIndividualScores($tournament, 1);
+        if ($tournament->isInProgress()) {
+            $liveStreams = $twitch->getLiveStreams($tournament);
         }
 
         return $this->render('tournament/show.html.twig', [
             'tournament' => $tournament,
             'top_team' => $topTeam,
             'top_player' => $topPlayer,
-            'recent_scores' => $recentScores,
-            'live_streams' => $liveStreams
+            'live_streams' => $liveStreams,
+            'high_scores' => $high_scores,
+            'user_scores' => $user_scores
         ]);
     }
 
@@ -114,10 +109,8 @@ class TournamentController extends AbstractController
      */
     public function individual_leaderboard(Tournament $tournament, TournamentScoreRepository $tournamentScoreRepository)
     {
-        $stats = $tournamentScoreRepository->findTournamentResults($tournament);
         return $this->render('tournament/_results.individual.html.twig', [
-            'tournament' => $tournament,
-            'stats' => $stats
+            'tournament' => $tournament
         ]);
     }
 
