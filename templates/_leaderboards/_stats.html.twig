@@ -5,8 +5,10 @@
             <tr>
                 <th>Rank</th>
                 <th>Player</th>
-                {% if not show_total and is_team_format %}
+                {% if is_team_format %}
+                    {% if not team is defined %}
                     <th>Team</th>
+                    {% endif %}
                     <th>Team Points</th>
                 {% endif %}
                 <th>Ranked Points</th>
@@ -29,7 +31,9 @@
                 <td>{{loop.index}}</td>
                 <td><a href="{{u_href}}">{{user}}</a></td>
                 {% if is_team_format %}
+                    {% if not team is defined %}
                     <td><a href="{{t_href}}">{{user.team}}</a></td>
+                    {% endif %}
                     <td class="labeled-data team-points">{{user.teamPoints|number_format}}</td>
                 {% endif %}
                 <td class="labeled-data ranked-points">{{user.rankedPoints|number_format}}</td>
