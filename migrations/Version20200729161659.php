@@ -37,7 +37,6 @@ final class Version20200729161659 extends AbstractMigration
         $this->addSql('DROP TABLE user_tournament');
         $this->addSql('DROP INDEX IDX_32993751CC61289F ON score');
         $this->addSql('ALTER TABLE score DROP tournament_user_id');
-        $this->addSql('ALTER TABLE tournament_user CHANGE ranked_points ranked_points INT NOT NULL');
         $this->addSql('DELETE FROM draft_entry');
         $this->addSql('ALTER TABLE draft_entry DROP INDEX IDX_2C56195FA76ED395, ADD UNIQUE INDEX UNIQ_2C56195FA76ED395 (user_id)');
         $this->addSql('ALTER TABLE draft_entry DROP FOREIGN KEY FK_2C56195FCC61289F');

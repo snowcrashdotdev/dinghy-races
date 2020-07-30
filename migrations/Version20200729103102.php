@@ -25,7 +25,7 @@ final class Version20200729103102 extends AbstractMigration
         /**
          * Add columns to tournament_user to store total point values.
          */
-        $this->addSql('ALTER TABLE tournament_user ADD ranked_points INT NOT NULL DEFAULT (0), ADD team_points INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE tournament_user ADD ranked_points INT DEFAULT NULL, ADD team_points INT DEFAULT NULL');
 
         /**
          * Update tournament_user with existing sums.
