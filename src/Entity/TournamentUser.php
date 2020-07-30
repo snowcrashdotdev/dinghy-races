@@ -50,7 +50,7 @@ class TournamentUser
     private $team;
 
     /**
-     * @ORM\OneToMany(targetEntity=TournamentScore::class, mappedBy="user", fetch="LAZY")
+     * @ORM\OneToMany(targetEntity=TournamentScore::class, mappedBy="user", fetch="LAZY", cascade={"persist", "remove"})
      */
     private $scores;
 
@@ -90,6 +90,11 @@ class TournamentUser
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->getUser()->getUsername();
     }
 
     public function getTournament(): ?Tournament
