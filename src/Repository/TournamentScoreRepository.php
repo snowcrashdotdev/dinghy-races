@@ -52,7 +52,7 @@ class TournamentScoreRepository extends ServiceEntityRepository
                 ->setParameter('game', $game)
             ;
 
-            return $q->getQuery()->getSingleResult();
+            return $q->getQuery()->getOneOrNullResult();
         }
 
         return $q->getQuery()->getResult();
