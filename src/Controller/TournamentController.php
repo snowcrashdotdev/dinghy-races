@@ -87,7 +87,7 @@ class TournamentController extends AbstractController
             $recent_scores = $scores->findBy(
                 [ 'tournament' => $tournament ],
                 [ 'updated_at' => 'DESC' ],
-                10, 0
+                5, 0
             );
         }
 
