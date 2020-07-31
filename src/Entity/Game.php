@@ -64,6 +64,11 @@ class Game implements \Serializable
      */
     private $personal_bests;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $rules;
+
     public function __construct()
     {
         $this->tournaments = new ArrayCollection();
@@ -266,5 +271,17 @@ class Game implements \Serializable
     public function unserialize($serialized)
     {
         return;
+    }
+
+    public function getRules(): ?string
+    {
+        return $this->rules;
+    }
+
+    public function setRules(?string $rules): self
+    {
+        $this->rules = $rules;
+
+        return $this;
     }
 }
