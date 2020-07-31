@@ -2,10 +2,6 @@
 
 {% block title %}{{ tournament.title }} scores for {{ game.description }}{% endblock %}
 
-{% set user_score = scores|filter(
-    s => s.user is same as(app.user))|first
-%}
-
 {% block body %}
 <header class="tournament-header">
     {% set t_href = path('tournament_show', {

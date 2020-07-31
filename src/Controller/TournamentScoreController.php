@@ -80,22 +80,32 @@ class TournamentScoreController extends AbstractController
      * @Entity("tournament", expr="repository.find(tournament_id)")
      * @ParamConverter("game", options={"mapping": {"game_name": "name"}})
      */
-    public function show(Tournament $tournament, Game $game, TournamentScoreRepository $repo)
+    public function show(Tournament $tournament, Game $game, TournamentScoreRepository $tournamentScores)
     {
-        $scores = $repo->findBy([
+        $scores = $tournamentScores->findBy([
             'game' => $game,
             'tournament' => $tournament
             ],
             ['points' => 'DESC', 'updated_at' => 'ASC']
         );
 
-        $teamTotals = $repo->findTeamScores($tournament, $game);
+        $user_score = null;
+        $team_totals = null;
+
+        if ($this->getUser()) {
+            $user_score = $tournamentScores->findUserScores($this->getUser(), $tournament, $game);
+        }
+
+        if ($tournament->getFormat() === 'TEAM') {
+            $team_totals = $scores->findTeamScores($tournament, $game);
+        }
 
         return $this->render('score/show.html.twig', [
             'scores' => $scores,
             'game' => $game,
             'tournament' => $tournament,
-            'team_totals' => $teamTotals
+            'team_totals' => $team_totals,
+            'user_score' => $user_score
         ]);
     }
 }

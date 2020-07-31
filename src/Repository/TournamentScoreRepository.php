@@ -37,7 +37,7 @@ class TournamentScoreRepository extends ServiceEntityRepository
         return $q->getQuery()->getResult();
     }
 
-    public function findUserScores(User $user, Tournament $tournament)
+    public function findUserScores(User $user, Tournament $tournament, Game $game=null)
     {
         $q = $this->createQueryBuilder('s')
             ->join('s.user', 'u')
@@ -46,6 +46,14 @@ class TournamentScoreRepository extends ServiceEntityRepository
             ->setParameter('tournament', $tournament)
             ->setParameter('user', $user)
         ;
+
+        if ($game) {
+            $q->andWhere('s.game = :game')
+                ->setParameter('game', $game)
+            ;
+
+            return $q->getQuery()->getSingleResult();
+        }
 
         return $q->getQuery()->getResult();
     }
