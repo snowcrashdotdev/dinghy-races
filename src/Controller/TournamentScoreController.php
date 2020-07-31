@@ -97,7 +97,7 @@ class TournamentScoreController extends AbstractController
         }
 
         if ($tournament->getFormat() === 'TEAM') {
-            $team_totals = $scores->findTeamScores($tournament, $game);
+            $team_totals = $tournamentScores->findTeamScores($tournament, $game);
         }
 
         return $this->render('score/show.html.twig', [
