@@ -32,9 +32,13 @@
 
     {% if not tournament.upcoming %}
         <section class="header-list">
-            <h2>View Leaderboards</h2>
-            <p><a href="{{path('team_leaderboard', {'id': tournament.id})}}">Team</a></p>
-            <p><a href="{{path('individual_leaderboard', {'id': tournament.id})}}">Individual</a></p>
+            {% if tournament.format == 'TEAM' %}
+                <h2>View Leaderboards</h2>
+                <p><a href="{{path('team_leaderboard', {'id': tournament.id})}}">Team</a></p>
+                <p><a href="{{path('individual_leaderboard', {'id': tournament.id})}}">Individual</a></p>
+            {% else %}
+                <h2><a href="{{path('individual_leaderboard', {'id': tournament.id})}}">View Leaderboard</a></h2>
+            {% endif %}
         </section>
     {% endif %}
 
