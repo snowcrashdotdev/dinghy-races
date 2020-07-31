@@ -40,6 +40,7 @@ services:
         arguments:
             $screenshot_dir: '%screenshot_dir%'
             $replay_dir: '/%replay_dir%/'
+
     App\Form\UserProfileType:
         arguments:
             $pfp_dir: '%pfp_dir%'
@@ -85,12 +86,7 @@ services:
         arguments:
             $screenshot_dir: '%screenshot_dir%'
             $replay_dir: '%replay_dir%'
-            $score_keeper: '@App\Service\ScoreKeeper'
         tags:
-            -
-                name: 'doctrine.orm.entity_listener'
-                event: 'postPersist'
-                entity: 'App\Entity\Score'
             -
                 name: 'doctrine.orm.entity_listener'
                 event: 'preUpdate'

@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use App\Service\ScoreKeeper;
 use App\Entity\TournamentScore;
 use App\Entity\Game;
 use App\Entity\Tournament;
@@ -27,7 +28,7 @@ class TournamentScoreController extends AbstractController
      * @Entity("tournament", expr="repository.find(tournament_id)")
      * @ParamConverter("game", options={"mapping": {"game_name": "name"}})
      */
-    public function new(Request $request, TournamentUserRepository $tournamentUsers, TournamentScoreRepository $tournamentScores, Game $game, Tournament $tournament): Response
+    public function new(Request $request, TournamentUserRepository $tournamentUsers, TournamentScoreRepository $tournamentScores, Game $game, Tournament $tournament, ScoreKeeper $scoreKeeper): Response
     {
         $this->denyAccessUnlessGranted('submit_score', $tournament);
 
@@ -57,6 +58,9 @@ class TournamentScoreController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Your score was saved!');
+
+            $scoreKeeper->update($score);
+
             return $this->redirectToRoute('score_show',
                 [
                     'tournament_id'=>$score->getTournament()->getId(),

@@ -4,7 +4,6 @@ namespace App\EventListener;
 use App\Entity\Score;
 use App\Entity\TournamentScore;
 use App\Entity\PersonalBest;
-use App\Service\ScoreKeeper;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -17,24 +16,11 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class ScoreListener
 {
-    public function __construct(string $screenshot_dir, string $replay_dir, ScoreKeeper $score_keeper)
+    public function __construct(string $screenshot_dir, string $replay_dir)
     {
         $this->screenshot_dir = $screenshot_dir;
         $this->replay_dir = $replay_dir;
         $this->fs = new Filesystem();
-        $this->score_keeper = $score_keeper;
-    }
-
-    public function postPersist(Score $score, LifecycleEventArgs $args)
-    {
-        if ($score instanceof TournamentScore) {
-            $this->getScoreKeeper()->scoreGame(
-                $score->getTournament(),
-                $score->getGame()
-            );
-            $args->getObjectManager()->flush();
-        }
-        
     }
 
     public function preUpdate(Score $score, PreUpdateEventArgs $args)
@@ -87,13 +73,6 @@ class ScoreListener
         if ($args->hasChangedField('points') && $score instanceof TournamentScore) {
             $old_score = $args->getOldValue('points');
             $new_score = $args->getNewValue('points');
-
-            if ($new_score > $old_score && $new_score !== 0) {
-                $this->getScoreKeeper()->scoreGame(
-                    $score->getTournament(),
-                    $score->getGame()
-                );
-            }
         }
     }
 
@@ -151,11 +130,6 @@ class ScoreListener
     public function getFilesystem()
     {
         return $this->fs;
-    }
-
-    public function getScoreKeeper(): ScoreKeeper
-    {
-        return $this->score_keeper;
     }
 
     private function syncPersonalBest(TournamentScore $score, EntityManager $manager, UnitOfWork $uow)
