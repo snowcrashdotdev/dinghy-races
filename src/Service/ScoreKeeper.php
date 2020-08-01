@@ -23,13 +23,28 @@ class ScoreKeeper
         $games = $tournament->getGames();
 
         foreach($games as $game) {
-            $this->scoreGame($tournament, $game, true);
-        }
-        $teams = $tournament->getTeams()->toArray();
-        $scores = $tournament->getScores()->toArray();
+            $scores = $this->getScores()->findBy([
+                'tournament' => $tournament,
+                'game' => $game
+            ], ['points' => 'DESC', 'created_at' => 'ASC']);
 
-        $this->scoreTeams($teams, $scores);
-        $this->getManager()->flush();
+            /**
+             * Reset scores ranks.
+             */
+            foreach($scores as $i => $score) {
+                $rank = $i + 1;
+                $score->setRank($rank);
+            }
+            $this->getManager()->flush();
+
+            $this->assignRankedPointsFor($tournament, $scores);
+        }
+
+        /**
+         * Execute query that updates totals and averages
+         * for each tournament user.
+         */
+        $this->getScores()->updateAggregateStatsFor($tournament);
     }
 
     public function update(TournamentScore $newScore)
@@ -58,23 +73,27 @@ class ScoreKeeper
         }
         $this->getManager()->flush();
 
+        $this->assignRankedPointsFor($tournament, $allGameScores);
+
+        /**
+         * Execute query that updates totals and averages
+         * for each tournament user.
+         */
+        $this->getScores()->updateAggregateStatsFor($tournament);
+    }
+
+    private function assignRankedPointsFor(Tournament $tournament, array $scores)
+    {
+        $tournamentFormat = $tournament->getFormat();
         $cutoff = $tournament->getScoring()->getCutoff();
         $cutoffScore = $tournament->getScoring()->getCutoffScore();
         $table = $tournament->getScoring()->getPointsTable();
-
-        $allTournamentScores = $this->getScores()->findBy([
-                'tournament' => $tournament
-            ],
-            ['rank' => 'ASC']
-        );
 
         /**
          * Setup cutoff index and variables for scoring,
          * depending on tournament format.
          */
-        if ($tournamentFormat === 'INDIVIDUAL') {
-            $cutoffIndex = count($tournament->getGames()) - $cutoff;
-        } else {
+        if ($tournamentFormat === 'TEAM') {
             $teams = $tournament->getTeams()->toArray();
             $cutoffIndex = min(
                 array_map(function($team) use ($cutoff) {
@@ -98,22 +117,20 @@ class ScoreKeeper
                 $rankedPoints = $table[$rank];
                 $score->setRankedPoints($rankedPoints);
             }
+        } else {
+            $cutoffIndex = count($tournament->getGames()) - $cutoff;
+            $allTournamentScores = $this->getScores()->findBy([
+                    'tournament' => $tournament
+                ],
+                ['rank' => 'ASC']
+            );
         }
 
         /**
          * Score the game.
          */
-        foreach($allGameScores as $score) {
-            if ($tournamentFormat === 'INDIVIDUAL') {
-                $user = $score->getUser();
-                $userScores = array_filter($allTournamentScores, $this->filterUser($user));
-
-                if (array_search($score, $userScores) < $cutoffIndex) {
-                    $score->setRankedPoints(array_shift($table));
-                } else {
-                    $score->setRankedPoints($cutoffScore);
-                }
-            } else {
+        foreach($scores as $score) {
+            if ($tournamentFormat === 'TEAM') {
                 $team = $score->getTeam();
                 if ($team->hasScoresAvailable()) {
                     $team->useScore();
@@ -121,8 +138,26 @@ class ScoreKeeper
                 } else {
                     $score->setTeamPoints($cutoffScore);
                 }
+            } else {
+                $user = $score->getUser();
+                $userScores = array_values(
+                        array_filter(
+                        $allTournamentScores,
+                        $this->filterUser($user)
+                    )
+                );
+
+                if (array_search($score, $userScores) < $cutoffIndex) {
+                    $score->setRankedPoints(array_shift($table));
+                } else {
+                    $score->setRankedPoints($cutoffScore);
+                }
             }
         }
+
+        /**
+         * Sum team points for each team.
+         */
         if ($tournamentFormat === 'TEAM') {
             $total = 0;
             foreach($teams as $team) {
@@ -133,9 +168,8 @@ class ScoreKeeper
                 $team->setPoints($total);
             }
         }
-        $this->getManager()->flush();
 
-        $this->getScores()->updateAggregateStatsFor($tournament);
+        $this->getManager()->flush();
     }
 
     private function getManager(): EntityManagerInterface
@@ -150,13 +184,13 @@ class ScoreKeeper
 
     private function filterTeam(Team $team) {
         return function(TournamentScore $score) use ($team) {
-            return $score->getTeam()->getId() === $team->getId();
+            return $score->getTeam() === $team;
         };
     }
 
     private function filterUser(TournamentUser $user) {
         return function(TournamentScore $score) use ($user) {
-            return $score->getUser()->getId() === $user->getId();
+            return $score->getUser() === $user;
         };
     }
 
