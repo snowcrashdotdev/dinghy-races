@@ -25,7 +25,7 @@ class TournamentUser
     private $created_at;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $ranked_points;
 
