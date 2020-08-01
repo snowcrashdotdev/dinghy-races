@@ -30,7 +30,7 @@ class Draft
     private $tournament;
 
     /**
-     * @ORM\OneToMany(targetEntity=DraftEntry::class, mappedBy="draft")
+     * @ORM\OneToMany(targetEntity=DraftEntry::class, mappedBy="draft", cascade={"persist", "remove"})
      * @ORM\OrderBy({"created_at" = "DESC"})
      */
     private $draftEntries;

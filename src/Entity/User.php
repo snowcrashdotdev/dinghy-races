@@ -74,7 +74,7 @@ class User implements UserInterface
     private $reset_token;
 
     /**
-     * @ORM\OneToOne(targetEntity=Profile::class, inversedBy="user", fetch="EAGER")
+     * @ORM\OneToOne(targetEntity=Profile::class, inversedBy="user", fetch="EAGER", cascade={"persist", "remove"})
      */
     private $profile;
 
