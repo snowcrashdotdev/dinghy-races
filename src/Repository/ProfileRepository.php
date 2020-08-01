@@ -29,7 +29,7 @@ class ProfileRepository extends ServiceEntityRepository
             ->join('u.appearances', 't')
             ->andWhere('t.tournament = :tournament')
             ->andWhere('p.social LIKE :twitch')
-            ->setParameter('tournament', $tournament->getId())
+            ->setParameter('tournament', $tournament)
             ->setParameter('twitch', '%twitch.tv%')
         ;
 
