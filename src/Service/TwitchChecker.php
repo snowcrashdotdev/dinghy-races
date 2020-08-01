@@ -42,10 +42,8 @@ class TwitchChecker
 
             if (empty($twitch_users)) { return []; }
 
-            $twitch_users = array_map(function($profile) {
-                    $url = parse_url($profile['twitchUrl']);
-                    return trim($url['path'], '/');
-                }, $twitch_users
+            $twitch_users = array_map(
+                [$this, 'pluckTwitchUsername'], $twitch_users
             );
     
             $query = '?user_login=' . join('&user_login=', $twitch_users);
@@ -96,5 +94,11 @@ class TwitchChecker
         $this->cache_handle = $handle;
 
         return $this;
+    }
+
+    protected function pluckTwitchUsername(array $result)
+    {
+        $url = $result['social'];
+        return trim(parse_url($url)['path'], '/');
     }
 }

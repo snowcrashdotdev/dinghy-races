@@ -24,13 +24,13 @@ class ProfileRepository extends ServiceEntityRepository
     public function findTournamentTwitchLinks(Tournament $tournament)
     {
         $q = $this->createQueryBuilder('p')
-            ->select('p.social as twitchUrl')
             ->join('p.user', 'u')
             ->join('u.appearances', 't')
             ->andWhere('t.tournament = :tournament')
             ->andWhere('p.social LIKE :twitch')
             ->setParameter('tournament', $tournament)
             ->setParameter('twitch', '%twitch.tv%')
+            ->select('p.social')
         ;
 
         return $q->getQuery()->getArrayResult();
