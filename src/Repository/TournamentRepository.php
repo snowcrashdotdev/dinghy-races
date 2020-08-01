@@ -31,14 +31,13 @@ class TournamentRepository extends ServiceEntityRepository
             ->join('t.users', 'tu')
             ->andWhere('tu.user = :user')
             ->setParameter('user', $user)
+            ->andWhere('t.end_date > CURRENT_DATE()')
         ;
 
-        if ($timing === 'UPCOMING') {
+        if ($timing === 'IN_PROGRESS') {
+            $q->andWhere('t.start_date <= CURRENT_DATE()');
+        } else {
             $q->andWhere('t.start_date > CURRENT_DATE()');
-        } else if ($timing === 'IN_PROGRESS') {
-            $q->andWhere('t.start_date < CURRENT_DATE()')
-                ->andWhere('t.end_date > CURRENT_DATE()')
-            ;
         }
 
         return $q->getQuery()->getResult();
