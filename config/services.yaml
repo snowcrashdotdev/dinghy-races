@@ -53,6 +53,7 @@ services:
         arguments:
             $connection: '@doctrine.dbal.default_connection'
             $clientId: '%env(TWITCH_CLIENT_ID)%'
+            $clientSecret: '%env(TWITCH_CLIENT_SECRET)%'
             $streamTag: 'calice'
             $manager: '@doctrine.orm.default_entity_manager'
 
