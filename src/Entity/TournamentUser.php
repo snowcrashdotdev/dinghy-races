@@ -6,6 +6,7 @@ use App\Repository\TournamentUserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=TournamentUserRepository::class)
@@ -26,11 +27,13 @@ class TournamentUser
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("public")
      */
     private $ranked_points;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("public")
      */
     private $team_points;
 
@@ -51,16 +54,20 @@ class TournamentUser
 
     /**
      * @ORM\OneToMany(targetEntity=TournamentScore::class, mappedBy="user", fetch="LAZY", cascade={"persist", "remove"})
+     * @ORM\OrderBy({"updated_at" = "DESC"})
+     * @Groups("public")
      */
     private $scores;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("public")
      */
     private $avg_rank;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups("public")
      */
     private $completion;
 
@@ -92,6 +99,9 @@ class TournamentUser
         return $this;
     }
 
+    /**
+     * @Groups("public")
+     */
     public function getUsername(): ?string
     {
         return $this->getUser()->getUsername();

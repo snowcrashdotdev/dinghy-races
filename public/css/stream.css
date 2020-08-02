@@ -24,9 +24,7 @@ main {
 }
 
 .gadget {
-    box-sizing: border-box;
-    grid-column-start: auto;
-    grid-column-end: auto;
+    display: block;
     margin: 0;
     padding-left: var(--padding);
     padding-right: var(--padding);
@@ -90,6 +88,10 @@ li:last-child {
     color: var(--color-two);
 }
 
+.score-rank {
+    width: 2em;
+}
+
 .score-rank::before {
     content: '#'
 }
@@ -119,31 +121,4 @@ li:last-child {
     font-size: var(--size-larger);
     text-shadow: var(--outlined);
     margin-bottom: var(--margin);
-}
-
-.fade {
-    opacity: 0;
-}
-
-@media (min-width: 1280px) {
-    main {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(12, 1fr);
-        column-gap: 75vh;
-        row-gap: 0;
-    }
-
-    .recent-scores,
-    .my-scores {
-        grid-row: span 4;
-    }
-
-    .my-stats {
-        grid-row-start: 5;
-    }
-
-    .top-player {
-        grid-column-start: 2;
-    }
 }

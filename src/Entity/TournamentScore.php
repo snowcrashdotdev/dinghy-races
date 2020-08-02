@@ -6,6 +6,7 @@ use App\Repository\TournamentScoreRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
  * @ORM\Entity(repositoryClass=TournamentScoreRepository::class)
@@ -160,5 +161,14 @@ class TournamentScore extends Score
         $this->user = $user;
 
         return $this;
+    }
+
+    /**
+     * @Groups("public")
+     * @SerializedName("user")
+     */
+    public function getUsername(): string
+    {
+        return $this->getUser()->getUsername();
     }
 }

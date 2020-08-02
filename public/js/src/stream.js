@@ -6,11 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const streamKit = new Vue({
         el: '#stream-kit',
         data: {
-            scores: [],
-            recent_scores: [],
-            stats: {},
-            teamScores: [],
-            topPlayer: {}
+            user: {},
+            recent_scores: []
         },
         methods: {
             fetch: function () {
@@ -30,20 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
                             app[prop] = result[prop]
                         }
                     })
-            },
-            fadeScores: function () {
-                let self = this
-                this.$refs.recentScores.classList.toggle('fade');
-                setTimeout(function() {
-                    this.$refs.recentScores.classList.toggle('fade');
-                }.bind(self), 1000 * 30)
             }
         },
         mounted: function () {
             this.fetch()
-        },
-        updated: function () {
-            this.$refs.recentScores.style.height = this.$refs.myScores.offsetHeight + 'px'
         },
         filters: {
             number_format: function (value) {

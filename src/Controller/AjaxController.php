@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Tournament;
 use App\Entity\User;
 use App\Repository\TournamentScoreRepository;
+use App\Repository\TournamentUserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -46,40 +47,32 @@ class AjaxController extends AbstractController
      * @Entity("tournament", expr="repository.find(tournament)")
      * @Entity("user", expr="repository.findOneBy({username: user})")
      */
-    public function stream_kit(Request $request, Tournament $tournament, User $user, TournamentScoreRepository $repo, SerializerInterface $serializer)
+    public function stream_kit(Request $request, Tournament $tournament, User $user, TournamentScoreRepository $tournamentScores, TournamentUserRepository $tournamentUsers, SerializerInterface $serializer)
     {
         if ($request->isXmlHttpRequest()) {
-            $scores = $repo->findBy([
+            $tournamentUser = $tournamentUsers->findOneBy([
                 'user' => $user,
-                'tournament' => $tournament,
-                'auto_assigned' => 0,
-            ], ['team_points' => 'DESC']);
+                'tournament' => $tournament
+            ]);
 
-            $recent_scores = $repo->findBy([
-                'tournament' => $tournament,
-                'auto_assigned' => 0,
-            ], ['updated_at' => 'DESC'], 10);
+            $recentScores = $tournamentScores->findBy(
+                [ 'tournament' => $tournament ],
+                [ 'updated_at' => 'DESC' ],
+                10
+            );
 
-            $team_scores = $repo->findTeamScores($tournament);
+            $data = [
+                'user' => $tournamentUser,
+                'recent_scores' => $recentScores
+            ];
 
-            $top_player = $repo->findIndividualScores($tournament, 1);
-
-            $stats = $repo->findTournamentResults($tournament, null, $user);
-            unset($stats[0]);
-
-            $data = $serializer->serialize(
-                [
-                    'stats' => $stats,
-                    'scores' => $scores,
-                    'recent_scores' => $recent_scores,
-                    'teamScores' => $team_scores,
-                    'topPlayer' => $top_player
-                ],
+            $json = $serializer->serialize(
+                $data,
                 'json',
                 ['groups' => 'public']
             );
 
-            return $this->json($data);
+            return $this->json($json);
         } else {
             $response = new Response();
             $response->setStatusCode(Response::HTTP_FORBIDDEN);

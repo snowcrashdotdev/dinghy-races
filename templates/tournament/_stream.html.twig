@@ -12,9 +12,9 @@
         {% verbatim %}
         <main id="stream-kit">
             <article class="gadget my-scores">
-                <h3>My High Scores</h3>
+                <h3>High Scores for {{user.username}}</h3>
                 <ul class="score-list">
-                    <li class="score" v-for="score in scores">
+                    <li class="score" v-for="score in user.scores">
                         <span class="score-rank">{{score.rank}}</span>
                         <span class="score-game">{{score.game.name}}</span>
                         <span class="score-points">{{score.points|number_format}}</span>
@@ -23,33 +23,19 @@
             </article>
 
             <article class="gadget my-stats">
-                <h3>Personal Stats</h3>
+                <h3>{{user.username}} Tournament Stats</h3>
                 <ul class="stats-list">
                     <li class="stat">
-                        <span class="stat-label">Rank</span>
-                        <span class="stat-value">{{stats.rank|number_format}}
-                    </li>
-                    <li class="stat">
                         <span class="stat-label">Ranked Points</span>
-                        <span class="stat-value">{{stats.ranked_points|number_format}}
+                        <span class="stat-value">{{user.ranked_points|number_format}}
                     </li>
                     <li class="stat">
                         <span class="stat-label">Avg Score Rank</span>
-                        <span class="stat-value">{{stats.avg_rank|number_format}}</span>
+                        <span class="stat-value">{{user.avg_rank|number_format}}</span>
                     </li>
                     <li class="stat">
-                        <span class="stat-label">Completion</span>
-                        <span class="stat-value">{{stats.completion|number_format}}%</span>
-                    </li>
-                </ul>
-            </article>
-
-            <article class="gadget team-scores">
-                <h3>Team Leaderboard</h3>
-                <ul class="team-leaderboard">
-                    <li class="team" v-for="team in teamScores">
-                        <span class="team-name">{{team.name}}</span>
-                        <span class="team-points">{{team.points|number_format}}</span>
+                        <span class="stat-label">Score Submissions</span>
+                        <span class="stat-value">{{user.completion|number_format}}</span>
                     </li>
                 </ul>
             </article>
@@ -58,19 +44,12 @@
                 <h3>Recent Scores</h3>
                 <ul class="recent-score-list">
                     <li class="recent-score" v-for="score in recent_scores">
+                        <span class="recent-score-points">{{score.user}}</span>
                         <span class="recent-score-points">{{score.points|number_format}}</span>
                         <span class="recent-score-game">{{score.game.name}}</span>
-                        <span class="recent-score-user">{{score.user.username}}</span>
                         <span class="recent-score-date">{{score.updated_at|date_diff}}
                     </li>
                 </ul>
-            </article>
-
-            <article class="gadget top-player">
-            <h3>Top Player</h3>
-                <p class="top-player-name">{{topPlayer.name}}</p>
-                <p class="top-player-team">{{topPlayer.team}}</p>
-                <p class="top-player-points">{{topPlayer.points|number_format}}</p>
             </article>
         </main>
         {% endverbatim %}
