@@ -58,7 +58,7 @@ class AjaxController extends AbstractController
             $recentScores = $tournamentScores->findBy(
                 [ 'tournament' => $tournament ],
                 [ 'updated_at' => 'DESC' ],
-                10
+                3
             );
 
             $data = [

@@ -1,62 +1,86 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:500|Roboto:900&display=swap');
 @import 'src/variables.css';
 @import 'src/typography.css';
-@import 'src/gadgets.css';
 
 :root {
-    font-size: 12px;
+    font-size: 14px;
 }
 
 body {
-    line-height: 1.125;
     margin: 0;
     padding: 0;
     background-color: transparent;
 }
 
 main {
-    position: relative;
     width: 100vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 .gadget {
     display: block;
+    box-sizing: border-box;
+    flex: 0 1 0;
+    line-height: 1.25;
     margin: 0;
+    padding-top: calc(var(--margin-large) + 4px);
     padding-left: var(--padding);
     padding-right: var(--padding);
+    padding-bottom: var(--padding);
+    position: relative;
+    background-image: var(--gradient-gadget);
 }
 
-li, p {
-    margin-bottom: 0.3rem;
+.gadget :--heading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    line-height: var(--margin-large);
+    margin: 0;
+    padding-left: calc(var(--margin) / 2);
+    background-color: var(--color-gray);
+    border-left: 0.3em solid var(--color-three);    
+    color: var(--color-white);
+    text-shadow: var(--outlined);
+    text-transform: uppercase;
+
+    &::after {
+        display: block;
+        content: '';
+        position: absolute;
+        top: 0;
+        right: calc(var(--margin-large) * -1);
+        width: var(--margin-large);
+        height: var(--margin-large);
+        background-image: linear-gradient(315deg, transparent 50%, var(--color-gray) 51%);
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 }
 
-li {
+.score {
     display: flex;
-    flex-wrap: nowrap;
-}
-
-li:last-child {
-    margin-bottom: 0;
 }
 
 .my-scores {
     flex-grow: 1;
-    flex-shrink: 0;
-    justify-content: space-around;
 }
 
 .recent-score {
-    justify-content: space-between;
-    align-items: center;
+    display: flex;
+    margin-bottom: var(--padding);
 }
 
 .recent-score span {
-    flex: 0;
-    flex-basis: 25%;
+    display: block;
+}
+
+.recent-score-submitted-by {
+    flex: 1;
+    text-align: right;
 }
 
 .recent-score-points {
@@ -74,7 +98,6 @@ li:last-child {
 
 .recent-score-date {
     font-size: var(--size-small);
-    text-align: right;
 }
 
 .score-rank,

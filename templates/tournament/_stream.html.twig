@@ -44,10 +44,14 @@
                 <h3>Recent Scores</h3>
                 <ul class="recent-score-list">
                     <li class="recent-score" v-for="score in recent_scores">
-                        <span class="recent-score-points">{{score.user}}</span>
-                        <span class="recent-score-points">{{score.points|number_format}}</span>
+                        <div class="recent-score-details">
                         <span class="recent-score-game">{{score.game.name}}</span>
-                        <span class="recent-score-date">{{score.updated_at|date_diff}}
+                        <span class="recent-score-points">{{score.points|number_format}}</span>
+                        </div>
+                        <div class="recent-score-submitted-by">
+                            <span class="recent-score-points">{{score.user}}</span>
+                            <span class="recent-score-date">{{score.updated_at|date_diff}}</span>
+                        </div>
                     </li>
                 </ul>
             </article>

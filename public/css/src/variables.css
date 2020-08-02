@@ -31,6 +31,8 @@
     --color-black: hsl(var(--hsl-black));
     --color-danger: hsl(var(--hsl-danger));
 
+    --gradient-gadget: linear-gradient(105deg, var(--color-black) 40%, var(--color-prime));
+
     --shaded: hsla(var(--hsl-gray), 0.1);
     --outlined: 0.1em 0.1em 0.1em var(--color-black);
 
