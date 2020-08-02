@@ -71,8 +71,8 @@ class TournamentController extends AbstractController
     public function show(Tournament $tournament, TournamentScoreRepository $scores, TwitchChecker $twitch): Response
     {
         $live_streams  = [];
-        $top_team = null;
-        $top_player = null;
+        $top_team = $tournament->getTeams()->first();
+        $top_player = $tournament->getUsers()->first();
         $user_scores = [];
         $high_scores = $scores->findHighScores($tournament);
         $recent_scores = [];

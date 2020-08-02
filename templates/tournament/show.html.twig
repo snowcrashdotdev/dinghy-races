@@ -59,24 +59,20 @@
                     })
                 }}
             {% endif %}
-            {% if not tournament.upcoming %}
+            {% if not tournament.upcoming and top_player is not null %}
+                {% if tournament.format == 'TEAM' and top_team is not null %}
                 {{
                     include('_gadgets/top.html.twig', {
                         'type': 'team',
-                        'result': top_team
+                        'result': {'id': top_team.id, 'name': top_team.name,'points': top_team.points}
                     })
                 }}
+                {% endif %}
 
                 {{
                     include('_gadgets/top.html.twig', {
                         'type': 'player',
-                        'result': top_player
-                    })
-                }}
-
-                {{
-                    include('_gadgets/participation.html.twig', {
-                        'rate': 0
+                        'result': {'name': top_player.username,'points': top_player.rankedPoints}
                     })
                 }}
             {% endif %}

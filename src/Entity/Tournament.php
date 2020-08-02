@@ -55,6 +55,7 @@ class Tournament
 
     /**
      * @ORM\OneToMany(targetEntity=Team::class, mappedBy="tournament", orphanRemoval=true)
+     * @ORM\OrderBy({"points" = "DESC"})
      */
     private $teams;
 
