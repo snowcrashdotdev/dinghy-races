@@ -185,23 +185,15 @@ img {
 }
 
 @media (min-width: 64rem) {
-    .summary {
-        max-width: 33vw;
+    .summary-group,
+    .gadget-group {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-auto-rows: 1fr;
+        grid-gap: calc(var(--margin)/2);
+        justify-items: stretch;
+        margin-bottom: var(--margin);
     }
-}
-.summary-group {
-    display: grid;
-    grid-template-columns: repeat(
-        auto-fit,
-        minmax(
-            var(--max-column-width),
-            1fr
-        )
-    );
-    grid-auto-rows: 1fr;
-    grid-gap: calc(var(--margin)/2);
-    justify-items: stretch;
-    margin-bottom: var(--margin);
 }
 
 .profile-summary {
