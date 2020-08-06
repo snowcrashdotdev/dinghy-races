@@ -6,8 +6,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const streamKit = new Vue({
         el: '#stream-kit',
         data: {
-            user: {},
+            user: { scores: [] },
+            place: 0,
             recent_scores: []
+        },
+        computed: {
+            user_scores: function () {
+                return this.user.scores.slice(0,20)
+            }
         },
         methods: {
             fetch: function () {
@@ -52,6 +58,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     return Math.floor(delta / hour) + ' hours ago'
                 }
+            },
+            ordinal: function (n) {
+                var s = ["th", "st", "nd", "rd"],
+                    v = n % 100;
+                return n + (s[(v - 20) % 10] || s[v] || s[0]);
             }
         }
     })

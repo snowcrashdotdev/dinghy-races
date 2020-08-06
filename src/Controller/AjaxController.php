@@ -61,8 +61,11 @@ class AjaxController extends AbstractController
                 3
             );
 
+            $place = $tournament->getUsers()->indexOf($tournamentUser) + 1;
+
             $data = [
                 'user' => $tournamentUser,
+                'place' => $place,
                 'recent_scores' => $recentScores
             ];
 

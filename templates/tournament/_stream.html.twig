@@ -14,7 +14,7 @@
             <article class="gadget my-scores">
                 <h3>High Scores for {{user.username}}</h3>
                 <ul class="score-list">
-                    <li class="score" v-for="score in user.scores">
+                    <li class="score" v-for="score in user_scores">
                         <span class="score-rank">{{score.rank}}</span>
                         <span class="score-game">{{score.game.name}}</span>
                         <span class="score-points">{{score.points|number_format}}</span>
@@ -25,6 +25,10 @@
             <article class="gadget my-stats">
                 <h3>{{user.username}} Tournament Stats</h3>
                 <ul class="stats-list">
+                    <li class="stat">
+                        <span class="stat-label">Place</span>
+                        <span class="stat-value">{{place|ordinal}}</span>
+                    </li>
                     <li class="stat">
                         <span class="stat-label">Ranked Points</span>
                         <span class="stat-value">{{user.ranked_points|number_format}}
