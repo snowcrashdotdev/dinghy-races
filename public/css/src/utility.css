@@ -111,6 +111,10 @@
     margin-right: var(--margin);
 }
 
+.margin-right-sm {
+    margin-right: calc(var(--margin) / 2);
+}
+
 .margin-bottom {
     margin-bottom: var(--margin);
 }

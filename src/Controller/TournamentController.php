@@ -72,7 +72,7 @@ class TournamentController extends AbstractController
     {
         $live_streams  = [];
         $top_team = $tournament->getTeams()->first();
-        $top_player = $tournament->getUsers()->first();
+        $top_five = $tournament->getUsers()->slice(0, 5);
         $user_scores = [];
         $high_scores = $scores->findHighScores($tournament);
         $recent_scores = [];
@@ -94,7 +94,7 @@ class TournamentController extends AbstractController
         return $this->render('tournament/show.html.twig', [
             'tournament' => $tournament,
             'top_team' => $top_team,
-            'top_player' => $top_player,
+            'top_five' => $top_five,
             'live_streams' => $live_streams,
             'high_scores' => $high_scores,
             'recent_scores' => $recent_scores,

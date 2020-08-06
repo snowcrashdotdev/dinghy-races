@@ -1,16 +1,21 @@
 {% if result %}
+    <aside class="gadget gadget-top-score">
+    <h3>Top {{type|capitalize}}</h3>
     {% if type == 'team' %}
         {% set href = path('team_show', {
             'id': result.id
         }) %}
-    {% elseif type == 'player' %}
-        {% set href = path('profile_show', {
-            'username': result.name
-        }) %}
+        <a class="text-large text-center" href="{{href}}">{{result.name}}</a>
+        <p class="roboto text-larger text-center outlined">{{result.points|number_format}}</p>
+    {% elseif type == 5 %}
+        {% for user in result %}
+        {% set href = path('profile_show', { 'username': user }) %}
+        <p class="top-five-player">
+            <span class="color-three flex-0 margin-right-sm">{{'#' ~ loop.index}}</span>
+            <span class="flex-1"><a href="{{href}}">{{user}}</a></span>
+            <span class="roboto outlined">{{user.rankedPoints|number_format}}</span>
+        </p>
+        {% endfor %}
     {% endif %}
-    <aside class="gadget gadget-top-score">
-        <h3>Top {{type|capitalize}}</h3>
-        <a class="text-large" href="{{href}}">{{result.name}}</a>
-        <p class="roboto text-larger outlined">{{result.points|number_format}}</p>
     </aside>
 {% endif %}

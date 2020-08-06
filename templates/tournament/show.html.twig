@@ -59,7 +59,7 @@
                     })
                 }}
             {% endif %}
-            {% if not tournament.upcoming and top_player is not null %}
+            {% if not tournament.upcoming and top_five is not null %}
                 {% if tournament.format == 'TEAM' and top_team is not null %}
                 {{
                     include('_gadgets/top.html.twig', {
@@ -71,8 +71,8 @@
 
                 {{
                     include('_gadgets/top.html.twig', {
-                        'type': 'player',
-                        'result': {'name': top_player.username,'points': top_player.rankedPoints}
+                        'type': 5,
+                        'result': top_five|filter(u => u.rankedPoints > 0)
                     })
                 }}
             {% endif %}
