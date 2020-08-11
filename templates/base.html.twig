@@ -6,7 +6,8 @@
         <meta http-equiv="robots" content="[noindex|nofollow]">
         <meta name="description" content="Competitive, team-based video game tournaments.">
         <title>{{website.name}} - {% block title %}{{website.description}}{% endblock %}</title>
-        {% block stylesheets %}<link rel="stylesheet" media="screen" href="{{ asset('/css/dist/style.min.css') }}">{% endblock %}
+        {{ encore_entry_link_tags('style') }}
+        {% block stylesheets %}{% endblock %}
     </head>
     <body>
         {% include '_partials/_nav.begin.html.twig' %}
