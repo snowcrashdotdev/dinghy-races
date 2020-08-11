@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=TournamentUserRepository::class)
  */
-class TournamentUser
+class TournamentUser implements \JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -220,5 +220,20 @@ class TournamentUser
         $this->completion = $completion;
 
         return $this;
+    }
+
+    public function getPublicData()
+    {
+        $public_data = [
+            'id' => $this->getId(),
+            'username' => $this->getUsername()
+        ];
+
+        return $public_data;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->getPublicData();
     }
 }

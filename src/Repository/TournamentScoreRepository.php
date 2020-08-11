@@ -58,16 +58,6 @@ class TournamentScoreRepository extends ServiceEntityRepository
         return $q->getQuery()->getResult();
     }
 
-    public function updateTournamentUserStats(TournamentUser $user)
-    {
-        $q = $this->createQueryBuilder('s')
-            ->update('s')
-            ->set('s.avg_rank', 'SELECT ')
-        ;
-
-        return $q->getQuery()->execute();
-    }
-
     public function findTournamentResults(Tournament $tournament, ?Team $team=null, ?User $user=null, ?bool $groupByTeam=false)
     {
         $q = $this->createQueryBuilder('s')
@@ -194,8 +184,8 @@ class TournamentScoreRepository extends ServiceEntityRepository
         $q = $this->createQueryBuilder('s')
             ->join('s.tournament', 't')
             ->join('s.user', 'p')
-            ->andWhere('t.start_date < CURRENT_DATE()')
-            ->andWhere('t.end_date > CURRENT_DATE()')
+            ->andWhere('t.start_date <= CURRENT_DATE()')
+            ->andWhere('t.end_date >= CURRENT_DATE()')
             ->andWhere('p.user = :user')
             ->setParameter('user', $user)
         ;

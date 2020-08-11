@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  *      @ORM\AssociationOverride(name="game", inversedBy="tournament_scores")
  * })
  */
-class TournamentScore extends Score
+class TournamentScore extends Score implements \JsonSerializable
 {
     /**
      * @ORM\ManyToOne(targetEntity=Tournament::class, inversedBy="scores")
@@ -170,5 +170,28 @@ class TournamentScore extends Score
     public function getUsername(): string
     {
         return $this->getUser()->getUsername();
+    }
+
+    public function getPublicData()
+    {
+        $public_data = [
+            'id' => $this->getId(),
+            'user' => $this->getUser()->jsonSerialize(),
+            'game' => $this->getGame()->jsonSerialize(),
+            'rank' => $this->getRank(),
+            'points' => $this->getPoints(),
+            'rankedPoints' => $this->getRankedPoints(),
+        ];
+
+        if ($this->getTournament()->getFormat() === 'TEAM') {
+            $public_data['team'] = $this->getTeam();
+        }
+
+        return $public_data;
+    }
+
+    public function jsonSerialize()
+    {
+        return  $this->getPublicData();
     }
 }

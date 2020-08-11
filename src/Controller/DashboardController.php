@@ -23,19 +23,29 @@ class DashboardController extends AbstractController
             return $this->redirectToRoute('tournament_index');
         }
 
-        $user_scores = null;
-        $upcoming_tournaments = $tournaments->findForUser($user);
         $in_progress_tournaments = $tournaments->findForUser($user, 'IN_PROGRESS');
 
-        if (!empty($in_progress_tournaments)) {
-            $user_scores = $scores->findActiveForUser($user);
+        if (empty($in_progress_tournaments)) {
+            return $this->redirectToRoute('tournament_index');
         }
 
+        $dashboard_data = [];
+
+        foreach($in_progress_tournaments as $tournament) {
+            $all_scores = array_merge( $tournament->getScores()->toArray() );
+        }
+        
+        $user_scores = $scores->findActiveForUser($user);
+
+        $dashboard_data['user'] = [
+            'username' => $user->getUsername(),
+            'scores' => $user_scores
+        ];
+
+        $dashboard_data['scores'] = $all_scores;
+
         return $this->render('dashboard/index.html.twig', [
-            'user' => $user,
-            'user_scores' => $user_scores,
-            'upcoming_tournaments' => $upcoming_tournaments,
-            'in_progress_tournaments' => $in_progress_tournaments
+            'dashboard_data' => $dashboard_data
         ]);
     }
 }

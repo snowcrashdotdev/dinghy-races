@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=GameRepository::class)
  */
-class Game implements \Serializable
+class Game implements \Serializable, \JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -263,16 +263,6 @@ class Game implements \Serializable
         return $this;
     }
 
-    public function serialize()
-    {
-        return '';
-    }
-
-    public function unserialize($serialized)
-    {
-        return;
-    }
-
     public function getRules(): ?string
     {
         return $this->rules;
@@ -283,5 +273,31 @@ class Game implements \Serializable
         $this->rules = $rules;
 
         return $this;
+    }
+
+    public function serialize()
+    {
+        return '';
+    }
+
+    public function unserialize($serialized)
+    {
+        return;
+    }
+
+    public function getPublicData()
+    {
+        $public_data = [
+            'id' => $this->getId(),
+            'slug' => $this->getName(),
+            'title' => $this->getDescription()
+        ];
+
+        return $public_data;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->getPublicData();
     }
 }
