@@ -2,48 +2,18 @@
 
 {% block title %}Dashboard{% endblock %}
 
+{% block stylesheets %}
+    {{ encore_entry_link_tags('dashboard') }}
+{% endblock %}
+
 {% block body %}
-<header>
-     <h1>Dashboard</h1>
-     <p>Welcome, {{user.username}}</p>
-</header>
-
 <main>
-    {% if in_progress_tournaments|length %}
-        <h2>Happening now:</h2>
-        {% for tournament in in_progress_tournaments %}
-            <section class="border-left">
-                {% set href = path('tournament_show', {
-                    'id': tournament.id
-                }) %}
-                <h3>
-                    <a href="{{href}}">{{tournament.title}}</a>
-                    <small>(ends: {{tournament.endDate|date_modify('-1 minute')|date}})</small>
-                </h3>
-                <section class="summary-group">
-                {% for game in tournament.games %}
-                    {{ include('game/_summary.html.twig', {
-                        'tournament': tournament,
-                        'game': game,
-                        'high_score': tournament.scores|filter(s => s.game is same as(game))|first,
-                        'user_score': user_scores|filter(s => s.game is same as(game))|first
-                    }) }}
-                {% endfor %}
-                </section>
-            </section>
-        {% endfor %}
-    {% endif %}
+    <aside ref="data" data-dashboard="{{ dashboard_data ? dashboard_data|json_encode|e('html_attr') }}"></aside>
 
-    {% if upcoming_tournaments|length %}
-        <h2>Upcoming:</h2>
-        {% for tournament in upcoming_tournaments %}
-            <section class="border-left">
-                {{ include('tournament/_summary.html.twig', {
-                    'tournament': tournament,
-                    'show_description': true
-                }) }}
-            </section>
-        {% endfor %}
-    {% endif %}
+    <div id="dash"></div>
 </main>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('dashboard') }}
 {% endblock %}

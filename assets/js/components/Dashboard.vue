@@ -1,0 +1,72 @@
+<template>
+    <div class="dashboard">
+        <matchup
+            v-bind:scores="scores"
+            v-bind:user="user"
+            v-bind:opponents="opponents">
+        </matchup>
+    </div>
+</template>
+
+<style scoped>
+.dashboard {
+    padding: 8px;
+    margin: 1.6rem 0;
+}
+</style>
+
+<script>
+import Matchup from './Matchup'
+
+export default {
+    data() {
+        return {
+            user: {},
+            scores: []
+        }
+    },
+
+    computed: {
+        opponents: function() {
+            function sortByUsername(a,b) {
+                return a.username.localeCompare(b.username)
+            }
+
+            function removeDuplicates(array, key) {
+                let lookup = {};
+                let result = [];
+                for (let i=0; i<array.length; i++) {
+                    if (!lookup[array[i][key]]) {
+                        lookup[array[i][key]] = true;
+                        result.push(array[i]);
+                    }
+                }
+                return result;
+            }
+
+            let users = this.scores.map(s => s.user).filter(u => u.username !== this.user.username).sort(sortByUsername)
+
+            return removeDuplicates(users, 'id')
+        }
+    },
+
+    components: {
+        Matchup
+    },
+
+    mounted() {
+        function sortByGame(a,b) {
+            return a.game.title.localeCompare(b.game.title)
+        }
+    
+        let data = JSON.parse(document.querySelector("aside[data-dashboard]").dataset.dashboard)
+
+        for (let prop in data) {
+            this[prop] = data[prop]
+        }
+
+        this.user.scores.sort(sortByGame)
+        this.scores.sort(sortByGame)
+    }
+}
+</script>
