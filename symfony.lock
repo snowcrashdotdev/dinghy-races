@@ -133,7 +133,7 @@
         "version": "2.1.1"
     },
     "php": {
-        "version": "7.3"
+        "version": "7.4"
     },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
@@ -524,14 +524,30 @@
             "config/routes/dev/web_profiler.yaml"
         ]
     },
+    "symfony/webpack-encore-bundle": {
+        "version": "1.6",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.6",
+            "ref": "69e1d805ad95964088bd510c05995e87dc391564"
+        },
+        "files": [
+            "assets/css/app.css",
+            "assets/js/app.js",
+            "config/packages/assets.yaml",
+            "config/packages/prod/webpack_encore.yaml",
+            "config/packages/test/webpack_encore.yaml",
+            "config/packages/webpack_encore.yaml",
+            "package.json",
+            "webpack.config.js"
+        ]
+    },
     "symfony/yaml": {
         "version": "v4.2.7"
     },
     "twig/twig": {
         "version": "v2.8.1"
-    },
-    "webimpress/safe-writer": {
-        "version": "2.0.0"
     },
     "webmozart/assert": {
         "version": "1.4.0"

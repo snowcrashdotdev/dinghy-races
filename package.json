@@ -1,40 +1,17 @@
 {
-  "name": "dinghy-races",
-  "version": "1.0.0",
-  "description": "The software behind the inaugural (and future?) [Calice Cup](https://calice.snowcrash.fun).",
-  "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
-  "scripts": {
-    "build:css": "postcss ./public/css/*.css --ext .min.css --dir ./public/css/dist/",
-    "build:js": "webpack stream=./public/js/src/stream.js app=./public/js/src/app.js forms=./public/js/src/forms.js --output-path='./public/js/dist' --output-filename='[name].min.js' --mode=production && terser ./public/js/src/admin.js --keep-fnames --compress -o ./public/js/dist/admin.min.js",
-    "build": "npm run build:css && npm run build:js",
-    "build:watch": "nodemon -e css,js --ignore *.min.* --exec \"npm run build\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/snowcrashdotdev/dinghy-races.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/snowcrashdotdev/dinghy-races/issues"
-  },
-  "homepage": "https://github.com/snowcrashdotdev/dinghy-races#readme",
   "devDependencies": {
+    "@symfony/webpack-encore": "^0.30.2",
     "cssnano": "^4.1.10",
     "cssnano-preset-advanced": "^4.0.7",
-    "nodemon": "^2.0.4",
-    "postcss-cli": "^7.1.1",
     "postcss-import": "^12.0.1",
+    "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.7.0",
-    "terser": "^5.0.0",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "vue-loader": "^15.9.3",
+    "vue-template-compiler": "^2.6.11",
+    "webpack-notifier": "^1.8.0"
   },
   "dependencies": {
+    "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "whatwg-fetch": "^3.0.0"
   }
