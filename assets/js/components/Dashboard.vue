@@ -5,6 +5,12 @@
             v-bind:user="user"
             v-bind:opponents="opponents">
         </matchup>
+
+        <suggested-games
+            v-bind:scores="scores"
+            v-bind:user="user"
+            v-bind:stddev="stddev">
+        </suggested-games>
     </div>
 </template>
 
@@ -16,13 +22,18 @@
 </style>
 
 <script>
-import Matchup from './Matchup'
+import matchup from './Matchup'
+import suggestedGames from './SuggestedGames'
 
 export default {
     data() {
         return {
-            user: {},
-            scores: []
+            user: {
+                username: '',
+                scores: []
+            },
+            scores: [],
+            stddev: []
         }
     },
 
@@ -51,7 +62,8 @@ export default {
     },
 
     components: {
-        Matchup
+        'matchup': matchup,
+        'suggested-games': suggestedGames
     },
 
     mounted() {
