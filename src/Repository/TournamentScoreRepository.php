@@ -185,12 +185,27 @@ class TournamentScoreRepository extends ServiceEntityRepository
             ->join('s.tournament', 't')
             ->join('s.user', 'p')
             ->andWhere('t.start_date <= CURRENT_DATE()')
-            ->andWhere('t.end_date >= CURRENT_DATE()')
+            ->andWhere('t.end_date > CURRENT_DATE()')
             ->andWhere('p.user = :user')
             ->setParameter('user', $user)
         ;
 
         return $q->getQuery()->getResult();
+    }
+
+    public function findScoreStdDev(array $tournaments)
+    {
+        $q = $this->createQueryBuilder('s')
+            ->select('STDDEV(s.points) AS stddev','g.description AS title')
+            ->leftJoin('s.game', 'g')
+            ->join('s.tournament', 't')
+            ->andWhere('s.tournament IN (:tournaments)')
+            ->setParameter('tournaments', $tournaments)
+            ->groupBy('title')
+        ;
+
+        return $q->getQuery()->getResult();
+
     }
 
     public function updateAggregateStatsFor(Tournament $tournament)
