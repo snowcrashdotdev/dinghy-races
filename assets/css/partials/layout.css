@@ -254,7 +254,9 @@ img {
 /*
 *   Tables
 */
-table, tbody, thead {
+.leaderboard,
+.leaderboard tbody,
+.leaderboard thead {
     display: block;
 }
 
@@ -264,7 +266,7 @@ table {
     margin-bottom: var(--margin);
 }
 
-thead {
+.leaderboard thead {
     position: absolute;
     top: -9999px;
     left: -9999px;
@@ -285,14 +287,14 @@ tbody tr:nth-child(even) {
     background-color: transparent;
 }
 
-tr {
+.leaderboard tr {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     margin-bottom: var(--margin);
 }
 
-td {
+.leaderboard td {
     position: relative;
     flex-grow: 0;
     flex-shrink: 0;
@@ -333,24 +335,24 @@ td {
 }
 
 @media (min-width: 52rem) {
-    table {
+    .leaderboard {
         display: table;
     }
 
-    thead,
-    tbody {
+    .leaderboard thead,
+    .leaderboard tbody {
         display: table-row-group;
     }
 
-    thead {
+    .leaderboard thead {
         position: unset;
     }
 
-    tr {
+    .leaderboard tr {
         display: table-row;
     }
 
-    td {
+    .leaderboard td {
         margin: 0;
     }
 
