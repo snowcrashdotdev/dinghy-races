@@ -7,7 +7,7 @@
                     :key="score.id"
                     v-for="score in user_scores">
                     <span class="score-rank">{{score.rank}}</span>
-                    <span class="score-game">{{score.game.title}}</span>
+                    <span class="score-game">{{score.game.slug}}</span>
                     <span class="score-points">{{score.points|number_format}}</span>
                 </li>
             </ul>
@@ -40,7 +40,7 @@
             <ul class="recent-score-list">
                 <li class="recent-score" :key="score.id" v-for="score in recent_scores">
                     <div class="recent-score-details">
-                    <span class="recent-score-game">{{score.game.title}}</span>
+                    <span class="recent-score-game">{{score.game.slug}}</span>
                     <span class="recent-score-points">{{score.points|number_format}}</span>
                     </div>
                     <div class="recent-score-submitted-by">
