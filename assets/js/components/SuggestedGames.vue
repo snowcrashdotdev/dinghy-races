@@ -3,7 +3,7 @@
         <h2>Suggested Games</h2>
         <label for="difficulty">Difficulty</label>
         <input class="difficulty" type="range" name="difficulty" v-model="difficulty" min="0.01" max="0.25" step="0.005">
-        <ul>
+        <ul class="suggestions">
             <li :key="suggestion.game" v-for="suggestion in suggestions">{{suggestion.title}}</li>
         </ul>
     </div>
@@ -24,6 +24,10 @@
 
 .difficulty::-webkit-slider-runnable-track {
     background: var(--color-three);
+}
+
+.suggestions {
+    overflow-y: scroll;
 }
 </style>
 

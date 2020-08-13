@@ -18,8 +18,10 @@
 
 <style scoped>
 .dashboard {
-    padding: 8px;
-    margin: 1.6rem 0;
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr;
+    grid-auto-rows: 450px;
+    grid-gap: var(--margin);
 }
 </style>
 

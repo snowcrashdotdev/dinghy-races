@@ -1,23 +1,26 @@
 <template>
     <div>
         <h2>Head-To-Head Matchup</h2>
-        <select class="matchup-select" v-model="player1">
-            <option value="">Player One</option>
-            <option :value="user.username">-My Scores-</option>
-            <option :key="opp.id" :value="opp.username" v-for="opp in opponents">{{opp.username}}</option>
-        </select>
-        <select class="matchup-select" v-model="player2">
-            <option value="">Player Two</option>
-            <option :value="user.username">-My Scores-</option>
-            <option :key="opp.id" :value="opp.username" v-for="opp in opponents">{{opp.username}}</option>
-        </select>
+        <div class="matchup-controls">
+            <select class="matchup-select" v-model="player1">
+                <option value="">Player One</option>
+                <option :value="user.username">-My Scores-</option>
+                <option :key="opp.id" :value="opp.username" v-for="opp in opponents">{{opp.username}}</option>
+            </select>
+            <select class="matchup-select" v-model="player2">
+                <option value="">Player Two</option>
+                <option :value="user.username">-My Scores-</option>
+                <option :key="opp.id" :value="opp.username" v-for="opp in opponents">{{opp.username}}</option>
+            </select>
+        </div>
+        <div class="matchup-result">
         <table class="matchup-scores" v-if="matchupScores.length > 0">
             <thead>
                 <tr>
-                    <th>Game</th>
-                    <th class="text-right">P1 Rank</th>
+                    <th class="game-title">Game</th>
+                    <th class="rank text-right">P1 Rank</th>
                     <th class="text-right">P1 Score</th>
-                    <th class="text-right">P2 Rank</th>
+                    <th class="rank text-right">P2 Rank</th>
                     <th class="text-right">P2 Score</th>
                 </tr>
             </thead>
@@ -31,31 +34,50 @@
                 </tr>
             </tbody>
         </table>
+        </div>
     </div>
 </template>
 
 <style scoped>
-.matchup-select {
-    background-color: var(--color-black);
-    border: 1px solid var(--color-gray);
-    border-radius: 2px;
-    box-shadow: var(--outlined);
-    color: var(--color-white);
-    display: block;
-    width: 13.6em;
-    height: 2.4em;
-    max-width: 100%;
-    margin-bottom: 1rem;
+.matchup-controls {
+    display: flex;
+    justify-content: space-between;
 }
 
-.matchup-select option {
-    line-height: 1.3;
+.matchup-select {
+    background-color: var(--color-black);
+    border: 1px solid var(--color-prime);
+    color: var(--color-white);
+    padding: 4px;
+}
+
+.matchup-result {
+    max-height: 100%;
+    overflow-y: scroll;
+    margin-top: var(--margin);
 }
 
 .matchup-scores {
-    display: inline-block;
-    height: 400px;
-    overflow-y: scroll;
+    table-layout: fixed;
+    width: 100%;
+    margin-bottom: 0;
+    position: relative;
+    white-space: nowrap;
+}
+
+.matchup-scores .rank {
+    width: 5em;
+}
+
+.matchup-scores .game-title {
+    width: 30em;
+}
+
+.matchup-scores th {
+    font-size: 0.6em;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 </style>
 
