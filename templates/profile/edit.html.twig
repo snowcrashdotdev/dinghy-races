@@ -13,5 +13,5 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{asset('/js/dist/forms.min.js')}}"></script>
+    {{ encore_entry_script_tags('forms') }}
 {% endblock %}

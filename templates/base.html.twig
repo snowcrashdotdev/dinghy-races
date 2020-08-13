@@ -17,7 +17,7 @@
         {% block body %}{% endblock %}
         {% block sidebar %}{% endblock %}
         {% block footer %}{% endblock %}
-        <script src="{{asset('/js/dist/app.min.js')}}"></script>
+        {{ encore_entry_script_tags('app') }}
         {% block javascripts %}{% endblock %}
     </body>
 </html>

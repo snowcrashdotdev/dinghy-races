@@ -29,5 +29,5 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{asset('/js/dist/admin.min.js')}}"></script>
+    {{ encore_entry_script_tags('admin') }}
 {% endblock %}

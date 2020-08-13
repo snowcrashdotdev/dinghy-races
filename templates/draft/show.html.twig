@@ -40,6 +40,8 @@
     </main>
 {% endblock %}
 
+{% if is_granted('ROLE_TO') %}
 {% block javascripts %}
-    <script src="{{asset('/js/dist/admin.min.js')}}"></script>
+    {{ encore_entry_script_tags('admin') }}
 {% endblock %}
+{% endif %}
