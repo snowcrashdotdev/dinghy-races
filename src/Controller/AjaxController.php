@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -65,17 +66,12 @@ class AjaxController extends AbstractController
 
             $data = [
                 'user' => $tournamentUser,
+                'scores' => $tournamentUser->getScores()->toArray(),
                 'place' => $place,
                 'recent_scores' => $recentScores
             ];
 
-            $json = $serializer->serialize(
-                $data,
-                'json',
-                ['groups' => 'public']
-            );
-
-            return $this->json($json);
+            return new JsonResponse($data);
         } else {
             $response = new Response();
             $response->setStatusCode(Response::HTTP_FORBIDDEN);

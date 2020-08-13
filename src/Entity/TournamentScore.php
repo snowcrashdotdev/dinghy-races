@@ -180,7 +180,8 @@ class TournamentScore extends Score implements \JsonSerializable
             'game' => $this->getGame()->jsonSerialize(),
             'rank' => $this->getRank(),
             'points' => $this->getPoints(),
-            'rankedPoints' => $this->getRankedPoints(),
+            'ranked_points' => $this->getRankedPoints(),
+            'updated_at' => $this->getUpdatedAt()->format('Y-m-d H:i:s')
         ];
 
         if ($this->getTournament()->getFormat() === 'TEAM') {

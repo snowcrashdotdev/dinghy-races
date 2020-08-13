@@ -6,61 +6,11 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="{{asset('css/dist/stream.min.css')}}">
+        {{ encore_entry_link_tags('stream') }}
     </head>
     <body data-endpoint="{{endpoint}}">
-        {% verbatim %}
-        <main id="stream-kit">
-            <article class="gadget my-scores">
-                <h3>High Scores for {{user.username}}</h3>
-                <ul class="score-list">
-                    <li class="score" v-for="score in user_scores">
-                        <span class="score-rank">{{score.rank}}</span>
-                        <span class="score-game">{{score.game.name}}</span>
-                        <span class="score-points">{{score.points|number_format}}</span>
-                    </li>
-                </ul>
-            </article>
 
-            <article class="gadget my-stats">
-                <h3>{{user.username}} Tournament Stats</h3>
-                <ul class="stats-list">
-                    <li class="stat">
-                        <span class="stat-label">Place</span>
-                        <span class="stat-value">{{place|ordinal}}</span>
-                    </li>
-                    <li class="stat">
-                        <span class="stat-label">Ranked Points</span>
-                        <span class="stat-value">{{user.ranked_points|number_format}}
-                    </li>
-                    <li class="stat">
-                        <span class="stat-label">Avg Score Rank</span>
-                        <span class="stat-value">{{user.avg_rank|number_format}}</span>
-                    </li>
-                    <li class="stat">
-                        <span class="stat-label">Score Submissions</span>
-                        <span class="stat-value">{{user.completion|number_format}}</span>
-                    </li>
-                </ul>
-            </article>
-
-            <article class="gadget recent-scores">
-                <h3>Recent Scores</h3>
-                <ul class="recent-score-list">
-                    <li class="recent-score" v-for="score in recent_scores">
-                        <div class="recent-score-details">
-                        <span class="recent-score-game">{{score.game.name}}</span>
-                        <span class="recent-score-points">{{score.points|number_format}}</span>
-                        </div>
-                        <div class="recent-score-submitted-by">
-                            <span class="recent-score-points">{{score.user}}</span>
-                            <span class="recent-score-date">{{score.updated_at|date_diff}}</span>
-                        </div>
-                    </li>
-                </ul>
-            </article>
-        </main>
-        {% endverbatim %}
+        <main id="stream-kit"></main>
 
         {{ encore_entry_script_tags('stream') }}
     </body>

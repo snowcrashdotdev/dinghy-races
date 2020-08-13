@@ -64,7 +64,7 @@ Encore
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
-    .enableVueLoader()
+    .enableVueLoader(() => {}, { runtimeCompilerBuild: false })
     .enablePostCssLoader()
 
     // uncomment to get integrity="..." attributes on your script & link tags

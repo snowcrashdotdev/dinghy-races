@@ -226,7 +226,10 @@ class TournamentUser implements \JsonSerializable
     {
         $public_data = [
             'id' => $this->getId(),
-            'username' => $this->getUsername()
+            'username' => $this->getUsername(),
+            'ranked_points' => $this->getRankedPoints(),
+            'avg_rank' => $this->getAvgRank(),
+            'completion' => $this->getCompletion()
         ];
 
         return $public_data;
