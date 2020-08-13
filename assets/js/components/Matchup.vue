@@ -1,27 +1,33 @@
 <template>
     <div>
         <h2>Head-To-Head Matchup</h2>
-        <select class="matchup-select" v-model="matchup">
-            <option value="">Choose an opponent</option>
-            <option :key="user.id" v-bind:value="user.username" v-for="user in opponents">{{user.username}}</option>
+        <select class="matchup-select" v-model="player1">
+            <option value="">Player One</option>
+            <option :value="user.username">-My Scores-</option>
+            <option :key="opp.id" :value="opp.username" v-for="opp in opponents">{{opp.username}}</option>
+        </select>
+        <select class="matchup-select" v-model="player2">
+            <option value="">Player Two</option>
+            <option :value="user.username">-My Scores-</option>
+            <option :key="opp.id" :value="opp.username" v-for="opp in opponents">{{opp.username}}</option>
         </select>
         <table class="matchup-scores" v-if="matchupScores.length > 0">
             <thead>
                 <tr>
                     <th>Game</th>
-                    <th class="text-right">Your Rank</th>
-                    <th class="text-right">Your Score</th>
-                    <th class="text-right">Opponent Rank</th>
-                    <th class="text-right">Opponent Score</th>
+                    <th class="text-right">P1 Rank</th>
+                    <th class="text-right">P1 Score</th>
+                    <th class="text-right">P2 Rank</th>
+                    <th class="text-right">P2 Score</th>
                 </tr>
             </thead>
             <tbody>
                 <tr :key="match.id" v-for="match in matchupScores">
                     <td>{{match.game.title}}</td>
-                    <td class="text-right">{{match.user.rank}}</td>
-                    <td class="text-right">{{match.user.points|number_format}}</td>
-                    <td class="text-right">{{match.opponent.rank}}</td>
-                    <td class="text-right">{{match.opponent.points|number_format}}</td>
+                    <td class="text-right">{{match.p1.rank}}</td>
+                    <td class="text-right">{{match.p1.points|number_format}}</td>
+                    <td class="text-right">{{match.p2.rank}}</td>
+                    <td class="text-right">{{match.p2.points|number_format}}</td>
                 </tr>
             </tbody>
         </table>
@@ -57,25 +63,30 @@
 export default {
     data() {
         return {
-            matchup: ''
+            player1: '',
+            player2: '',
         }
     },
     props: ['user', 'opponents', 'scores'],
     computed: {
-        opponentScores: function() {
-            return this.scores.filter(s => s.user.username === this.matchup && this.user.scores.filter(u => u.game.id === s.game.id).length >= 1)
+        scoresPlayer1: function() {
+            return this.scores.filter(s => s.user.username === this.player1)
+        },
+
+        scoresPlayer2: function() {
+            return this.scores.filter(s => s.user.username === this.player2)
         },
 
         commonScores: function() {
-            return this.user.scores.filter(s => this.opponentScores.filter(m => m.game.id === s.game.id).length >= 1)
+            return this.scoresPlayer1.filter(s => this.scoresPlayer2.filter(m => m.game.id === s.game.id).length >= 1)
         },
 
         matchupScores: function() {
-            return this.commonScores.map((s,i)=> ({
-                id: [this.user.id, this.matchup, s.game.id].join('-'),
+            return this.commonScores.map(s => ({
+                id: [this.player1, this.player2, s.game.id].join('-'),
                 game: s.game,
-                user: s,
-                opponent: this.opponentScores.find(o => o.game.id === s.game.id)
+                p1: s,
+                p2: this.scoresPlayer2.find(o => o.game.id === s.game.id)
             }))
         }
     }
