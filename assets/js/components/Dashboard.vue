@@ -11,6 +11,8 @@
             v-bind:user="user"
             v-bind:stddev="stddev">
         </suggested-games>
+
+        <rivals v-bind:rivals="rivals"></rivals>
     </div>
 </template>
 
@@ -24,6 +26,7 @@
 <script>
 import matchup from './Matchup'
 import suggestedGames from './SuggestedGames'
+import rivals from './Rivals'
 
 export default {
     data() {
@@ -33,7 +36,8 @@ export default {
                 scores: []
             },
             scores: [],
-            stddev: []
+            stddev: [],
+            rivals: []
         }
     },
 
@@ -63,7 +67,8 @@ export default {
 
     components: {
         'matchup': matchup,
-        'suggested-games': suggestedGames
+        'suggested-games': suggestedGames,
+        'rivals': rivals
     },
 
     mounted() {

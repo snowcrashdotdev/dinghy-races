@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\TournamentUser;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +18,32 @@ class TournamentUserRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, TournamentUser::class);
+    }
+
+    public function findTournamentRivals(User $user, array $tournaments)
+    {
+        $r = $this->createQueryBuilder('u')
+            ->select('AVG(u.avg_rank)')
+            ->andWhere('u.user = :user')
+            ->setParameter('user', $user)
+        ;
+
+        $rank = $r->getQuery()->getSingleScalarResult();
+
+        $q = $this->createQueryBuilder('u')
+            ->addSelect('ABS(AVG(u.avg_rank) - :rank) AS HIDDEN diff')
+            ->andWhere('u.tournament IN (:tournaments)')
+            ->andWhere('u.user != :user')
+            ->andWhere('u.ranked_points > 0')
+            ->groupBy('u.user')
+            ->orderBy('diff', 'ASC')
+            ->setParameter('user', $user)
+            ->setParameter('rank', $rank)
+            ->setParameter('tournaments', $tournaments)
+            ->setMaxResults(5)
+        ;
+
+        return $q->getQuery()->getResult();
     }
 
     // /**
