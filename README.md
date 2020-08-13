@@ -31,5 +31,9 @@ It is also vital to add unit and functional tests to this bundle, and ensure tha
 - compare scores of two specific players across all games as kind of a head to head matchup
 - Suggest game(s) to focus on, where you have a chance to increase in rank
 - A points breakdown on one's profile page would be handy, to see which games are contributing the most to the total points.
-- Displaying tournament rules for a game on that game's tournament page
-- A widget based layout for tournament pages, similar to the current stream kit, that makes it easy to track the tournament as a whole from one view
+- Displaying tournament rules for a game on that game's community leaderboard
+- A widget based layout for tournament pages, similar to the current stream kit, that makes it easy to track the tournament as a whole from one view; possibly using the stream gadgets as a sidebar
+- A countdown for the remaining absolute time left
+- Displaying dates/times in user's tz
+- Highlighting current user on individual leaderboard
+- Continue to show user name in game summary, even if high score is their own
