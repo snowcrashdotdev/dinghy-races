@@ -1,27 +1,66 @@
 <template>
     <div class="dashboard">
-        <matchup
+        <matchup class="matchup"
             v-bind:scores="scores"
             v-bind:user="user"
             v-bind:opponents="opponents">
         </matchup>
 
-        <suggested-games
+        <suggested-games class="suggested-games"
             v-bind:scores="scores"
             v-bind:user="user"
             v-bind:stddev="stddev">
         </suggested-games>
 
-        <rivals v-bind:rivals="rivals"></rivals>
+        <rivals class="rivals" v-bind:rivals="rivals"></rivals>
     </div>
 </template>
 
 <style scoped>
+@media (min-width: 74em) {
+    .dashboard {
+        display: grid;
+        grid-auto-columns: 1fr;
+        grid-template-areas:
+            "t t t s1 s1"
+            "t t t s2 s2";
+        grid-auto-rows: 40vh;
+        grid-gap: var(--padding);
+    }
+
+    .matchup {
+        grid-area: t;
+    }
+
+    .suggested-games {
+        grid-area: s2;
+    }
+
+    .rivals {
+        grid-area: s1;
+    }
+}
+
 .dashboard {
-    display: grid;
-    grid-template-columns: 3fr 1fr 1fr;
-    grid-auto-rows: 450px;
     grid-gap: var(--margin);
+}
+
+.dashboard >>> p {
+    margin-bottom: var(--margin);
+}
+
+.dashboard .dash-component {
+    border: 1px solid var(--color-gray);
+    border-radius: 0.1em;
+    box-shadow: 0.1em 0.2em 0.2em #000;
+    display: flex;
+    flex-direction: column;
+    padding: 1.6em;
+}
+
+.dashboard >>> .range {
+    background: transparent;
+    max-width: 100% ;
 }
 </style>
 

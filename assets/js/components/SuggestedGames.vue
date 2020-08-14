@@ -1,33 +1,38 @@
 <template>
-    <div>
+    <div class="dash-component">
         <h2>Suggested Games</h2>
+        <p>Find games where you have a good chance of ranking up.</p>
         <label for="difficulty">Difficulty</label>
-        <input class="difficulty" type="range" name="difficulty" v-model="difficulty" min="0.01" max="0.25" step="0.005">
-        <ul class="suggestions">
-            <li :key="suggestion.game" v-for="suggestion in suggestions">{{suggestion.title}}</li>
-        </ul>
+        <input class="range" type="range" name="difficulty" v-model="difficulty" min="0.01" max="0.25" step="0.005">
+
+        <div class="suggestions">
+            <ul>
+                <li :key="suggestion.game" v-for="suggestion in suggestions">{{suggestion.title}}</li>
+            </ul>
+        </div>
     </div>
 </template>
 
 <style scoped>
-.difficulty {
-    background: transparent;
-}
-
-.difficulty::-moz-range-track {
-    background: var(--color-three);
-}
-
-.difficulty::-ms-track {
-    background: var(--color-three);
-}
-
-.difficulty::-webkit-slider-runnable-track {
-    background: var(--color-three);
-}
-
 .suggestions {
+    overflow-x: hidden;
     overflow-y: scroll;
+}
+
+ul {
+    max-height: 100%;
+}
+
+.range::-moz-range-track {
+    background: linear-gradient(to left, var(--color-danger), var(--color-three));
+}
+
+.range::-ms-track {
+    background: linear-gradient(to left, var(--color-danger), var(--color-three));
+}
+
+.range::-webkit-slider-runnable-track {
+    background: linear-gradient(to left, var(--color-danger), var(--color-three));
 }
 </style>
 
@@ -47,7 +52,7 @@ export default {
                 dev: Math.abs(s.points - this.user.scores.find(s2 => s2.game.id === s.game.id).points)
             }))
 
-            return this.stddev.filter(d => deviations.some(d2 => d2.title === d.title && (d2.dev / d.stddev) <= this.difficulty)).sort((d,d2) => d.stddev - d2.stddev)
+            return this.stddev.filter(d => deviations.some(d2 => d2.title === d.title && (d2.dev / d.stddev) <= this.difficulty)).sort((d,d2) => d.stddev - d2.stddev).slice(-4)
         }
     }
 }

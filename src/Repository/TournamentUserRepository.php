@@ -40,7 +40,6 @@ class TournamentUserRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->setParameter('rank', $rank)
             ->setParameter('tournaments', $tournaments)
-            ->setMaxResults(5)
         ;
 
         return $q->getQuery()->getResult();

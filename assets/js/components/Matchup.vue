@@ -1,6 +1,7 @@
 <template>
-    <div>
-        <h2>Head-To-Head Matchup</h2>
+    <div class="dash-component">
+        <h2 class="title">Create A Matchup</h2>
+        <p>Compare scores for two players side-by-side.</p>
         <div class="matchup-controls">
             <select class="matchup-select" v-model="player1">
                 <option value="">Player One</option>
@@ -78,6 +79,11 @@
     position: sticky;
     top: 0;
     z-index: 1;
+}
+
+.matchup-scores td {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>
 
