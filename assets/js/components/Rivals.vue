@@ -1,7 +1,7 @@
 <template>
     <div class="dash-component">
         <h2>Rivals</h2>
-        <p>See players who have ranked similar to you.</p>
+        <p>See players who have historically ranked closely to you.</p>
         <label for="similarity">Similarity</label>
         <input class="range" type="range" name="similarity" v-model="similarity" min="0" max="100" step="1">
 
