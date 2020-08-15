@@ -53,7 +53,8 @@ class DashboardController extends AbstractController
         ];
 
         return $this->render('dashboard/index.html.twig', [
-            'dashboard_data' => $dashboard_data
+            'dashboard_data' => $dashboard_data,
+            'tournaments' => $in_progress_tournaments
         ]);
     }
 }

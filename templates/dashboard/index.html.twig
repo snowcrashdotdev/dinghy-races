@@ -10,6 +10,17 @@
 <main>
     <aside ref="data" data-dashboard="{{ dashboard_data ? dashboard_data|json_encode|e('html_attr') }}"></aside>
 
+    {% if tournaments|length %}
+        {% import '_macros/date.diff.html.twig' as dt %}
+        <section>
+        <h1>Tournaments happening now:</h1>
+        {% for tournament in tournaments %}
+        {% set interval = date(tournament.endDate).diff(date('NOW')) %}
+            <p><a href="{{ path('tournament_show', { 'id': tournament.id }) }}">{{ tournament.title }}</a> &mdash; {{ dt.diff(interval) }}</p>
+        {% endfor %}
+        </section>
+    {% endif %}
+
     <div id="dash"></div>
 </main>
 {% endblock %}
