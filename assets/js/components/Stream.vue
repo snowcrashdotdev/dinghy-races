@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="stream">
         <article class="gadget my-scores">
             <h3>High Scores for {{user.username}}</h3>
             <ul class="score-list">
@@ -68,7 +68,7 @@ body {
     background-color: transparent;
 }
 
-main {
+.stream {
     width: 100vw;
     height: 100vh;
     display: flex;
