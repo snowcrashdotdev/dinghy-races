@@ -5,6 +5,13 @@
 {% block body %}
     <header>
         <h1>Community Leaderboard for {{game.description}}</h1>
+
+        {% if game.rules %}
+        <section class="header-list">
+            <h2>Rules:</h2>
+            <p>{{game.rules|e}}</p>
+        </section>
+    {% endif %}
     </header>
     <main>
     {% set user_score = personal_bests|filter(s => s.user is same as(app.user))|first %}
