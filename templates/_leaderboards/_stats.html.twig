@@ -27,7 +27,7 @@
                 {% set u_href = path('profile_show', {
                     'username': user
                 }) %}
-            <tr>
+            <tr{{user.user is same as(app.user) ? ' class="highlighted"'}}>
                 <td>{{loop.index}}</td>
                 <td><a href="{{u_href}}">{{user}}</a></td>
                 {% if is_team_format %}
