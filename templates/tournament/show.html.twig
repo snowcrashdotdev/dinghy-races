@@ -12,7 +12,9 @@
         {% if tournament.upcoming %}
             starts {{ tournament.startDate|date('F jS, g:ia') }}
         {% else %}
-            ends {{ tournament.endDate|date_modify('-1 minute')|date('F jS, g:ia') }}
+            {% import '_macros/date.diff.html.twig' as dt %}
+            {% set interval = date(tournament.endDate).diff(date('NOW')) %}
+            ends {{ tournament.endDate|date_modify('-1 minute')|date('F jS, g:ia') }} ({{ (dt.diff(interval)) }})
         {% endif %}
         </time>
     {% endif %}
