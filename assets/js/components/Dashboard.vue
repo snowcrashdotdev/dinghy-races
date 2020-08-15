@@ -24,7 +24,7 @@
         grid-template-areas:
             "t t t s1 s1"
             "t t t s2 s2";
-        grid-auto-rows: 40vh;
+        grid-auto-rows: 16rem;
         grid-gap: var(--padding);
     }
 
@@ -42,10 +42,18 @@
 }
 
 .dashboard {
-    grid-gap: var(--margin);
+    grid-gap: calc( var(--margin) / 2 );
+}
+
+.dashboard >>> h2 {
+    color: var(--color-two);
+    font-size: 1.1em;
+    text-shadow: var(--outlined);
+    text-transform: uppercase;
 }
 
 .dashboard >>> p {
+    font-size: 0.8em;
     margin-bottom: var(--margin);
 }
 
@@ -55,7 +63,8 @@
     box-shadow: 0.1em 0.2em 0.2em #000;
     display: flex;
     flex-direction: column;
-    padding: 1.6em;
+    overflow: hidden;
+    padding: 0.8rem;
 }
 
 .dashboard >>> .range {
