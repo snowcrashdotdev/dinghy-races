@@ -15,12 +15,7 @@
 
 <style scoped>
 .rivals {
-    overflow-x: hidden;
-    overflow-y: scroll;
-}
-
-ul {
-    max-height: 100%;
+    overflow: hidden;
 }
 
 .range::-moz-range-track {
