@@ -40,8 +40,8 @@
     </main>
 {% endblock %}
 
-{% if is_granted('ROLE_TO') %}
 {% block javascripts %}
+{% if is_granted('ROLE_TO') %}
     {{ encore_entry_script_tags('admin') }}
-{% endblock %}
 {% endif %}
+{% endblock %}
