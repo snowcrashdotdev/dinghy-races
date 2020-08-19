@@ -19,7 +19,7 @@
                 </tr>
             </thead>
             <tbody>
-            {% for user in draft.tournament.users %}
+            {% for user in draft.tournament.users|sort((a,b) => b.createdAt <=> a.createdAt) %}
                 {% set href = path('profile_show', {
                     'username': user
                 }) %}
