@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\DraftEntry;
 use App\Entity\Tournament;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method DraftEntry|null find($id, $lockMode = null, $lockVersion = null)

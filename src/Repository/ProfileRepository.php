@@ -6,7 +6,7 @@ use App\Entity\Profile;
 use App\Entity\Tournament;
 use App\Entity\TournamentUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Profile|null find($id, $lockMode = null, $lockVersion = null)
