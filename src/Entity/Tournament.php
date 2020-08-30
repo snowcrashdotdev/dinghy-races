@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\TournamentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -193,6 +195,18 @@ class Tournament
     {
         if ($this->games->contains($game)) {
             $this->games->removeElement($game);
+
+            $expr = new Comparison('game', '=', $game);
+            $criteria = new Criteria();
+            $criteria->where($expr);
+
+            $scores = $this->getScores()->matching($criteria);
+
+            if (!$scores->isEmpty()) {
+                foreach($scores as $score) {
+                    $this->removeScore($score);
+                }
+            }
         }
 
         return $this;

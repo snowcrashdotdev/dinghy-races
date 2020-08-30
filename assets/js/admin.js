@@ -14,11 +14,11 @@ function addGameToCollection(json,resultList) {
         let li = document.createElement('li')
         li.classList.add('ajax-search-result')
         li.classList.add('game-search-result')
-        li.innerHTML = `${result.description} <small>(${result.name}.zip)</small>`
+        li.innerHTML = `${result.title} <small>(${result.slug}.zip)</small>`
         resultList.appendChild(li)
 
         li.addEventListener('click', function(e) {
-            let consent = confirm(`Add the game ${result.description} to this tournament?`)
+            let consent = confirm(`Add the game ${result.title} to this tournament?`)
 
             if (!consent) { return false; }
 
@@ -30,12 +30,12 @@ function addGameToCollection(json,resultList) {
 
             let newInput = createNewInput(gameCollection)
             gameCollection.appendChild(newInput)
-            gameCollection.lastElementChild.value = result.name
+            gameCollection.lastElementChild.value = result.slug
 
             let newPreview = document.createElement('span')
             newPreview.classList.add('game-form-list-item')
             newPreview.setAttribute('data-input-id', gameCollection.lastElementChild.id)
-            newPreview.innerText = result.name
+            newPreview.innerText = result.slug
             newPreview.addEventListener('click', removeGameFromCollection)
             gamePreviews.appendChild(newPreview)
 
@@ -361,3 +361,85 @@ function removeAllChildren(el) {
         el.removeChild(el.lastChild)
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    let ajaxSearchInputs = document.getElementsByClassName('ajax-search')
+    for (let input of ajaxSearchInputs) {
+        let ajaxSearchResultsList = document.createElement('ul')
+        ajaxSearchResultsList.classList.add('ajax-search-results')
+        input.parentElement.appendChild(ajaxSearchResultsList)
+        let entity = input.getAttribute('data-entity')
+        let cb = input.getAttribute('data-cb')
+
+        input.addEventListener('keyup', function(e) {
+            let query = input.value
+            let path = [entity, query].join('/')
+            if (query < 2) {
+                removeAllChildren(ajaxSearchResultsList)
+                return false;
+            } else {
+                window.fetch('/ajax/search/' + path, {
+                    'headers': {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(function(res) {
+                    return res.json()
+                })
+                .then(function(json) {
+                    removeAllChildren(ajaxSearchResultsList)
+                    let data = JSON.parse(json)
+                    console.log(data)
+
+                    switch (cb) {
+                        case 'addGameToCollection': addGameToCollection(data, ajaxSearchResultsList)
+                        break
+                    }
+                })
+            }
+        })
+
+        input.addEventListener('focus', toggleAjaxSearchShow)
+
+        input.addEventListener('blur', toggleAjaxSearchShow)
+    }
+
+    function toggleAjaxSearchShow(e) {
+        let target = e.target
+        setTimeout(function() {
+            removeAllChildren(target.nextElementSibling)
+            target.nextElementSibling.classList.toggle('show')
+        }, 1000)
+    }
+})
+
+function removeAllChildren(el) {
+    while(el.hasChildNodes()) {
+        el.removeChild(el.lastChild)
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    let listFilters = document.getElementsByClassName('list-filter')
+
+    for (let filter of listFilters) {
+        let list = filter.nextElementSibling
+        filter.addEventListener('keyup', function() {
+            let query = this.value.toUpperCase()
+            let listItems = Array.from(list.children)
+
+            if (query === '') {
+                listItems.forEach(item => item.removeAttribute('hidden'))
+            } else {
+                listItems.forEach(function(item) {
+                    let username = item.innerText.toUpperCase()
+                    if (username.indexOf(query) > -1) {
+                        item.removeAttribute('hidden')
+                    } else {
+                        item.setAttribute('hidden', '')
+                    }
+                })
+            }
+        })
+    }
+})
