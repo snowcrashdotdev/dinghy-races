@@ -183,7 +183,7 @@ class TournamentController extends AbstractController
      * @Route("/{id}/edit", name="tournament_edit", methods={"GET","POST","PATCH"})
      * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TO')")
      */
-    public function edit(Request $request, Tournament $tournament): Response
+    public function edit(Request $request, Tournament $tournament, TournamentScoreRepository $scores): Response
     {
         $form = $this->createForm(TournamentType::class, $tournament);
         $form->handleRequest($request);
@@ -195,7 +195,19 @@ class TournamentController extends AbstractController
         $gamesForm = $this->createForm(GameCollectionType::class, $tournament);
         $gamesForm->handleRequest($request);
         if ($gamesForm->isSubmitted() && $gamesForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $manager = $this->getDoctrine()->getManager();
+            $manager->flush();
+
+            $invalidScores = $scores->findBy([
+                'tournament' => null,
+            ]);
+
+            if (! empty($invalidScores)) {
+                foreach($invalidScores as $invalid) {
+                    $manager->remove($invalid);
+                }
+                $manager->flush();
+            }
 
             if ($request->isXmlHttpRequest()) {
                 return $this->json([
