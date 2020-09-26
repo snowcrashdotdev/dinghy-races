@@ -1,16 +1,15 @@
 {% macro diff(interval) %}
-    {% set timeRemaining = interval.days %}
-    {% set label = 'days' %}
-
-    {% if timeRemaining <= 1  %}
-        {% set timeRemaining = interval.hours %}
-        {% if timeRemaining <= 1 %}
-            {% set timeRemaining = interval.minutes %}
-            {% set label = timeRemaining == 1 ? 'minute' : 'minutes' %}
-        {% else %}
-            {% set label = 'hours' %}
-        {% endif %}
+    <span class="date-diff">
+    {% if interval.days > 1 %}
+        {{interval.days ~ (interval.d > 1 ? ' days' : ' day')}}
+    {% elseif interval.days == 1 %}
+        {{'1 day' ~ (interval.h >= 1 ? ', ' ~ interval.h ~ (interval.h > 1 ? ' hours' : ' hour')  : '')}}
+    {% elseif interval.h >= 1 %}
+        {{interval.h ~ (interval.h > 1 ? ' hours' : ' hour')}}
+    {% elseif interval.i >= 1 %}
+        {{interval.i ~ (interval.i > 1 ? ' minutes' : ' minute')}}
+    {% elseif interval.s >= 1 %}
+        {{interval.s ~ (interval.s > 1 ? ' seconds' : ' second')}}
     {% endif %}
-
-    <span class="date-diff">{{timeRemaining}} {{label}} remaining</span>
+    </span>
 {% endmacro %}
