@@ -1,16 +1,16 @@
 {
     "devDependencies": {
-        "@symfony/webpack-encore": "^0.30.0",
-        "core-js": "^3.0.0",
+        "@symfony/webpack-encore": "^0.31.0",
+        "core-js": "^3.6.5",
         "cssnano": "^4.1.10",
         "cssnano-preset-advanced": "^4.0.7",
         "postcss-import": "^12.0.1",
-        "postcss-loader": "^3.0.0",
+        "postcss-loader": "^4.0.3",
         "postcss-preset-env": "^6.7.0",
-        "regenerator-runtime": "^0.13.2",
+        "regenerator-runtime": "^0.13.7",
         "vue-loader": "^15.9.3",
         "vue-template-compiler": "^2.6.12",
-        "webpack-notifier": "^1.6.0"
+        "webpack-notifier": "^1.8.0"
     },
     "license": "UNLICENSED",
     "private": true,
@@ -22,6 +22,6 @@
     },
     "dependencies": {
         "vue": "^2.6.12",
-        "whatwg-fetch": "^3.4.0"
+        "whatwg-fetch": "^3.4.1"
     }
 }
