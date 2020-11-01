@@ -276,5 +276,8 @@
             "package.json",
             "webpack.config.js"
         ]
+    },
+    "webimpress/safe-writer": {
+        "version": "2.1.0"
     }
 }

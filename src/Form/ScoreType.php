@@ -60,7 +60,7 @@ class ScoreType extends AbstractType
                 'mapped' => false,
                 'constraints' => [
                     new File([
-                        'maxSize' => '4M',
+                        'maxSize' => '5M',
                         'mimeTypes' => 'application/zip',
                         'mimeTypesMessage' => 'ZIP and upload your INP'
                     ])

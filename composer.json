@@ -13,7 +13,7 @@
         "symfony/event-dispatcher": "5.1.*",
         "symfony/expression-language": "5.1.*",
         "symfony/filesystem": "5.1.*",
-        "symfony/flex": "^1.1",
+        "symfony/flex": "^1.8",
         "symfony/form": "5.1.*",
         "symfony/framework-bundle": "5.1.*",
         "symfony/mime": "5.1.*",
