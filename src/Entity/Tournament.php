@@ -265,7 +265,7 @@ class Tournament
     {
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
-            $user->removeTournament($this);
+            $user->getUser()->removeAppearance($user);
         }
 
         return $this;

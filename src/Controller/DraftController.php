@@ -135,6 +135,19 @@ class DraftController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
+            $user->getTournament()->removeUser($user);
+            
+            $draftEntry = $this->getDoctrine()
+                ->getRepository('App\Entity\DraftEntry')
+                ->findOneBy([
+                    'user' => $user
+                ])
+            ;
+
+            if ($draftEntry) {
+                $entityManager->remove($draftEntry);
+            }
+
             $entityManager->remove($user);
             $entityManager->flush();
 
