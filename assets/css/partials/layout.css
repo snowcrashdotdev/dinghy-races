@@ -200,6 +200,11 @@ img {
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    word-break: break-all;
+}
+
+.profile-summary__streaming {
+    font-size: 0.5875em;
 }
 
 .tournament-title {
