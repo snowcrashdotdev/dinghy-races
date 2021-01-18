@@ -78,7 +78,7 @@ class Team
     {
         if (!$this->members->contains($member)) {
             $this->members[] = $member;
-            $member->addTeam($this);
+            $member->setTeam($this);
         }
 
         return $this;
@@ -90,7 +90,7 @@ class Team
             $this->members->removeElement($member);
             // set the owning side to null (unless already changed)
             if ($member->getTeams()->contains($this)) {
-                $member->removeTeam($this);
+                $member->setTeam(null);
             }
         }
 
