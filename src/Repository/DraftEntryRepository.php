@@ -23,7 +23,8 @@ class DraftEntryRepository extends ServiceEntityRepository
     public function findEligiblePlayers(Tournament $tournament)
     {
         return $this->createQueryBuilder('e')
-            ->join('e.user', 'u')
+            ->join('e.user', 'p')
+            ->join('p.user', 'u')
             ->join('e.draft', 'd')
             ->select('u.username as username')
             ->andWhere('e.eligible = :eligible')

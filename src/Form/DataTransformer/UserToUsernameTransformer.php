@@ -2,6 +2,7 @@
 namespace App\Form\DataTransformer;
 
 use App\Entity\User;
+use App\Entity\TournamentUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -40,13 +41,20 @@ class UserToUsernameTransformer implements DataTransformerInterface
             ->findOneBy(['username' => $user])
         ;
 
-        if (null === $user) {
+        $tournamentUser = $this->entityManager
+            ->getRepository(TournamentUser::class)
+            ->findOneBy([
+                'user' => $user
+            ])
+        ;
+
+        if (null === $tournamentUser) {
             throw new TransformationFailedException(sprintf(
-                'The game "%s" does not exist!',
+                'The user "%s" does not exist!',
                 $user
             ));
         }
 
-        return $user;
+        return $tournamentUser;
     }
 }
