@@ -6,6 +6,7 @@ use App\Entity\TournamentScore;
 use App\Entity\TournamentUser;
 use App\Repository\TournamentScoreRepository;
 use App\Entity\Game;
+use App\Entity\Team;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ScoreKeeper
@@ -88,6 +89,12 @@ class ScoreKeeper
         $cutoff = $tournament->getScoring()->getCutoff();
         $cutoffScore = $tournament->getScoring()->getCutoffScore();
         $table = $tournament->getScoring()->getPointsTable();
+        $allTournamentScores = $this->getScores()
+            ->findBy([
+                'tournament' => $tournament
+            ],
+            ['rank' => 'ASC']
+        );
 
         /**
          * Setup cutoff index and variables for scoring,
@@ -112,18 +119,13 @@ class ScoreKeeper
              * Immediately assign team tournament scores ranked points
              * for their given rank (ez).
              */
-            foreach($allGameScores as $score) {
+            foreach($scores as $score) {
                 $rank = $score->getRank();
                 $rankedPoints = $table[$rank];
                 $score->setRankedPoints($rankedPoints);
             }
         } else {
             $cutoffIndex = count($tournament->getGames()) - $cutoff;
-            $allTournamentScores = $this->getScores()->findBy([
-                    'tournament' => $tournament
-                ],
-                ['rank' => 'ASC']
-            );
         }
 
         /**
@@ -161,9 +163,9 @@ class ScoreKeeper
         if ($tournamentFormat === 'TEAM') {
             $total = 0;
             foreach($teams as $team) {
-                $scores = array_filter($allTournamentScores, $this->filterTeam($team));
+                $team_scores = array_filter($allTournamentScores, $this->filterTeam($team));
                 $total = array_sum(
-                    array_map([$this, 'returnTeamPoints'], $sccores)
+                    array_map([$this, 'returnTeamPoints'], $team_scores)
                 );
                 $team->setPoints($total);
             }
