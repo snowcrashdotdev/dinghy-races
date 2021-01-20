@@ -18,6 +18,11 @@ class RosterType extends AbstractType
                 'required' => false,
                 'label' => false,
                 'entry_type' => UserSelectorType::class,
+                'entry_options' => [
+                    'attr' => [
+                        'tournament' => $builder->getData()->getTournament()
+                    ]
+                ],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'delete_empty' => true,

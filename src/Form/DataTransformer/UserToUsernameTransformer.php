@@ -2,6 +2,7 @@
 namespace App\Form\DataTransformer;
 
 use App\Entity\User;
+use App\Entity\Tournament;
 use App\Entity\TournamentUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -10,6 +11,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 class UserToUsernameTransformer implements DataTransformerInterface
 {
     private $entityManager;
+    private $tournament;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -31,21 +33,17 @@ class UserToUsernameTransformer implements DataTransformerInterface
     /**
      * Transforms a string (ROM filename) into a Game entity
      */
-    public function reverseTransform($user) {
-        if (!$user) {
-            return;
-        }
-
-        $user = $this->entityManager
-            ->getRepository(User::class)
-            ->findOneBy(['username' => $user])
-        ;
-
+    public function reverseTransform($username) {
         $tournamentUser = $this->entityManager
             ->getRepository(TournamentUser::class)
-            ->findOneBy([
-                'user' => $user
-            ])
+            ->createQueryBuilder('p')
+            ->join('p.user', 'u')
+            ->where('u.username = :username')
+            ->andWhere('p.tournament = :tournament')
+            ->setParameter('username', $username)
+            ->setParameter('tournament', $this->getTournament())
+            ->getQuery()
+            ->getOneOrNullResult()
         ;
 
         if (null === $tournamentUser) {
@@ -56,5 +54,14 @@ class UserToUsernameTransformer implements DataTransformerInterface
         }
 
         return $tournamentUser;
+
+    }
+
+    public function setTournament(Tournament $tournament) {
+        $this->tournament = $tournament;
+    }
+
+    public function getTournament() : Tournament {
+        return $this->tournament;
     }
 }

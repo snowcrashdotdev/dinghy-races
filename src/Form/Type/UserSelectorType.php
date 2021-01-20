@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
 
 class UserSelectorType extends AbstractType
 {
@@ -18,7 +20,16 @@ class UserSelectorType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $tournament = $options['attr']['tournament'];
+        $transformer = $this->transformer;
         $builder->addModelTransformer($this->transformer);
+
+        $builder->addEventListener(
+            FormEvents::POST_SET_DATA,
+            function (FormEvent $event) use ($transformer, $tournament) {
+                $transformer->setTournament($tournament);
+            }
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver)
