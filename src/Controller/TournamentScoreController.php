@@ -50,6 +50,7 @@ class TournamentScoreController extends AbstractController
             }
             $game->addTournamentScore($score);
             $user->addScore($score);
+            $score->setAutoAssigned(false);
         }
 
         $form = $this->createForm(ScoreType::class, $score);
