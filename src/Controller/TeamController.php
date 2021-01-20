@@ -140,8 +140,15 @@ class TeamController extends AbstractController
     public function send(Request $request, Team $team, Team $receivingTeam, User $user)
     {
         if ($this->isCsrfTokenValid('send'.$team->getId(), $request->request->get('_token'))) {
-            $team->removeMember($user);
-            $receivingTeam->addMember($user);
+            $appearance = $this->getDoctrine()
+                ->getRepository('App\Entity\TournamentUser')
+                ->findOneBy([
+                    'user' => $user,
+                    'tournament' => $team->getTournament()
+                ])
+            ;
+            $team->removeMember($appearance);
+            $receivingTeam->addMember($appearance);
             $this->getDoctrine()->getManager()->flush();
 
             if ($request->isXmlHttpRequest()) {
