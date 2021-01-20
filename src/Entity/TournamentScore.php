@@ -176,8 +176,8 @@ class TournamentScore extends Score implements \JsonSerializable
     {
         $public_data = [
             'id' => $this->getId(),
-            'user' => $this->getUser()->jsonSerialize(),
-            'game' => $this->getGame()->jsonSerialize(),
+            'user' => $this->getUser(),
+            'game' => $this->getGame(),
             'rank' => $this->getRank(),
             'points' => $this->getPoints(),
             'ranked_points' => $this->getRankedPoints(),
@@ -185,7 +185,8 @@ class TournamentScore extends Score implements \JsonSerializable
         ];
 
         if ($this->getTournament()->getFormat() === 'TEAM') {
-            $public_data['team'] = $this->getTeam();
+            $public_data['team'] = $this->getTeam()->getName();
+            $public_data['team_points'] = $this->getTeamPoints();
         }
 
         return $public_data;

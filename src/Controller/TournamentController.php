@@ -127,9 +127,11 @@ class TournamentController extends AbstractController
      */
     public function show_json(Tournament $tournament)
     {
-        $scores = $this->getDoctrine()
-            ->getRepository('App\Entity\TournamentScore')
-            ->findByTournamentPublic($tournament)
+        $scores = $tournament->getScores()
+            ->map(function($score) {
+                return $score->getPublicData();
+            })
+            ->toArray()
         ;
 
         return $this->json([
@@ -142,10 +144,13 @@ class TournamentController extends AbstractController
      */
     public function show_csv(Tournament $tournament)
     {
-        $scores = $this->getDoctrine()
-            ->getRepository('App\Entity\TournamentScore')
-            ->findByTournamentPublic($tournament)
+        $scores = $tournament->getScores()
+            ->map(function($score) {
+                return $score->getPublicData();
+            })
+            ->toArray()
         ;
+
         $csv = $this->get('serializer')->encode($scores, 'csv');
                 $response = new Response($csv);
                 $disposition = HeaderUtils::makeDisposition(
