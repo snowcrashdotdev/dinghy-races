@@ -4,8 +4,13 @@ config:
   webroot: public
   php: 7.2
   database: mysql:5.7
-  via: apache:2.4
+  via: nginx
 services:
   appserver:
+    build_as_root:
+      - curl -sL https://deb.nodesource.com/setup_20.x | bash -
+      - apt-get install -y nodejs
     build:
       - composer install
+      - npm install
+      - npm run build
