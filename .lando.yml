@@ -1,0 +1,11 @@
+name: calice
+recipe: symfony
+config:
+  webroot: public
+  php: 7.2
+  database: mysql:5.7
+  via: apache:2.4
+services:
+  appserver:
+    build:
+      - composer install
