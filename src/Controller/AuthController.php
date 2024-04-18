@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Form\Type\HoneypotType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,12 +44,12 @@ class AuthController extends AbstractController
     public function lostPassword(Request $request, \Swift_Mailer $mailer)
     {
         $form = $this->createFormBuilder()
+            ->add('username', HoneypotType::class)
             ->add('email', EmailType::class, [
                 'attr' => [
                     'placeholder' => 'Your email address.',
                 ]
             ])
-            ->add('save', SubmitType::class, ['label' => 'Send'])
             ->getForm();
 
         $form->handleRequest($request);
