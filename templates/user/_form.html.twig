@@ -1,5 +1,27 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="margin-y">{{ button_label|default('Sign up') }}</button>
+    <button disabled class="margin-y form__submit">{{ button_label|default('Sign up') }}</button>
     <p>Already registered? <a href="{{path('app_login')}}">Sign in</a></p>
 {{ form_end(form) }}
+
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    function maybeNotSpam() {
+        var buttons = Array.from(document.querySelectorAll('.form__submit'))
+
+        buttons.forEach(function(button) {
+            button.removeAttribute('disabled')
+        })
+
+        var honeypots = Array.from(document.querySelectorAll('.field--honeypot'))
+
+        honeypots.forEach(function(field) {
+            if ('NewUser' === field.value) {
+                field.value = null
+            }
+        })
+    }
+
+    setTimeout(maybeNotSpam, 3900)
+})
+</script>

@@ -7,11 +7,9 @@
     {% set t_href = path('tournament_show', {
         'id': tournament.id
     }) %}
-    {% set g_href = path('pb_show', {
-        'game': game.name
-    }) %}
+    
     <h1 class="tournament-title"><a href="{{t_href}}">{{ tournament.title }}</a><br>
-    scores for <a href="{{g_href}}">{{ game.description }}</a></h1>
+    scores for {{ game.description }}</h1>
 
     {% if team_totals|length %}
     <section class="header-list">
