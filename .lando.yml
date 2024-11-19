@@ -1,0 +1,14 @@
+name: calice
+recipe: symfony
+config:
+  webroot: public
+  php: 7.4
+  via: apache:2.4
+  database: mariadb
+services:
+  node:
+    type: node
+tooling:
+  npm:
+    service: node
+  
