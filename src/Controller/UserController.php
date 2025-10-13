@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 /**
  * @Route("/user")
@@ -48,20 +48,24 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $verify_url = $this->generateUrl('app_verify', [
-                'user'=> $user->getId(),
-                'token'=>$user->getResetToken(),
-                ], UrlGeneratorInterface::ABSOLUTE_URL
+            $verify_url = $this->generateUrl(
+                'app_verify',
+                [
+                    'user' => $user->getId(),
+                    'token' => $user->getResetToken(),
+                ],
+                UrlGeneratorInterface::ABSOLUTE_URL
             );
 
-            $message = (new Email())
+            $message = (new TemplatedEmail())
                 ->from($this->getParameter('default_sender'))
                 ->to($user->getEmail())
                 ->subject('Calice Cup: Please verify your email address')
-                ->html($this->renderView('_emails/registration.html.twig', [
+                ->htmlTemplate('_emails/registration.html.twig')
+                ->context([
                     'verify_url' => $verify_url
-                ]), 'text/html');
-            
+                ]);
+
             $mailer->send($message);
 
             return $this->redirectToRoute('app_welcome');
@@ -79,7 +83,7 @@ class UserController extends AbstractController
      */
     public function delete(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($user);
             $entityManager->flush();
