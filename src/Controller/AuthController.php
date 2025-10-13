@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 class AuthController extends AbstractController
 {
@@ -32,7 +32,7 @@ class AuthController extends AbstractController
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
-     /**
+    /**
      * @Route("/welcome", name="app_welcome", methods={"GET"})
      */
     public function welcome(): Response
@@ -66,26 +66,28 @@ class AuthController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                $verify_url = $this->generateUrl('app_verify', [
-                    'user'=> $user->getId(),
-                    'token'=>$user->getResetToken(),
-                    'lost-password'=> true
-                    ], UrlGeneratorInterface::ABSOLUTE_URL
+                $verify_url = $this->generateUrl(
+                    'app_verify',
+                    [
+                        'user' => $user->getId(),
+                        'token' => $user->getResetToken(),
+                        'lost-password' => true
+                    ],
+                    UrlGeneratorInterface::ABSOLUTE_URL
                 );
 
-                $message = (new Email())
+                $message = (new TemplatedEmail())
                     ->from($this->getParameter('default_sender'))
                     ->to($email)
                     ->subject('Calice Cup: Reset lost password')
-                    ->html($this->renderView('_emails/password-reset.html.twig',
-                        [
-                            'verify_url' => $verify_url
-                        ]
-                    ), 'text/html');
-                
+                    ->htmlTemplate('_emails/password-reset.html.twig')
+                    ->context([
+                        'verify_url' => $verify_url
+                    ]);
+
                 $mailer->send($message);
             }
-            
+
             $this->addFlash(
                 'notice',
                 'Check your email.'
@@ -93,7 +95,7 @@ class AuthController extends AbstractController
 
             return $this->redirectToRoute('index');
         }
-     
+
 
         return $this->render('security/lost-password.html.twig', [
             'form' => $form->createView()
@@ -141,7 +143,6 @@ class AuthController extends AbstractController
                 'user' => $user,
                 'form' => $form->createView()
             ]);
-
         } else {
             $user->setVerified(true)->setResetToken(null);
             $em->persist($user);
