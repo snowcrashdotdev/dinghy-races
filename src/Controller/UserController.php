@@ -12,6 +12,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 /**
  * @Route("/user")
@@ -32,7 +34,7 @@ class UserController extends AbstractController
     /**
      * @Route("/sign-up", name="user_new", methods={"GET","POST"})
      */
-    public function new(Request $request, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer): Response
+    public function new(Request $request, UserPasswordEncoderInterface $encoder, MailerInterface $mailer): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -52,13 +54,13 @@ class UserController extends AbstractController
                 ], UrlGeneratorInterface::ABSOLUTE_URL
             );
 
-            $message = (new \Swift_Message('Please verify your email address'))
-                ->setFrom($this->getParameter('default_sender'))
-                ->setTo($user->getEmail())
-                ->setBody($this->renderView('_emails/registration.html.twig', [
+            $message = (new Email())
+                ->from($this->getParameter('default_sender'))
+                ->to($user->getEmail())
+                ->subject('Calice Cup: Please verify your email address')
+                ->html($this->renderView('_emails/registration.html.twig', [
                     'verify_url' => $verify_url
-                ]), 'text/html'
-            );
+                ]), 'text/html');
             
             $mailer->send($message);
 

@@ -14,6 +14,8 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class AuthController extends AbstractController
 {
@@ -41,7 +43,7 @@ class AuthController extends AbstractController
     /**
      * @Route("/lost-password", name="app_lost_password", methods={"GET", "POST"})
      */
-    public function lostPassword(Request $request, \Swift_Mailer $mailer)
+    public function lostPassword(Request $request, MailerInterface $mailer)
     {
         $form = $this->createFormBuilder()
             ->add('username', HoneypotType::class)
@@ -71,10 +73,11 @@ class AuthController extends AbstractController
                     ], UrlGeneratorInterface::ABSOLUTE_URL
                 );
 
-                $message = (new \Swift_Message('Password reset request'))
-                    ->setFrom($this->getParameter('default_sender'))
-                    ->setTo($email)
-                    ->setBody($this->renderView('_emails/password-reset.html.twig',
+                $message = (new Email())
+                    ->from($this->getParameter('default_sender'))
+                    ->to($email)
+                    ->subject('Calice Cup: Reset lost password')
+                    ->html($this->renderView('_emails/password-reset.html.twig',
                         [
                             'verify_url' => $verify_url
                         ]
