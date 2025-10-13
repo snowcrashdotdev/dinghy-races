@@ -11,4 +11,6 @@ services:
 tooling:
   npm:
     service: node
+  composer:
+    service: appserver
   
