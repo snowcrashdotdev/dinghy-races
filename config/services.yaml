@@ -43,6 +43,11 @@ services:
     App\Form\UserProfileType:
         arguments:
             $pfp_dir: '%pfp_dir%'
+    
+    App\Service\Mailer:
+        arguments:
+            $token: '%env(SENDER_TOKEN)%'
+            $from: '%env(SENDER_EMAIL)%'
 
     App\Service\ScoreKeeper:
         arguments:

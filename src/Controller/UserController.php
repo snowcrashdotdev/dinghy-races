@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,8 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 /**
  * @Route("/user")
@@ -34,7 +33,7 @@ class UserController extends AbstractController
     /**
      * @Route("/sign-up", name="user_new", methods={"GET","POST"})
      */
-    public function new(Request $request, UserPasswordEncoderInterface $encoder, MailerInterface $mailer): Response
+    public function new(Request $request, UserPasswordEncoderInterface $encoder, Mailer $mailer): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -57,16 +56,16 @@ class UserController extends AbstractController
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
 
-            $message = (new TemplatedEmail())
-                ->from($this->getParameter('default_sender'))
-                ->to($user->getEmail())
-                ->subject('Calice Cup: Please verify your email address')
-                ->htmlTemplate('_emails/registration.html.twig')
-                ->context([
-                    'verify_url' => $verify_url
-                ]);
-
-            $mailer->send($message);
+            $mailer->send(
+                $user->getEmail(),
+                'Calice Cup: Please verify your email address',
+                $this->renderView(
+                    '_emails/registration.html.twig',
+                    [
+                        'verify_url' => $verify_url
+                    ]
+                )
+            );
 
             return $this->redirectToRoute('app_welcome');
         }

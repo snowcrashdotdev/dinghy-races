@@ -5,17 +5,15 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\Type\HoneypotType;
+use App\Service\Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 class AuthController extends AbstractController
 {
@@ -43,7 +41,7 @@ class AuthController extends AbstractController
     /**
      * @Route("/lost-password", name="app_lost_password", methods={"GET", "POST"})
      */
-    public function lostPassword(Request $request, MailerInterface $mailer)
+    public function lostPassword(Request $request, Mailer $mailer)
     {
         $form = $this->createFormBuilder()
             ->add('username', HoneypotType::class)
@@ -76,16 +74,13 @@ class AuthController extends AbstractController
                     UrlGeneratorInterface::ABSOLUTE_URL
                 );
 
-                $message = (new TemplatedEmail())
-                    ->from($this->getParameter('default_sender'))
-                    ->to($email)
-                    ->subject('Calice Cup: Reset lost password')
-                    ->htmlTemplate('_emails/password-reset.html.twig')
-                    ->context([
+                $mailer->send(
+                    $email,
+                    'Calice Cup: Reset lost password',
+                    $this->renderView('_emails/password-reset.html.twig', [
                         'verify_url' => $verify_url
-                    ]);
-
-                $mailer->send($message);
+                    ])
+                );
             }
 
             $this->addFlash(
